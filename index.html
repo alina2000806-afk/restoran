@@ -1,0 +1,1030 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#6A4CF0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#120D1F" media="(prefers-color-scheme: dark)">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="У Алинки">
+<meta name="mobile-web-app-capable" content="yes">
+<title>Ресторан у Алинки</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@500;600;700;800&family=Manrope:wght@400;500;600;700&display=swap">
+
+<style>
+:root{
+  --bg:#F7F5FF; --bg-2:#EFEAFF; --surface:#FFFFFF; --surface-2:#F3EFFF;
+  --ink:#1D1533; --ink-2:#6E6390; --line:#E7E1FA;
+  --violet:#6A4CF0; --violet-2:#8B6BFF; --violet-soft:#EDE7FF;
+  --pink:#E8558E; --pink-soft:#FFE6F0;
+  --mint:#2FBFA0; --amber:#EFA02A;
+  --shadow-s:0 2px 8px rgba(29,21,51,.05);
+  --shadow-m:0 12px 30px -14px rgba(60,40,140,.28), 0 2px 6px rgba(29,21,51,.04);
+  --shadow-l:0 28px 60px -26px rgba(60,40,140,.42), 0 4px 10px rgba(29,21,51,.05);
+  --glow:0 10px 24px -8px rgba(106,76,240,.5);
+  --r:24px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#120D1F; --bg-2:#1A1330; --surface:#1C1533; --surface-2:#261D45;
+    --ink:#F3EFFF; --ink-2:#A99BCC; --line:#332752;
+    --violet:#9A82FF; --violet-2:#B49EFF; --violet-soft:#2C2150;
+    --pink:#FF7BAE; --pink-soft:#3A2141;
+    --mint:#4FD9BC; --amber:#F5B950;
+    --shadow-s:0 2px 8px rgba(0,0,0,.4);
+    --shadow-m:0 14px 32px -16px rgba(0,0,0,.85), 0 2px 6px rgba(0,0,0,.4);
+    --shadow-l:0 30px 64px -28px rgba(0,0,0,.95), 0 4px 10px rgba(0,0,0,.45);
+    --glow:0 10px 24px -10px rgba(154,130,255,.55);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#120D1F; --bg-2:#1A1330; --surface:#1C1533; --surface-2:#261D45;
+  --ink:#F3EFFF; --ink-2:#A99BCC; --line:#332752;
+  --violet:#9A82FF; --violet-2:#B49EFF; --violet-soft:#2C2150;
+  --pink:#FF7BAE; --pink-soft:#3A2141;
+  --mint:#4FD9BC; --amber:#F5B950;
+  --shadow-s:0 2px 8px rgba(0,0,0,.4);
+  --shadow-m:0 14px 32px -16px rgba(0,0,0,.85), 0 2px 6px rgba(0,0,0,.4);
+  --shadow-l:0 30px 64px -28px rgba(0,0,0,.95), 0 4px 10px rgba(0,0,0,.45);
+  --glow:0 10px 24px -10px rgba(154,130,255,.55);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:Manrope, ui-sans-serif, system-ui, sans-serif; font-size:16px; line-height:1.55;
+  -webkit-text-size-adjust:100%;
+}
+h1,h2,h3{font-family:Onest, ui-sans-serif, system-ui, sans-serif; font-weight:800; margin:0; letter-spacing:-.025em; text-wrap:balance}
+button, input, textarea{font:inherit; color:inherit}
+:focus-visible{outline:3px solid var(--violet); outline-offset:2px; border-radius:12px}
+
+/* ——— первый экран ——— */
+.top{
+  position:relative; overflow:hidden; padding:34px 22px 46px;
+  background:
+    radial-gradient(70% 90% at 88% 8%, var(--pink-soft), transparent 62%),
+    radial-gradient(80% 100% at 6% 100%, var(--violet-soft), transparent 60%),
+    linear-gradient(180deg, var(--bg-2), var(--bg));
+}
+.top-in{
+  max-width:1200px; margin:0 auto; display:grid; gap:30px; align-items:center;
+  grid-template-columns:1.15fr .85fr;
+}
+@media (max-width:880px){.top-in{grid-template-columns:1fr; gap:22px}}
+.kicker{
+  display:inline-flex; align-items:center; gap:7px; background:var(--surface); color:var(--violet);
+  border-radius:999px; padding:7px 15px; font-size:12.5px; font-weight:700; box-shadow:var(--shadow-s);
+}
+.top h1{font-size:clamp(34px,5.6vw,60px); line-height:1.05; margin:16px 0 0}
+.top h1 i{font-style:normal; color:var(--violet)}
+.top p{margin:14px 0 0; max-width:44ch; color:var(--ink-2); font-size:16px}
+.cta{display:flex; gap:10px; flex-wrap:wrap; margin-top:22px}
+.stats{display:flex; gap:26px; margin-top:26px; flex-wrap:wrap}
+.stat b{display:block; font-family:Onest; font-size:26px; font-weight:800; line-height:1.1}
+.stat span{font-size:12.5px; color:var(--ink-2); font-weight:600}
+
+.art{position:relative; display:grid; place-items:center; min-height:230px}
+.art .blob{
+  width:min(300px,72vw); aspect-ratio:1; border-radius:46% 54% 52% 48%/48% 46% 54% 52%;
+  background:linear-gradient(140deg, var(--violet-2), var(--pink));
+  display:grid; place-items:center; font-size:clamp(76px,15vw,120px);
+  box-shadow:0 30px 60px -26px rgba(106,76,240,.6);
+  animation:morph 16s ease-in-out infinite;
+}
+@keyframes morph{
+  0%,100%{border-radius:46% 54% 52% 48%/48% 46% 54% 52%}
+  50%{border-radius:54% 46% 44% 56%/56% 52% 48% 44%}
+}
+@media (prefers-reduced-motion:reduce){.art .blob{animation:none}}
+.pill{
+  position:absolute; background:var(--surface); color:var(--ink); border-radius:999px;
+  padding:8px 14px; font-size:13px; font-weight:700; box-shadow:var(--shadow-m); white-space:nowrap;
+}
+.pill.p1{left:2%; top:14%}
+.pill.p2{right:0%; top:38%}
+.pill.p3{left:10%; bottom:8%}
+.pill em{font-style:normal; color:var(--pink)}
+
+.btn{
+  border:0; background:var(--violet); color:#FFF; border-radius:16px; padding:13px 22px;
+  cursor:pointer; font-weight:700; font-size:15px; box-shadow:var(--glow); transition:transform .16s, filter .16s;
+}
+.btn:hover{transform:translateY(-2px); filter:brightness(1.06)}
+.btn.ghost{background:var(--surface); color:var(--ink); box-shadow:var(--shadow-s)}
+@media (prefers-reduced-motion:reduce){.btn{transition:none} .btn:hover{transform:none}}
+.theme-btn{
+  position:absolute; right:20px; top:20px; z-index:3; cursor:pointer; border:0;
+  background:var(--surface); color:var(--ink); border-radius:999px; padding:9px 16px;
+  font-size:13px; font-weight:700; box-shadow:var(--shadow-s);
+}
+
+/* ——— навигация ——— */
+.nav{position:sticky; top:0; z-index:15; background:color-mix(in oklab, var(--bg) 88%, transparent); backdrop-filter:blur(14px); border-bottom:1px solid var(--line)}
+.nav-in{max-width:1200px; margin:0 auto; padding:12px 22px; display:grid; gap:11px}
+.realms{display:flex; gap:10px; justify-content:center}
+.realm{
+  background:var(--surface); border:0; cursor:pointer; font-family:Onest; font-size:16px; font-weight:700;
+  color:var(--ink-2); padding:10px 26px; border-radius:999px; box-shadow:var(--shadow-s); transition:.16s;
+}
+.realm:hover{color:var(--ink)}
+.realm[aria-pressed="true"]{background:var(--violet); color:#FFF; box-shadow:var(--glow)}
+.sections{display:flex; gap:8px; flex-wrap:wrap; justify-content:center}
+.sec{
+  border:1px solid var(--line); background:var(--surface); color:var(--ink-2); cursor:pointer;
+  border-radius:999px; padding:7px 16px; font-size:13.5px; font-weight:700; transition:.16s;
+}
+.sec:hover{color:var(--violet); border-color:var(--violet-2)}
+.sec[aria-pressed="true"]{background:var(--violet-soft); border-color:transparent; color:var(--violet)}
+
+/* ——— каркас ——— */
+.wrap{max-width:1200px; margin:0 auto; padding:26px 22px 150px; display:grid; gap:24px; grid-template-columns:296px 1fr; align-items:start}
+@media (max-width:940px){.wrap{grid-template-columns:1fr; padding-top:18px}}
+.panel{background:var(--surface); border-radius:var(--r); box-shadow:var(--shadow-m)}
+aside.panel{
+  position:sticky; top:118px; padding:22px; display:grid; gap:20px; align-content:start;
+  max-height:calc(100vh - 134px); overflow-y:auto; overscroll-behavior:contain;
+}
+aside.panel::-webkit-scrollbar{width:8px}
+aside.panel::-webkit-scrollbar-thumb{background:var(--line); border-radius:99px}
+@media (max-width:940px){aside.panel{position:static; max-height:none; overflow:visible}}
+
+.label{font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-2); font-weight:800; margin-bottom:10px}
+.hr{height:1px; background:var(--line); border:0; margin:0}
+.row{display:flex; align-items:center; justify-content:space-between; gap:10px}
+.num{font-variant-numeric:tabular-nums}
+.big{font-family:Onest; font-size:22px; font-weight:800}
+.linkbtn{background:none; border:0; color:var(--violet); cursor:pointer; font-size:12.5px; font-weight:700; padding:0}
+.linkbtn:hover{text-decoration:underline; text-underline-offset:3px}
+.slider{width:100%; accent-color:var(--violet); margin-top:10px}
+
+details.fridge-group summary{cursor:pointer; list-style:none; display:flex; align-items:center; gap:7px; padding:4px 0}
+details.fridge-group summary::-webkit-details-marker{display:none}
+details.fridge-group summary::before{content:"▸"; color:var(--violet); font-size:11px; transition:transform .15s}
+details.fridge-group[open] summary::before{transform:rotate(90deg)}
+.fridge-group{margin-bottom:12px}
+.fridge-group h4{display:inline; margin:0; font-size:12px; font-weight:800; color:var(--ink); letter-spacing:0}
+.chips{display:flex; flex-wrap:wrap; gap:6px; padding-top:8px}
+.chip{
+  display:inline-flex; align-items:center; gap:5px; cursor:pointer; user-select:none;
+  border:1px solid var(--line); background:var(--surface-2); color:var(--ink-2);
+  padding:6px 12px; border-radius:999px; font-size:12.5px; font-weight:600; line-height:1.3; transition:.14s;
+}
+.chip input{position:absolute; opacity:0; width:0; height:0}
+.chip:hover{border-color:var(--violet-2); color:var(--ink)}
+.chip.on{background:var(--violet); border-color:transparent; color:#FFF}
+.chip.on::before{content:"✓"; font-size:10px}
+.switch{display:flex; align-items:center; gap:10px; cursor:pointer; font-size:13.5px; font-weight:600}
+.switch input{accent-color:var(--violet); width:18px; height:18px}
+
+.search{
+  width:100%; padding:14px 18px; border-radius:18px; border:1px solid var(--line);
+  background:var(--surface); font-size:15px; font-weight:500; box-shadow:var(--shadow-s); margin-bottom:24px;
+}
+.search::placeholder{color:var(--ink-2)}
+
+/* ——— разделы и карточки ——— */
+.group{margin-bottom:38px}
+.group-head{display:flex; align-items:center; gap:12px; margin-bottom:18px}
+.group-head h2{font-size:26px}
+.group-head span{flex:1}
+.group-head em{
+  font-style:normal; font-size:12px; font-weight:700; color:var(--violet);
+  background:var(--violet-soft); border-radius:999px; padding:5px 12px;
+}
+.grid{display:grid; gap:20px; grid-template-columns:repeat(auto-fill,minmax(238px,1fr))}
+.card{
+  background:var(--surface); border-radius:var(--r); overflow:hidden; box-shadow:var(--shadow-m);
+  display:flex; flex-direction:column; transition:transform .2s cubic-bezier(.2,.7,.3,1), box-shadow .2s;
+}
+.card:hover{transform:translateY(-6px); box-shadow:var(--shadow-l)}
+@media (prefers-reduced-motion:reduce){.card{transition:none} .card:hover{transform:none}}
+
+.photo{
+  aspect-ratio:4/3; position:relative; display:grid; place-items:center; cursor:pointer;
+  border:0; width:100%; padding:0; overflow:hidden;
+  background:
+    radial-gradient(90% 90% at 24% 12%, hsl(var(--h) 88% 90%), transparent 62%),
+    radial-gradient(80% 80% at 86% 92%, hsl(var(--h2) 84% 86%), transparent 60%),
+    linear-gradient(145deg, hsl(var(--h) 72% 94%), hsl(var(--h2) 78% 88%));
+}
+:root[data-theme="dark"] .photo{filter:saturate(.75) brightness(.66)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .photo{filter:saturate(.75) brightness(.66)}}
+.photo img{width:100%; height:100%; object-fit:cover; position:absolute; inset:0}
+.photo span{
+  width:98px; height:98px; border-radius:50%; background:rgba(255,255,255,.72);
+  display:grid; place-items:center; font-size:46px; backdrop-filter:blur(2px);
+  box-shadow:0 12px 26px -10px rgba(29,21,51,.35); transition:transform .25s;
+}
+.card:hover .photo span{transform:scale(1.07) translateY(-3px)}
+@media (prefers-reduced-motion:reduce){.card:hover .photo span{transform:none}}
+.badge{
+  position:absolute; left:12px; top:12px; font-style:normal; background:var(--surface); color:var(--ink);
+  border-radius:999px; padding:5px 12px; font-size:12px; font-weight:700;
+  font-variant-numeric:tabular-nums; box-shadow:var(--shadow-s);
+}
+.body{padding:16px; display:grid; gap:10px; flex:1; align-content:start}
+.title{
+  font-family:Onest; font-size:17px; font-weight:700; line-height:1.25; letter-spacing:-.015em;
+  background:none; border:0; padding:0; text-align:left; color:var(--ink); cursor:pointer;
+}
+.title:hover{color:var(--violet)}
+.meta{display:flex; gap:6px; flex-wrap:wrap; font-size:11.5px; font-weight:600}
+.tag{background:var(--surface-2); border-radius:9px; padding:3px 9px; color:var(--ink-2)}
+.tag.ok{background:color-mix(in oklab, var(--mint) 20%, var(--surface)); color:var(--mint)}
+.tag.miss{background:var(--pink-soft); color:var(--pink)}
+.tag.t1{background:color-mix(in oklab, var(--mint) 16%, var(--surface)); color:var(--mint)}
+.tag.t2{background:color-mix(in oklab, var(--amber) 20%, var(--surface)); color:var(--amber)}
+.tag.t3{background:var(--violet-soft); color:var(--violet)}
+.tag.him{background:var(--pink-soft); color:var(--pink)}
+.price{font-family:Onest; font-size:20px; font-weight:800; font-variant-numeric:tabular-nums}
+.per{font-size:11.5px; color:var(--ink-2); font-weight:600}
+.card-actions{display:flex; gap:8px; margin-top:2px}
+.order-btn{
+  flex:1; border:0; background:var(--violet); color:#FFF; border-radius:14px; padding:11px 14px;
+  cursor:pointer; font-weight:700; font-size:14px; box-shadow:var(--glow); transition:.16s;
+}
+.order-btn:hover{filter:brightness(1.07)}
+.order-btn.in{background:var(--violet-soft); color:var(--violet); box-shadow:none}
+.like{
+  border:0; background:var(--surface-2); color:var(--ink-2); cursor:pointer; border-radius:14px;
+  padding:11px 13px; font-size:13px; font-weight:700; white-space:nowrap; transition:.16s;
+}
+.like:hover{color:var(--pink)}
+.like.on{background:var(--pink-soft); color:var(--pink)}
+.empty{padding:70px 16px; text-align:center; font-family:Onest; font-size:20px; font-weight:700; color:var(--ink-2)}
+
+/* ——— поднос ——— */
+.tray{
+  position:fixed; left:0; right:0; bottom:0; z-index:20;
+  padding:14px 22px calc(14px + env(safe-area-inset-bottom));
+  background:color-mix(in oklab, var(--surface) 92%, transparent); backdrop-filter:blur(16px);
+  border-top:1px solid var(--line); box-shadow:0 -18px 44px -30px rgba(60,40,140,.6);
+  transform:translateY(115%); transition:transform .28s cubic-bezier(.2,.7,.3,1);
+}
+.tray.show{transform:none}
+@media (prefers-reduced-motion:reduce){.tray{transition:none}}
+.tray-in{max-width:1200px; margin:0 auto; display:flex; align-items:center; gap:16px; flex-wrap:wrap}
+.bar{flex:1; min-width:150px; height:10px; border-radius:99px; background:var(--surface-2); overflow:hidden}
+.bar i{display:block; height:100%; background:linear-gradient(90deg, var(--violet), var(--violet-2)); transition:width .25s}
+.bar i.over{background:linear-gradient(90deg, var(--pink), #FF9BC2)}
+.ghost{border:0; background:var(--surface-2); color:var(--ink-2); border-radius:14px; padding:11px 16px; cursor:pointer; font-size:13.5px; font-weight:700}
+.ghost:hover{color:var(--ink)}
+
+dialog{
+  border:0; border-radius:28px; background:var(--surface); color:var(--ink);
+  padding:0; max-width:580px; width:calc(100% - 26px); box-shadow:var(--shadow-l);
+}
+dialog::backdrop{background:rgba(24,16,44,.5); backdrop-filter:blur(4px)}
+.d-head{padding:24px 26px 14px; display:flex; justify-content:space-between; gap:12px; align-items:start}
+.d-head h2{font-size:26px}
+.d-body{padding:0 26px 26px; display:grid; gap:20px; max-height:66vh; overflow:auto}
+.x{background:var(--surface-2); border:0; width:36px; height:36px; border-radius:50%; font-size:20px; line-height:1; cursor:pointer; color:var(--ink-2)}
+.x:hover{color:var(--ink)}
+ol.steps{margin:0; padding-left:22px; display:grid; gap:10px; font-size:14.5px}
+ol.steps::marker{color:var(--violet); font-weight:700}
+ul.ing{margin:0; padding:0; list-style:none; display:grid; gap:7px; font-size:14px}
+ul.ing li{display:flex; justify-content:space-between; gap:12px; padding-bottom:7px; border-bottom:1px solid var(--line)}
+ul.ing li.no{color:var(--pink); font-weight:600}
+.total{display:flex; justify-content:space-between; font-family:Onest; font-size:19px; font-weight:800}
+textarea.order{
+  width:100%; min-height:200px; border:1px solid var(--line); border-radius:18px; padding:14px;
+  background:var(--surface-2); font-size:14px; resize:vertical; font-family:Manrope, sans-serif; line-height:1.5;
+}
+.comments{display:grid; gap:9px}
+.comment{background:var(--surface-2); border-radius:16px; padding:10px 14px; font-size:14px}
+.comment b{font-family:Onest; font-size:14px; font-weight:800; color:var(--violet); margin-right:8px}
+.c-form{display:flex; gap:8px}
+.c-form input{flex:1; padding:12px 15px; border-radius:14px; border:1px solid var(--line); background:var(--surface-2); font-size:14px}
+.c-form .order-btn{flex:0 0 auto}
+.who{font-size:12.5px; color:var(--ink-2); font-weight:600}
+</style>
+
+<header class="top">
+  <button class="theme-btn" id="theme">Тема</button>
+  <div class="top-in">
+    <div>
+      <span class="kicker">🍽️ домашняя кухня · открыто, когда Алинка дома</span>
+      <h1>Ресторан <i>у Алинки</i></h1>
+      <p>Отметь, что есть в холодильнике, поставь бюджет — меню само покажет, что можно приготовить прямо сейчас.</p>
+      <div class="cta">
+        <button class="btn" id="go-menu">Смотреть меню</button>
+        <button class="btn ghost" id="go-fridge">Заполнить холодильник</button>
+      </div>
+      <div class="stats">
+        <div class="stat"><b id="st-dishes">—</b><span>ПОЗИЦИЙ В МЕНЮ</span></div>
+        <div class="stat"><b id="st-sections">—</b><span>РАЗДЕЛОВ</span></div>
+        <div class="stat"><b id="st-ready">—</b><span>МОЖНО ПРЯМО СЕЙЧАС</span></div>
+      </div>
+    </div>
+    <div class="art">
+      <div class="blob">🍝</div>
+      <span class="pill p1">♥ <em>любимое мужа</em></span>
+      <span class="pill p2">20 мин · быстро</span>
+      <span class="pill p3">всё есть в холодильнике</span>
+    </div>
+  </div>
+</header>
+
+<nav class="nav">
+  <div class="nav-in">
+    <div class="realms" id="realms"></div>
+    <div class="sections" id="sections"></div>
+  </div>
+</nav>
+
+<section id="social" hidden>
+  <div id="likes"><b data-id="bulon-kur" data-n="0"></b><b data-id="bulon-tel" data-n="0"></b><b data-id="sup-verm" data-n="0"></b><b data-id="sup-ovosh" data-n="0"></b><b data-id="tom-yam" data-n="0"></b><b data-id="tykva-krem" data-n="0"></b><b data-id="karbonara" data-n="0"></b><b data-id="pasta-kur-griby" data-n="0"></b><b data-id="bolognese" data-n="0"></b><b data-id="pasta-avokado" data-n="0"></b><b data-id="nyokki-kur" data-n="0"></b><b data-id="nyokki-bekon" data-n="0"></b><b data-id="kotlety-babushka" data-n="0"></b><b data-id="rublenye-kukuruza" data-n="0"></b><b data-id="rublenye-griby" data-n="0"></b><b data-id="shaurma" data-n="0"></b><b data-id="pizza" data-n="0"></b><b data-id="pyure" data-n="0"></b><b data-id="ris" data-n="0"></b><b data-id="grechka" data-n="0"></b><b data-id="makarony" data-n="0"></b><b data-id="zhar-kart" data-n="0"></b><b data-id="brokkoli" data-n="0"></b><b data-id="zhar-ovosh" data-n="0"></b><b data-id="salat-og-pom" data-n="0"></b><b data-id="guakamole" data-n="0"></b><b data-id="brusketta-kamamber" data-n="0"></b><b data-id="brusketta-losos" data-n="0"></b><b data-id="zhar-kabachki" data-n="0"></b><b data-id="syrniki" data-n="0"></b><b data-id="omlet" data-n="0"></b><b data-id="tost-avokado" data-n="0"></b><b data-id="bliny" data-n="0"></b><b data-id="tiramisu" data-n="0"></b><b data-id="panakota" data-n="0"></b><b data-id="shok-muss" data-n="0"></b><b data-id="muss-pirozhnye" data-n="0"></b><b data-id="vaf-tort" data-n="0"></b><b data-id="utka" data-n="0"></b><b data-id="utka-konfi" data-n="0"></b><b data-id="salat-hamon" data-n="0"></b><b data-id="salat-krevetki" data-n="0"></b><b data-id="kanape" data-n="0"></b><b data-id="chay" data-n="0"></b><b data-id="kofe" data-n="0"></b><b data-id="kompot" data-n="0"></b><b data-id="vino" data-n="0"></b><b data-id="igristoe" data-n="0"></b><b data-id="pivo" data-n="0"></b><b data-id="kokteyl" data-n="0"></b></div>
+  <div id="comments"></div>
+</section>
+
+<main class="wrap">
+  <aside class="panel">
+    <div>
+      <div class="label">Бюджет на позицию</div>
+      <div class="row"><span class="big num" id="budget-val">без лимита</span><button class="linkbtn" id="budget-max">снять</button></div>
+      <input type="range" class="slider" id="budget" min="20" max="600" step="10" value="600">
+    </div>
+    <hr class="hr">
+    <div>
+      <div class="row" style="margin-bottom:12px">
+        <div class="label" style="margin:0">Холодильник</div>
+        <button class="linkbtn" id="clear-fridge">очистить</button>
+      </div>
+      <label class="switch" style="margin-bottom:14px">
+        <input type="checkbox" id="only-cookable"> Только то, что можно сделать сейчас
+      </label>
+      <div id="fridge"></div>
+    </div>
+  </aside>
+
+  <section>
+    <input class="search" id="search" type="search" placeholder="Поиск: борщ, курица, мохито…" autocomplete="off">
+    <div id="groups"></div>
+    <div class="empty" id="empty" hidden>Здесь пока пусто.<br>Снимите лимит бюджета или отметьте больше продуктов.</div>
+  </section>
+</main>
+
+<div class="tray" id="tray">
+  <div class="tray-in">
+    <div>
+      <div class="big num" id="tray-sum">0 грн</div>
+      <div class="per" id="tray-count">поднос пуст</div>
+    </div>
+    <div class="bar"><i id="tray-bar" style="width:0"></i></div>
+    <button class="order-btn" id="open-order">Оформить заказ</button>
+    <button class="ghost" id="clear-tray">Очистить</button>
+  </div>
+</div>
+
+<dialog id="dish-dlg">
+  <div class="d-head">
+    <div>
+      <h2 id="dd-name"></h2>
+      <div class="meta" id="dd-meta" style="margin-top:10px"></div>
+    </div>
+    <button class="x" id="dd-close" aria-label="Закрыть">×</button>
+  </div>
+  <div class="d-body">
+    <div>
+      <div class="label">Продукты</div>
+      <ul class="ing" id="dd-ing"></ul>
+      <div class="total" style="margin-top:12px"><span>Итого</span><span class="num" id="dd-total"></span></div>
+    </div>
+    <div>
+      <div class="label">Как готовлю</div>
+      <ol class="steps" id="dd-steps"></ol>
+    </div>
+    <button class="order-btn" id="dd-add">Добавить на поднос</button>
+    <div>
+      <div class="label">Отзывы</div>
+      <div class="comments" id="dd-comments"></div>
+      <form class="c-form" id="dd-cform" style="margin-top:10px">
+        <input id="dd-ctext" placeholder="Написать отзыв…" maxlength="220" autocomplete="off">
+        <button class="order-btn" type="submit">Отправить</button>
+      </form>
+      <div class="who" style="margin-top:7px">Вы пишете как <b id="dd-who"></b> · <button class="linkbtn" type="button" id="dd-rename">сменить имя</button></div>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="order-dlg">
+  <div class="d-head">
+    <h2>Заказ</h2>
+    <button class="x" id="od-close" aria-label="Закрыть">×</button>
+  </div>
+  <div class="d-body">
+    <textarea class="order" id="od-text" readonly></textarea>
+    <button class="order-btn" id="od-copy">Скопировать заказ</button>
+    <div class="per" id="od-hint">Скопируйте и отправьте Алинке в мессенджер.</div>
+  </div>
+</dialog>
+
+<script>
+/* ============================================================
+   1) ПРОДУКТЫ И ЦЕНЫ. p — цена за единицу (u) в гривнах.
+      base:true — то, что всегда есть дома: в холодильнике не
+      показывается и никогда не считается недостающим,
+      но в цену блюда входит.
+      dislike:true — то, что Алинка не ест (кисломолочка, майонез, рыба).
+      Блюдо с таким продуктом помечается «готовлю мужу».
+      Цены — уровень Сільпо, серпень 2026. Правятся здесь, одной строкой.
+   ============================================================ */
+const ING = {
+  /* мясо и птица */
+  "курица":            {p:145, u:"кг", g:"Мясо и птица"},
+  "куриное филе":      {p:250, u:"кг", g:"Мясо и птица"},
+  "куриные бёдра":     {p:190, u:"кг", g:"Мясо и птица"},
+  "куриный фарш":      {p:210, u:"кг", g:"Мясо и птица"},
+  "свинина":           {p:260, u:"кг", g:"Мясо и птица"},
+  "говядина":          {p:380, u:"кг", g:"Мясо и птица"},
+  "телятина":          {p:420, u:"кг", g:"Мясо и птица"},
+  "фарш свино-говяжий":{p:230, u:"кг", g:"Мясо и птица"},
+  "индейка":           {p:280, u:"кг", g:"Мясо и птица"},
+  "утка":              {p:300, u:"кг", g:"Мясо и птица"},
+  "утиные ножки":      {p:340, u:"кг", g:"Мясо и птица"},
+  "бекон":             {p:330, u:"кг", g:"Мясо и птица"},
+  "хамон":             {p:1500,u:"кг", g:"Мясо и птица"},
+  "сосиски":           {p:220, u:"кг", g:"Мясо и птица"},
+  "колбаса":           {p:350, u:"кг", g:"Мясо и птица"},
+
+  /* рыба и морепродукты — Алинка не ест, готовим мужу */
+  "лосось слабосолёный":{p:1200,u:"кг", g:"Рыба и морепродукты", dislike:true},
+  "лосось свежий":     {p:950, u:"кг", g:"Рыба и морепродукты", dislike:true},
+  "сельдь":            {p:180, u:"кг", g:"Рыба и морепродукты", dislike:true},
+  "креветки":          {p:700, u:"кг", g:"Рыба и морепродукты"},
+  "крабовые палочки":  {p:140, u:"уп", g:"Рыба и морепродукты", dislike:true},
+  "тунец консерв.":    {p:95,  u:"банка", g:"Рыба и морепродукты", dislike:true},
+
+  /* овощи и зелень */
+  "картофель":         {p:30,  u:"кг", g:"Овощи и зелень"},
+  "морковь":           {p:25,  u:"кг", g:"Овощи и зелень"},
+  "лук":               {p:30,  u:"кг", g:"Овощи и зелень"},
+  "свёкла":            {p:25,  u:"кг", g:"Овощи и зелень"},
+  "капуста":           {p:25,  u:"кг", g:"Овощи и зелень"},
+  "помидоры":          {p:65,  u:"кг", g:"Овощи и зелень"},
+  "помидоры черри":    {p:130, u:"кг", g:"Овощи и зелень"},
+  "огурцы":            {p:45,  u:"кг", g:"Овощи и зелень"},
+  "огурцы солёные":    {p:95,  u:"кг", g:"Овощи и зелень"},
+  "перец болгарский":  {p:70,  u:"кг", g:"Овощи и зелень"},
+  "кабачок":           {p:35,  u:"кг", g:"Овощи и зелень"},
+  "баклажан":          {p:55,  u:"кг", g:"Овощи и зелень"},
+  "брокколи":          {p:120, u:"кг", g:"Овощи и зелень"},
+  "цветная капуста":   {p:90,  u:"кг", g:"Овощи и зелень"},
+  "шампиньоны":        {p:130, u:"кг", g:"Овощи и зелень"},
+  "тыква":             {p:30,  u:"кг", g:"Овощи и зелень"},
+  "чеснок":            {p:160, u:"кг", g:"Овощи и зелень"},
+  "авокадо":           {p:60,  u:"шт", g:"Овощи и зелень"},
+  "шпинат":            {p:90,  u:"уп", g:"Овощи и зелень"},
+  "руккола":           {p:120, u:"уп", g:"Овощи и зелень"},
+  "салат листовой":    {p:60,  u:"уп", g:"Овощи и зелень"},
+  "зелень":            {p:20,  u:"пучок", g:"Овощи и зелень"},
+  "кинза":             {p:20,  u:"пучок", g:"Овощи и зелень"},
+  "базилик":           {p:35,  u:"пучок", g:"Овощи и зелень"},
+  "мята":              {p:25,  u:"пучок", g:"Овощи и зелень"},
+  "кукуруза консерв.": {p:55,  u:"банка", g:"Овощи и зелень"},
+  "горошек консерв.":  {p:55,  u:"банка", g:"Овощи и зелень"},
+
+  /* фрукты и ягоды */
+  "яблоки":            {p:50,  u:"кг", g:"Фрукты и ягоды"},
+  "бананы":            {p:60,  u:"кг", g:"Фрукты и ягоды"},
+  "груши":             {p:75,  u:"кг", g:"Фрукты и ягоды"},
+  "виноград":          {p:120, u:"кг", g:"Фрукты и ягоды"},
+  "лимон":             {p:110, u:"кг", g:"Фрукты и ягоды"},
+  "лайм":              {p:220, u:"кг", g:"Фрукты и ягоды"},
+  "апельсины":         {p:95,  u:"кг", g:"Фрукты и ягоды"},
+  "грейпфрут":         {p:95,  u:"кг", g:"Фрукты и ягоды"},
+  "смородина мор.":    {p:200, u:"кг", g:"Фрукты и ягоды"},
+  "ягоды мор.":        {p:220, u:"кг", g:"Фрукты и ягоды"},
+
+  /* молочное */
+  "молоко":            {p:48,  u:"л",  g:"Молочное"},
+  "сливки":            {p:180, u:"л",  g:"Молочное"},
+  "сметана":           {p:120, u:"кг", g:"Молочное", dislike:true},
+  "йогурт":            {p:65,  u:"кг", g:"Молочное", dislike:true},
+  "кефир":             {p:55,  u:"л",  g:"Молочное", dislike:true},
+  "творог":            {p:170, u:"кг", g:"Молочное"},
+  "сыр твёрдый":       {p:430, u:"кг", g:"Молочное"},
+  "пармезан":          {p:950, u:"кг", g:"Молочное"},
+  "моцарелла":         {p:220, u:"уп", g:"Молочное"},
+  "камамбер":          {p:190, u:"шт", g:"Молочное"},
+  "сыр плавленый":     {p:220, u:"кг", g:"Молочное"},
+  "маскарпоне":        {p:480, u:"кг", g:"Молочное"},
+  "масло сливочное":   {p:480, u:"кг", g:"Молочное"},
+
+  /* крупы, тесто, хлеб */
+  "рис":               {p:65,  u:"кг", g:"Крупы, тесто, хлеб"},
+  "гречка":            {p:60,  u:"кг", g:"Крупы, тесто, хлеб"},
+  "макароны":          {p:60,  u:"кг", g:"Крупы, тесто, хлеб"},
+  "спагетти":          {p:65,  u:"кг", g:"Крупы, тесто, хлеб"},
+  "вермишель":         {p:55,  u:"кг", g:"Крупы, тесто, хлеб"},
+  "ньокки":            {p:130, u:"уп", g:"Крупы, тесто, хлеб"},
+  "булгур":            {p:85,  u:"кг", g:"Крупы, тесто, хлеб"},
+  "овсянка":           {p:55,  u:"кг", g:"Крупы, тесто, хлеб"},
+  "панировочные сухари":{p:80, u:"кг", g:"Крупы, тесто, хлеб"},
+  "хлеб":              {p:40,  u:"шт", g:"Крупы, тесто, хлеб"},
+  "багет":             {p:45,  u:"шт", g:"Крупы, тесто, хлеб"},
+  "лаваш":             {p:30,  u:"шт", g:"Крупы, тесто, хлеб"},
+  "тесто для пиццы":   {p:95,  u:"уп", g:"Крупы, тесто, хлеб"},
+  "слоёное тесто":     {p:130, u:"уп", g:"Крупы, тесто, хлеб"},
+  "тарталетки":        {p:80,  u:"уп", g:"Крупы, тесто, хлеб"},
+  "савоярди":          {p:180, u:"уп", g:"Крупы, тесто, хлеб"},
+
+  /* бакалея */
+  "оливковое масло":   {p:320, u:"л",  g:"Бакалея"},
+  "томатная паста":    {p:120, u:"кг", g:"Бакалея"},
+  "кетчуп":            {p:120, u:"кг", g:"Бакалея"},
+  "горчица":           {p:150, u:"кг", g:"Бакалея"},
+  "майонез":           {p:130, u:"кг", g:"Бакалея", dislike:true},
+  "соевый соус":       {p:180, u:"л",  g:"Бакалея"},
+  "бальзамик":         {p:220, u:"л",  g:"Бакалея"},
+  "мёд":               {p:320, u:"кг", g:"Бакалея"},
+  "орехи грецкие":     {p:420, u:"кг", g:"Бакалея"},
+  "шоколад":           {p:340, u:"кг", g:"Бакалея"},
+  "какао":             {p:520, u:"кг", g:"Бакалея"},
+  "кофе молотый":      {p:900, u:"кг", g:"Бакалея"},
+  "чай":               {p:130, u:"уп", g:"Бакалея"},
+  "желатин":           {p:90,  u:"уп", g:"Бакалея"},
+  "сода":              {p:35,  u:"кг", g:"Бакалея"},
+  "уксус":             {p:60,  u:"л",  g:"Бакалея"},
+  "содовая":           {p:35,  u:"л",  g:"Бакалея"},
+  "кокосовое молоко":  {p:95,  u:"банка", g:"Бакалея"},
+  "паста том ям":      {p:280, u:"уп", g:"Бакалея"},
+  "рыбный соус":       {p:220, u:"л",  g:"Бакалея"},
+  "лемонграсс":        {p:90,  u:"уп", g:"Бакалея"},
+  "чили":              {p:180, u:"кг", g:"Овощи и зелень"},
+
+  /* алкоголь */
+  "вино красное":      {p:350, u:"л",  g:"Алкоголь"},
+  "вино белое":        {p:350, u:"л",  g:"Алкоголь"},
+  "просекко":          {p:600, u:"л",  g:"Алкоголь"},
+  "пиво":              {p:60,  u:"л",  g:"Алкоголь"},
+  "апероль":           {p:1100,u:"л",  g:"Алкоголь"},
+  "ром белый":         {p:1200,u:"л",  g:"Алкоголь"},
+
+  /* всегда дома — в холодильнике не показывается */
+  "соль":              {p:15,  u:"кг", base:true},
+  "сахар":             {p:42,  u:"кг", base:true},
+  "масло подсолнечное":{p:80,  u:"л",  base:true},
+  "специи":            {p:250, u:"кг", base:true},
+  "мука":              {p:35,  u:"кг", base:true},
+  "яйца":              {p:4.5, u:"шт", base:true}
+};
+
+/* ============================================================
+   2) РАЗДЕЛЫ МЕНЮ. Вкладка «Кухня» и вкладка «Бар».
+   ============================================================ */
+const REALMS = {
+  "Кухня": ["Новинка месяца","Супы","Паста","Горячее","Гарниры","Салаты","Закуски","Завтраки","Десерты","Праздничные"],
+  "Бар":   ["Безалкогольные","Алкогольные"]
+};
+
+/* ============================================================
+   3) БЛЮДА. section — раздел из списка выше.
+      ing: [продукт, количество] · time — минуты · serves — порции
+      hue — два цвета для картинки-пейзажа (0–360)
+   ============================================================ */
+const DISHES = [
+{ id:"grechotto", name:"Гречотто с грибами", emoji:"🍄", section:"Новинка месяца", time:40, serves:2, hue:[30,50], tags:["новинка","ещё не готовили"],
+  ing:[["гречка",.2],["шампиньоны",.3],["лук",.08],["сливки",.1],["пармезан",.05],["масло сливочное",.04],["вино белое",.05,"opt"],["чеснок",.01],["соль",.005]],
+  steps:["Гречка по технике ризотто: не варить в воде, а подливать бульон половниками.","Грибы обжарить отдельно до румяного и отложить — иначе они отдадут воду в крупу.","Лук и чеснок на сливочном масле, всыпать сухую гречку и минуту прогреть.","Влить вино, выпарить, дальше подливать горячий бульон по половнику, помешивая, минут 20.","В конце — сливки, пармезан, грибы. Снять с огня и дать постоять 2 минуты."] },
+
+{ id:"bulon-kur", name:"Куриный бульон", emoji:"🐔", section:"Супы", time:90, serves:4, hue:[44,30], tags:["просто"],
+  ing:[["курица",1.2],["морковь",.1],["лук",.1],["зелень",1,"opt"],["специи",.005],["соль",.01]],
+  steps:["Курицу залить холодной водой и греть медленно — при быстром нагреве бульон мутнеет.","Как пойдёт пена — снимать её тщательно, это залог прозрачности.","Морковь и лук целиком, лавровый лист. Огонь на минимум: поверхность должна еле подрагивать, а не кипеть.","Варить 60–75 минут, солить в самом конце.","Курицу вынуть, бульон процедить. Это и есть блюдо: варёная курица и прозрачный бульон."] },
+
+{ id:"bulon-tel", name:"Телячий бульон", emoji:"🥩", section:"Супы", time:150, serves:4, hue:[18,40], tags:["просто"],
+  ing:[["телятина",1],["морковь",.12],["лук",.12],["зелень",1,"opt"],["специи",.005],["соль",.01]],
+  steps:["Телятину залить холодной водой, довести почти до кипения и слить первую воду — так бульон будет чистым.","Залить свежей холодной водой, снова медленно нагреть, снимая пену.","Варить 2–2,5 часа при еле заметном кипении. Бурление всё портит.","Морковь и лук — за 40 минут до конца, соль — в самом конце.","Мясо вынуть, бульон процедить через мелкое сито."] },
+
+{ id:"sup-verm", name:"Суп с вермишелью", emoji:"🍜", section:"Супы", time:60, serves:4, hue:[40,20], tags:["детям заходит"],
+  ing:[["курица",1],["вермишель",.1],["яйца",2],["картофель",.3,"opt"],["морковь",.1],["лук",.08],["зелень",1],["соль",.01]],
+  steps:["Сварить обычный куриный бульон: холодная вода, медленный нагрев, снятая пена, 50 минут еле заметного кипения.","Курицу вынуть, остудить и нарезать кусочками.","Яйца сварить вкрутую, 9 минут, и разрезать пополам.","В кипящий бульон — вермишель, всего 4 минуты, иначе разварится в кашу.","Вернуть курицу, разлить по тарелкам, в каждую половинку яйца и зелень."] },
+
+{ id:"sup-ovosh", name:"Овощной суп", emoji:"🥕", section:"Супы", time:40, serves:null, hue:[95,55], tags:[], ing:[], steps:[] },
+
+{ id:"tom-yam", name:"Том ям", emoji:"🦐", section:"Супы", time:45, serves:4, hue:[8,190], tags:["острое"],
+  ing:[["креветки",.4],["паста том ям",1],["кокосовое молоко",1],["шампиньоны",.2],["помидоры черри",.2],["лемонграсс",1],["лайм",.1],["рыбный соус",.02],["чили",.02,"opt"],["кинза",1],["чеснок",.01]],
+  steps:["Бульон вскипятить, бросить размятый стебель лемонграсса, галангал и листья кафрского лайма — черешок из листа выдернуть, иначе аромат не раскроется.","Проварить ароматы 5 минут и вынуть: их не едят.","Добавить пасту том ям, размешать, дать провариться 1–2 минуты.","Грибы и черри — 3 минуты, следом креветки: им хватает 2–3 минут, дольше станут резиновыми.","Влить кокосовое молоко, прогреть и СРАЗУ снять с огня — кипятить нельзя.","В конце сок лайма и рыбный соус по вкусу, сверху кинза. Баланс острое-кислое-солёное настраивается уже в кастрюле."] },
+
+{ id:"tykva-krem", name:"Тыквенный крем-суп", emoji:"🎃", section:"Супы", time:45, serves:4, hue:[30,45], tags:["постное"],
+  ing:[["тыква",0.8],["картофель",0.2],["морковь",0.15],["лук",0.1],["сливки",0.15],["чеснок",0.01],["масло сливочное",0.03],["специи",0.005],["соль",0.01]],
+  steps:["Тыкву, картофель, морковь крупным кубиком, лук — как получится.","Обжарить на сливочном масле 5 минут, залить водой вровень с овощами.","Варить 20 минут до полной мягкости тыквы.","Пробить блендером, влить сливки, прогреть, не кипятя.","Мускатный орех и семечки сверху — вкус меняется полностью."] },
+
+{ id:"karbonara", name:"Карбонара", emoji:"🍝", section:"Паста", time:25, serves:2, hue:[45,30], tags:["быстро"],
+  ing:[["спагетти",0.25],["бекон",0.15],["яйца",2],["пармезан",0.06],["чеснок",0.01],["соль",0.01]],
+  steps:["Воду посолить как следует — это единственная соль в блюде.","Бекон нарезать, вытопить на сухой сковороде до хруста.","Яйца взбить с тёртым пармезаном и большим количеством перца.","Горячие спагетти в сковороду БЕЗ огня, влить яичную смесь, быстро мешать — нужен кремовый соус, а не яичница.","Пара ложек воды от пасты, если густо."] },
+
+{ id:"pasta-kur-griby", name:"Паста с курицей и грибами в сливочном", emoji:"🍄", section:"Паста", time:35, serves:2, hue:[40,25], tags:[],
+  ing:[["спагетти",0.25],["куриное филе",0.3],["шампиньоны",0.25],["сливки",0.2],["лук",0.06],["чеснок",0.01],["пармезан",0.04],["масло подсолнечное",0.02],["соль",0.005]],
+  steps:["Филе кубиком, обжарить на сильном огне до корочки и снять со сковороды.","Грибы пластинами жарить, пока не уйдёт вся вода, потом лук.","Вернуть курицу, влить сливки, чеснок, соль, перец — 5 минут, соус загустеет.","Пасту сварить на минуту меньше указанного на пачке.","Переложить в соус с половником воды от варки, пармезан — в конце, без огня."] },
+
+{ id:"bolognese", name:"Паста болоньезе", emoji:"🍅", section:"Паста", time:70, serves:4, hue:[8,35], tags:["сытное"],
+  ing:[["спагетти",0.4],["фарш свино-говяжий",0.5],["помидоры",0.4],["томатная паста",0.06],["морковь",0.1],["лук",0.12],["чеснок",0.02],["вино красное",0.1,"opt"],["оливковое масло",0.03],["базилик",1,"opt"],["соль",0.01]],
+  steps:["Морковь и лук мелким кубиком — томить на масле 10 минут, не зажаривая.","Фарш разбивать лопаткой и жарить до испарения жидкости и лёгкой корочки.","Влить вино, дать выпариться. Помидоры и томатную пасту — следом.","Тушить на самом малом огне 40 минут, подливая воду. Чем дольше, тем вкуснее.","Пасту откинуть и соединить с соусом прямо в сотейнике."] },
+
+{ id:"pasta-avokado", name:"Паста с авокадо", emoji:"🥑", section:"Паста", time:20, serves:2, hue:[95,60], tags:["быстро","постное"],
+  ing:[["спагетти",0.25],["авокадо",2],["лимон",0.06],["чеснок",0.01],["оливковое масло",0.04],["базилик",1,"opt"],["пармезан",0.03,"opt"],["соль",0.005]],
+  steps:["Спагетти отварить, полстакана воды от варки не выливать.","Мякоть двух спелых авокадо, сок лимона, чеснок, оливковое масло, соль — пробить блендером до крема.","Развести соус парой ложек воды от пасты, чтобы стал шелковистым.","Горячие спагетти смешать с соусом БЕЗ огня: авокадо нельзя греть — потемнеет и загорчит.","Пармезан и базилик сверху. Есть сразу, это блюдо не ждёт."] },
+
+{ id:"nyokki-kur", name:"Ньокки с курицей и шпинатом", emoji:"🥟", section:"Паста", time:30, serves:2, hue:[120,45], tags:["быстро"],
+  ing:[["ньокки",1],["куриное филе",0.3],["шпинат",1],["сливки",0.2],["чеснок",0.01],["пармезан",0.03],["масло сливочное",0.02],["соль",0.005]],
+  steps:["Филе кубиком обжарить до румяного, отставить.","На той же сковороде растопить масло, чеснок, бросить шпинат — он осядет за минуту.","Сливки, курица, соль, перец — прогреть до загустения.","Ньокки варить ровно до всплытия, минуты 2, и сразу в соус.","Пармезан в конце. Ньокки не любят ждать — подавать немедленно."] },
+
+{ id:"nyokki-bekon", name:"Ньокки с беконом", emoji:"🥓", section:"Паста", time:25, serves:2, hue:[30,20], tags:["быстро"],
+  ing:[["ньокки",1],["бекон",0.12],["сливки",0.15],["пармезан",0.03],["чеснок",0.01],["зелень",1,"opt"]],
+  steps:["Бекон вытопить до хруста, часть отложить для подачи.","В вытопленный жир — чеснок и сливки, дать чуть загустеть.","Ньокки отварить до всплытия и переложить в соус.","Пармезан, перец, сверху хрустящий бекон и зелень."] },
+
+{ id:"kotlety-babushka", name:"Котлеты как у бабушки", emoji:"🍖", section:"Горячее", time:50, serves:4, hue:[20,38], tags:["сытное"],
+  ing:[["фарш свино-говяжий",0.6],["лук",0.1],["хлеб",0.3],["молоко",0.08],["яйца",1],["панировочные сухари",0.05],["масло подсолнечное",0.04],["чеснок",0.01,"opt"],["соль",0.01]],
+  steps:["Хлеб без корки замочить в молоке, отжать — от этого котлеты и получаются мягкими.","Фарш, тёртый лук, хлеб, яйцо, соль, перец. Вымешать и отбить о миску минуту.","Дать фаршу постоять в холоде 20 минут — тогда котлеты не развалятся.","Слепить, обвалять в сухарях, жарить по 4 минуты с каждой стороны.","Влить полстакана воды, накрыть крышкой и потомить 8 минут."] },
+
+{ id:"rublenye-kukuruza", name:"Рубленые куриные с кукурузой", emoji:"🌽", section:"Горячее", time:35, serves:3, hue:[48,90], tags:["быстро"],
+  ing:[["куриное филе",0.5],["кукуруза консерв.",1],["яйца",2],["мука",0.04],["зелень",1],["масло подсолнечное",0.03],["соль",0.005]],
+  steps:["Филе нарезать мелким кубиком ножом — не прокручивать, в этом весь смысл рубленых.","Добавить кукурузу без жидкости, яйца, муку, зелень, соль.","Вымешать и оставить на 15 минут, чтобы масса схватилась.","Выкладывать ложкой на сковороду, жарить по 4 минуты с каждой стороны на среднем огне."] },
+
+{ id:"rublenye-griby", name:"Рубленые куриные с грибами", emoji:"🍄", section:"Горячее", time:40, serves:3, hue:[35,25], tags:[],
+  ing:[["куриное филе",0.5],["шампиньоны",0.2],["лук",0.06],["яйца",2],["мука",0.04],["масло подсолнечное",0.03],["соль",0.005]],
+  steps:["Грибы с луком обжарить до испарения влаги и полностью остудить.","Филе нарезать мелким кубиком, соединить с грибами.","Яйца, мука, соль, перец — вымешать, дать постоять 15 минут.","Жарить ложкой на среднем огне по 4–5 минут с каждой стороны."] },
+
+{ id:"shaurma", name:"Шаурма", emoji:"🌯", section:"Горячее", time:30, serves:2, hue:[35,60], tags:["быстро","сытное"],
+  ing:[["лаваш",2],["куриное филе",0.35],["помидоры",0.15],["огурцы",0.12],["капуста",0.15],["сыр твёрдый",0.05,"opt"],["кетчуп",0.04],["чеснок",0.01],["специи",0.005]],
+  steps:["Филе полосками замариновать в специях и масле на 15 минут.","Жарить на сильном огне до румяных краёв, не пересушивая.","Капусту тонко нашинковать и слегка помять с солью.","Соус: кетчуп с чесноком и перцем.","Собрать в лаваш, завернуть и обжарить конверт на сухой сковороде — так он не разваливается."] },
+
+{ id:"pizza", name:"Пицца на готовом тесте", emoji:"🍕", section:"Горячее", time:30, serves:4, hue:[10,45], tags:["быстро"],
+  ing:[["тесто для пиццы",1],["томатная паста",0.06],["моцарелла",1],["помидоры черри",0.15],["базилик",1],["оливковое масло",0.02],["колбаса",0.1,"opt"],["шампиньоны",0.1,"opt"]],
+  steps:["Духовку разогреть максимально, 250°C, вместе с противнем.","Тесто раскатать тонко, смазать томатной пастой с солью и оливковым маслом.","Моцареллу порвать руками, черри — половинками.","10–12 минут на раскалённом противне, до пузырей на краях.","Базилик — только после духовки, иначе почернеет."] },
+
+{ id:"pyure", name:"Картофельное пюре", emoji:"🥔", section:"Гарниры", time:30, serves:null, hue:[48,26], tags:[], ing:[], steps:[] },
+
+{ id:"ris", name:"Рис", emoji:"🍚", section:"Гарниры", time:25, serves:null, hue:[36,200], tags:[], ing:[], steps:[] },
+
+{ id:"grechka", name:"Гречка", emoji:"🌾", section:"Гарниры", time:25, serves:null, hue:[28,44], tags:[], ing:[], steps:[] },
+
+{ id:"makarony", name:"Макароны", emoji:"🍝", section:"Гарниры", time:20, serves:null, hue:[42,12], tags:[], ing:[], steps:[] },
+
+{ id:"zhar-kart", name:"Жареная картошка", emoji:"🍟", section:"Гарниры", time:30, serves:null, hue:[40,22], tags:[], ing:[], steps:[] },
+
+{ id:"brokkoli", name:"Жареная брокколи", emoji:"🥦", section:"Гарниры", time:20, serves:null, hue:[120,90], tags:[], ing:[], steps:[] },
+
+{ id:"zhar-ovosh", name:"Жареные овощи", emoji:"🫑", section:"Гарниры", time:25, serves:null, hue:[100,60], tags:[], ing:[], steps:[] },
+
+{ id:"salat-og-pom", name:"Огурец-помидор", emoji:"🥗", section:"Салаты", time:10, serves:2, hue:[105,70], tags:["быстро","постное","состав плавающий"],
+  ing:[["помидоры",0.3],["огурцы",0.25],["перец болгарский",0.15,"opt"],["лук",0.04,"opt"],["зелень",1],["оливковое масло",0.02],["соль",0.005]],
+  steps:["Помидоры крупными дольками — мелкие пустят сок и салат поплывёт.","Огурцы толстыми полукружками, чтобы хрустели.","Перец и лук — по настроению, салат работает и без них.","Соль, масло, много зелени. Заправлять прямо перед подачей."] },
+
+{ id:"guakamole", name:"Гуакамоле", emoji:"🥑", section:"Закуски", time:15, serves:4, hue:[95,50], tags:["быстро","постное"],
+  ing:[["авокадо",2],["помидоры",0.1],["лук",0.04],["лайм",0.06],["кинза",1],["чеснок",0.01,"opt"],["соль",0.005]],
+  steps:["Авокадо размять вилкой, а не блендером — нужна текстура, а не крем.","Сразу влить сок лайма: он держит цвет и даёт кислоту.","Помидор без семян мелким кубиком, лук как можно мельче.","Кинза, соль, перец. Острое — по желанию.","Косточку оставить в миске, если готовите заранее — меньше темнеет."] },
+
+{ id:"brusketta-kamamber", name:"Брускетта с камамбером", emoji:"🧀", section:"Закуски", time:15, serves:2, hue:[38,20], tags:["быстро"],
+  ing:[["багет",1],["камамбер",1],["мёд",0.02],["орехи грецкие",0.03],["руккола",1,"opt"],["оливковое масло",0.02]],
+  steps:["Багет ломтиками, сбрызнуть маслом и подсушить в духовке 6 минут.","Камамбер нарезать и выложить на горячий хлеб — подтает сам.","Мёд и рубленый орех сверху.","Руккола и крупный перец в конце."] },
+
+{ id:"brusketta-losos", name:"Брускетта с лососем и авокадо", emoji:"🍞", section:"Закуски", time:12, serves:2, hue:[20,340], tags:["быстро"],
+  ing:[["багет",1],["лосось слабосолёный",0.12],["авокадо",1],["лимон",0.03],["масло сливочное",0.02],["зелень",1,"opt"]],
+  steps:["Багет подсушить в тостере или на сухой сковороде.","Авокадо размять с соком лимона и солью, намазать толстым слоем.","Сверху лосось лентами.","Перец, зелень, ещё капля лимона."] },
+
+{ id:"zhar-kabachki", name:"Жареные кабачки", emoji:"🥒", section:"Закуски", time:25, serves:3, hue:[88,55], tags:["быстро","постное"],
+  ing:[["кабачок",0.6],["чеснок",0.02],["мука",0.05],["зелень",1],["масло подсолнечное",0.04],["помидоры",0.15,"opt"],["соль",0.005]],
+  steps:["Кабачки кружками в сантиметр, обвалять в муке с солью.","Жарить на хорошо разогретой сковороде по 3 минуты с каждой стороны.","Выложить на салфетку — лишнее масло уйдёт.","Пока горячие — натереть чесноком и посыпать зеленью."] },
+
+{ id:"syrniki", name:"Сырники", emoji:"🥞", section:"Завтраки", time:25, serves:3, hue:[40,20], tags:["быстро"],
+  ing:[["творог",0.5],["яйца",2],["мука",0.08],["сахар",0.05],["масло подсолнечное",0.03],["соль",0.005]],
+  steps:["Творог размять вилкой, добавить яйца, сахар, щепотку соли.","Муку подсыпать понемногу — тесто мягкое, но лепится.","Сформировать шайбочки, обвалять в муке.","Жарить на среднем огне по 3 минуты с каждой стороны."] },
+
+{ id:"omlet", name:"Омлет с помидорами и сыром", emoji:"🍳", section:"Завтраки", time:15, serves:2, hue:[48,15], tags:["быстро"],
+  ing:[["яйца",4],["молоко",0.08],["помидоры",0.15],["сыр твёрдый",0.05],["масло сливочное",0.02],["зелень",1,"opt"],["соль",0.005]],
+  steps:["Помидоры на масле 2 минуты, чтобы ушла лишняя вода.","Яйца взбить с молоком и солью.","Вылить на сковороду, накрыть крышкой, огонь малый.","Через 4 минуты — тёртый сыр и зелень, крышку обратно на минуту."] },
+
+{ id:"tost-avokado", name:"Тост с авокадо и яйцом", emoji:"🍞", section:"Завтраки", time:15, serves:2, hue:[95,45], tags:["быстро"],
+  ing:[["хлеб",0.5],["авокадо",1],["яйца",2],["лимон",0.02],["зелень",1,"opt"],["соль",0.005]],
+  steps:["Хлеб подсушить до хруста.","Авокадо размять с лимоном и солью, намазать толсто.","Яйцо пашот или глазунью — сверху.","Крупная соль и перец в конце."] },
+
+{ id:"bliny", name:"Блины", emoji:"🥮", section:"Завтраки", time:40, serves:4, hue:[36,22], tags:[],
+  ing:[["мука",0.3],["молоко",0.5],["яйца",3],["сахар",0.04],["масло подсолнечное",0.03],["соль",0.005]],
+  steps:["Яйца с сахаром и солью взбить, влить половину молока.","Муку просеять, размешать до гладкого теста без комков.","Остальное молоко и ложку масла — тесто как жидкая сметана.","Дать постоять 15 минут, печь на раскалённой сковороде."] },
+
+{ id:"tiramisu", name:"Тирамису", emoji:"🍰", section:"Десерты", time:40, serves:null, hue:[28,15], tags:["готовится заранее"], ing:[], steps:[] },
+
+{ id:"panakota", name:"Панакота", emoji:"🍮", section:"Десерты", time:25, serves:null, hue:[32,340], tags:["готовится заранее"], ing:[], steps:[] },
+
+{ id:"shok-muss", name:"Шоколадный мусс", emoji:"🍫", section:"Десерты", time:30, serves:null, hue:[18,300], tags:[], ing:[], steps:[] },
+
+{ id:"muss-pirozhnye", name:"Муссовые пирожные", emoji:"🧁", section:"Десерты", time:120, serves:null, hue:[330,280], tags:["готовится заранее"], ing:[], steps:[] },
+
+{ id:"vaf-tort", name:"Вафельный торт", emoji:"🧇", section:"Десерты", time:40, serves:null, hue:[38,25], tags:[], ing:[], steps:[] },
+
+{ id:"utka", name:"Запечённая утка", emoji:"🦆", section:"Праздничные", time:150, serves:null, hue:[18,38], tags:["праздничное"], ing:[], steps:[] },
+
+{ id:"utka-konfi", name:"Утиные ножки конфи", emoji:"🍗", section:"Праздничные", time:240, serves:2, hue:[25,15], tags:["праздничное"],
+  ing:[["утиные ножки",0.8],["чеснок",0.04],["специи",0.01],["масло подсолнечное",0.3],["соль",0.02]],
+  steps:["Ножки натереть солью, чесноком, тимьяном и оставить в холоде минимум на 6 часов.","Соль смыть и насухо промокнуть — иначе будет пересол.","Уложить в форму, залить жиром или маслом так, чтобы покрыло полностью.","140°C, 3 часа. Мясо должно отходить от кости само.","Перед подачей обжарить кожей вниз на сковороде до хруста."] },
+
+{ id:"salat-hamon", name:"Салат с хамоном и авокадо", emoji:"🥑", section:"Праздничные", time:20, serves:4, hue:[95,30], tags:["праздничное","быстро"],
+  ing:[["хамон",0.1],["авокадо",2],["руккола",1],["помидоры черри",0.2],["пармезан",0.04,"opt"],["оливковое масло",0.03],["бальзамик",0.02]],
+  steps:["Рукколу вымыть и обсушить — мокрая тянет заправку вниз.","Авокадо дольками, черри половинками.","Хамон рвать руками и класть сверху, не перемешивая.","Масло, бальзамик, крупный перец. Пармезан слайсами."] },
+
+{ id:"salat-krevetki", name:"Салат с креветками и грейпфрутом", emoji:"🍤", section:"Праздничные", time:25, serves:4, hue:[10,340], tags:["праздничное"],
+  ing:[["креветки",0.3],["грейпфрут",0.4],["авокадо",1],["салат листовой",1],["лимон",0.03],["оливковое масло",0.03],["чеснок",0.01,"opt"]],
+  steps:["Креветки обжарить на сильном огне 2 минуты с чесноком — дольше нельзя, станут резиновыми.","Грейпфрут разобрать на филе без плёнок, сок сохранить.","Салат порвать руками, авокадо дольками.","Заправка: сок грейпфрута, лимон, масло, соль.","Собирать перед подачей, иначе салат потечёт."] },
+
+{ id:"kanape", name:"Канапе", emoji:"🥂", section:"Праздничные", time:30, serves:null, hue:[40,200], tags:["праздничное"], ing:[], steps:[] },
+
+{ id:"chay", name:"Чай", emoji:"🍵", section:"Безалкогольные", time:5, serves:null, hue:[100,60], tags:[], ing:[], steps:[] },
+
+{ id:"kofe", name:"Кофе", emoji:"☕", section:"Безалкогольные", time:10, serves:null, hue:[28,15], tags:[], ing:[], steps:[] },
+
+{ id:"kompot", name:"Компот", emoji:"🍎", section:"Безалкогольные", time:30, serves:null, hue:[350,20], tags:[], ing:[], steps:[] },
+
+{ id:"vino", name:"Вино", emoji:"🍷", section:"Алкогольные", time:2, serves:null, hue:[345,300], tags:[], ing:[], steps:[] },
+
+{ id:"igristoe", name:"Игристое", emoji:"🥂", section:"Алкогольные", time:2, serves:null, hue:[45,200], tags:[], ing:[], steps:[] },
+
+{ id:"pivo", name:"Пиво", emoji:"🍺", section:"Алкогольные", time:2, serves:null, hue:[42,30], tags:[], ing:[], steps:[] },
+
+{ id:"kokteyl", name:"Коктейли", emoji:"🍹", section:"Алкогольные", time:10, serves:null, hue:[20,185], tags:[], ing:[], steps:[] }
+];
+
+/* ============================ логика ============================ */
+const $ = s => document.querySelector(s);
+const money = n => Math.round(n) + " грн";
+const cost = d => d.ing.reduce((s,[k,q]) => s + (ING[k] ? ING[k].p*q : 0), 0);
+const store = {
+  get(k,f){ try{ const v = localStorage.getItem(k); return v ? JSON.parse(v) : f; }catch(e){ return f; } },
+  set(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+};
+
+const used = Object.keys(ING).filter(k => !ING[k].base);
+const state = {
+  fridge: new Set(store.get("fridge", [])),
+  budget: store.get("budget", 600),
+  realm: "Кухня",
+  section: "все",
+  q: "",
+  onlyCookable: false,
+  tray: new Map(store.get("tray", []))
+};
+const MAXB = 600;
+const isDraft = d => d.ing.length === 0;
+const missingOf = d => d.ing.filter(([k,q,opt]) => !opt && !ING[k].base && !state.fridge.has(k)).map(([k]) => k);
+const timeWord = t => !t ? null : t <= 30 ? ["быстро","t1"] : t <= 60 ? ["полчаса-час","t2"] : ["долго","t3"];
+const plural = (n,a,b,c) => n % 10 === 1 && n % 100 !== 11 ? a : (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? b : c);
+
+/* холодильник */
+function buildFridge(){
+  const groups = {};
+  used.forEach(k => (groups[ING[k].g] ||= []).push(k));
+  const order = ["Мясо и птица","Рыба и морепродукты","Овощи и зелень","Фрукты и ягоды","Молочное","Крупы, тесто, хлеб","Бакалея","Алкоголь"];
+  $("#fridge").innerHTML = order.filter(g => groups[g]).map(g => `
+    <details class="fridge-group"${g === "Мясо и птица" || g === "Овощи и зелень" ? " open" : ""}><summary><h4>${g}</h4></summary><div class="chips">${
+      groups[g].sort((a,b) => a.localeCompare(b,"ru")).map(k =>
+        `<label class="chip${state.fridge.has(k)?" on":""}"><input type="checkbox" data-ing="${k}"${state.fridge.has(k)?" checked":""}>${k}</label>`
+      ).join("")
+    }</div></details>`).join("");
+}
+$("#fridge").addEventListener("change", e => {
+  const k = e.target.dataset.ing; if(!k) return;
+  e.target.checked ? state.fridge.add(k) : state.fridge.delete(k);
+  e.target.closest(".chip").classList.toggle("on", e.target.checked);
+  store.set("fridge", [...state.fridge]); render();
+});
+$("#clear-fridge").onclick = () => { state.fridge.clear(); store.set("fridge",[]); buildFridge(); render(); };
+
+/* навигация: Кухня / Бар + разделы */
+function buildNav(){
+  $("#realms").innerHTML = Object.keys(REALMS).map(r =>
+    `<button class="realm" data-r="${r}" aria-pressed="${state.realm===r}">${r}</button>`).join("");
+  $("#sections").innerHTML = ["все", ...REALMS[state.realm]].map(s =>
+    `<button class="sec" data-s="${s}" aria-pressed="${state.section===s}">${s === "все" ? (state.realm === "Бар" ? "Всё в баре" : "Всё меню") : s}</button>`).join("");
+}
+$("#realms").onclick = e => {
+  const b = e.target.closest(".realm"); if(!b) return;
+  state.realm = b.dataset.r; state.section = "все"; buildNav(); render();
+  window.scrollTo({top:0, behavior:"smooth"});
+};
+$("#sections").onclick = e => {
+  const b = e.target.closest(".sec"); if(!b) return;
+  state.section = b.dataset.s; buildNav(); render();
+};
+
+$("#search").oninput = e => { state.q = e.target.value.trim().toLowerCase(); render(); };
+$("#only-cookable").onchange = e => { state.onlyCookable = e.target.checked; render(); };
+const budgetEl = $("#budget");
+budgetEl.value = state.budget;
+function budgetLabel(){ $("#budget-val").textContent = state.budget >= MAXB ? "без лимита" : money(state.budget); }
+budgetEl.oninput = e => { state.budget = +e.target.value; store.set("budget", state.budget); budgetLabel(); render(); };
+$("#budget-max").onclick = () => { state.budget = MAXB; budgetEl.value = MAXB; store.set("budget",MAXB); budgetLabel(); render(); };
+
+/* ——— лайки и отзывы: живут в разметке #social, поэтому видны обоим ——— */
+const likeNode = id => document.querySelector(`#likes b[data-id="${id}"]`);
+const likesOf = id => +(likeNode(id)?.dataset.n || 0);
+const commentsOf = id => [...document.querySelectorAll(`#comments p[data-id="${id}"]`)];
+const myLikes = new Set(store.get("myLikes", []));
+let who = store.get("who", "");
+
+function askWho(){
+  const name = prompt("Как вас зовут? Имя подписывает отзывы.", who || "");
+  if(name && name.trim()){ who = name.trim().slice(0,20); store.set("who", who); }
+  return who;
+}
+
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-like]"); if(!b) return;
+  const id = b.dataset.like;
+  let node = likeNode(id);
+  if(!node){ node = document.createElement("b"); node.dataset.id = id; node.dataset.n = "0"; document.getElementById("likes").appendChild(node); }
+  const liked = myLikes.has(id);
+  node.dataset.n = Math.max(0, likesOf(id) + (liked ? -1 : 1));
+  liked ? myLikes.delete(id) : myLikes.add(id);
+  store.set("myLikes", [...myLikes]);
+  render();
+  if(current && current.id === id) renderComments();
+});
+
+function renderComments(){
+  const list = commentsOf(current.id);
+  $("#dd-comments").innerHTML = list.length
+    ? list.map(c => `<div class="comment"><b>${c.dataset.who}</b>${c.textContent}</div>`).join("")
+    : `<div class="who">Отзывов пока нет. Будьте первым.</div>`;
+  $("#dd-who").textContent = who || "гость";
+}
+$("#dd-rename").onclick = () => { askWho(); renderComments(); };
+$("#dd-cform").onsubmit = e => {
+  e.preventDefault();
+  const text = $("#dd-ctext").value.trim(); if(!text) return;
+  if(!who && !askWho()) return;
+  const el = document.createElement("p");
+  el.dataset.id = current.id;
+  el.dataset.who = who;
+  el.textContent = text;
+  $("#comments").appendChild(el);
+  $("#dd-ctext").value = "";
+  renderComments(); render();
+};
+
+/* карточка */
+function cardHTML(d){
+  const miss = missingOf(d), c = cost(d), inTray = state.tray.has(d.id), draft = isDraft(d);
+  return `<article class="card">
+    <button class="photo" data-open="${d.id}" style="--h:${d.hue[0]}; --h2:${d.hue[1]}" aria-label="${d.name}">
+      <span>${d.emoji}</span><em class="badge">${d.time ? d.time + " мин" : "время уточним"}</em>
+    </button>
+    <div class="body">
+      <button class="title" data-open="${d.id}">${d.name}</button>
+      <div class="meta">
+        ${d.tags.map(t=>`<span class="tag">${t}</span>`).join("")}
+        ${d.time ? `<span class="tag ${timeWord(d.time)[1]}">${timeWord(d.time)[0]}</span>` : ""}
+        ${d.ing.some(([k]) => ING[k].dislike) ? `<span class="tag him">готовлю мужу</span>` : ""}
+        ${draft
+          ? `<span class="tag">рецепт заполняется</span>`
+          : miss.length === 0
+            ? `<span class="tag ok">всё есть</span>`
+            : `<span class="tag miss">нет: ${miss.slice(0,2).join(", ")}${miss.length>2?" +"+(miss.length-2):""}</span>`}
+      </div>
+      <div class="row">
+        ${draft
+          ? `<span class="per">цену и рецепт добавим позже</span>`
+          : `<span class="price">${money(c)}</span>
+             <span class="per num">${d.serves} ${plural(d.serves,"порция","порции","порций")} · ${money(c/d.serves)}</span>`}
+      </div>
+      <div class="card-actions">
+        <button class="order-btn${inTray?" in":""}" data-add="${d.id}">${inTray ? "На подносе ✓" : "Заказать"}</button>
+        <button class="like${myLikes.has(d.id)?" on":""}" data-like="${d.id}" aria-label="Нравится">♥ ${likesOf(d.id)}${commentsOf(d.id).length ? " · 💬 " + commentsOf(d.id).length : ""}</button>
+      </div>
+    </div>
+  </article>`;
+}
+
+function render(){
+  const pass = d => REALMS[state.realm].includes(d.section)
+    && (state.section === "все" || d.section === state.section)
+    && (isDraft(d) || cost(d) <= state.budget)
+    && (!state.q || (d.name + " " + d.section + " " + d.tags.join(" ") + " " + d.ing.map(i=>i[0]).join(" ")).toLowerCase().includes(state.q))
+    && (!state.onlyCookable || (!isDraft(d) && missingOf(d).length === 0));
+
+  const list = DISHES.filter(pass);
+  const secs = state.section === "все" ? REALMS[state.realm] : [state.section];
+
+  $("#empty").hidden = list.length > 0;
+  $("#groups").innerHTML = secs.map(s => {
+    const items = list.filter(d => d.section === s)
+      .sort((a,b) => missingOf(a).length - missingOf(b).length || a.time - b.time);
+    if(!items.length) return "";
+    return `<section class="group">
+      <div class="group-head"><h2>${s}</h2><span></span><em>${items.length} ${plural(items.length,"позиция","позиции","позиций")}</em></div>
+      <div class="grid">${items.map(cardHTML).join("")}</div>
+    </section>`;
+  }).join("");
+  $("#st-ready").textContent = DISHES.filter(d => !isDraft(d) && missingOf(d).length === 0).length;
+  renderTray();
+}
+$("#groups").addEventListener("click", e => {
+  const o = e.target.closest("[data-open]"), a = e.target.closest("[data-add]");
+  if(a) return toggleTray(a.dataset.add);
+  if(o) return openDish(o.dataset.open);
+});
+
+/* поднос */
+function toggleTray(id){
+  state.tray.has(id) ? state.tray.delete(id) : state.tray.set(id, 1);
+  store.set("tray", [...state.tray]); render();
+}
+function renderTray(){
+  const ids = [...state.tray.keys()], sum = ids.reduce((s,id) => s + cost(DISHES.find(d=>d.id===id)), 0);
+  $("#tray").classList.toggle("show", ids.length > 0);
+  $("#tray-sum").textContent = money(sum);
+  $("#tray-count").textContent = ids.length + " " + plural(ids.length,"позиция","позиции","позиций");
+  const limit = state.budget >= MAXB ? Math.max(sum, 1) : state.budget;
+  const bar = $("#tray-bar");
+  bar.style.width = Math.min(100, sum/limit*100) + "%";
+  bar.classList.toggle("over", state.budget < MAXB && sum > state.budget);
+}
+$("#clear-tray").onclick = () => { state.tray.clear(); store.set("tray", []); render(); };
+
+/* карточка блюда */
+let current = null;
+function openDish(id){
+  const d = current = DISHES.find(x => x.id === id);
+  $("#dd-name").textContent = d.name;
+  $("#dd-meta").innerHTML = `<span class="tag">${d.section}</span>${d.time ? `<span class="tag ${timeWord(d.time)[1]}">${d.time} мин · ${timeWord(d.time)[0]}</span>` : `<span class="tag">время уточним</span>`}${d.serves ? `<span class="tag">${d.serves} ${plural(d.serves,"порция","порции","порций")}</span>` : ""}${d.tags.map(t=>`<span class="tag">${t}</span>`).join("")}`;
+  $("#dd-ing").innerHTML = isDraft(d) ? `<li style="border:0">Список продуктов ещё не заполнен — Алинка допишет.</li>` : d.ing.map(([k,q,opt]) => {
+    const i = ING[k], have = i.base || state.fridge.has(k);
+    const qty = (i.u === "кг" || i.u === "л")
+      ? (q < 1 ? Math.round(q*1000) + (i.u === "л" ? " мл" : " г") : q + " " + i.u)
+      : q + " " + i.u;
+    return `<li class="${have||opt?"":"no"}"><span>${have||opt?"":"✗ "}${k}${opt?` <em style="font-style:normal;color:var(--ink-2)">по желанию</em>`:""}</span><span class="num">${qty} · ${money(i.p*q)}</span></li>`;
+  }).join("");
+  $("#dd-total").textContent = isDraft(d) ? "—" : money(cost(d));
+  $("#dd-steps").innerHTML = isDraft(d) ? `<li style="list-style:none; margin-left:-20px; color:var(--ink-2)">Рецепт добавим позже.</li>` : d.steps.map(s => `<li>${s}</li>`).join("");
+  $("#dd-add").textContent = state.tray.has(d.id) ? "Убрать с подноса" : "Добавить на поднос";
+  renderComments();
+  $("#dish-dlg").showModal();
+}
+$("#dd-add").onclick = () => { toggleTray(current.id); $("#dish-dlg").close(); };
+$("#dd-close").onclick = () => $("#dish-dlg").close();
+
+/* заказ */
+$("#open-order").onclick = () => {
+  const ds = [...state.tray.keys()].map(id => DISHES.find(d => d.id === id));
+  const sum = ds.reduce((s,d) => s + cost(d), 0);
+  const shop = [...new Set(ds.flatMap(missingOf))];
+  const lines = [
+    "Заказ из «Ресторана у Алинки»",
+    "",
+    ...ds.map(d => `• ${d.name}${isDraft(d) ? "" : ` — ${money(cost(d))} (${d.time} мин)`}`),
+    "",
+    `Итого: ${money(sum)}`,
+    state.budget < MAXB ? `Бюджет: ${money(state.budget)}${sum > state.budget ? " — перебор на " + money(sum - state.budget) : " — укладываемся"}` : "",
+    shop.length ? "\nКупить: " + shop.join(", ") : "\nВсё есть дома 🎉"
+  ].filter(Boolean);
+  $("#od-text").value = lines.join("\n");
+  $("#od-hint").textContent = "Скопируйте и отправьте Алинке в мессенджер.";
+  $("#order-dlg").showModal();
+};
+$("#od-close").onclick = () => $("#order-dlg").close();
+$("#od-copy").onclick = async () => {
+  const t = $("#od-text");
+  try{
+    await navigator.clipboard.writeText(t.value);
+    $("#od-hint").textContent = "Скопировано. Вставляйте в чат.";
+  }catch(e){
+    t.select(); t.setSelectionRange(0, 99999);
+    $("#od-hint").textContent = "Текст выделен — скопируйте вручную (⌘C или долгое нажатие).";
+  }
+};
+
+/* тема */
+$("#theme").onclick = () => {
+  const dark = matchMedia("(prefers-color-scheme: dark)").matches;
+  const now = document.documentElement.dataset.theme || (dark ? "dark" : "light");
+  document.documentElement.dataset.theme = now === "dark" ? "light" : "dark";
+};
+
+$("#go-menu").onclick = () => document.querySelector(".nav").scrollIntoView({behavior:"smooth"});
+$("#go-fridge").onclick = () => {
+  document.querySelector("aside.panel").scrollIntoView({behavior:"smooth", block:"center"});
+};
+$("#st-dishes").textContent = DISHES.length;
+$("#st-sections").textContent = Object.values(REALMS).flat().length;
+
+buildFridge();
+buildNav();
+budgetLabel();
+render();
+
+/* самопроверка */
+const ALL_SECTIONS = Object.values(REALMS).flat();
+console.assert(DISHES.every(d => d.ing.every(([k]) => ING[k])), "в блюде есть продукт, которого нет в списке ING");
+console.assert(DISHES.every(d => ALL_SECTIONS.includes(d.section)), "у блюда раздел, которого нет в REALMS");
+console.assert(ALL_SECTIONS.every(s => DISHES.some(d => d.section === s)), "есть пустой раздел меню");
+console.assert(!used.some(k => ING[k].base), "базовый продукт попал в холодильник");
+</script>
+
+<script>
+if("serviceWorker" in navigator){
+  addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
+}
+</script>
