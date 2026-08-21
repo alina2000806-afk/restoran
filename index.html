@@ -241,19 +241,12 @@ details.fridge-group[open] summary::before{transform:rotate(90deg)}
 .tag.him{background:var(--pink-soft); color:var(--pink)}
 .price{font-family:Onest; font-size:20px; font-weight:800; font-variant-numeric:tabular-nums}
 .per{font-size:11.5px; color:var(--ink-2); font-weight:600}
-.card-actions{display:flex; gap:8px; margin-top:2px}
 .order-btn{
   flex:1; border:0; background:var(--violet); color:#FFF; border-radius:14px; padding:11px 14px;
   cursor:pointer; font-weight:700; font-size:14px; box-shadow:var(--glow); transition:.16s;
 }
 .order-btn:hover{filter:brightness(1.07)}
 .order-btn.in{background:var(--violet-soft); color:var(--violet); box-shadow:none}
-.like{
-  border:0; background:var(--surface-2); color:var(--ink-2); cursor:pointer; border-radius:14px;
-  padding:11px 13px; font-size:13px; font-weight:700; white-space:nowrap; transition:.16s;
-}
-.like:hover{color:var(--pink)}
-.like.on{background:var(--pink-soft); color:var(--pink)}
 .empty{padding:70px 16px; text-align:center; font-family:Onest; font-size:20px; font-weight:700; color:var(--ink-2)}
 
 /* ——— поднос ——— */
@@ -336,7 +329,6 @@ textarea.order{
 </nav>
 
 <section id="social" hidden>
-  <div id="likes"><b data-id="bulon-kur" data-n="0"></b><b data-id="bulon-tel" data-n="0"></b><b data-id="sup-verm" data-n="0"></b><b data-id="sup-ovosh" data-n="0"></b><b data-id="tom-yam" data-n="0"></b><b data-id="tykva-krem" data-n="0"></b><b data-id="karbonara" data-n="0"></b><b data-id="pasta-kur-griby" data-n="0"></b><b data-id="bolognese" data-n="0"></b><b data-id="pasta-avokado" data-n="0"></b><b data-id="nyokki-kur" data-n="0"></b><b data-id="nyokki-bekon" data-n="0"></b><b data-id="kotlety-babushka" data-n="0"></b><b data-id="rublenye-kukuruza" data-n="0"></b><b data-id="rublenye-griby" data-n="0"></b><b data-id="shaurma" data-n="0"></b><b data-id="pizza" data-n="0"></b><b data-id="pyure" data-n="0"></b><b data-id="ris" data-n="0"></b><b data-id="grechka" data-n="0"></b><b data-id="makarony" data-n="0"></b><b data-id="zhar-kart" data-n="0"></b><b data-id="brokkoli" data-n="0"></b><b data-id="zhar-ovosh" data-n="0"></b><b data-id="salat-og-pom" data-n="0"></b><b data-id="guakamole" data-n="0"></b><b data-id="brusketta-kamamber" data-n="0"></b><b data-id="brusketta-losos" data-n="0"></b><b data-id="zhar-kabachki" data-n="0"></b><b data-id="syrniki" data-n="0"></b><b data-id="omlet" data-n="0"></b><b data-id="tost-avokado" data-n="0"></b><b data-id="bliny" data-n="0"></b><b data-id="tiramisu" data-n="0"></b><b data-id="panakota" data-n="0"></b><b data-id="shok-muss" data-n="0"></b><b data-id="muss-pirozhnye" data-n="0"></b><b data-id="vaf-tort" data-n="0"></b><b data-id="utka" data-n="0"></b><b data-id="utka-konfi" data-n="0"></b><b data-id="salat-hamon" data-n="0"></b><b data-id="salat-krevetki" data-n="0"></b><b data-id="kanape" data-n="0"></b><b data-id="chay" data-n="0"></b><b data-id="kofe" data-n="0"></b><b data-id="kompot" data-n="0"></b><b data-id="vino" data-n="0"></b><b data-id="igristoe" data-n="0"></b><b data-id="pivo" data-n="0"></b><b data-id="kokteyl" data-n="0"></b></div>
   <div id="comments"></div>
 </section>
 
@@ -818,11 +810,8 @@ function budgetLabel(){ $("#budget-val").textContent = state.budget >= MAXB ? "�
 budgetEl.oninput = e => { state.budget = +e.target.value; store.set("budget", state.budget); budgetLabel(); render(); };
 $("#budget-max").onclick = () => { state.budget = MAXB; budgetEl.value = MAXB; store.set("budget",MAXB); budgetLabel(); render(); };
 
-/* ——— лайки и отзывы: живут в разметке #social, поэтому видны обоим ——— */
-const likeNode = id => document.querySelector(`#likes b[data-id="${id}"]`);
-const likesOf = id => +(likeNode(id)?.dataset.n || 0);
+/* ——— отзывы: живут в разметке #social ——— */
 const commentsOf = id => [...document.querySelectorAll(`#comments p[data-id="${id}"]`)];
-const myLikes = new Set(store.get("myLikes", []));
 let who = store.get("who", "");
 
 function askWho(){
@@ -830,19 +819,6 @@ function askWho(){
   if(name && name.trim()){ who = name.trim().slice(0,20); store.set("who", who); }
   return who;
 }
-
-document.addEventListener("click", e => {
-  const b = e.target.closest("[data-like]"); if(!b) return;
-  const id = b.dataset.like;
-  let node = likeNode(id);
-  if(!node){ node = document.createElement("b"); node.dataset.id = id; node.dataset.n = "0"; document.getElementById("likes").appendChild(node); }
-  const liked = myLikes.has(id);
-  node.dataset.n = Math.max(0, likesOf(id) + (liked ? -1 : 1));
-  liked ? myLikes.delete(id) : myLikes.add(id);
-  store.set("myLikes", [...myLikes]);
-  render();
-  if(current && current.id === id) renderComments();
-});
 
 function renderComments(){
   const list = commentsOf(current.id);
@@ -890,10 +866,7 @@ function cardHTML(d){
           : `<span class="price">${money(c)}</span>
              <span class="per num">${d.serves} ${plural(d.serves,"порция","порции","порций")} · ${money(c/d.serves)}</span>`}
       </div>
-      <div class="card-actions">
-        <button class="order-btn${inTray?" in":""}" data-add="${d.id}">${inTray ? "На подносе ✓" : "Заказать"}</button>
-        <button class="like${myLikes.has(d.id)?" on":""}" data-like="${d.id}" aria-label="Нравится">♥ ${likesOf(d.id)}${commentsOf(d.id).length ? " · 💬 " + commentsOf(d.id).length : ""}</button>
-      </div>
+      <button class="order-btn${inTray?" in":""}" data-add="${d.id}">${inTray ? "На подносе ✓" : "Заказать"}${commentsOf(d.id).length ? " · 💬 " + commentsOf(d.id).length : ""}</button>
     </div>
   </article>`;
 }
