@@ -186,6 +186,8 @@ details.fridge-group[open] summary::before{transform:rotate(90deg)}
   background:var(--surface); font-size:15px; font-weight:500; box-shadow:var(--shadow-s); margin-bottom:24px;
 }
 .search::placeholder{color:var(--ink-2)}
+.fridge-q{margin-bottom:14px; padding:10px 14px; border-radius:14px; font-size:14px}
+#groups{scroll-margin-top:124px}
 
 /* ——— разделы и карточки ——— */
 .group{margin-bottom:38px}
@@ -317,22 +319,34 @@ textarea.order{
     <div class="art">
       <div class="blob">
         <svg viewBox="0 0 220 210" class="cat" aria-hidden="true">
-          <ellipse cx="112" cy="188" rx="58" ry="10" fill="rgba(40,20,70,.2)"/>
-          <path d="M150 178c30 6 40-16 30-40" stroke="#FFF" stroke-width="13" stroke-linecap="round" fill="none"/>
-          <path d="M74 186c-8-30-6-58 6-76 10-15 28-22 44-18 20 5 30 22 30 44 0 18-4 36-10 50z" fill="#FFF"/>
-          <path d="M84 96 76 56l30 20z" fill="#FFF"/>
-          <path d="M138 92 152 58l-30 14z" fill="#FFF"/>
-          <path d="M88 90 84 68l16 11z" fill="#FFB4CE"/>
-          <path d="M136 86 144 70l-16 8z" fill="#FFB4CE"/>
-          <ellipse cx="112" cy="108" rx="42" ry="38" fill="#FFF"/>
-          <path d="M92 104c5-6 14-6 19 0M121 104c5-6 14-6 19 0" stroke="#2B1F45" stroke-width="4" stroke-linecap="round" fill="none"/>
-          <ellipse cx="88" cy="120" rx="10" ry="6" fill="#FFB4CE" opacity=".7"/>
-          <ellipse cx="136" cy="120" rx="10" ry="6" fill="#FFB4CE" opacity=".7"/>
-          <path d="M106 118h12l-6 7z" fill="#FF8FB8"/>
-          <path d="M112 125v5M112 130c-4 5-11 4-13-1M112 130c4 5 11 4 13-1" stroke="#2B1F45" stroke-width="3" stroke-linecap="round" fill="none"/>
-          <ellipse cx="94" cy="186" rx="16" ry="9" fill="#FFF"/>
-          <ellipse cx="132" cy="186" rx="16" ry="9" fill="#FFF"/>
-        </svg>
+  <ellipse cx="110" cy="204" rx="66" ry="38" fill="#FFF"/>
+  <path d="M50 92 38 28c-1-4 3-6 6-4l52 32z" fill="#241C33"/>
+  <path d="M170 92 182 28c1-4-3-6-6-4l-52 32z" fill="#241C33"/>
+  <path d="M58 80 50 44l30 19z" fill="#EE9EBB"/>
+  <path d="M162 80 170 44l-30 19z" fill="#EE9EBB"/>
+  <ellipse cx="110" cy="114" rx="74" ry="64" fill="#241C33"/>
+  <path d="M110 50c11 0 17 14 18 30 1 12-2 22-6 30H98c-4-8-7-18-6-30 1-16 7-30 18-30z" fill="#FFF"/>
+  <ellipse cx="110" cy="146" rx="60" ry="36" fill="#FFF"/>
+  <ellipse cx="80" cy="150" rx="30" ry="26" fill="#FFF"/>
+  <ellipse cx="140" cy="150" rx="30" ry="26" fill="#FFF"/>
+  <circle cx="76" cy="108" r="23" fill="#FFF"/>
+  <circle cx="144" cy="108" r="23" fill="#FFF"/>
+  <circle cx="76" cy="108" r="20" fill="#DCDD86"/>
+  <circle cx="144" cy="108" r="20" fill="#DCDD86"/>
+  <circle cx="77" cy="110" r="12" fill="#1B1526"/>
+  <circle cx="143" cy="110" r="12" fill="#1B1526"/>
+  <circle cx="83" cy="101" r="5.5" fill="#FFF"/>
+  <circle cx="149" cy="101" r="5.5" fill="#FFF"/>
+  <circle cx="71" cy="116" r="2.6" fill="#FFF" opacity=".85"/>
+  <circle cx="137" cy="116" r="2.6" fill="#FFF" opacity=".85"/>
+  <path d="M101 136h18c1 0 2 1 1 2l-8 8c-1 1-3 1-4 0l-8-8c-1-1 0-2 1-2z" fill="#EF7E9D"/>
+  <path d="M110 146v5" stroke="#1B1526" stroke-width="3" stroke-linecap="round"/>
+  <path d="M110 151c-6 5-15 3-17-3M110 151c6 5 15 3 17-3" stroke="#1B1526" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <path d="M104 153h12c0 10-2 15-6 15s-6-5-6-15z" fill="#EF7E9D"/>
+  <g stroke="#FFF" stroke-width="2.6" stroke-linecap="round" opacity=".95">
+    <path d="M50 128 12 116M52 140 14 138M54 152 18 160M170 128 208 116M168 140 206 138M166 152 202 160"/>
+  </g>
+</svg>
       </div>
       <span class="pill p1">🐾 сегодня готовит Алинка</span>
       <span class="pill p2">20 мин · быстро</span>
@@ -368,6 +382,7 @@ textarea.order{
       <label class="switch" style="margin-bottom:14px">
         <input type="checkbox" id="only-cookable"> Только то, что можно сделать сейчас
       </label>
+      <input class="search fridge-q" id="fridge-q" type="search" placeholder="Найти продукт…" autocomplete="off">
       <div id="fridge"></div>
     </div>
   </aside>
@@ -781,6 +796,7 @@ const state = {
   realm: "Кухня",
   section: "все",
   q: "",
+  fq: "",
   onlyCookable: false,
   tray: new Map(store.get("tray", []))
 };
@@ -793,10 +809,11 @@ const plural = (n,a,b,c) => n % 10 === 1 && n % 100 !== 11 ? a : (n % 10 >= 2 &&
 /* холодильник */
 function buildFridge(){
   const groups = {};
-  used.forEach(k => (groups[ING[k].g] ||= []).push(k));
+  const q = state.fq;
+  used.filter(k => !q || k.toLowerCase().includes(q)).forEach(k => (groups[ING[k].g] ||= []).push(k));
   const order = ["Мясо и птица","Рыба и морепродукты","Овощи и зелень","Фрукты и ягоды","Молочное","Крупы, тесто, хлеб","Бакалея","Алкоголь"];
   $("#fridge").innerHTML = order.filter(g => groups[g]).map(g => `
-    <details class="fridge-group"${g === "Мясо и птица" || g === "Овощи и зелень" ? " open" : ""}><summary><h4>${g}</h4></summary><div class="chips">${
+    <details class="fridge-group"${q || g === "Мясо и птица" || g === "Овощи и зелень" ? " open" : ""}><summary><h4>${g}</h4></summary><div class="chips">${
       groups[g].sort((a,b) => a.localeCompare(b,"ru")).map(k =>
         `<label class="chip${state.fridge.has(k)?" on":""}"><input type="checkbox" data-ing="${k}"${state.fridge.has(k)?" checked":""}>${k}</label>`
       ).join("")
@@ -808,6 +825,7 @@ $("#fridge").addEventListener("change", e => {
   e.target.closest(".chip").classList.toggle("on", e.target.checked);
   store.set("fridge", [...state.fridge]); render();
 });
+$("#fridge-q").oninput = e => { state.fq = e.target.value.trim().toLowerCase(); buildFridge(); };
 $("#clear-fridge").onclick = () => { state.fridge.clear(); store.set("fridge",[]); buildFridge(); render(); };
 
 /* навигация: Кухня / Бар + разделы */
@@ -820,11 +838,12 @@ function buildNav(){
 $("#realms").onclick = e => {
   const b = e.target.closest(".realm"); if(!b) return;
   state.realm = b.dataset.r; state.section = "все"; buildNav(); render();
-  window.scrollTo({top:0, behavior:"smooth"});
+  document.getElementById("groups").scrollIntoView({behavior:"smooth", block:"start"});
 };
 $("#sections").onclick = e => {
   const b = e.target.closest(".sec"); if(!b) return;
   state.section = b.dataset.s; buildNav(); render();
+  document.getElementById("groups").scrollIntoView({behavior:"smooth", block:"start"});
 };
 
 $("#search").oninput = e => { state.q = e.target.value.trim().toLowerCase(); render(); };
@@ -871,7 +890,7 @@ function cardHTML(d){
   const miss = missingOf(d), c = cost(d), inTray = state.tray.has(d.id), draft = isDraft(d);
   return `<article class="card">
     <button class="photo" data-open="${d.id}" style="--h:${d.hue[0]}; --h2:${d.hue[1]}" aria-label="${d.name}">
-      <img src="images/${d.id}.jpg" alt="" loading="lazy" onerror="this.remove()"><span>${d.emoji}</span><em class="badge">${d.time ? d.time + " мин" : "время уточним"}</em>
+      <img src="images/${d.id}.jpg" alt="" loading="lazy" onerror="this.remove()" onload="this.nextElementSibling&&this.nextElementSibling.remove()"><span>${d.emoji}</span><em class="badge">${d.time ? d.time + " мин" : "время уточним"}</em>
     </button>
     <div class="body">
       <button class="title" data-open="${d.id}">${d.name}</button>
