@@ -8,6 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="У Алинки">
 <meta name="mobile-web-app-capable" content="yes">
+<script>window.__PHOTOS={"bliny": "images/bliny.jpg", "bolognese": "images/bolognese.jpg", "brokkoli": "images/brokkoli.jpg", "brusketta-kamamber": "images/brusketta-kamamber.jpg", "brusketta-losos": "images/brusketta-losos.jpg", "bulon-kur": "images/bulon-kur.jpg", "bulon-tel": "images/bulon-tel.jpg", "chay": "images/chay.jpg", "feta-cherry": "images/feta-cherry.jpg", "gambas": "images/gambas.jpg", "grechka": "images/grechka.jpg", "grechotto": "images/grechotto.jpg", "guakamole": "images/guakamole.jpg", "kanape": "images/kanape.jpg", "karbonara": "images/karbonara.jpg", "kofe": "images/kofe.jpg", "kompot": "images/kompot.jpg", "kotlety-babushka": "images/kotlety-babushka.jpg", "makarony": "images/makarony.jpg", "muss-pirozhnye": "images/muss-pirozhnye.jpg", "nyokki-bekon": "images/nyokki-bekon.jpg", "nyokki-kur": "images/nyokki-kur.jpg", "omlet": "images/omlet.jpg", "panakota": "images/panakota.jpg", "pasta-avokado": "images/pasta-avokado.jpg", "pasta-kur-griby": "images/pasta-kur-griby.jpg", "pizza": "images/pizza.jpg", "pyure": "images/pyure.jpg", "ris": "images/ris.jpg", "rublenye-griby": "images/rublenye-griby.jpg", "rublenye-kukuruza": "images/rublenye-kukuruza.jpg", "salat-hamon": "images/salat-hamon.jpg", "salat-krevetki": "images/salat-krevetki.jpg", "salat-og-pom": "images/salat-og-pom.jpg", "shaurma": "images/shaurma.jpg", "shok-muss": "images/shok-muss.jpg", "sup-ovosh": "images/sup-ovosh.jpg", "sup-verm": "images/sup-verm.jpg", "syrniki": "images/syrniki.jpg", "tiramisu": "images/tiramisu.jpg", "tom-yam": "images/tom-yam.jpg", "tost-avokado": "images/tost-avokado.jpg", "tykva-krem": "images/tykva-krem.jpg", "utka-konfi": "images/utka-konfi.jpg", "utka": "images/utka.jpg", "vaf-tort": "images/vaf-tort.jpg", "vino": "images/vino.jpg", "zhar-kabachki": "images/zhar-kabachki.jpg", "zhar-kart": "images/zhar-kart.jpg", "zhar-ovosh": "images/zhar-ovosh.jpg"}</script>
 <meta charset="utf-8">
 <title>Ресторан у Алинки</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -443,8 +444,13 @@ textarea.order{
     <button class="x" id="od-close" aria-label="Закрыть">×</button>
   </div>
   <div class="d-body">
+    <div class="row" style="gap:12px">
+      <label class="who" for="od-time">Когда подавать</label>
+      <input type="time" id="od-time" class="search" style="margin:0; width:auto; padding:9px 12px">
+    </div>
     <textarea class="order" id="od-text" readonly></textarea>
-    <button class="order-btn" id="od-copy">Скопировать заказ</button>
+    <button class="order-btn" id="od-tg">Отправить в Telegram</button>
+    <button class="ghost" id="od-copy" style="width:100%">Просто скопировать</button>
     <div class="per" id="od-hint">Скопируйте и отправьте Алинке в мессенджер.</div>
   </div>
 </dialog>
@@ -749,7 +755,7 @@ const DISHES = [
 
 { id:"vaf-tort", name:"Вафельный торт", emoji:"🧇", section:"Десерты", time:40, serves:null, hue:[38,25], tags:[], ing:[], steps:[] },
 
-{ id:"utka", name:"Запечённая утка", emoji:"🦆", section:"Праздничные", time:150, serves:null, hue:[18,38], tags:["праздничное"], ing:[], steps:[] },
+{ id:"utka", name:"Запечённая утка с яблоками", emoji:"🦆", section:"Праздничные", time:150, serves:null, hue:[18,38], tags:["праздничное"], ing:[], steps:[] },
 
 { id:"utka-konfi", name:"Утиные ножки конфи", emoji:"🍗", section:"Праздничные", time:240, serves:2, hue:[25,15], tags:["праздничное"],
   ing:[["утиные ножки",0.8],["чеснок",0.04],["специи",0.01],["масло подсолнечное",0.3],["соль",0.02]],
@@ -890,7 +896,7 @@ function cardHTML(d){
   const miss = missingOf(d), c = cost(d), inTray = state.tray.has(d.id), draft = isDraft(d);
   return `<article class="card">
     <button class="photo" data-open="${d.id}" style="--h:${d.hue[0]}; --h2:${d.hue[1]}" aria-label="${d.name}">
-      <img src="images/${d.id}.jpg" alt="" loading="lazy" onerror="this.remove()" onload="this.nextElementSibling&&this.nextElementSibling.remove()"><span>${d.emoji}</span><em class="badge">${d.time ? d.time + " мин" : "время уточним"}</em>
+      <img src="${(window.__PHOTOS&&window.__PHOTOS[d.id])||("images/"+d.id+".jpg")}" alt="" loading="lazy" onerror="this.remove()" onload="this.nextElementSibling&&this.nextElementSibling.remove()"><span>${d.emoji}</span><em class="badge">${d.time ? d.time + " мин" : "время уточним"}</em>
     </button>
     <div class="body">
       <button class="title" data-open="${d.id}">${d.name}</button>
@@ -983,25 +989,56 @@ function openDish(id){
 $("#dd-add").onclick = () => { toggleTray(current.id); $("#dish-dlg").close(); };
 $("#dd-close").onclick = () => $("#dish-dlg").close();
 
+/* список покупок: недостающие продукты по всем блюдам подноса, с количествами */
+function fmtQty(k, q){
+  const u = ING[k].u;
+  if(u === "кг") return q < 1 ? Math.round(q*1000) + " г" : Math.round(q*100)/100 + " кг";
+  if(u === "л")  return q < 1 ? Math.round(q*1000) + " мл" : Math.round(q*100)/100 + " л";
+  return Math.ceil(q) + " " + u;           // штучное округляем вверх: полбанки не купишь
+}
+function shoppingList(ds){
+  const acc = {};
+  ds.forEach(d => d.ing.forEach(([k,q,opt]) => {
+    if(opt || ING[k].base || state.fridge.has(k)) return;
+    acc[k] = (acc[k] || 0) + q;
+  }));
+  return Object.entries(acc)
+    .map(([k,q]) => ({k, q, sum: ING[k].p * q}))
+    .sort((a,b) => b.sum - a.sum);
+}
+
 /* заказ */
-$("#open-order").onclick = () => {
+function buildOrderText(){
   const ds = [...state.tray.keys()].map(id => DISHES.find(d => d.id === id));
   const sum = ds.reduce((s,d) => s + cost(d), 0);
-  const shop = [...new Set(ds.flatMap(missingOf))];
+  const shop = shoppingList(ds);
   const lines = [
     "Заказ из «Ресторана у Алинки»",
+    $("#od-time").value ? "Подать к " + $("#od-time").value : "",
     "",
     ...ds.map(d => `• ${d.name}${isDraft(d) ? "" : ` — ${money(cost(d))} (${d.time} мин)`}`),
     "",
     `Итого: ${money(sum)}`,
     state.budget < MAXB ? `Бюджет: ${money(state.budget)}${sum > state.budget ? " — перебор на " + money(sum - state.budget) : " — укладываемся"}` : "",
-    shop.length ? "\nКупить: " + shop.join(", ") : "\nВсё есть дома 🎉"
+    shop.length ? "" : "\nВсё есть дома 🎉",
+    shop.length ? "\nКУПИТЬ:" : "",
+    ...shop.map(i => `• ${i.k} — ${fmtQty(i.k, i.q)} (~${money(i.sum)})`),
+    shop.length ? `\nНа закупку: ~${money(shop.reduce((s,i) => s + i.sum, 0))}` : ""
   ].filter(Boolean);
   $("#od-text").value = lines.join("\n");
-  $("#od-hint").textContent = "Скопируйте и отправьте Алинке в мессенджер.";
+}
+$("#open-order").onclick = () => {
+  buildOrderText();
+  $("#od-hint").textContent = "Кнопка откроет Telegram с готовым заказом — останется выбрать Алинку.";
   $("#order-dlg").showModal();
 };
+$("#od-time").onchange = buildOrderText;
 $("#od-close").onclick = () => $("#order-dlg").close();
+$("#od-tg").onclick = () => {
+  // Telegram откроется со списком чатов и готовым текстом — остаётся выбрать Алинку и нажать отправить
+  const text = encodeURIComponent($("#od-text").value);
+  window.open("https://t.me/share/url?url=&text=" + text, "_blank");
+};
 $("#od-copy").onclick = async () => {
   const t = $("#od-text");
   try{
