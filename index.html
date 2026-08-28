@@ -829,7 +829,11 @@ $("#fridge").addEventListener("change", e => {
   const k = e.target.dataset.ing; if(!k) return;
   e.target.checked ? state.fridge.add(k) : state.fridge.delete(k);
   e.target.closest(".chip").classList.toggle("on", e.target.checked);
-  store.set("fridge", [...state.fridge]); render();
+  store.set("fridge", [...state.fridge]);
+  if(e.target.checked && state.fq){          // продукт добавлен — поиск больше не нужен
+    state.fq = ""; $("#fridge-q").value = ""; buildFridge();
+  }
+  render();
 });
 $("#fridge-q").oninput = e => { state.fq = e.target.value.trim().toLowerCase(); buildFridge(); };
 $("#clear-fridge").onclick = () => { state.fridge.clear(); store.set("fridge",[]); buildFridge(); render(); };
