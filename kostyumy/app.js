@@ -283,26 +283,43 @@ function flash(text, ok = false) {
   el.className = "formmsg " + (ok ? "is-ok" : "is-bad");
 }
 
-/* Резервна панель: текст заявки з кнопкою «скопіювати» —
-   на випадок, якщо браузер заблокував відкриття месенджера. */
+/* Панель відправки: готовий текст заявки та вибір месенджера.
+   У WhatsApp і Direct текст підставляється сам, у Telegram — з буфера. */
 function showCopy(text) {
   let box = $("#copyBox");
   if (!box) {
     box = document.createElement("div");
     box.id = "copyBox";
     box.className = "copybox";
-    box.innerHTML = `<textarea readonly rows="7"></textarea>
-      <button type="button" class="btn btn--wide">Скопіювати заявку</button>`;
+
+    const ways = [];
+    if (CFG.whatsapp) ways.push(["WhatsApp", t => `https://wa.me/${CFG.whatsapp}?text=${encodeURIComponent(t)}`]);
+    if (CFG.telegram) ways.push(["Telegram", () => `https://t.me/${CFG.telegram}`]);
+    ways.push(["Direct", () => `https://ig.me/m/${CFG.instagram}`]);
+    if (CFG.viber) ways.push(["Viber", () => `viber://chat?number=${encodeURIComponent(CFG.viber)}`]);
+
+    box.innerHTML = `
+      <p class="copybox__t">Заявка готова:</p>
+      <textarea readonly rows="7"></textarea>
+      <div class="copybox__ways">${ways.map((w, i) =>
+        `<button type="button" class="flink" data-way="${i}">${w[0]}</button>`).join("")}</div>
+      <button type="button" class="btn btn--wide" data-copy>Скопіювати текст</button>`;
     $("#summary").appendChild(box);
-    box.querySelector("button").addEventListener("click", async e => {
+
+    box.querySelectorAll("[data-way]").forEach(b => b.addEventListener("click", () => {
+      const t = box.querySelector("textarea").value;
+      window.open(ways[+b.dataset.way][1](t), "_blank", "noopener");
+    }));
+    box.querySelector("[data-copy]").addEventListener("click", async e => {
       try { await navigator.clipboard.writeText(box.querySelector("textarea").value); }
       catch (_) { box.querySelector("textarea").select(); document.execCommand("copy"); }
       e.target.textContent = "Скопійовано ✓";
-      setTimeout(() => (e.target.textContent = "Скопіювати заявку"), 2200);
+      setTimeout(() => (e.target.textContent = "Скопіювати текст"), 2200);
     });
   }
   box.querySelector("textarea").value = text;
   box.hidden = false;
+  box.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 
 function bookingText() {
@@ -322,13 +339,6 @@ function bookingText() {
   return lines.join("\n");
 }
 
-function fallbackSend(text) {
-  const t = encodeURIComponent(text);
-  if (CFG.telegram) return `https://t.me/${CFG.telegram}?text=${t}`;
-  if (CFG.whatsapp) return `https://wa.me/${CFG.whatsapp}?text=${t}`;
-  if (CFG.viber)    return `viber://chat?number=${encodeURIComponent(CFG.viber)}`;
-  return `https://ig.me/m/${CFG.instagram}`;
-}
 
 $("#book").addEventListener("submit", async e => {
   e.preventDefault();
@@ -361,11 +371,10 @@ $("#book").addEventListener("submit", async e => {
 
   if (!CFG.apiUrl) {                                   // резервний режим
     const text = bookingText();
-    const win = window.open(fallbackSend(text), "_blank", "noopener");
-    btn.disabled = false; btn.textContent = "Забронювати";
-    if (!win) { showCopy(text); return flash("Браузер заблокував вікно. Скопіюйте заявку й надішліть нам у Direct.", true); }
+    try { await navigator.clipboard.writeText(text); } catch (_) {}
     showCopy(text);
-    return flash("Відкрили Direct із готовим текстом заявки — просто надішліть його. Ми підтвердимо бронь і напишемо про оплату.", true);
+    btn.disabled = false; btn.textContent = "Забронювати";
+    return flash("Заявка готова й уже скопійована. Оберіть, куди її надіслати — текст вставиться сам.", true);
   }
 
   try {
@@ -384,8 +393,8 @@ $("#book").addEventListener("submit", async e => {
     renderCal(); renderSummary();
     flash("Бронь прийнято. Ми напишемо вам, щоб підтвердити й узгодити оплату.", true);
   } catch (_) {
-    window.open(fallbackSend(bookingText()), "_blank", "noopener");
-    flash("Не вдалось надіслати автоматично — відкрили месенджер із готовим текстом.", true);
+    showCopy(bookingText());
+    flash("Не вдалось надіслати автоматично — оберіть месенджер нижче.", true);
   } finally {
     btn.disabled = false; btn.textContent = "Забронювати";
   }

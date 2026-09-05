@@ -7,10 +7,10 @@ window.CONFIG = {
   apiUrl: "",
 
   // Контакти. Порожнє поле = кнопка не показується.
-  phone: "",                       // напр. "+380XXXXXXXXX"
-  telegram: "",                    // юзернейм без @, напр. "kostyumy"
-  viber: "",                       // номер у форматі +380XXXXXXXXX
-  whatsapp: "",                    // номер без плюса, напр. "380XXXXXXXXX"
+  phone: "+380966958712",          // Аліна
+  telegram: "a_kovtyn",            // юзернейм без @
+  viber: "+380966958712",
+  whatsapp: "380966958712",        // без плюса
   instagram: "kostyumy_v_orendu",
   threads: "kostyumy_v_orendu",
 

@@ -393,3 +393,6 @@ h1,h2,h3{font-family:"Unbounded",sans-serif;font-weight:800;line-height:.98;lett
   font-size:13px;line-height:1.5;color:var(--muted);
 }
 .copybox textarea:focus{outline:0;border-color:var(--acid)}
+.copybox__t{margin:2px 0 0;font-size:12px;color:var(--muted)}
+.copybox__ways{display:flex;flex-wrap:wrap;gap:7px}
+.copybox__ways .flink{cursor:pointer;border:0;padding:10px 16px;font-size:13.5px}
