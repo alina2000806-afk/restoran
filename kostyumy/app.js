@@ -283,6 +283,28 @@ function flash(text, ok = false) {
   el.className = "formmsg " + (ok ? "is-ok" : "is-bad");
 }
 
+/* Резервна панель: текст заявки з кнопкою «скопіювати» —
+   на випадок, якщо браузер заблокував відкриття месенджера. */
+function showCopy(text) {
+  let box = $("#copyBox");
+  if (!box) {
+    box = document.createElement("div");
+    box.id = "copyBox";
+    box.className = "copybox";
+    box.innerHTML = `<textarea readonly rows="7"></textarea>
+      <button type="button" class="btn btn--wide">Скопіювати заявку</button>`;
+    $("#summary").appendChild(box);
+    box.querySelector("button").addEventListener("click", async e => {
+      try { await navigator.clipboard.writeText(box.querySelector("textarea").value); }
+      catch (_) { box.querySelector("textarea").select(); document.execCommand("copy"); }
+      e.target.textContent = "Скопійовано ✓";
+      setTimeout(() => (e.target.textContent = "Скопіювати заявку"), 2200);
+    });
+  }
+  box.querySelector("textarea").value = text;
+  box.hidden = false;
+}
+
 function bookingText() {
   const c = COSTUMES.find(x => x.id === state.costume);
   const days = daysBetween(state.from, state.to);
@@ -338,9 +360,12 @@ $("#book").addEventListener("submit", async e => {
   btn.disabled = true; btn.textContent = "Надсилаємо…";
 
   if (!CFG.apiUrl) {                                   // резервний режим
-    window.open(fallbackSend(bookingText()), "_blank", "noopener");
+    const text = bookingText();
+    const win = window.open(fallbackSend(text), "_blank", "noopener");
     btn.disabled = false; btn.textContent = "Забронювати";
-    return flash("Відкрили месенджер із готовим текстом — надішліть його, і ми підтвердимо бронь.", true);
+    if (!win) { showCopy(text); return flash("Браузер заблокував вікно. Скопіюйте заявку й надішліть нам у Direct.", true); }
+    showCopy(text);
+    return flash("Відкрили Direct із готовим текстом заявки — просто надішліть його. Ми підтвердимо бронь і напишемо про оплату.", true);
   }
 
   try {
