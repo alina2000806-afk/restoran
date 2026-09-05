@@ -62,7 +62,7 @@ window.COSTUMES = [
     about:
       "Костюм із анатомічним принтом: тканина тягнеться в усіх напрямках і не сповзає під час руху. Обличчя відкрите, тому образ читається на відео. Добре працює для зйомок зі стретчингу, йоги, поул-дансу та повітряної гімнастики.",
     kit: ["Комбінезон"],
-    photos: [IMG + "biomeh_lightbox_sneakers.jpg", IMG + "biomeh_1.jpg", IMG + "biomeh_2.jpg", IMG + "biomeh_3.jpg", IMG + "biomeh_4.jpg"],
+    photos: [IMG + "biomeh_lightbox_sneakers.jpg"],
     good: ["Зйомки для Instagram", "Спортивні студії", "Хелловін"]
   },
   {
