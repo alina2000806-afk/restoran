@@ -390,8 +390,38 @@ function renderFooter() {
 }
 
 /* ============================================================
+   ГЕРОЙ: карусель по всіх костюмах
+   ============================================================ */
+function heroStage() {
+  const stage = $("#stage"), dots = $("#stageDots"), tag = $("#stageTag");
+  if (!stage) return;
+
+  stage.innerHTML = COSTUMES.map((c, i) =>
+    `<img src="${c.photos[0]}" alt="${c.name}" ${i ? 'loading="lazy"' : 'fetchpriority="high"'}
+       width="928" height="1160" class="${i ? "" : "is-on"}">`).join("");
+  dots.innerHTML = COSTUMES.map((c, i) =>
+    `<button type="button" class="${i ? "" : "is-on"}" data-go="${i}" aria-label="${c.name}"></button>`).join("");
+
+  const imgs = $$("img", stage), btns = $$("button", dots);
+  let i = 0, timer;
+
+  const show = n => {
+    i = (n + COSTUMES.length) % COSTUMES.length;
+    imgs.forEach((el, k) => el.classList.toggle("is-on", k === i));
+    btns.forEach((el, k) => el.classList.toggle("is-on", k === i));
+    tag.textContent = `${COSTUMES[i].name} · ${COSTUMES[i].price} ₴`;
+  };
+  const play = () => { clearInterval(timer); timer = setInterval(() => show(i + 1), 3400); };
+
+  btns.forEach(b => b.addEventListener("click", () => { show(+b.dataset.go); play(); }));
+  stage.addEventListener("click", () => openModal(COSTUMES[i].id));
+  show(0); play();
+}
+
+/* ============================================================
    СТАРТ
    ============================================================ */
+heroStage();
 renderCards();
 renderPicks();
 renderCal();

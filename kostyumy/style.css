@@ -107,6 +107,18 @@ h1,h2,h3{font-family:"Unbounded",sans-serif;font-weight:800;line-height:.98;lett
 
 .hero__art{position:relative;border-radius:var(--r);overflow:hidden;background:var(--surface)}
 .hero__art img{width:100%;height:100%;object-fit:cover;aspect-ratio:4/5}
+
+/* карусель костюмів у героя */
+.stage{position:relative;aspect-ratio:4/5}
+.stage img{position:absolute;inset:0;opacity:0;transform:scale(1.04);transition:opacity .9s ease,transform 6s ease-out}
+.stage img.is-on{opacity:1;transform:scale(1)}
+.dots{position:absolute;right:14px;bottom:14px;display:flex;gap:6px}
+.dots button{
+  width:8px;height:8px;padding:0;border:0;border-radius:50%;cursor:pointer;
+  background:rgba(255,255,255,.34);transition:.25s;
+}
+.dots button:hover{background:rgba(255,255,255,.7)}
+.dots button.is-on{background:var(--acid);width:22px;border-radius:99px}
 .hero__tag{
   position:absolute;left:14px;bottom:14px;
   padding:8px 14px;border-radius:100px;
