@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Оренда костюмів у Харкові — kostyumy_v_orendu</title>
+<meta name="description" content="Оренда костюмів у Харкові та по всій Україні. Людина-павук, Бетмен, Охоронець, надувні акула і щур. Від 200 ₴ за добу. Бронювання онлайн за дві хвилини.">
+<meta name="theme-color" content="#0d0d0f">
+<meta property="og:title" content="Оренда костюмів — Харків і вся Україна">
+<meta property="og:description" content="Від 200 ₴ за добу. Забронювати онлайн, без листування.">
+<meta property="og:image" content="https://alina2000806-afk.github.io/restoran/pavuk_rooftop.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800;900&family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<a class="skip" href="#catalog">До каталогу</a>
+
+<header class="hdr" id="hdr">
+  <a class="hdr__logo" href="#top">
+    <span class="hdr__mark">К</span>
+    <span class="hdr__name">костюми<br><b>в оренду</b></span>
+  </a>
+  <nav class="hdr__nav">
+    <a href="#catalog">Костюми</a>
+    <a href="#how">Як це працює</a>
+    <a href="#delivery">Доставка</a>
+    <a href="#reviews">Відгуки</a>
+  </nav>
+  <a class="btn btn--sm" href="#booking">Забронювати</a>
+</header>
+
+<!-- ───────────────────────── HERO ───────────────────────── -->
+<section class="hero" id="top">
+  <div class="hero__grid">
+    <div class="hero__copy">
+      <p class="eyebrow">Харків · Левада &nbsp;·&nbsp; Нова пошта по всій Україні</p>
+      <h1>Костюм<br>на одну<br><span class="acid">ніч</span></h1>
+      <p class="lede">
+        Шість образів, які не треба нікому пояснювати. Обираєте костюм, обираєте дату —
+        і забираєте його вже готовим до виходу. Без листування, без «а можна дізнатись ціну».
+      </p>
+      <div class="hero__cta">
+        <a class="btn" href="#booking">Обрати дату</a>
+        <a class="btn btn--ghost" href="#catalog">Дивитись костюми</a>
+      </div>
+      <dl class="hero__facts">
+        <div><dt>від</dt><dd>200 ₴<span>за добу</span></dd></div>
+        <div><dt>застава</dt><dd>800 ₴<span>повертається</span></dd></div>
+        <div><dt>видаємо</dt><dd>чистим<span>після хімчистки</span></dd></div>
+      </dl>
+    </div>
+    <div class="hero__art">
+      <img src="https://alina2000806-afk.github.io/restoran/pavuk_rooftop.jpg" alt="Костюм Людини-павука на нічному даху" width="928" height="1152" fetchpriority="high">
+      <span class="hero__tag">Людина-павук · 200 ₴</span>
+    </div>
+  </div>
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee__row">
+      <span>вечірки</span><i></i><span>дні народження</span><i></i><span>фотосесії</span><i></i>
+      <span>розіграші</span><i></i><span>хелловін</span><i></i><span>корпоративи</span><i></i>
+      <span>вечірки</span><i></i><span>дні народження</span><i></i><span>фотосесії</span><i></i>
+      <span>розіграші</span><i></i><span>хелловін</span><i></i><span>корпоративи</span><i></i>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────── CATALOG ───────────────────────── -->
+<section class="sec" id="catalog">
+  <div class="sec__head">
+    <h2>Каталог</h2>
+    <div class="chips" role="tablist" aria-label="Фільтр костюмів">
+      <button class="chip is-on" data-filter="all" role="tab" aria-selected="true">Усі</button>
+      <button class="chip" data-filter="fit" role="tab" aria-selected="false">Облягаючі · 200 ₴</button>
+      <button class="chip" data-filter="inflatable" role="tab" aria-selected="false">Надувні · 250 ₴</button>
+    </div>
+  </div>
+  <div class="cards" id="cards"><!-- рендериться скриптом --></div>
+</section>
+
+<!-- ───────────────────────── BOOKING ───────────────────────── -->
+<section class="sec sec--book" id="booking">
+  <div class="sec__head">
+    <h2>Бронювання</h2>
+    <p class="sec__note">Дві хвилини. Заявка одразу падає нам у Telegram — передзвонювати, щоб «уточнити», не доведеться.</p>
+  </div>
+
+  <form class="book" id="book" novalidate>
+    <ol class="steps">
+      <!-- крок 1 -->
+      <li class="step">
+        <div class="step__no">1</div>
+        <div class="step__body">
+          <h3>Костюм</h3>
+          <div class="picks" id="picks"><!-- рендериться скриптом --></div>
+        </div>
+      </li>
+
+      <!-- крок 2 -->
+      <li class="step">
+        <div class="step__no">2</div>
+        <div class="step__body">
+          <h3>Дати</h3>
+          <div class="ship">
+            <label class="switch">
+              <input type="checkbox" id="isShip">
+              <span class="switch__box" aria-hidden="true"></span>
+              <span class="switch__txt">Відправити Новою поштою<b>Харків — самовивіз, Левада</b></span>
+            </label>
+          </div>
+          <div class="cal" id="cal">
+            <div class="cal__bar">
+              <button type="button" class="cal__nav" id="calPrev" aria-label="Попередній місяць">←</button>
+              <div class="cal__title" id="calTitle">—</div>
+              <button type="button" class="cal__nav" id="calNext" aria-label="Наступний місяць">→</button>
+            </div>
+            <div class="cal__dow"><span>пн</span><span>вт</span><span>ср</span><span>чт</span><span>пт</span><span>сб</span><span>нд</span></div>
+            <div class="cal__grid" id="calGrid"></div>
+            <div class="cal__legend">
+              <span><i class="lg lg--free"></i>вільно</span>
+              <span><i class="lg lg--pick"></i>ваш вибір</span>
+              <span><i class="lg lg--ship"></i>дорога</span>
+              <span><i class="lg lg--busy"></i>зайнято</span>
+            </div>
+          </div>
+          <p class="hint" id="calHint">Оберіть костюм, щоб побачити вільні дати.</p>
+        </div>
+      </li>
+
+      <!-- крок 3 -->
+      <li class="step">
+        <div class="step__no">3</div>
+        <div class="step__body">
+          <h3>Контакти</h3>
+          <div class="fields">
+            <label class="fld">
+              <span>Ім'я</span>
+              <input type="text" name="name" id="fName" autocomplete="name" placeholder="Як до вас звертатись" required>
+            </label>
+            <label class="fld">
+              <span>Телефон</span>
+              <input type="tel" name="phone" id="fPhone" autocomplete="tel" placeholder="+380" required>
+            </label>
+            <label class="fld fld--wide" id="npWrap" hidden>
+              <span>Місто й відділення Нової пошти</span>
+              <input type="text" name="np" id="fNp" placeholder="Напр.: Полтава, відділення №12">
+            </label>
+            <label class="fld fld--wide">
+              <span>Коментар <i>необов'язково</i></span>
+              <textarea name="note" id="fNote" rows="2" placeholder="Зріст, привід, побажання"></textarea>
+            </label>
+          </div>
+        </div>
+      </li>
+    </ol>
+
+    <aside class="summary" id="summary">
+      <div class="summary__row"><span>Костюм</span><b id="sumCostume">—</b></div>
+      <div class="summary__row"><span>Дати</span><b id="sumDates">—</b></div>
+      <div class="summary__row"><span>Діб</span><b id="sumDays">—</b></div>
+      <div class="summary__row summary__row--sum"><span>Оренда</span><b id="sumPrice">—</b></div>
+      <div class="summary__row summary__row--dep"><span>Застава</span><b>800 ₴ <i>повертається</i></b></div>
+      <button class="btn btn--wide" type="submit" id="submitBtn">Забронювати</button>
+      <p class="summary__fine">
+        Для брони достатньо оплатити оренду. Заставу можна внести в день видачі —
+        готівкою, переказом або накладеним платежем.
+      </p>
+      <p class="formmsg" id="formMsg" role="status"></p>
+    </aside>
+  </form>
+</section>
+
+<!-- ───────────────────────── HOW ───────────────────────── -->
+<section class="sec" id="how">
+  <div class="sec__head"><h2>Як це працює</h2></div>
+  <ol class="how">
+    <li><span>01</span><h3>Бронюєте онлайн</h3><p>Обираєте костюм і дати на цій сторінці. Заявка приходить нам одразу — ми підтверджуємо її в месенджері.</p></li>
+    <li><span>02</span><h3>Вносите оплату оренди</h3><p>Дата закріплюється за вами. Застава 800 ₴ — пізніше, у день видачі: готівкою, переказом або накладеним платежем.</p></li>
+    <li><span>03</span><h3>Забираєте костюм</h3><p>Харків, Левада — у будь-який день за попередньою домовленістю. В інші міста — Нова пошта, доставку в обидва боки оплачує отримувач.</p></li>
+    <li><span>04</span><h3>Повертаєте</h3><p>До 14:00. Прати й чистити не треба — це наша робота. Заставу повертаємо повністю.</p></li>
+  </ol>
+</section>
+
+<!-- ───────────────────────── DELIVERY ───────────────────────── -->
+<section class="sec" id="delivery">
+  <div class="sec__head"><h2>Доставка й оплата</h2></div>
+  <div class="cols">
+    <article class="col">
+      <h3>Харків</h3>
+      <p>Самовивіз, район <b>Левада</b>. Забрати костюм можна в будь-який день за попередньою домовленістю — точну адресу й час надсилаємо в переписці.</p>
+    </article>
+    <article class="col">
+      <h3>Уся Україна</h3>
+      <p>Нова пошта. Доставку в обидва боки оплачує отримувач. Дні дороги в календарі позначені окремо — костюм на цей час теж заброньований за вами.</p>
+    </article>
+    <article class="col">
+      <h3>Застава 800 ₴</h3>
+      <p>Повертається повністю після повернення костюма. Готівкою або переказом — як зручніше. При відправці Новою поштою: накладеним платежем або на картку.</p>
+    </article>
+    <article class="col">
+      <h3>Гігієна</h3>
+      <p>Кожен костюм видаємо після хімчистки. Повертати чистим не потрібно — просто складіть і віддайте як є.</p>
+    </article>
+  </div>
+</section>
+
+<!-- ───────────────────────── RULES / FAQ ───────────────────────── -->
+<section class="sec" id="faq">
+  <div class="sec__head"><h2>Питання й умови</h2></div>
+  <div class="faq">
+    <details><summary>Мінімальний і максимальний строк</summary><p>Мінімум — одна доба. Максимум не обмежений: беріть на скільки потрібно, кожна наступна доба рахується за тим самим тарифом.</p></details>
+    <details><summary>А якщо не встигну повернути вчасно?</summary><p>Затримка рахується як додаткова доба оренди за звичайним тарифом. Штрафів немає — просто попередьте.</p></details>
+    <details><summary>Що буде, якщо костюм пошкодили?</summary><p>Звичайні сліди вечірки — плями, пил, запах — це наша хімчистка, з вас нічого. Якщо пошкодження серйозне і чистка не рятує, розбираємо ситуацію індивідуально й по-людськи.</p></details>
+    <details><summary>Як зрозуміти розмір?</summary><p>Для кожного облягаючого костюма вказано діапазон зросту — орієнтуйтесь на нього. Надувні акула і щур універсальні: підходять і на 155, і на 190.</p></details>
+    <details><summary>Що потрібно для надувного костюма?</summary><p>Нічого купувати не треба. Компресор, батарейки й фіксатор на одяг уже в комплекті. Костюм надувається приблизно за пів хвилини й тримає форму весь вечір.</p></details>
+    <details><summary>Чи можна забронювати заздалегідь?</summary><p>Так, і на популярні дати — Хелловін, новорічні свята — краще саме так. У календарі видно, що вже зайнято.</p></details>
+  </div>
+</section>
+
+<!-- ───────────────────────── REVIEWS ───────────────────────── -->
+<section class="sec" id="reviews">
+  <div class="sec__head">
+    <h2>Відгуки</h2>
+    <p class="sec__note">Скріншоти з переписок. Особисті дані замальовані.</p>
+  </div>
+  <div class="revs" id="revs"></div>
+</section>
+
+<!-- ───────────────────────── FOOTER ───────────────────────── -->
+<footer class="foot" id="contacts">
+  <div class="foot__main">
+    <h2>Написати<br>напряму</h2>
+    <div class="foot__links" id="footLinks"></div>
+  </div>
+  <div class="foot__meta">
+    <p>Оренда костюмів · Харків, Левада · Нова пошта по всій Україні</p>
+    <p class="foot__mono">від 200 ₴/доба · застава 800 ₴ · повернення до 14:00</p>
+  </div>
+</footer>
+
+<!-- ───────────────────────── MODAL ───────────────────────── -->
+<div class="modal" id="modal" hidden>
+  <div class="modal__scrim" data-close></div>
+  <div class="modal__win" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+    <button class="modal__x" data-close aria-label="Закрити">✕</button>
+    <div class="modal__body" id="modalBody"></div>
+  </div>
+</div>
+
+<script src="config.js"></script>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
