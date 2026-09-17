@@ -224,3 +224,8 @@ footer{padding:24px 20px 140px;text-align:center;font-size:12px;opacity:.4;font-
 .modal-actions{display:flex;flex-direction:column;gap:10px;margin-top:22px;}
 .modal-actions .btn{width:100%;padding:14px;font-size:15px;}
 .modal-note{font-size:12px;opacity:.55;margin-top:14px;line-height:1.5;}
+
+.ideas-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-top:20px}
+.ideas-grid img{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:14px;display:block}
+.lead small{font-size:12px;opacity:.6;text-transform:uppercase;letter-spacing:.06em}
+.review-video{display:block;width:100%;max-width:360px;aspect-ratio:9/16;border-radius:18px;margin-top:20px;background:#000}
