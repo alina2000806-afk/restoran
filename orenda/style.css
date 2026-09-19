@@ -229,3 +229,29 @@ footer{padding:24px 20px 140px;text-align:center;font-size:12px;opacity:.4;font-
 .ideas-grid img{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:14px;display:block}
 .lead small{font-size:12px;opacity:.6;text-transform:uppercase;letter-spacing:.06em}
 .review-video{display:block;width:100%;max-width:360px;aspect-ratio:9/16;border-radius:18px;margin-top:20px;background:#000}
+
+/* ---------- 19.09: real photos, colour blocks, bonuses ---------- */
+.mission{margin-top:28px;max-width:620px;font-size:17px;line-height:1.55;opacity:.9;border-left:6px solid var(--lime);padding-left:16px;}
+.mission b{color:var(--lime);}
+.kicker{display:inline-block;font-family:'JetBrains Mono',monospace;font-weight:600;font-size:13px;letter-spacing:.08em;text-transform:uppercase;background:var(--lime);color:var(--dark);padding:6px 10px;}
+.kicker.dark{background:var(--dark);color:var(--lime);}
+.big-accent{font-family:'Unbounded',sans-serif;font-weight:900;text-transform:uppercase;letter-spacing:-.04em;line-height:.9;font-size:clamp(44px,9vw,110px);margin:16px 0 24px;}
+.real-strip{padding:64px 0 48px;}
+.reel-row{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:0 20px 12px;-webkit-overflow-scrolling:touch;}
+.reel-row img{flex:0 0 auto;width:min(72vw,300px);aspect-ratio:4/5;object-fit:cover;border-radius:14px;scroll-snap-align:start;}
+.color-block{padding:72px 0;color:var(--dark);}
+.cb-orange{background:var(--orange);}
+.cb-lime{background:var(--lime);}
+.cb-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:36px;align-items:center;}
+.cb-text{font-size:20px;line-height:1.5;font-weight:500;max-width:520px;}
+.cb-photo{border-radius:18px;border:4px solid var(--dark);box-shadow:12px 12px 0 var(--dark);width:100%;aspect-ratio:1;object-fit:cover;}
+.bonus-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;}
+.bonus{background:var(--dark);color:var(--paper);border-radius:18px;padding:22px 20px;}
+.bonus b{display:block;font-family:'Unbounded',sans-serif;font-weight:900;font-size:40px;letter-spacing:-.03em;color:var(--lime);line-height:1;margin-bottom:10px;}
+.bonus p{margin:0;font-size:15px;line-height:1.5;opacity:.9;}
+@media (max-width:820px){
+  .cb-grid{grid-template-columns:1fr;}
+  .cb-text{font-size:18px;}
+  .color-block{padding:56px 0;}
+}
+.cb-grid>*{min-width:0}.mission,.cb-text{overflow-wrap:anywhere}
