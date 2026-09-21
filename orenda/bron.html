@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="uk"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Бронь костюма</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700;900&family=Golos+Text:wght@400;500;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+:root{--lime:#C6F833;--pink:#FF4DA0;--blue:#5170FF;--orange:#FF7A29;--violet:#B15CFF;--dark:#16100E;--dark2:#241a17;--paper:#EFE9E1;--line:#3a2d28}
+*{box-sizing:border-box}html,body{margin:0;background:var(--dark);color:var(--paper);font-family:"Golos Text",system-ui,sans-serif;font-size:17px;line-height:1.45}
+.wrap{max-width:760px;margin:0 auto;padding:18px 16px 120px}
+a{color:var(--lime)}
+h1,h2{font-family:"Unbounded",sans-serif;text-transform:uppercase;letter-spacing:-.03em;line-height:.95;margin:0}
+h1{font-size:clamp(34px,10vw,58px);color:var(--lime);margin:12px 0 10px}
+h2{font-size:22px;margin:0 0 12px}
+.mono{font-family:"JetBrains Mono",monospace;font-weight:700;font-size:12px;letter-spacing:.07em;text-transform:uppercase}
+.back{display:inline-block;margin-top:6px}
+.lead{color:#cfc6bd;margin:0 0 6px}
+.rules{background:var(--dark2);border:2px solid var(--line);border-radius:18px;padding:14px 16px;margin:16px 0;font-size:15px;color:#d8cfc6}
+.rules b{color:var(--lime)}
+.sec{background:var(--dark2);border-radius:22px;padding:18px;margin-top:14px;border:2px solid var(--line)}
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{border:2px solid var(--line);background:var(--dark);color:var(--paper);border-radius:999px;padding:12px 16px;min-height:48px;font:inherit;font-weight:700;cursor:pointer}
+.chip[aria-pressed=true]{background:var(--lime);color:var(--dark);border-color:var(--lime)}
+.chip[disabled]{opacity:.45;cursor:not-allowed}
+.chip small{font-weight:500;opacity:.8;margin-left:6px}
+.cal{display:grid;gap:18px}
+.month h3{margin:0 0 8px;font-family:"Unbounded";font-size:15px;text-transform:uppercase}
+.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.dow{font-size:11px;text-align:center;color:#a99f96;padding:2px 0}
+.day{aspect-ratio:1;min-height:40px;border-radius:10px;border:0;background:var(--dark);color:var(--paper);font:inherit;font-weight:700;cursor:pointer;padding:0}
+.day:disabled{color:#5a4c45;background:transparent;cursor:not-allowed;text-decoration:line-through}
+.day.busy{background:repeating-linear-gradient(45deg,#3a2d28,#3a2d28 4px,#2c211d 4px,#2c211d 8px);color:#8a7b72}
+.day.in{background:#3d4d10;color:var(--lime)}
+.day.end{background:var(--lime);color:var(--dark)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:#a99f96;margin-top:10px}
+.legend i{display:inline-block;width:14px;height:14px;border-radius:4px;margin-right:6px;vertical-align:-2px}
+label{display:block;font-weight:700;margin:12px 0 6px}
+input[type=text],input[type=tel],textarea{width:100%;background:var(--dark);border:2px solid var(--line);color:var(--paper);border-radius:14px;padding:13px 14px;font:inherit;min-height:50px}
+textarea{min-height:90px}
+input:focus,textarea:focus,.chip:focus-visible,.day:focus-visible,.btn:focus-visible{outline:3px solid var(--lime);outline-offset:2px}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.check{display:flex;gap:12px;align-items:flex-start;min-height:44px;margin:6px 0;cursor:pointer}
+.check input{width:24px;height:24px;flex:none;margin-top:2px;accent-color:#C6F833}
+.check span small{display:block;color:#a99f96;font-weight:400}
+.sum{background:var(--lime);color:var(--dark);border-radius:22px;padding:18px;margin-top:14px}
+.sum h2{color:var(--dark)}
+.sum table{width:100%;border-collapse:collapse;font-size:16px}
+.sum td{padding:5px 0;vertical-align:top}.sum td:last-child{text-align:right;font-weight:700;white-space:nowrap;padding-left:10px}
+.sum .tot td{border-top:2px solid var(--dark);padding-top:10px;font-family:"Unbounded";font-size:19px}
+.sum p{margin:10px 0 0;font-size:14px}
+.btn{display:block;width:100%;background:var(--pink);color:var(--dark);border:0;border-radius:999px;padding:18px 20px;font-family:"Unbounded";font-weight:900;font-size:16px;text-transform:uppercase;cursor:pointer;margin-top:16px;min-height:56px}
+.btn[disabled]{opacity:.5}
+.msg{margin-top:12px;padding:14px;border-radius:14px;font-weight:700}
+.msg.err{background:#4a1c1c;color:#ffb3b3}.msg.ok{background:#1c3a1c;color:#c8ffc8}
+.hint{font-size:14px;color:#a99f96}
+.demo{background:#3a2d28;border-radius:10px;padding:8px 12px;font-size:13px;color:#ffd08a;margin-top:10px}
+[hidden]{display:none!important}
+</style></head><body><div class="wrap">
+<a class="back mono" href="./">← на головну</a>
+<h1>Бронь костюма</h1>
+<p class="lead">Оберіть костюм і дати, побачите вартість, і заявка потрапить Аліні. Дату закріплює лише передоплата.</p>
+<div class="rules"><b>Як це працює.</b> Щоб закріпити дати, наперед оплачуєте вартість костюма (і в Харкові теж); до оплати бронь тримається 24 години. Платите лише за дні оренди: дні, поки костюм їде до вас і назад, не рахуються. Застава 800 ₴ — при отриманні або накладеним платежем Нової пошти. Доставка за ваш рахунок в обидва боки, тільки Нова пошта; Укрпошта — лише там, де немає відділення НП.</div>
+
+<div class="sec"><h2>1. Костюм</h2><div class="chips" id="costumes"></div><p class="hint" style="margin:10px 0 0">Можна обрати кілька: від 3 костюмів — знижка.</p></div>
+
+<div class="sec"><h2>2. Дати</h2>
+<p class="hint" style="margin:0 0 10px">Оберіть день отримання, потім день повернення (кількість діб = різниця дат). Дні в дорозі не оплачуються, але костюм на цей час зайнятий.</p>
+<div class="cal" id="cal"></div>
+<div class="legend"><span><i style="background:var(--lime)"></i>обрані</span><span><i style="background:#3a2d28"></i>зайнято</span><span id="picked" class="mono"></span></div></div>
+
+<div class="sec"><h2>3. Доставка</h2>
+<div class="chips" id="city"><button class="chip" type="button" data-c="kh" aria-pressed="true">Харків, самовивіз</button><button class="chip" type="button" data-c="other" aria-pressed="false">Інше місто, Нова пошта</button></div>
+<div id="otherBox" hidden><label for="cityName">Місто або село</label><input type="text" id="cityName" autocomplete="address-level2" placeholder="наприклад, Київ">
+<label class="check"><input type="checkbox" id="noNp"><span>У моєму населеному пункті немає відділення Нової пошти<small>тоді Укрпошта, також за ваш рахунок в обидва боки</small></span></label></div></div>
+
+<div class="sec"><h2>4. Знижки</h2>
+<p class="hint" style="margin:0 0 6px">Позначте, що вам підходить. Остаточно знижку підтверджує Аліна (скрін репосту, документ УБД тощо). Знижки сумуються до −20%, УБД додається без стелі.</p>
+<label class="check"><input type="checkbox" data-d="loyal" data-p="10"><span>Я вже брав(ла) костюм у вас — постійний клієнт, −10%</span></label>
+<label class="check"><input type="checkbox" data-d="review" data-p="10"><span>Відгук із фото після минулої оренди, −10%</span></label>
+<label class="check"><input type="checkbox" data-d="school" data-p="10"><span>Шкільне або садочкове свято, −10%</span></label>
+<label class="check"><input type="checkbox" data-d="mat" data-p="10"><span>Виписка з пологового, −10%</span></label>
+<label class="check"><input type="checkbox" data-d="repost" data-p="10"><span>Репост допису в Stories (мені або другу), −10%</span></label>
+<label class="check"><input type="checkbox" data-d="ubd" data-p="20"><span>УБД, −20%<small>додається до всіх інших без обмеження</small></span></label>
+<label class="check"><input type="checkbox" data-d="photo" data-p="50"><span>Фотосесія або привітання і я дам від 10 якісних фото чи відео з дозволом на публікацію, −50%<small>не сумується з іншими</small></span></label></div>
+
+<div class="sec"><h2>5. Контакти</h2>
+<label for="name">Ім’я</label><input type="text" id="name" autocomplete="name">
+<label for="phone">Телефон або Telegram</label><input type="tel" id="phone" autocomplete="tel" placeholder="+380… або @нік">
+<label for="comment">Коментар (подія, розмір, побажання)</label><textarea id="comment"></textarea></div>
+
+<div class="sum" id="sum"><h2>Разом</h2><table id="sumT"></table><p id="sumNote"></p></div>
+<button class="btn" id="go" type="button">Відправити заявку</button>
+<div id="msg"></div><div class="demo" id="demo" hidden>Демо-режим: заявка нікуди не відправляється, поки не підключена таблиця бронювань.</div>
+</div>
+<script src="config.js"></script>
+<script>
+(function(){
+"use strict";
+var API=window.BOOKING_API||"";
+var COST=[{n:"Людина-павук",p:200,k:"Павук"},{n:"Бетмен",p:200,k:"Бетмен"},{n:"Охоронець",p:200,k:"Охоронець"},{n:"Біомеханіка",p:200,k:"Біомеханіка"},{n:"Щур",p:250,k:"Щур"},{n:"Акула",p:250,k:"Акула",soon:true}];
+var DEPOSIT=800, sel={}, busy={}, from=null, to=null, other=false;
+var params=new URLSearchParams(location.search), pre=params.get("c");
+function $(s){return document.querySelector(s)}
+function ymd(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function pd(s){var a=s.split("-");return new Date(+a[0],+a[1]-1,+a[2])}
+function today(){var t=new Date();return new Date(t.getFullYear(),t.getMonth(),t.getDate())}
+function fmt(s){return s?pd(s).toLocaleDateString("uk-UA",{day:"2-digit",month:"2-digit"}):""}
+$("#demo").hidden=!!API;
+
+var cw=$("#costumes");
+COST.forEach(function(c){var b=document.createElement("button");b.type="button";b.className="chip";b.setAttribute("aria-pressed","false");
+ b.innerHTML=c.n+"<small>"+(c.soon?"скоро":c.p+" ₴")+"</small>";if(c.soon){b.disabled=true}
+ b.addEventListener("click",function(){sel[c.k]=!sel[c.k];b.setAttribute("aria-pressed",sel[c.k]?"true":"false");from=to=null;loadBusy()});
+ if(pre&&(c.n===pre||c.k===pre)&&!c.soon){sel[c.k]=true;b.setAttribute("aria-pressed","true")}cw.appendChild(b)});
+
+function api(q){return fetch(API+"?"+q).then(function(r){return r.json()})}
+function loadBusy(){
+ var ks=Object.keys(sel).filter(function(k){return sel[k]});busy={};
+ if(!API||!ks.length){render();return}
+ var f=ymd(today()),t=new Date();t.setDate(t.getDate()+75);
+ Promise.all(ks.map(function(k){return api("action=availability&costume="+encodeURIComponent(k)+"&from="+f+"&to="+ymd(t)).then(function(j){(j.busy||[]).forEach(function(d){busy[d]=1})}).catch(function(){})})).then(render);
+}
+function render(){
+ var cal=$("#cal");cal.innerHTML="";var base=today();
+ for(var m=0;m<3;m++){
+  var d0=new Date(base.getFullYear(),base.getMonth()+m,1),box=document.createElement("div");box.className="month";
+  box.innerHTML="<h3>"+d0.toLocaleDateString("uk-UA",{month:"long",year:"numeric"})+"</h3>";
+  var g=document.createElement("div");g.className="grid";
+  ["Пн","Вт","Ср","Чт","Пт","Сб","Нд"].forEach(function(x){var e=document.createElement("div");e.className="dow";e.textContent=x;g.appendChild(e)});
+  var off=(d0.getDay()+6)%7;for(var i=0;i<off;i++)g.appendChild(document.createElement("div"));
+  var n=new Date(d0.getFullYear(),d0.getMonth()+1,0).getDate();
+  for(var k=1;k<=n;k++){(function(k){var d=new Date(d0.getFullYear(),d0.getMonth(),k),s=ymd(d),b=document.createElement("button");b.type="button";b.className="day";b.textContent=k;
+   var past=d<base;if(past){b.disabled=true}
+   if(busy[s]){b.classList.add("busy");b.disabled=true;b.setAttribute("aria-label",k+" зайнято")}
+   if(from&&s===from||to&&s===to)b.classList.add("end");else if(from&&to&&s>from&&s<to)b.classList.add("in");
+   b.addEventListener("click",function(){pick(s)});g.appendChild(b)})(k)}
+  box.appendChild(g);cal.appendChild(box)}
+ var p=$("#picked");p.textContent=from?("з "+fmt(from)+(to?" по "+fmt(to):" — оберіть повернення")):"";
+ calc()}
+function pick(s){
+ if(!from||(from&&to)){from=s;to=null}
+ else if(s<=from){from=s;to=null}
+ else{var ok=true;for(var d=pd(from);ymd(d)<s;d.setDate(d.getDate()+1)){if(busy[ymd(d)]){ok=false;break}}
+  if(!ok){msg("У цей період є зайняті дні, оберіть інший.","err");from=s;to=null}else{to=s;msg("")}}
+ render()}
+
+$("#city").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;other=b.dataset.c==="other";
+ this.querySelectorAll("button").forEach(function(x){x.setAttribute("aria-pressed",x===b?"true":"false")});$("#otherBox").hidden=!other;calc()});
+document.querySelectorAll("[data-d]").forEach(function(c){c.addEventListener("change",function(){if(c.dataset.d==="photo"&&c.checked){document.querySelectorAll("[data-d]").forEach(function(o){if(o!==c)o.checked=false})}else if(c.checked){var ph=document.querySelector('[data-d="photo"]');ph.checked=false}calc()})});
+
+function days(){return from&&to?Math.max(1,Math.round((pd(to)-pd(from))/86400000)):0}
+var last={};
+function calc(){
+ var ks=COST.filter(function(c){return sel[c.k]}),dd=days(),T=$("#sumT"),note=$("#sumNote");
+ if(!ks.length||!dd){T.innerHTML="<tr><td>Оберіть костюм і дати</td><td></td></tr>";note.textContent="";last={ok:false};return}
+ var rent=ks.reduce(function(a,c){return a+c.p},0)*dd,rows=ks.map(function(c){return "<tr><td>"+c.n+" × "+dd+" діб</td><td>"+(c.p*dd)+" ₴</td></tr>"}).join("");
+ var pct=0,names=[],ph=$('[data-d="photo"]').checked;
+ if(ph){pct=50;names.push("фотосесія −50%")}else{
+  var s=0;if(ks.length>=3||dd>=3){s+=10;names.push("від 3 костюмів/діб −10%")}
+  var ubd=0;document.querySelectorAll("[data-d]").forEach(function(c){if(!c.checked)return;var p=+c.dataset.p;if(c.dataset.d==="ubd"){ubd=p;names.push("УБД −20%")}else{s+=p;names.push(c.parentNode.textContent.trim().split(",").pop().trim()&&c.dataset.d)}});
+  pct=Math.min(20,s)+ubd}
+ var disc=Math.round(rent*pct/100),tot=rent-disc;
+ T.innerHTML=rows+(pct?"<tr><td>Знижка "+pct+"%</td><td>−"+disc+" ₴</td></tr>":"")+"<tr class='tot'><td>Сплатити наперед</td><td>"+tot+" ₴</td></tr><tr><td>Застава (при отриманні)</td><td>"+DEPOSIT+" ₴</td></tr>";
+ note.textContent="Доставка Новою поштою — за ваш рахунок в обидва боки, окремо. Розмір знижки остаточно підтверджує Аліна.";
+ last={ok:true,rent:rent,pct:pct,tot:tot,names:names,dd:dd}}
+function msg(t,c){var m=$("#msg");m.innerHTML=t?"<div class='msg "+(c||"ok")+"'>"+t+"</div>":""}
+
+$("#go").addEventListener("click",function(){
+ var ks=COST.filter(function(c){return sel[c.k]}).map(function(c){return c.k});
+ if(!ks.length)return msg("Оберіть костюм.","err");if(!from||!to)return msg("Оберіть дати отримання й повернення.","err");
+ var name=$("#name").value.trim(),ph=$("#phone").value.trim();if(!name||!ph)return msg("Вкажіть ім’я та телефон або Telegram.","err");
+ var city=other?($("#cityName").value.trim()||""):"Харків";if(other&&!city)return msg("Вкажіть місто або село.","err");
+ var carrier=!other?"самовивіз":($("#noNp").checked?"Укрпошта":"Нова пошта");
+ var disc=[];document.querySelectorAll("[data-d]:checked").forEach(function(c){disc.push(c.parentNode.textContent.trim().split(/,\s*[−-]/)[0])});
+ var comment=$("#comment").value.trim()+(disc.length?" | Знижки (за словами клієнта): "+disc.join("; ")+(last.ok?" | очікувана сума до сплати "+last.tot+" ₴":""):"");
+ var body={action:"booking",costumes:ks,from:from,to:to,city:city,carrier:carrier,contact:name+", "+ph,comment:comment,source:"форма"};
+ var b=$("#go");b.disabled=true;
+ if(!API){b.disabled=false;return msg("Демо: заявка була б відправлена ("+ks.join(", ")+", "+fmt(from)+"–"+fmt(to)+", "+carrier+").","ok")}
+ fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(body)}).then(function(r){return r.json()}).then(function(j){
+  b.disabled=false;
+  if(j.ok){msg("Заявку прийнято, № "+j.id+". Бронь тримається 24 години. Аліна напише вам у Telegram або Viber і надішле реквізити для передоплати ("+last.tot+" ₴). Після оплати дата закріплюється.","ok");b.hidden=true}
+  else if(j.error==="busy"){msg("Костюм «"+(j.costume||"")+"» на ці дати вже зайнятий. Оберіть інші дати.","err");loadBusy()}
+  else msg("Не вдалося відправити: "+(j.error||"помилка")+". Напишіть Аліні у Viber або Telegram.","err")
+ }).catch(function(){b.disabled=false;msg("Немає зв’язку із сервером бронювань. Напишіть Аліні у Viber або Telegram.","err")})
+});
+loadBusy();
+})();
+</script></body></html>

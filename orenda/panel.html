@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="uk"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow">
+<title>Панель броней</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700;900&family=Golos+Text:wght@400;500;700&display=swap">
+<style>
+:root{--lime:#C6F833;--pink:#FF4DA0;--blue:#5170FF;--orange:#FF7A29;--violet:#B15CFF;--dark:#16100E;--dark2:#241a17;--paper:#EFE9E1;--line:#3a2d28}
+*{box-sizing:border-box}html,body{margin:0;background:var(--dark);color:var(--paper);font-family:"Golos Text",system-ui,sans-serif;font-size:17px;line-height:1.4}
+.wrap{max-width:720px;margin:0 auto;padding:14px 14px 90px}
+h1{font-family:"Unbounded";font-size:24px;text-transform:uppercase;margin:6px 0 12px;color:var(--lime);letter-spacing:-.03em}
+.top{position:sticky;top:0;background:var(--dark);padding:8px 0 10px;z-index:5;border-bottom:2px solid var(--line)}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+.tab{flex:none;border:2px solid var(--line);background:var(--dark2);color:var(--paper);border-radius:999px;padding:10px 14px;min-height:46px;font:inherit;font-weight:700;cursor:pointer}
+.tab[aria-selected=true]{background:var(--lime);color:var(--dark);border-color:var(--lime)}
+.tab b{margin-left:6px;background:var(--pink);color:var(--dark);border-radius:99px;padding:1px 8px;font-size:13px}
+.card{background:var(--dark2);border:2px solid var(--line);border-radius:20px;padding:14px;margin-top:12px}
+.card.alert{border-color:var(--orange)}
+.hd{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap}
+.id{font-family:"Unbounded";font-size:15px}
+.st{font-weight:700;font-size:13px;padding:5px 11px;border-radius:99px;text-transform:uppercase;letter-spacing:.04em;color:var(--dark);background:var(--lime)}
+.st.нова{background:var(--orange)}.st.внесла{background:var(--violet);color:#fff}.st.оплачено{background:var(--lime)}.st.відправлено,.st.у-клієнта{background:var(--blue);color:#fff}.st.повернуто{background:#bdb3a9}.st.залог-повернуто{background:#6c635c;color:#fff}.st.скасовано{background:#5a2c2c;color:#fff}
+.big{font-size:19px;font-weight:700;margin:8px 0 2px}
+.meta{color:#bfb5ab;font-size:15px}
+.dates{margin-top:6px;font-size:15px}.dates b{color:var(--lime)}
+.acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.a{border:2px solid var(--lime);background:transparent;color:var(--lime);border-radius:14px;padding:10px 14px;min-height:46px;font:inherit;font-weight:700;cursor:pointer}
+.a.done{background:var(--lime);color:var(--dark)}
+.a.pink{border-color:var(--pink);color:var(--pink)}
+.a[disabled]{opacity:.5}
+details{margin-top:10px}summary{cursor:pointer;color:#bfb5ab;min-height:40px;display:flex;align-items:center}
+.f{display:grid;grid-template-columns:1fr;gap:8px;margin-top:8px}
+.f label{font-size:13px;color:#a99f96}
+.f input{width:100%;background:var(--dark);border:2px solid var(--line);color:var(--paper);border-radius:12px;padding:11px;font:inherit;min-height:46px}
+.key{background:var(--dark2);border:2px solid var(--line);border-radius:20px;padding:16px;margin-top:16px}
+.key input{width:100%;background:var(--dark);border:2px solid var(--line);color:var(--paper);border-radius:12px;padding:13px;font:inherit;margin:10px 0}
+.empty{color:#a99f96;text-align:center;padding:30px 0}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--lime);color:var(--dark);padding:12px 18px;border-radius:99px;font-weight:700;z-index:20}
+.demo{background:#3a2d28;color:#ffd08a;border-radius:10px;padding:8px 12px;font-size:13px;margin-bottom:8px}
+:focus-visible{outline:3px solid var(--lime);outline-offset:2px}[hidden]{display:none!important}
+</style></head><body><div class="wrap">
+<h1>Броні костюмів</h1>
+<div id="gate" class="key" hidden><b>Вхід для Аліни</b><br><small>Введіть ключ доступу один раз, він збережеться лише в цьому браузері.</small><input id="k" type="password" autocomplete="off" placeholder="ключ доступу"><button class="a done" id="kb" type="button">Увійти</button></div>
+<div id="app" hidden>
+ <div class="demo" id="demo" hidden>Демо-дані: панель ще не підключена до таблиці.</div>
+ <div class="top"><div class="tabs" id="tabs" role="tablist"></div></div>
+ <div id="list"></div>
+</div></div><div class="toast" id="toast" hidden></div>
+<script src="config.js"></script>
+<script>
+(function(){
+"use strict";
+var API=window.BOOKING_API||"",KEY="",items=[],tab="dosend";
+function $(s){return document.querySelector(s)}
+function today(){var t=new Date();return new Date(t.getFullYear(),t.getMonth(),t.getDate())}
+function ymd(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function fm(s){if(!s)return"";var a=String(s).split("-");return a.length===3?a[2]+"."+a[1]:s}
+function toast(t){var e=$("#toast");e.textContent=t;e.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(function(){e.hidden=true},2500)}
+function sk(){try{return localStorage.getItem("bronKey")||""}catch(e){return""}}
+function ss(v){try{localStorage.setItem("bronKey",v)}catch(e){}}
+var DEMO=[
+ {row:2,"№":"Z-260922-001","Костюм":"Щур","Контакт":"Олена, +380501112233","Місто":"Київ","Перевізник":"Нова пошта","Оренда з":ymd(new Date(Date.now()+3*864e5)),"Оренда по":ymd(new Date(Date.now()+5*864e5)),"Дата відправки":ymd(new Date(Date.now()+1*864e5)),"Статус":"оплачено","Оплачено":"так","Сума оплати, ₴":"500","Внесла":"так","Застава, ₴":"800","Коментар":"на день народження"},
+ {row:3,"№":"Z-260922-002","Костюм":"Бетмен","Контакт":"Іван, @ivan","Місто":"Харків","Перевізник":"самовивіз","Оренда з":ymd(new Date(Date.now()+2*864e5)),"Оренда по":ymd(new Date(Date.now()+3*864e5)),"Статус":"нова","Оплачено":"","Внесла":"","Застава, ₴":"800","Коментар":""},
+ {row:4,"№":"Z-260918-004","Костюм":"Павук","Контакт":"Марія, +380671234567","Місто":"Львів","Перевізник":"Нова пошта","Оренда з":ymd(new Date(Date.now()-3*864e5)),"Оренда по":ymd(new Date(Date.now()-1*864e5)),"Дата відправки":ymd(new Date(Date.now()-5*864e5)),"Відправлено (дата)":ymd(new Date(Date.now()-5*864e5)),"Статус":"у клієнта","Оплачено":"так","Внесла":"так","Застава, ₴":"800","Очікуване повернення":ymd(new Date(Date.now()+1*864e5))}
+];
+function load(){
+ if(!API){items=DEMO;$("#demo").hidden=false;draw();return}
+ fetch(API+"?action=list&key="+encodeURIComponent(KEY)).then(function(r){return r.json()}).then(function(j){
+  if(!j.ok){if(String(j.error).match(/key|auth|forbid/i)){ss("");$("#app").hidden=true;$("#gate").hidden=false;toast("Невірний ключ");return}throw new Error(j.error)}
+  items=j.items||[];draw()}).catch(function(e){toast("Немає зв’язку: "+e.message)})}
+function isStat(o,a){return a.indexOf(o["Статус"])>=0}
+function tomorrowS(){var t=today();t.setDate(t.getDate()+1);return ymd(t)}
+var TABS=[
+ {id:"new",n:"Нові",f:function(o){return o["Статус"]==="нова"||(o["Статус"]==="внесла")}},
+ {id:"dosend",n:"Відправити",f:function(o){return o["Статус"]==="оплачено"&&o["Дата відправки"]&&o["Дата відправки"]<=tomorrowS()}},
+ {id:"sent",n:"У клієнта",f:function(o){return isStat(o,["відправлено","у клієнта"])}},
+ {id:"back",n:"Повернення",f:function(o){return isStat(o,["повернуто"])&&!(o["Залог повернуто (дата)"])}},
+ {id:"all",n:"Усі",f:function(o){return o["Статус"]!=="скасовано"}}];
+function draw(){
+ $("#tabs").innerHTML="";TABS.forEach(function(t){var c=items.filter(t.f).length,b=document.createElement("button");b.className="tab";b.type="button";b.setAttribute("role","tab");b.setAttribute("aria-selected",tab===t.id?"true":"false");b.innerHTML=t.n+(c?"<b>"+c+"</b>":"");b.onclick=function(){tab=t.id;draw()};$("#tabs").appendChild(b)});
+ var t=TABS.filter(function(x){return x.id===tab})[0],L=items.filter(t.f),h=$("#list");h.innerHTML="";
+ if(!L.length){h.innerHTML="<div class='empty'>Тут порожньо.</div>";return}
+ L.sort(function(a,b){return String(a["Оренда з"]).localeCompare(String(b["Оренда з"]))});
+ L.forEach(function(o){h.appendChild(card(o))})}
+function el(t,c,h){var e=document.createElement(t);if(c)e.className=c;if(h!==undefined)e.innerHTML=h;return e}
+function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function upd(o,field,value,ok){
+ if(!API){o[field]=value;toast("Демо: збережено");draw();return}
+ fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({action:"update",key:KEY,row:o.row,field:field,value:value})}).then(function(r){return r.json()}).then(function(j){if(j.ok){o[field]=value;toast("Збережено");draw()}else toast("Не вийшло: "+j.error)}).catch(function(){toast("Немає зв’язку")})}
+function setStatus(o,s){
+ if(!API){o["Статус"]=s;toast("Демо: "+s);draw();return}
+ fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({action:"status",key:KEY,id:o["№"],status:s})}).then(function(r){return r.json()}).then(function(j){if(j.ok){items.forEach(function(x){if(x["№"]===o["№"])x["Статус"]=s});toast("Статус: "+s);draw()}else toast("Не вийшло: "+j.error)}).catch(function(){toast("Немає зв’язку")})}
+function card(o){
+ var s=o["Статус"]||"нова",soon=o["Дата відправки"]&&o["Дата відправки"]<=tomorrowS()&&s==="оплачено";
+ var c=el("div","card"+(soon?" alert":""));
+ c.innerHTML="<div class='hd'><span class='id'>"+esc(o["№"])+"</span><span class='st "+esc(s.replace(/ /g,"-"))+"'>"+esc(s)+"</span></div><div class='big'>"+esc(o["Костюм"])+"</div><div class='meta'>"+esc(o["Контакт"])+" · "+esc(o["Місто"])+" · "+esc(o["Перевізник"])+"</div>"
+  +"<div class='dates'>Оренда <b>"+fm(o["Оренда з"])+" – "+fm(o["Оренда по"])+"</b>"+(o["Дата відправки"]?" · відправити <b>"+fm(o["Дата відправки"])+"</b>":"")+(o["Очікуване повернення"]?" · повернення до <b>"+fm(o["Очікуване повернення"])+"</b>":"")+"</div>"
+  +(o["Коментар"]?"<div class='meta' style='margin-top:6px'>"+esc(o["Коментар"])+"</div>":"");
+ var a=el("div","acts");
+ function btn(t,fn,cls){var b=el("button","a "+(cls||""),t);b.type="button";b.onclick=fn;a.appendChild(b)}
+ var tdy=ymd(today());
+ btn(o["Внесла"]==="так"?"✓ Внесла":"Внесла",function(){upd(o,"Внесла",o["Внесла"]==="так"?"":"так");if(o["Внесла"]!=="так"&&s==="нова")setStatus(o,"внесла")},o["Внесла"]==="так"?"done":"");
+ if(s!=="оплачено"&&s!=="відправлено"&&s!=="у клієнта")btn("Оплачено",function(){upd(o,"Оплачено","так");setStatus(o,"оплачено")});
+ if(s==="оплачено"&&o["Перевізник"]!=="самовивіз")btn("Відправлено",function(){upd(o,"Відправлено (дата)",tdy);setStatus(o,"відправлено")},"pink");
+ if(s==="оплачено"&&o["Перевізник"]==="самовивіз")btn("Видано",function(){upd(o,"Відправлено (дата)",tdy);setStatus(o,"у клієнта")},"pink");
+ if(s==="відправлено"||s==="у клієнта")btn("Повернули",function(){upd(o,"Повернули (дата)",tdy);setStatus(o,"повернуто")},"pink");
+ if(s==="повернуто")btn("Залог повернуто",function(){upd(o,"Залог повернуто (дата)",tdy);upd(o,"Залог повернуто (сума)",o["Застава, ₴"]||"800");setStatus(o,"залог повернуто")},"pink");
+ if(s!=="скасовано"&&s!=="залог повернуто")btn("Скасувати",function(){if(confirm("Скасувати бронь "+o["№"]+"?"))setStatus(o,"скасовано")});
+ c.appendChild(a);
+ var d=el("details","","<summary>ТТН, застава, коментар</summary>"),f=el("div","f");
+ [["ТТН туди","ТТН туди"],["ТТН назад","ТТН назад"],["Коментар","Коментар"]].forEach(function(p){var l=el("label","",p[0]),i=el("input");i.value=o[p[1]]||"";i.onchange=function(){upd(o,p[1],i.value)};l.appendChild(i);f.appendChild(l)});
+ d.appendChild(f);c.appendChild(d);return c}
+function start(){$("#gate").hidden=true;$("#app").hidden=false;load()}
+KEY=sk();
+if(!API){start()}else if(KEY){start()}else{$("#gate").hidden=false}
+$("#kb").onclick=function(){var v=$("#k").value.trim();if(!v)return;KEY=v;ss(v);start()};
+})();
+</script></body></html>
