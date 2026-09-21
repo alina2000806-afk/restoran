@@ -57,7 +57,7 @@ input:focus,textarea:focus,.chip:focus-visible,.day:focus-visible,.btn:focus-vis
 <a class="back mono" href="./">← на головну</a>
 <h1>Бронь костюма</h1>
 <p class="lead">Оберіть костюм і дати, побачите вартість, і заявка потрапить Аліні. Дату закріплює лише передоплата.</p>
-<div class="rules"><b>Як це працює.</b> Щоб закріпити дати, наперед оплачуєте вартість костюма (і в Харкові теж); до оплати бронь тримається 24 години. Платите лише за дні оренди: дні, поки костюм їде до вас і назад, не рахуються. Застава 800 ₴ — при отриманні або накладеним платежем Нової пошти. Доставка за ваш рахунок в обидва боки, тільки Нова пошта; Укрпошта — лише там, де немає відділення НП.</div>
+<div class="rules"><b>Як це працює.</b> Щоб закріпити дати, наперед оплачуєте вартість костюма (і в Харкові теж); до оплати бронь тримається 24 години. Платите лише за дні оренди: дні, поки костюм їде до вас і назад, не рахуються. Застава 800 ₴ — за кожен костюм (3 костюми — 2400 ₴), при отриманні або накладеним платежем Нової пошти. Доставка за ваш рахунок в обидва боки, тільки Нова пошта; Укрпошта — лише там, де немає відділення НП.</div>
 
 <div class="sec"><h2>1. Костюм</h2><div class="chips" id="costumes"></div><p class="hint" style="margin:10px 0 0">Можна обрати кілька: від 3 костюмів — знижка.</p></div>
 
@@ -158,7 +158,7 @@ function calc(){
   var ubd=0;document.querySelectorAll("[data-d]").forEach(function(c){if(!c.checked)return;var p=+c.dataset.p;if(c.dataset.d==="ubd"){ubd=p;names.push("УБД −20%")}else{s+=p;names.push(c.parentNode.textContent.trim().split(",").pop().trim()&&c.dataset.d)}});
   pct=Math.min(20,s)+ubd}
  var disc=Math.round(rent*pct/100),tot=rent-disc;
- T.innerHTML=rows+(pct?"<tr><td>Знижка "+pct+"%</td><td>−"+disc+" ₴</td></tr>":"")+"<tr class='tot'><td>Сплатити наперед</td><td>"+tot+" ₴</td></tr><tr><td>Застава (при отриманні)</td><td>"+DEPOSIT+" ₴</td></tr>";
+ T.innerHTML=rows+(pct?"<tr><td>Знижка "+pct+"%</td><td>−"+disc+" ₴</td></tr>":"")+"<tr class='tot'><td>Сплатити наперед</td><td>"+tot+" ₴</td></tr><tr><td>Застава: "+ks.length+" × "+DEPOSIT+" ₴ (при отриманні)</td><td>"+(DEPOSIT*ks.length)+" ₴</td></tr>";
  note.textContent="Доставка Новою поштою — за ваш рахунок в обидва боки, окремо. Розмір знижки остаточно підтверджує Аліна.";
  last={ok:true,rent:rent,pct:pct,tot:tot,names:names,dd:dd}}
 function msg(t,c){var m=$("#msg");m.innerHTML=t?"<div class='msg "+(c||"ok")+"'>"+t+"</div>":""}
