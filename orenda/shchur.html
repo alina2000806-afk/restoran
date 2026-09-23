@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Надувний Щур — купити костюм</title>
+<meta name="description" content="Надувний костюм Щура у власність. Під ключ: вентилятор, батарейки, фіксатор. Доставка Новою поштою по Україні до 14 днів.">
+<meta property="og:title" content="Надувний Щур — купити костюм">
+<meta property="og:description" content="Костюм, з якого регочуть усі. Під ключ, доставка до 14 днів.">
+<meta property="og:image" content="media/rat_2.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700;900&family=Golos+Text:wght@400;500;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<script src="config.js"></script>
+<style>
+:root{
+  --orange:#FF7A29; --ink:#16100E; --paper:#FFF4EA; --card:#FFFFFF; --lime:#C6F833;
+  --pink:#FF4DA0; --violet:#B15CFF; --muted:#6B5A50; --line:#F0D9C6;
+  --disp:"Unbounded","Arial Black",system-ui,sans-serif;
+  --body:"Golos Text",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55;overflow-x:hidden}
+img{max-width:100%;height:auto;display:block}
+.hero .wrap>*,.gal figure,.kit>div,.order>*,.steps li{min-width:0}
+a{color:inherit}
+h1,h2,h3{font-family:var(--disp);margin:0;line-height:1.08;text-wrap:balance}
+h2{font-size:clamp(26px,5.5vw,42px);font-weight:900}
+p{margin:0}
+.wrap{max-width:1040px;margin:0 auto;padding-inline:16px}
+section{padding-block:56px}
+.eyebrow{font-family:var(--mono);font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:700}
+
+/* top bar */
+.bar{position:sticky;top:0;z-index:20;background:var(--ink);color:var(--paper);padding-top:env(safe-area-inset-top,0px)}
+.bar .wrap{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-block:10px}
+.bar a.logo{font-family:var(--disp);font-weight:700;font-size:14px;text-decoration:none;color:var(--lime)}
+.bar .timer{font-family:var(--mono);font-size:12.5px;text-align:right}
+.bar .timer b{color:var(--lime)}
+
+/* hero */
+.hero{background:var(--orange);padding-block:28px 0;overflow:hidden}
+.hero .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:24px;align-items:end}
+@media (max-width:760px){.hero .wrap{grid-template-columns:1fr}}
+.hero h1{font-size:clamp(78px,20vw,190px);font-weight:900;letter-spacing:-.04em;line-height:.86}
+.hero .kicker{font-family:var(--disp);font-weight:700;font-size:clamp(18px,3.4vw,26px);margin-top:14px}
+.hero .lead{margin-top:14px;max-width:44ch;font-size:18px}
+.hero-actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:22px;padding-bottom:28px}
+.price-big{font-family:var(--disp);font-weight:900;font-size:clamp(34px,6vw,48px)}
+.price-big small{font-family:var(--mono);font-size:14px;font-weight:500;display:block;letter-spacing:.02em}
+.btn{display:inline-flex;align-items:center;gap:8px;font-family:var(--disp);font-weight:700;font-size:16px;text-decoration:none;background:var(--ink);color:var(--lime);border:none;border-radius:99px;padding:16px 26px;cursor:pointer}
+.btn:hover{background:#000}
+.btn:focus-visible,input:focus-visible,select:focus-visible,label.opt:focus-within{outline:3px solid var(--pink);outline-offset:3px}
+.hero-img{position:relative;align-self:end}
+.hero-img img{border-radius:28px 28px 0 0;width:100%;height:auto;aspect-ratio:4/5;max-height:560px;object-fit:cover;object-position:center 30%}
+.viz{position:absolute;left:12px;top:12px;font-family:var(--mono);font-size:11px;background:rgba(22,16,14,.72);color:#fff;padding:3px 8px;border-radius:6px}
+.sticker{position:absolute;right:-6px;top:18px;background:var(--lime);color:var(--ink);font-family:var(--disp);font-weight:900;font-size:14px;padding:12px 14px;border-radius:50%;width:112px;height:112px;display:grid;place-items:center;text-align:center;transform:rotate(10deg);line-height:1.1}
+@media (prefers-reduced-motion:no-preference){.sticker{animation:wob 3.2s ease-in-out infinite}@keyframes wob{50%{transform:rotate(-4deg) scale(1.05)}}}
+
+/* ticker */
+.ticker{background:var(--ink);color:var(--paper);overflow:hidden;white-space:nowrap;font-family:var(--disp);font-weight:700;font-size:15px;padding-block:12px}
+.ticker span{display:inline-block;padding-left:100%}
+@media (prefers-reduced-motion:no-preference){.ticker span{animation:run 26s linear infinite}@keyframes run{to{transform:translateX(-100%)}}}
+@media (prefers-reduced-motion:reduce){.ticker span{padding-left:16px}}
+
+/* kit */
+.kit{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:22px}
+@media (max-width:760px){.kit{grid-template-columns:repeat(2,1fr)}}
+.kit div{background:var(--card);border:2px solid var(--ink);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:6px}
+.kit b{font-family:var(--disp);font-size:15px}
+.kit span{font-size:14.5px;color:var(--muted)}
+.kit .num{font-family:var(--mono);font-size:12px;color:var(--orange);font-weight:700}
+
+/* gallery */
+.gal{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:22px}
+@media (max-width:760px){.gal{grid-template-columns:repeat(2,1fr)}}
+.gal figure{margin:0;position:relative}
+.gal img{border-radius:18px;width:100%;aspect-ratio:4/5;object-fit:cover}
+.gal figcaption{font-size:14px;margin-top:6px;color:var(--muted)}
+
+/* when */
+.when{background:var(--ink);color:var(--paper)}
+.when h2{color:var(--lime)}
+.steps{list-style:none;margin:24px 0 0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:14px;counter-reset:s}
+@media (max-width:760px){.steps{grid-template-columns:1fr 1fr}}
+.steps li{counter-increment:s;border-top:3px solid var(--orange);padding-top:12px;display:flex;flex-direction:column;gap:4px}
+.steps li::before{content:counter(s);font-family:var(--disp);font-weight:900;font-size:28px;color:var(--orange)}
+.steps b{font-family:var(--disp);font-size:15px}
+.steps span{font-size:14.5px;opacity:.8}
+.deadline{margin-top:26px;background:var(--lime);color:var(--ink);border-radius:18px;padding:16px 18px;font-weight:500}
+.deadline b{font-family:var(--disp)}
+
+/* rent block */
+.rent{background:var(--violet);color:#fff;border-radius:24px;padding:24px;display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between}
+.rent h3{font-size:clamp(20px,4vw,26px)}
+.rent p{max-width:52ch;opacity:.95}
+.rent .btn{background:#fff;color:var(--ink)}
+
+/* order */
+.order{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start}
+@media (max-width:760px){.order{grid-template-columns:1fr}}
+form{background:var(--card);border:2px solid var(--ink);border-radius:24px;padding:20px;display:flex;flex-direction:column;gap:14px}
+form label.f{display:flex;flex-direction:column;gap:5px;font-weight:500;font-size:15px}
+input,select{font:500 17px var(--body);color:var(--ink);background:var(--paper);border:1.5px solid var(--line);border-radius:12px;padding:12px}
+.qty{display:flex;align-items:center;gap:10px}
+.qty button{width:44px;height:44px;border-radius:12px;border:2px solid var(--ink);background:var(--card);font:700 20px var(--disp);cursor:pointer;color:var(--ink)}
+.qty output{font:900 22px var(--disp);min-width:32px;text-align:center}
+fieldset{border:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+legend{font-weight:500;font-size:15px;margin-bottom:6px}
+label.opt{display:flex;gap:10px;align-items:flex-start;border:1.5px solid var(--line);border-radius:14px;padding:12px;cursor:pointer}
+label.opt:has(input:checked){border-color:var(--ink);background:#FFF0E3}
+label.opt input{margin-top:4px;accent-color:var(--orange)}
+label.opt small{display:block;color:var(--muted);font-size:13.5px}
+.sum{background:var(--ink);color:var(--paper);border-radius:16px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;font-variant-numeric:tabular-nums}
+.sum .r{display:flex;justify-content:space-between;gap:10px;font-size:15px}
+.sum .r span:last-child{font-family:var(--mono)}
+.sum .big{font-family:var(--disp);font-size:22px;color:var(--lime)}
+#msg{font-size:15px;border-radius:12px;padding:12px}
+#msg.ok{background:#E9FBD0}
+#msg.err{background:#FFE0EC}
+.copybox{white-space:pre-wrap;font-family:var(--mono);font-size:13px;background:var(--paper);border-radius:10px;padding:10px;margin-top:8px}
+
+.side{display:flex;flex-direction:column;gap:16px}
+.faq details{border-bottom:1.5px solid var(--line);padding-block:12px}
+.faq summary{font-family:var(--disp);font-weight:700;font-size:15.5px;cursor:pointer}
+.faq p{margin-top:8px;color:var(--muted);font-size:15.5px}
+
+footer{background:var(--ink);color:var(--paper);padding-block:32px;font-size:15px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between}
+footer a{color:var(--lime)}
+.phone{font-family:var(--mono);font-weight:700;font-size:18px;user-select:all}
+</style>
+</head>
+<body>
+
+<div class="bar"><div class="wrap">
+  <a class="logo" href="index.html">костюми в оренду</a>
+  <div class="timer" id="timer">Доставка до 14 днів</div>
+</div></div>
+
+<header class="hero">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow">Надувний костюм · у власність</div>
+      <h1>ЩУР</h1>
+      <p class="kicker">Регочуть навіть ті, хто «не любить костюми»</p>
+      <p class="lead">Величезний живіт і нахабна морда. Надувається за пів хвилини, одягаєш поверх свого одягу. Для привітань, вечірок і Хелловіну — і він залишається у тебе.</p>
+      <div class="hero-actions">
+        <div class="price-big"><span data-price>1 699</span> ₴<small>доставка Новою поштою — за тарифом НП</small></div>
+        <a class="btn" href="#order">Замовити →</a>
+      </div>
+    </div>
+    <div class="hero-img">
+      <img src="media/rat_2.jpg" alt="Дівчина в надувному костюмі Щура на скейті у скейт-парку" width="1289" height="1600">
+      <span class="viz">візуалізація</span>
+      <div class="sticker">Під<br>ключ</div>
+    </div>
+  </div>
+</header>
+
+<div class="ticker" aria-hidden="true"><span>Вентилятор, батарейки й фіксатор уже в комплекті · Доставка до 14 днів · Передоплата 200 ₴, решта при отриманні · Офіційно, ФОП · Вентилятор, батарейки й фіксатор уже в комплекті · Доставка до 14 днів</span></div>
+
+<main>
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Що в коробці</div>
+    <h2>Докуповувати нічого не треба</h2>
+    <div class="kit">
+      <div><span class="num">01</span><b>Костюм</b><span>Надувний Щур, дорослий розмір</span></div>
+      <div><span class="num">02</span><b>Вентилятор</b><span>Вшитий нагнітач, тримає форму весь час</span></div>
+      <div><span class="num">03</span><b>Батарейки</b><span>Уже в комплекті, вставив і пішов</span></div>
+      <div><span class="num">04</span><b>Фіксатор</b><span>Кріпить костюм до одягу</span></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="eyebrow">Де він смішить</div>
+    <h2>Привітання, офіс, вечірка</h2>
+    <div class="gal">
+      <figure><img loading="lazy" src="media/real_rat_b.jpg" alt="Справжній костюм Щура вдома" width="720" height="900"><figcaption>Справжній костюм, фото з нашого прокату</figcaption></figure>
+      <figure><img loading="lazy" src="media/rat_1.jpg" alt="Щур на нараді в офісі, колеги сміються" width="1289" height="1600"><span class="viz">візуалізація</span><figcaption>Нарада, яку запам'ятають</figcaption></figure>
+      <figure><img loading="lazy" src="media/idea_rat_3.jpg" alt="Щур замовляє каву в кав'ярні" width="805" height="1000"><span class="viz">візуалізація</span><figcaption>Кава для Щура</figcaption></figure>
+      <figure><img loading="lazy" src="media/idea_rat_4.jpg" alt="Щур з повітряною кулькою біжить по осінньому листю" width="805" height="1000"><span class="viz">візуалізація</span><figcaption>Осіння фотосесія</figcaption></figure>
+      <figure><img loading="lazy" src="media/real_rat_a.jpg" alt="Справжній костюм Щура на помаранчевому фоні" width="720" height="900"><figcaption>Так він виглядає вживу</figcaption></figure>
+      <figure><img loading="lazy" src="media/rat_2.jpg" alt="Щур на скейті" width="1289" height="1600"><span class="viz">візуалізація</span><figcaption>Скейт-парк</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="when">
+  <div class="wrap">
+    <div class="eyebrow" style="color:var(--orange)">Як отримати</div>
+    <h2>Від заявки до посилки</h2>
+    <ol class="steps">
+      <li><b>Заявка</b><span>Залишаєте ім'я, телефон і відділення НП.</span></li>
+      <li><b>Оплата</b><span>200 ₴ передоплати або вся сума на рахунок ФОП.</span></li>
+      <li><b>До 14 днів</b><span>Костюм їде до нас, перевіряємо комплект.</span></li>
+      <li><b>Нова пошта</b><span>Відправляємо, повідомляємо номер ТТН.</span></li>
+    </ol>
+    <p class="deadline" id="deadline"><b>На Хелловін 31.10</b> — замовляйте до 15 жовтня, щоб посилка встигла.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="rent">
+      <div>
+        <h3>Потрібен уже завтра?</h3>
+        <p>Візьміть Щура в оренду: 250 ₴ за добу, застава 800 ₴. Харків — самовивіз день у день, по Україні — Новою поштою.</p>
+      </div>
+      <a class="btn" href="bron.html?c=Щур">Орендувати →</a>
+    </div>
+  </div>
+</section>
+
+<section id="order" style="padding-top:0">
+  <div class="wrap order">
+    <form id="f" novalidate>
+      <h2 style="font-size:clamp(24px,4.5vw,32px)">Замовити Щура</h2>
+      <label class="f" for="name">Ім'я<input id="name" autocomplete="name" required></label>
+      <label class="f" for="phone">Телефон або Telegram<input id="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="096 000 00 00" required></label>
+      <label class="f" for="np">Місто і відділення Нової пошти<input id="np" placeholder="Київ, відділення 25" required></label>
+      <div class="f" style="display:flex;flex-direction:column;gap:5px;font-weight:500;font-size:15px">Кількість
+        <div class="qty"><button type="button" id="minus" aria-label="Менше">−</button><output id="q">1</output><button type="button" id="plus" aria-label="Більше">+</button></div>
+      </div>
+      <fieldset>
+        <legend>Як оплатити</legend>
+        <label class="opt"><input type="radio" name="pay" id="pay-part" value="part" checked><span>Передоплата 200 ₴<small>Решта накладеним платежем при отриманні. Комісію НП за накладений платіж сплачує отримувач.</small></span></label>
+        <label class="opt"><input type="radio" name="pay" id="pay-full" value="full"><span>Уся сума одразу<small>Оплата на рахунок ФОП (IBAN), реквізити надішле Аліна.</small></span></label>
+      </fieldset>
+      <div class="sum" id="sum"></div>
+      <button class="btn" type="submit" id="go" style="justify-content:center">Відправити заявку</button>
+      <div id="msg" hidden></div>
+    </form>
+
+    <div class="side">
+      <div class="faq">
+        <div class="eyebrow">Питання</div>
+        <details open><summary>Чому до 14 днів?</summary><p>Новий костюм ми замовляємо під вас і перевіряємо комплект перед відправкою. Якщо Щур є вільний на складі, відправимо раніше й напишемо.</p></details>
+        <details><summary>Хто платить доставку?</summary><p>Доставку Новою поштою оплачує отримувач за тарифом НП. Безкоштовної доставки немає. Укрпошта — тільки якщо у вашому населеному пункті немає відділення НП.</p></details>
+        <details><summary>Є дитячий розмір?</summary><p>Цей костюм дорослий. Дитячі шиємо тільки під замовлення, ціну скаже Аліна в Direct.</p></details>
+        <details><summary>Навіщо передоплата?</summary><p>Ми замовляємо костюм саме під вас. 200 ₴ підтверджують, що посилку заберуть.</p></details>
+        <details><summary>Можна кілька штук?</summary><p>Так. Три Щури на свято — це вже шоу. Вкажіть кількість у формі.</p></details>
+      </div>
+      <div>
+        <div class="eyebrow">Швидше голосом</div>
+        <p style="margin-top:6px">Viber, Telegram або дзвінок — Аліна:</p>
+        <p class="phone">096 695 87 12</p>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer><div class="wrap">
+  <div>Костюми в оренду · Харків і вся Україна · ФОП</div>
+  <div><a href="https://instagram.com/kostyumy_v_orendu" target="_blank" rel="noopener">Instagram</a> · <a href="https://www.threads.com/@kostyumy_v_orendu" target="_blank" rel="noopener">Threads</a> · <a href="index.html">Усі костюми</a></div>
+</div></footer>
+
+<script>
+(function(){
+var PRICE=1699, PREPAY=200, DAYS=14;
+var $=function(s){return document.querySelector(s)};
+var fmt=function(n){return n.toLocaleString('uk-UA')};
+document.querySelectorAll('[data-price]').forEach(function(e){e.textContent=fmt(PRICE)});
+
+// дедлайн на Хелловін: 14 днів + 2 дні НП
+var now=new Date(), hw=new Date(now.getFullYear(),9,31), last=new Date(hw);last.setDate(hw.getDate()-DAYS-2);
+var dl=$('#deadline'), tm=$('#timer');
+var dayMs=864e5, left=Math.ceil((last-now)/dayMs);
+if(left>=0){
+  dl.innerHTML='<b>На Хелловін 31.10</b> — замовляйте до '+last.getDate()+' жовтня, щоб посилка встигла.';
+  tm.innerHTML='До Хелловіну встигнемо, якщо замовити за <b>'+left+' '+(left%10==1&&left%100!=11?'день':(left%10>=2&&left%10<=4&&(left%100<10||left%100>=20)?'дні':'днів'))+'</b>';
+}else{
+  var arr=new Date(now.getTime()+(DAYS+2)*dayMs);
+  dl.innerHTML='<b>Замовите сьогодні</b> — посилка буде у вас приблизно до '+arr.toLocaleDateString('uk-UA',{day:'numeric',month:'long'})+'. На Хелловін уже не встигаємо — беріть Щура в оренду.';
+  tm.textContent='Доставка до 14 днів';
+}
+
+var q=1;
+function sum(){
+  var full=$('#pay-full').checked, tot=PRICE*q;
+  $('#q').textContent=q;
+  $('#sum').innerHTML='<div class="r"><span>Щур × '+q+'</span><span>'+fmt(tot)+' ₴</span></div>'+
+   (full?'<div class="r"><span>Оплата зараз</span><span>'+fmt(tot)+' ₴</span></div>'
+        :'<div class="r"><span>Передоплата зараз</span><span>'+fmt(PREPAY)+' ₴</span></div><div class="r"><span>При отриманні</span><span>'+fmt(tot-PREPAY)+' ₴ + комісія НП</span></div>')+
+   '<div class="r"><span>Доставка</span><span>за тарифом НП</span></div><div class="big">'+fmt(tot)+' ₴</div>';
+}
+$('#plus').onclick=function(){if(q<10){q++;sum()}};
+$('#minus').onclick=function(){if(q>1){q--;sum()}};
+document.querySelectorAll('[name=pay]').forEach(function(r){r.onchange=sum});
+sum();
+
+function msg(h,c){var m=$('#msg');m.hidden=false;m.className=c;m.innerHTML=h}
+$('#f').addEventListener('submit',function(e){
+  e.preventDefault();
+  var name=$('#name').value.trim(),ph=$('#phone').value.trim(),np=$('#np').value.trim();
+  if(!name||!ph||!np)return msg("Заповніть ім'я, телефон і відділення Нової пошти.","err");
+  var full=$('#pay-full').checked, tot=PRICE*q;
+  var text='Замовлення: надувний Щур × '+q+' = '+fmt(tot)+' ₴\n'+name+', '+ph+'\nНП: '+np+'\nОплата: '+(full?'уся сума':'передоплата 200 ₴ + накладений платіж');
+  var API=window.BOOKING_API||"";
+  var fallback=function(){
+    msg('Скопіюйте текст і надішліть Аліні в Viber, Telegram (096 695 87 12) або Direct Instagram — вона надішле реквізити:<div class="copybox" id="cb">'+text.replace(/</g,'&lt;')+'</div><button type="button" class="btn" id="cp" style="margin-top:10px;font-size:14px;padding:10px 18px">Скопіювати</button>','ok');
+    $('#cp').onclick=function(){var b=this;(navigator.clipboard?navigator.clipboard.writeText(text):Promise.reject()).then(function(){b.textContent='Скопійовано'}).catch(function(){var r=document.createRange();r.selectNodeContents($('#cb'));var s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent='Виділено — натисніть «Копіювати»'})};
+  };
+  if(!API)return fallback();
+  var b=$('#go');b.disabled=true;
+  fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'order',product:'Щур (купівля)',qty:q,total:tot,pay:full?'full':'prepay200',city:np,contact:name+', '+ph,comment:text,source:'сайт-щур'})})
+   .then(function(r){return r.json()}).then(function(j){b.disabled=false;
+     if(j.ok){msg('Заявку прийнято'+(j.id?', № '+j.id:'')+'. Аліна напише протягом дня і надішле реквізити на '+fmt(full?tot:PREPAY)+' ₴.','ok');b.hidden=true}
+     else fallback()})
+   .catch(function(){b.disabled=false;fallback()});
+});
+})();
+</script>
+</body>
+</html>
