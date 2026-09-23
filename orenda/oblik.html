@@ -6,17 +6,26 @@
 :root{--lime:#C6F833;--pink:#FF4DA0;--blue:#5170FF;--orange:#FF7A29;--violet:#B15CFF;--dark:#16100E;--dark2:#241a17;--dark3:#2f2320;--paper:#F6F1E8;--line:#3a2d28;--red:#ff6b5e}
 *{box-sizing:border-box}
 html,body{background:var(--dark)}
-body{margin:0;color:var(--paper);font-family:"Golos Text",system-ui,sans-serif;font-size:16px;line-height:1.35;padding-inline:14px;padding-block:14px 120px}
+body{margin:0;color:var(--paper);font-family:"Golos Text",system-ui,sans-serif;font-size:16px;line-height:1.35;padding-inline:12px;padding-block:12px 120px;overflow-x:hidden}
 .wrap{max-width:860px;margin:0 auto}
 h1,h2,h3{font-family:Unbounded,sans-serif;font-weight:900;text-transform:uppercase;letter-spacing:-.04em;margin:0;line-height:.95}
 h1{font-size:clamp(28px,8vw,44px);color:var(--lime)}
 h2{font-size:20px;margin:22px 0 10px}
 .mono{font-family:"JetBrains Mono",monospace;font-weight:700;font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+.head{background:linear-gradient(135deg,var(--lime),#a8e01f);border-radius:22px;padding:14px 16px 0;margin-bottom:14px;position:relative;overflow:hidden}
+.head h1{color:var(--dark)}
+.head .mono{color:#3d4a12!important}
+.hband{display:flex;gap:2px;justify-content:space-between;margin:6px -6px -10px}
+.hband img{width:16%;max-width:74px;filter:drop-shadow(0 6px 0 rgba(22,16,14,.18))}
+@media(prefers-reduced-motion:no-preference){.hband img{animation:bob 3.4s ease-in-out infinite}
+.hband img:nth-child(2){animation-delay:-.5s}.hband img:nth-child(3){animation-delay:-1s}.hband img:nth-child(4){animation-delay:-1.5s}.hband img:nth-child(5){animation-delay:-2s}.hband img:nth-child(6){animation-delay:-2.5s}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-8px) rotate(3deg)}}}
 .top{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;flex-wrap:wrap}
-.top .mono{color:#a99f96;max-width:46vw;text-align:right}
+.top .mono{color:#a99f96;max-width:100%;text-align:right;font-size:11px}
 
 /* деньги */
-.money{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:8px;margin-top:14px}
+.money{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:14px}
+@media(min-width:620px){.money{grid-template-columns:repeat(4,minmax(0,1fr))}}
 .m{background:var(--dark2);border-radius:18px;padding:14px}
 .m b{display:block;font-family:Unbounded;font-size:clamp(18px,5.4vw,26px);letter-spacing:-.03em;overflow-wrap:anywhere}
 .m span{font-size:13px;color:#a99f96}
@@ -32,18 +41,21 @@ h2{font-size:20px;margin:22px 0 10px}
 .calhead{display:flex;align-items:center;gap:10px;margin:14px 0 8px}
 .calhead h3{flex:1;font-size:17px}
 .calhead button{background:var(--dark2);border:2px solid var(--line);color:var(--paper);border-radius:12px;width:44px;height:44px;font-size:20px;cursor:pointer}
-.cgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px}
+.cgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:2px;width:100%}
 .dow{font-family:"JetBrains Mono";font-size:10px;text-align:center;color:#8d8077}
-.cell{min-width:0;min-height:64px;background:var(--dark2);border-radius:10px;padding:4px 4px 5px;font-size:11px;position:relative;overflow:hidden}
+.cell{min-width:0;min-height:62px;background:var(--dark2);border-radius:9px;padding:3px 3px 4px;font-size:11px;position:relative;overflow:hidden}
 .cell.today{outline:2px solid var(--lime)}
 .cell .d{font-family:"JetBrains Mono";font-size:11px;color:#a99f96}
-.cell .ev{display:block;border-radius:5px;padding:2px 3px;margin-top:2px;font-weight:700;font-size:9px;color:#16100e;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;border:0;width:100%;text-align:left}
+.cell .ev{display:block;min-width:0;max-width:100%;border-radius:5px;padding:2px 3px;margin-top:2px;font-weight:700;font-size:9px;color:#16100e;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;border:0;width:100%;text-align:left}
 .ev.rent{background:var(--lime)}.ev.ship{background:var(--blue);color:#fff}.ev.back{background:var(--orange)}.ev.sale{background:var(--violet);color:#fff}
 .leg{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:#a99f96;margin-top:8px}
 .leg i{width:11px;height:11px;border-radius:3px;display:inline-block;margin-right:5px}
 
 /* список */
-.item{background:var(--dark2);border-radius:18px;padding:13px 14px;margin-top:10px;border-left:6px solid var(--lime)}
+.item{position:relative;overflow:hidden;background:var(--dark2);border-radius:18px;padding:13px 14px;margin-top:10px;border-left:6px solid var(--lime)}
+.item .stk{position:absolute;right:-14px;bottom:-16px;width:110px;opacity:.9;pointer-events:none;filter:drop-shadow(0 6px 10px rgba(0,0,0,.45))}
+.item .h,.item .sub,.item .dates,.item .sumline,.item .badges{position:relative;z-index:2}
+.item .badges{max-width:calc(100% - 78px)}
 .item.sale{border-left-color:var(--violet)}
 .item .h{display:flex;justify-content:space-between;gap:8px;align-items:flex-start;flex-wrap:wrap}
 .item .nm{font-family:Unbounded;font-size:17px;text-transform:uppercase;letter-spacing:-.02em}
@@ -58,6 +70,9 @@ h2{font-size:20px;margin:22px 0 10px}
 
 /* форма */
 .add{background:var(--dark2);border-radius:20px;padding:16px;margin-top:12px}
+.costrow{display:flex;gap:10px;align-items:center}
+.costrow select{flex:1}
+.costrow img{width:74px;flex:none;filter:drop-shadow(0 6px 10px rgba(0,0,0,.4));transition:transform .2s}
 .add label{display:block;font-weight:700;margin:10px 0 5px;font-size:14px}
 .add input,.add select,.add textarea{width:100%;background:var(--dark);border:2px solid var(--line);color:var(--paper);border-radius:12px;padding:12px;font:inherit;min-height:46px}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -71,7 +86,8 @@ h2{font-size:20px;margin:22px 0 10px}
 .note{font-size:13px;color:#8d8077;margin-top:10px}
 </style></head><body><div class="wrap">
 
-<div class="top"><h1>Облік</h1><span class="mono" id="sync">локально на цьому пристрої</span></div>
+<div class="head"><div class="top"><h1>Облік</h1><span class="mono" id="sync">локально на цьому пристрої</span></div>
+ <div class="hband"><img src="media/st/pavuk.png" alt=""><img src="media/st/rat.png" alt=""><img src="media/st/guard.png" alt=""><img src="media/st/batman.png" alt=""><img src="media/st/shark.png" alt=""><img src="media/st/biomeh.png" alt=""></div></div>
 
 <div class="money" id="money"></div>
 
@@ -83,12 +99,18 @@ h2{font-size:20px;margin:22px 0 10px}
 <div class="toast" id="toast" hidden></div>
 
 <script src="config.js"></script>
+<script src="oblik-data.js"></script>
 <script>
 (function(){
 "use strict";
 var API=window.BOOKING_API||"", KEY="";
 var COST=["Павук","Бетмен","Охоронець","Біомеханіка","Щур","Акула"];
 var PRICE={"Павук":200,"Бетмен":200,"Охоронець":200,"Біомеханіка":200,"Щур":250,"Акула":250};
+var ST={"Павук":"pavuk","Бетмен":"batman","Охоронець":"guard","Біомеханіка":"biomeh","Щур":"rat","Акула":"shark"};
+var CLR={"Павук":"var(--pink)","Бетмен":"var(--violet)","Охоронець":"var(--lime)","Біомеханіка":"var(--blue)","Щур":"var(--orange)","Акула":"var(--blue)"};
+function stKey(name){name=String(name||"");for(var k in ST){if(name.indexOf(k)===0)return ST[k]}return ""}
+function stImg(name,cls){var k=stKey(name);return k?"<img class='"+(cls||"stk")+"' src='media/st/"+k+".png' alt=''>":""}
+function clr(name){name=String(name||"");for(var k in CLR){if(name.indexOf(k)===0)return CLR[k]}return "var(--lime)"}
 var tab="cal", cur=new Date(), items=[], ed=null;
 function $(s){return document.querySelector(s)}
 function ymd(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
@@ -96,7 +118,12 @@ function pd(s){if(!s)return null;var a=s.split("-");return new Date(+a[0],+a[1]-
 function today(){var t=new Date();return new Date(t.getFullYear(),t.getMonth(),t.getDate())}
 function fm(s){return s?(s.split("-")[2]+"."+s.split("-")[1]):"—"}
 function toast(t){var e=$("#toast");e.textContent=t;e.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(function(){e.hidden=true},2200)}
-function load(){try{items=JSON.parse(localStorage.getItem("oblik")||"[]")}catch(e){items=[]}}
+function load(){
+ try{items=JSON.parse(localStorage.getItem("oblik")||"[]")}catch(e){items=[]}
+ var seed=window.OBLIK_SEED||[],have={};items.forEach(function(o){have[o.id]=1});
+ var added=0;seed.forEach(function(o){if(!have[o.id]){items.push(JSON.parse(JSON.stringify(o)));added++}});
+ if(added){save()}
+}
 function save(){try{localStorage.setItem("oblik",JSON.stringify(items))}catch(e){}}
 function uid(){return "z"+Date.now().toString(36)+Math.random().toString(36).slice(2,5)}
 
@@ -140,13 +167,13 @@ function calendar(){
   items.forEach(function(o){
    if(o.type==="spend")return;
    if(o.type==="sale"){ if(o.from===s) ev+="<button class='ev sale' data-id='"+o.id+"'>продаж "+o.costume+"</button>"; return}
-   if(o.ship===s) ev+="<button class='ev ship' data-id='"+o.id+"'>↑ "+o.costume+"</button>";
+   if(o.ship===s) ev+="<button class='ev ship' data-id='"+o.id+"'>↑ віддали "+o.costume+"</button>";
    if(o.from&&o.to&&s>=o.from&&s<=o.to) ev+="<button class='ev rent' data-id='"+o.id+"'>"+o.costume+"</button>";
-   if(o.back===s) ev+="<button class='ev back' data-id='"+o.id+"'>↓ "+o.costume+"</button>";
+   if(o.back===s) ev+="<button class='ev back' data-id='"+o.id+"'>↓ назад "+o.costume+"</button>";
   });
   h+="<div class='cell"+(s===t?" today":"")+"'><span class='d'>"+k+"</span>"+ev+"</div>";
  }
- h+="</div><div class='leg'><span><i style='background:var(--blue)'></i>відправка</span><span><i style='background:var(--lime)'></i>дні оренди</span><span><i style='background:var(--orange)'></i>повернення до нас</span><span><i style='background:var(--violet)'></i>продаж</span></div>";
+ h+="</div><div class='leg'><span><i style='background:var(--blue)'></i>віддали костюм</span><span><i style='background:var(--lime)'></i>день оренди</span><span><i style='background:var(--orange)'></i>повернувся до нас</span><span><i style='background:var(--violet)'></i>продаж</span></div>";
  v.innerHTML=h;
  $("#pm").onclick=function(){cur=new Date(y,m-1,1);draw()};
  $("#nm").onclick=function(){cur=new Date(y,m+1,1);draw()};
@@ -170,11 +197,11 @@ function list(filter){
 function card(o){
  if(o.type==="spend")return "<div class='item sale'><div class='h'><span class='nm'>Витрата</span><span class='mono'>"+fm(o.from)+"</span></div><div class='sub'>"+esc(o.note||"")+"</div><div class='sumline'>− "+(+o.sum||0)+" ₴</div><div class='badges'><button class='b' data-act='edit' data-id='"+o.id+"'>Змінити</button><button class='b del' data-act='del' data-id='"+o.id+"'>Видалити</button></div></div>";
  var days=(o.from&&o.to)?Math.max(1,Math.round((pd(o.to)-pd(o.from))/864e5)):0;
- return "<div class='item"+(o.type==="sale"?" sale":"")+"'>"+
+ return "<div class='item"+(o.type==="sale"?" sale":"")+"' style='border-left-color:"+clr(o.costume)+"'>"+stImg(o.costume)+
   "<div class='h'><span class='nm'>"+esc(o.costume)+(o.type==="sale"?" · продаж":"")+"</span><span class='mono'>"+(o.city||"")+"</span></div>"+
   "<div class='sub'>"+esc(o.client||"без імені")+(o.ttn?" · ТТН "+esc(o.ttn):"")+"</div>"+
   (o.type==="sale"?"<div class='dates'>дата: "+fm(o.from)+"</div>":
-   "<div class='dates'>↑ "+fm(o.ship)+" · оренда "+fm(o.from)+"–"+fm(o.to)+" ("+days+" діб) · ↓ "+fm(o.back)+"</div>")+
+   "<div class='dates'>віддали "+fm(o.ship)+" · оренда "+fm(o.from)+(o.to&&o.to!==o.from?"–"+fm(o.to):"")+" ("+days+" діб) · назад "+fm(o.back)+"</div>")+
   "<div class='sumline'>сума "+(+o.sum||0)+" ₴"+(o.type!=="sale"?" · застава "+(+o.dep||0)+" ₴":"")+"</div>"+
   "<div class='badges'>"+
    "<button class='b"+(o.paid?" on":"")+"' data-act='paid' data-id='"+o.id+"'>"+(o.paid?"✓ оплачено":"оплачено")+"</button>"+
@@ -207,7 +234,7 @@ function openForm(o){
  tab="form";drawTabs();
  v.innerHTML="<div class='add'>"+
   "<label>Тип</label><select id='f_type'><option value='rent'>Оренда</option><option value='sale'>Продаж</option><option value='spend'>Витрата</option></select>"+
-  "<div id='f_costbox'><label>Костюм</label><select id='f_cost'>"+COST.map(function(c){return "<option>"+c+"</option>"}).join("")+"</select></div>"+
+  "<div id='f_costbox'><label>Костюм</label><div class='costrow'><select id='f_cost'>"+COST.map(function(c){return "<option>"+c+"</option>"}).join("")+"</select><img id='f_st' src='media/st/rat.png' alt=''></div></div>"+
   "<label>Клієнт (імʼя, нік, телефон)</label><input id='f_client' type='text'>"+
   "<div class='row2'><div><label>Місто</label><input id='f_city' type='text'></div><div><label>ТТН</label><input id='f_ttn' type='text'></div></div>"+
   "<div class='row2'><div><label id='l_from'>Оренда з</label><input id='f_from' type='date'></div><div><label>Оренда по</label><input id='f_to' type='date'></div></div>"+
@@ -220,6 +247,7 @@ function openForm(o){
  $("#f_client").value=d.client||"";$("#f_city").value=d.city||"";$("#f_ttn").value=d.ttn||"";
  $("#f_from").value=d.from||"";$("#f_to").value=d.to||"";$("#f_ship").value=d.ship||"";$("#f_back").value=d.back||"";
  $("#f_sum").value=d.sum!=null?d.sum:"";$("#f_dep").value=d.dep!=null?d.dep:800;$("#f_note").value=d.note||"";
+ function stset(){var k=stKey($("#f_cost").value);if(k&&$("#f_st")){$("#f_st").src="media/st/"+k+".png";$("#f_st").style.transform="rotate(-6deg) scale(1.06)";setTimeout(function(){$("#f_st").style.transform=""},220)}}
  function sync(){var t=$("#f_type").value;
   $("#f_costbox").hidden=(t==="spend");
   $("#l_from").textContent=t==="rent"?"Оренда з":"Дата";
@@ -229,10 +257,11 @@ function openForm(o){
   if($("#f_type").value!=="rent")return;
   var f=$("#f_from").value,t=$("#f_to").value,c=$("#f_cost").value;
   if(f&&t&&!$("#f_sum").value){var dd=Math.max(1,Math.round((pd(t)-pd(f))/864e5));$("#f_sum").value=dd*(PRICE[c]||200)}
-  if(f&&!$("#f_ship").value){var s=pd(f);s.setDate(s.getDate()-2);$("#f_ship").value=ymd(s)}
-  if(t&&!$("#f_back").value){var b=pd(t);b.setDate(b.getDate()+2);$("#f_back").value=ymd(b)}}
- $("#f_type").onchange=sync;$("#f_from").onchange=auto;$("#f_to").onchange=auto;$("#f_cost").onchange=auto;
- sync();
+  var np=!/харк/i.test($("#f_city").value||""), lag=np?2:1;
+  if(f&&!$("#f_ship").value){var s=pd(f);s.setDate(s.getDate()-lag);$("#f_ship").value=ymd(s)}
+  if(t&&!$("#f_back").value){var b=pd(t);b.setDate(b.getDate()+lag);$("#f_back").value=ymd(b)}}
+ $("#f_type").onchange=sync;$("#f_city").onchange=auto;$("#f_from").onchange=auto;$("#f_to").onchange=auto;$("#f_cost").onchange=function(){stset();auto()};
+ sync();stset();
  $("#f_cancel").onclick=function(){tab="cal";draw()};
  $("#f_save").onclick=function(){
   var o=ed||{id:uid()};
@@ -254,14 +283,6 @@ function draw(){
 }
 $("#fab").onclick=function(){openForm(null)};
 load();
-if(!items.length){
- items=[{id:uid(),type:"rent",costume:"Павук",client:"anastasia (Direct)",city:"",ttn:"20451543462280",
-  from:ymd(new Date(today().getFullYear(),today().getMonth(),today().getDate()+(7-today().getDay())%7||0)),
-  sum:200,dep:800,paid:true,depTaken:false,sent:true,note:"відправлено 23.09, дві маски в комплекті"}];
- var o=items[0];var f=pd(o.from);var b=new Date(f);b.setDate(f.getDate()+1);o.to=ymd(b);
- var sh=new Date(f);sh.setDate(f.getDate()-2);o.ship=ymd(sh);
- var bk=new Date(b);bk.setDate(b.getDate()+2);o.back=ymd(bk);
- save()}
 draw();
 })();
 </script></body></html>
