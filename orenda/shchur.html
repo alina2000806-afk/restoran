@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Надувний Щур — купити костюм</title>
-<meta name="description" content="Надувний костюм Щура у власність. Під ключ: вентилятор, батарейки, фіксатор. Доставка Новою поштою по Україні до 14 днів.">
+<meta name="description" content="Надувний костюм Щура у власність. Під ключ: вентилятор, батарейки, фіксатор. Є в наявності — відправка за 24 години після оплати. Якщо закінчились — під замовлення до 14 днів.">
 <meta property="og:title" content="Надувний Щур — купити костюм">
-<meta property="og:description" content="Костюм, з якого регочуть усі. Під ключ, доставка до 14 днів.">
+<meta property="og:description" content="Костюм, з якого регочуть усі. Під ключ. Є в наявності — відправка за 24 години.">
 <meta property="og:image" content="media/rat_2.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700;900&family=Golos+Text:wght@400;500;700&family=JetBrains+Mono:wght@500;700&display=swap">
@@ -136,7 +136,7 @@ footer a{color:var(--lime)}
 
 <div class="bar"><div class="wrap">
   <a class="logo" href="index.html">костюми в оренду</a>
-  <div class="timer" id="timer">Доставка до 14 днів</div>
+  <div class="timer" id="timer">Є в наявності · відправка за 24 год</div>
 </div></div>
 
 <header class="hero">
@@ -159,7 +159,7 @@ footer a{color:var(--lime)}
   </div>
 </header>
 
-<div class="ticker" aria-hidden="true"><span>Вентилятор, батарейки й фіксатор уже в комплекті · Доставка до 14 днів · Передоплата 200 ₴, решта при отриманні · Офіційно, ФОП · Вентилятор, батарейки й фіксатор уже в комплекті · Доставка до 14 днів</span></div>
+<div class="ticker" aria-hidden="true"><span>Є в наявності — відправка за 24 години · Вентилятор, батарейки й фіксатор уже в комплекті · Передоплата 200 ₴, решта при отриманні · Закінчились — під замовлення до 14 днів · Офіційно, ФОП</span></div>
 
 <main>
 <section>
@@ -197,10 +197,10 @@ footer a{color:var(--lime)}
     <ol class="steps">
       <li><b>Заявка</b><span>Залишаєте ім'я, телефон і відділення НП.</span></li>
       <li><b>Оплата</b><span>200 ₴ передоплати або вся сума на рахунок ФОП.</span></li>
-      <li><b>До 14 днів</b><span>Костюм їде до нас, перевіряємо комплект.</span></li>
+      <li id="st3"><b>24 години</b><span>Щур є в наявності: перевіряємо комплект і пакуємо. Якщо закінчились — до 14 днів.</span></li>
       <li><b>Нова пошта</b><span>Відправляємо, повідомляємо номер ТТН.</span></li>
     </ol>
-    <p class="deadline" id="deadline"><b>На Хелловін 31.10</b> — замовляйте до 15 жовтня, щоб посилка встигла.</p>
+    <p class="deadline" id="deadline"><b>На Хелловін 31.10</b> — поки Щур є в наявності, встигаємо, якщо замовити до 28 жовтня.</p>
   </div>
 </section>
 
@@ -239,7 +239,7 @@ footer a{color:var(--lime)}
     <div class="side">
       <div class="faq">
         <div class="eyebrow">Питання</div>
-        <details open><summary>Чому до 14 днів?</summary><p>Новий костюм ми замовляємо під вас і перевіряємо комплект перед відправкою. Якщо Щур є вільний на складі, відправимо раніше й напишемо.</p></details>
+        <details open><summary>Коли відправите?</summary><p>Щур є в наявності — відправляємо протягом 24 годин після оплати. Якщо в наявності закінчились, замовляємо новий під вас — це до 14 днів. Про термін Аліна скаже одразу, до оплати.</p></details>
         <details><summary>Хто платить доставку?</summary><p>Доставку Новою поштою оплачує отримувач за тарифом НП. Безкоштовної доставки немає. Укрпошта — тільки якщо у вашому населеному пункті немає відділення НП.</p></details>
         <details><summary>Є дитячий розмір?</summary><p>Цей костюм дорослий. Дитячі шиємо тільки під замовлення, ціну скаже Аліна в Direct.</p></details>
         <details><summary>Навіщо передоплата?</summary><p>Ми замовляємо костюм саме під вас. 200 ₴ підтверджують, що посилку заберуть.</p></details>
@@ -262,22 +262,24 @@ footer a{color:var(--lime)}
 
 <script>
 (function(){
-var PRICE=1300, PREPAY=200, DAYS=14;
+// IN_STOCK: true — є в наявності (24 год + 1–2 дні НП), false — під замовлення (до 14 днів)
+var PRICE=1300, PREPAY=200, IN_STOCK=true, DAYS=IN_STOCK?1:14;
 var $=function(s){return document.querySelector(s)};
 var fmt=function(n){return n.toLocaleString('uk-UA')};
+if(!IN_STOCK){$('#st3').innerHTML='<b>До 14 днів</b><span>Замовляємо новий костюм під вас і перевіряємо комплект.</span>';}
 document.querySelectorAll('[data-price]').forEach(function(e){e.textContent=fmt(PRICE)});
 
-// дедлайн на Хелловін: 14 днів + 2 дні НП
+// дедлайн на Хелловін: відправка + 2 дні НП
 var now=new Date(), hw=new Date(now.getFullYear(),9,31), last=new Date(hw);last.setDate(hw.getDate()-DAYS-2);
 var dl=$('#deadline'), tm=$('#timer');
 var dayMs=864e5, left=Math.ceil((last-now)/dayMs);
 if(left>=0){
-  dl.innerHTML='<b>На Хелловін 31.10</b> — замовляйте до '+last.getDate()+' жовтня, щоб посилка встигла.';
-  tm.innerHTML='До Хелловіну встигнемо, якщо замовити за <b>'+left+' '+(left%10==1&&left%100!=11?'день':(left%10>=2&&left%10<=4&&(left%100<10||left%100>=20)?'дні':'днів'))+'</b>';
+  dl.innerHTML='<b>На Хелловін 31.10</b> — '+(IN_STOCK?'Щур є в наявності, ':'')+'замовляйте до '+last.getDate()+' жовтня, щоб посилка встигла.';
+  tm.innerHTML=(IN_STOCK?'Є в наявності · ':'')+'До Хелловіну — замовити за <b>'+left+' '+(left%10==1&&left%100!=11?'день':(left%10>=2&&left%10<=4&&(left%100<10||left%100>=20)?'дні':'днів'))+'</b>';
 }else{
   var arr=new Date(now.getTime()+(DAYS+2)*dayMs);
   dl.innerHTML='<b>Замовите сьогодні</b> — посилка буде у вас приблизно до '+arr.toLocaleDateString('uk-UA',{day:'numeric',month:'long'})+'. На Хелловін уже не встигаємо — беріть Щура в оренду.';
-  tm.textContent='Доставка до 14 днів';
+  tm.textContent=IN_STOCK?'Є в наявності · відправка за 24 год':'Під замовлення · до 14 днів';
 }
 
 var q=1;
