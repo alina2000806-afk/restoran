@@ -120,6 +120,7 @@ function fm(s){return s?(s.split("-")[2]+"."+s.split("-")[1]):"—"}
 function toast(t){var e=$("#toast");e.textContent=t;e.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(function(){e.hidden=true},2200)}
 function load(){
  try{items=JSON.parse(localStorage.getItem("oblik")||"[]")}catch(e){items=[]}
+ if(typeof window.OBLIK_DROP==="function"){var before=items.length;items=items.filter(function(o){try{return !window.OBLIK_DROP(o)}catch(e){return true}});if(items.length!==before)save()}
  var seed=window.OBLIK_SEED||[],have={};items.forEach(function(o){have[o.id]=1});
  var added=0;seed.forEach(function(o){if(!have[o.id]){items.push(JSON.parse(JSON.stringify(o)));added++}});
  if(added){save()}
@@ -173,7 +174,7 @@ function calendar(){
   });
   h+="<div class='cell"+(s===t?" today":"")+"'><span class='d'>"+k+"</span>"+ev+"</div>";
  }
- h+="</div><div class='leg'><span><i style='background:var(--blue)'></i>віддали костюм</span><span><i style='background:var(--lime)'></i>день оренди</span><span><i style='background:var(--orange)'></i>повернувся до нас</span><span><i style='background:var(--violet)'></i>продаж</span></div>";
+ h+="</div><div class='leg'><span><i style='background:var(--blue)'></i>віддали костюм</span><span><i style='background:var(--lime)'></i>день оренди</span><span><i style='background:var(--orange)'></i>відправляють назад</span><span><i style='background:var(--violet)'></i>продаж</span></div>";
  v.innerHTML=h;
  $("#pm").onclick=function(){cur=new Date(y,m-1,1);draw()};
  $("#nm").onclick=function(){cur=new Date(y,m+1,1);draw()};
@@ -238,7 +239,7 @@ function openForm(o){
   "<label>Клієнт (імʼя, нік, телефон)</label><input id='f_client' type='text'>"+
   "<div class='row2'><div><label>Місто</label><input id='f_city' type='text'></div><div><label>ТТН</label><input id='f_ttn' type='text'></div></div>"+
   "<div class='row2'><div><label id='l_from'>Оренда з</label><input id='f_from' type='date'></div><div><label>Оренда по</label><input id='f_to' type='date'></div></div>"+
-  "<div class='row2'><div><label>Відправила</label><input id='f_ship' type='date'></div><div><label>Чекаю назад</label><input id='f_back' type='date'></div></div>"+
+  "<div class='row2'><div><label>Відправила</label><input id='f_ship' type='date'></div><div><label>Відправляють назад</label><input id='f_back' type='date'></div></div>"+
   "<div class='row2'><div><label>Сума, ₴</label><input id='f_sum' type='number' inputmode='numeric'></div><div><label>Застава, ₴</label><input id='f_dep' type='number' inputmode='numeric'></div></div>"+
   "<label>Нотатка</label><textarea id='f_note'></textarea>"+
   "<button class='btn lime' id='f_save' type='button'>Зберегти</button>"+
