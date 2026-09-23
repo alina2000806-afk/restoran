@@ -114,9 +114,9 @@ input:focus,textarea:focus,.chip:focus-visible,.day:focus-visible,.c:focus-visib
  <p class="hint">Можна обрати кілька — від 3 костюмів знижка −10%.</p></section>
 
 <section class="step"><h2><i>2</i>Дати</h2>
- <p class="hint">Тисни день отримання, потім день повернення.</p>
+ <p class="hint">Познач <b>дні оренди</b> — саме за них ти платиш. Один день або кілька поспіль. Дні доставки не рахуються.</p>
  <div class="cal" id="cal"></div>
- <div class="legend"><span><i style="background:var(--lime)"></i>обрано</span><span><i style="background:#3a2d28"></i>зайнято</span><span class="mono" id="picked"></span></div></section>
+ <div class="legend"><span><i style="background:var(--lime)"></i>твої дні оренди</span><span><i style="background:#3a2d28"></i>вже зайнято</span><span class="mono" id="picked"></span></div></section>
 
 <section class="step"><h2><i>3</i>Доставка</h2>
  <div class="chips" id="city">
@@ -129,6 +129,7 @@ input:focus,textarea:focus,.chip:focus-visible,.day:focus-visible,.c:focus-visib
 
 <section class="step"><h2><i>4</i>Знижки</h2>
  <p class="hint">Познач своє — Аліна підтвердить. Складаються до −20%, УБД −20% зверху.</p>
+ <label class="check"><input type="checkbox" data-d="none" data-p="0"><span>У мене немає жодної знижки<small>просто беру костюм</small></span></label>
  <label class="check"><input type="checkbox" data-d="loyal" data-p="10"><span>Вже брав(ла) у вас костюм — −10%</span></label>
  <label class="check"><input type="checkbox" data-d="review" data-p="10"><span>Відгук із фото після оренди — −10%</span></label>
  <label class="check"><input type="checkbox" data-d="school" data-p="10"><span>Шкільне або садочкове свято — −10%</span></label>
@@ -151,6 +152,7 @@ input:focus,textarea:focus,.chip:focus-visible,.day:focus-visible,.c:focus-visib
 <div class="bar" id="bar" hidden><div class="t" id="barT"></div><button type="button" id="barGo">Далі →</button></div>
 
 <script src="config.js"></script>
+<script src="oblik-data.js"></script>
 <script>
 (function(){
 "use strict";
@@ -181,8 +183,21 @@ COST.forEach(function(c){
  cw.appendChild(b)});
 
 function api(q){return fetch(API+"?"+q).then(function(r){return r.json()})}
+var UNITS={"Щур":3};
+function qtyOf(rec){var m=String(rec.costume||"").match(/×\s*(\d+)/);return m?+m[1]:1}
+function baseName(rec){return String(rec.costume||"").replace(/\s*×.*$/,"").trim()}
+function localBusy(k){
+ /* костюм зайнятий від дня, коли ми його віддали, до дня, коли він повернувся */
+ var out={},cnt={},units=UNITS[k]||1;
+ (window.OBLIK_SEED||[]).forEach(function(r){
+  if(r.type==="spend"||baseName(r)!==k)return;
+  var a=r.ship||r.from,b=r.back||r.to||r.from;if(!a||!b)return;
+  for(var d=new Date(a.split("-")[0],+a.split("-")[1]-1,+a.split("-")[2]);ymd(d)<=b;d.setDate(d.getDate()+1)){
+   var s=ymd(d);cnt[s]=(cnt[s]||0)+qtyOf(r);if(cnt[s]>=units)out[s]=1}});
+ return out}
 function loadBusy(){
  var ks=Object.keys(sel).filter(function(k){return sel[k]});busy={};
+ ks.forEach(function(k){var b=localBusy(k);for(var d in b)busy[d]=1});
  if(!API||!ks.length){render();return}
  var f=ymd(today()),t=new Date();t.setDate(t.getDate()+75);
  Promise.all(ks.map(function(k){return api("action=availability&costume="+encodeURIComponent(k)+"&from="+f+"&to="+ymd(t))
@@ -206,13 +221,13 @@ function render(){
    else if(from&&to&&s>from&&s<to)b.classList.add("in");
    b.addEventListener("click",function(){pick(s)});g.appendChild(b)})(k)}
   box.appendChild(g);cal.appendChild(box)}
- $("#picked").textContent=from?("з "+fmt(from)+(to?" по "+fmt(to):" — обери повернення")):"";
+ $("#picked").textContent=from?(from===to?("оренда "+fmt(from)+" · 1 доба"):("оренда "+fmt(from)+"–"+fmt(to))):"";
  calc()}
 function pick(s){
- if(!from||(from&&to)){from=s;to=null}
- else if(s<=from){from=s;to=null}
- else{var ok=true;for(var d=pd(from);ymd(d)<s;d.setDate(d.getDate()+1)){if(busy[ymd(d)]){ok=false;break}}
-  if(!ok){msg("У цьому проміжку є зайняті дні — обери інші.","err");from=s;to=null}else{to=s;msg("")}}
+ if(!from||(from&&to)){from=s;to=s}
+ else if(s<from){from=s;to=from===to?s:to}
+ else{var ok=true;for(var d=pd(from);ymd(d)<=s;d.setDate(d.getDate()+1)){if(busy[ymd(d)]){ok=false;break}}
+  if(!ok){msg("У цьому проміжку є зайняті дні — обери інші.","err");from=s;to=s}else{to=s;msg("")}}
  render()}
 
 $("#city").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;
@@ -220,11 +235,11 @@ $("#city").addEventListener("click",function(e){var b=e.target.closest("button")
  this.querySelectorAll("button").forEach(function(x){x.setAttribute("aria-pressed",x===b?"true":"false")});
  $("#otherBox").hidden=!other;calc()});
 document.querySelectorAll("[data-d]").forEach(function(c){c.addEventListener("change",function(){
- if(c.dataset.d==="photo"&&c.checked){document.querySelectorAll("[data-d]").forEach(function(o){if(o!==c)o.checked=false})}
- else if(c.checked){document.querySelector('[data-d="photo"]').checked=false}
+ if((c.dataset.d==="photo"||c.dataset.d==="none")&&c.checked){document.querySelectorAll("[data-d]").forEach(function(o){if(o!==c)o.checked=false})}
+ else if(c.checked){document.querySelector('[data-d="photo"]').checked=false;document.querySelector('[data-d="none"]').checked=false}
  calc()})});
 
-function days(){return from&&to?Math.max(1,Math.round((pd(to)-pd(from))/86400000)):0}
+function days(){return from&&to?Math.max(1,Math.round((pd(to)-pd(from))/86400000)+1):0}
 function calc(){
  var ks=COST.filter(function(c){return sel[c.k]}),dd=days(),T=$("#sumT"),note=$("#sumNote"),bar=$("#bar");
  if(!ks.length||!dd){T.innerHTML="<tr><td>Обери костюм і дати</td><td></td></tr>";note.textContent="";last={ok:false};
@@ -251,7 +266,7 @@ $("#barGo").addEventListener("click",function(){$("#go").scrollIntoView({behavio
 $("#go").addEventListener("click",function(){
  var ks=COST.filter(function(c){return sel[c.k]}).map(function(c){return c.k});
  if(!ks.length)return msg("Обери костюм.","err");
- if(!from||!to)return msg("Обери дати отримання й повернення.","err");
+ if(!from||!to)return msg("Обери дні оренди.","err");
  var name=$("#name").value.trim(),ph=$("#phone").value.trim();
  if(!name||!ph)return msg("Вкажи ім’я та телефон або Telegram.","err");
  var city=other?$("#cityName").value.trim():"Харків";
