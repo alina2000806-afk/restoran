@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="uk"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow">
+<title>Облік Аліни</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@800;900&family=Golos+Text:wght@500;600;700&family=JetBrains+Mono:wght@600;700&display=swap">
+<style>
+:root{--lime:#C6F833;--pink:#FF4DA0;--blue:#5170FF;--orange:#FF7A29;--violet:#B15CFF;--dark:#16100E;--dark2:#241a17;--dark3:#2f2320;--paper:#F6F1E8;--line:#3a2d28;--red:#ff6b5e}
+*{box-sizing:border-box}
+html,body{background:var(--dark)}
+body{margin:0;color:var(--paper);font-family:"Golos Text",system-ui,sans-serif;font-size:16px;line-height:1.35;padding-inline:14px;padding-block:14px 120px}
+.wrap{max-width:860px;margin:0 auto}
+h1,h2,h3{font-family:Unbounded,sans-serif;font-weight:900;text-transform:uppercase;letter-spacing:-.04em;margin:0;line-height:.95}
+h1{font-size:clamp(28px,8vw,44px);color:var(--lime)}
+h2{font-size:20px;margin:22px 0 10px}
+.mono{font-family:"JetBrains Mono",monospace;font-weight:700;font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+.top{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;flex-wrap:wrap}
+.top .mono{color:#a99f96;max-width:46vw;text-align:right}
+
+/* деньги */
+.money{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:8px;margin-top:14px}
+.m{background:var(--dark2);border-radius:18px;padding:14px}
+.m b{display:block;font-family:Unbounded;font-size:clamp(18px,5.4vw,26px);letter-spacing:-.03em;overflow-wrap:anywhere}
+.m span{font-size:13px;color:#a99f96}
+.m.in b{color:var(--lime)}.m.out b{color:var(--red)}.m.net b{color:var(--blue)}.m.dep b{color:var(--orange)}
+
+/* табы */
+.tabs{display:flex;gap:7px;overflow-x:auto;margin:16px -14px 0;padding:0 14px 6px}
+.tab{flex:none;border:2px solid var(--line);background:var(--dark2);color:var(--paper);border-radius:999px;padding:10px 15px;min-height:46px;font:700 15px "Golos Text";cursor:pointer}
+.tab[aria-selected=true]{background:var(--lime);border-color:var(--lime);color:var(--dark)}
+.tab b{background:var(--pink);color:#fff;border-radius:99px;padding:1px 7px;margin-left:6px;font-size:12px}
+
+/* календарь */
+.calhead{display:flex;align-items:center;gap:10px;margin:14px 0 8px}
+.calhead h3{flex:1;font-size:17px}
+.calhead button{background:var(--dark2);border:2px solid var(--line);color:var(--paper);border-radius:12px;width:44px;height:44px;font-size:20px;cursor:pointer}
+.cgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px}
+.dow{font-family:"JetBrains Mono";font-size:10px;text-align:center;color:#8d8077}
+.cell{min-width:0;min-height:64px;background:var(--dark2);border-radius:10px;padding:4px 4px 5px;font-size:11px;position:relative;overflow:hidden}
+.cell.today{outline:2px solid var(--lime)}
+.cell .d{font-family:"JetBrains Mono";font-size:11px;color:#a99f96}
+.cell .ev{display:block;border-radius:5px;padding:2px 3px;margin-top:2px;font-weight:700;font-size:9px;color:#16100e;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;border:0;width:100%;text-align:left}
+.ev.rent{background:var(--lime)}.ev.ship{background:var(--blue);color:#fff}.ev.back{background:var(--orange)}.ev.sale{background:var(--violet);color:#fff}
+.leg{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:#a99f96;margin-top:8px}
+.leg i{width:11px;height:11px;border-radius:3px;display:inline-block;margin-right:5px}
+
+/* список */
+.item{background:var(--dark2);border-radius:18px;padding:13px 14px;margin-top:10px;border-left:6px solid var(--lime)}
+.item.sale{border-left-color:var(--violet)}
+.item .h{display:flex;justify-content:space-between;gap:8px;align-items:flex-start;flex-wrap:wrap}
+.item .nm{font-family:Unbounded;font-size:17px;text-transform:uppercase;letter-spacing:-.02em}
+.item .sub{color:#bfb3a8;font-size:14px;margin-top:3px}
+.item .dates{font-family:"JetBrains Mono";font-size:13px;margin-top:6px;color:var(--lime)}
+.badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
+.b{border:2px solid var(--line);background:transparent;color:#bfb3a8;border-radius:999px;padding:8px 12px;min-height:40px;font:700 13px "Golos Text";cursor:pointer}
+.b.on{background:var(--lime);border-color:var(--lime);color:var(--dark)}
+.b.dep.on{background:var(--orange);border-color:var(--orange)}
+.b.del{border-color:#5a2c2c;color:#ff9c8f}
+.sumline{margin-top:8px;font-family:"JetBrains Mono";font-size:13px;color:#e8dfd6}
+
+/* форма */
+.add{background:var(--dark2);border-radius:20px;padding:16px;margin-top:12px}
+.add label{display:block;font-weight:700;margin:10px 0 5px;font-size:14px}
+.add input,.add select,.add textarea{width:100%;background:var(--dark);border:2px solid var(--line);color:var(--paper);border-radius:12px;padding:12px;font:inherit;min-height:46px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn{width:100%;background:var(--pink);color:#fff;border:0;border-radius:999px;padding:16px;font-family:Unbounded;font-weight:900;font-size:16px;text-transform:uppercase;cursor:pointer;margin-top:14px;min-height:54px}
+.btn.lime{background:var(--lime);color:var(--dark)}
+.empty{color:#8d8077;text-align:center;padding:26px 0}
+.fab{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));background:var(--pink);color:#fff;border:0;border-radius:999px;padding:16px 22px;font-family:Unbounded;font-weight:900;font-size:15px;box-shadow:0 8px 24px rgba(0,0,0,.5);cursor:pointer;z-index:8;min-height:54px}
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--lime);color:var(--dark);padding:11px 18px;border-radius:999px;font-weight:700;z-index:20}
+:focus-visible{outline:3px solid var(--lime);outline-offset:2px}
+[hidden]{display:none!important}
+.note{font-size:13px;color:#8d8077;margin-top:10px}
+</style></head><body><div class="wrap">
+
+<div class="top"><h1>Облік</h1><span class="mono" id="sync">локально на цьому пристрої</span></div>
+
+<div class="money" id="money"></div>
+
+<div class="tabs" role="tablist" id="tabs"></div>
+<div id="view"></div>
+
+</div>
+<button class="fab" id="fab" type="button">+ Запис</button>
+<div class="toast" id="toast" hidden></div>
+
+<script src="config.js"></script>
+<script>
+(function(){
+"use strict";
+var API=window.BOOKING_API||"", KEY="";
+var COST=["Павук","Бетмен","Охоронець","Біомеханіка","Щур","Акула"];
+var PRICE={"Павук":200,"Бетмен":200,"Охоронець":200,"Біомеханіка":200,"Щур":250,"Акула":250};
+var tab="cal", cur=new Date(), items=[], ed=null;
+function $(s){return document.querySelector(s)}
+function ymd(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function pd(s){if(!s)return null;var a=s.split("-");return new Date(+a[0],+a[1]-1,+a[2])}
+function today(){var t=new Date();return new Date(t.getFullYear(),t.getMonth(),t.getDate())}
+function fm(s){return s?(s.split("-")[2]+"."+s.split("-")[1]):"—"}
+function toast(t){var e=$("#toast");e.textContent=t;e.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(function(){e.hidden=true},2200)}
+function load(){try{items=JSON.parse(localStorage.getItem("oblik")||"[]")}catch(e){items=[]}}
+function save(){try{localStorage.setItem("oblik",JSON.stringify(items))}catch(e){}}
+function uid(){return "z"+Date.now().toString(36)+Math.random().toString(36).slice(2,5)}
+
+/* ---------- деньги ---------- */
+function money(){
+ var inc=0,out=0,dep=0;
+ items.forEach(function(o){
+  if(o.paid)inc+=+o.sum||0;
+  if(o.type==="spend")out+=+o.sum||0;
+  if(o.depTaken&&!o.depBack)dep+=+o.dep||0;
+ });
+ var net=inc-out;
+ $("#money").innerHTML=
+  "<div class='m in'><b>"+inc.toLocaleString("uk-UA")+" ₴</b><span>отримано</span></div>"+
+  "<div class='m out'><b>"+out.toLocaleString("uk-UA")+" ₴</b><span>витрачено</span></div>"+
+  "<div class='m net'><b>"+net.toLocaleString("uk-UA")+" ₴</b><span>чистими</span></div>"+
+  "<div class='m dep'><b>"+dep.toLocaleString("uk-UA")+" ₴</b><span>застав на руках</span></div>";
+}
+
+/* ---------- вкладки ---------- */
+var TABS=[{id:"cal",n:"Календар"},{id:"now",n:"В роботі",f:function(o){return o.type!=="spend"&&!o.done}},
+ {id:"all",n:"Усі записи",f:function(){return true}},{id:"money",n:"Гроші"}];
+function drawTabs(){
+ $("#tabs").innerHTML="";
+ TABS.forEach(function(t){
+  var b=document.createElement("button");b.className="tab";b.type="button";b.setAttribute("role","tab");
+  b.setAttribute("aria-selected",tab===t.id?"true":"false");
+  var c=t.f?items.filter(t.f).length:0;
+  b.innerHTML=t.n+(c?"<b>"+c+"</b>":"");
+  b.onclick=function(){tab=t.id;draw()};$("#tabs").appendChild(b)})}
+
+/* ---------- календарь ---------- */
+function calendar(){
+ var v=$("#view"),y=cur.getFullYear(),m=cur.getMonth();
+ var h="<div class='calhead'><button type='button' id='pm'>‹</button><h3>"+cur.toLocaleDateString("uk-UA",{month:"long",year:"numeric"})+"</h3><button type='button' id='nm'>›</button></div><div class='cgrid'>";
+ ["Пн","Вт","Ср","Чт","Пт","Сб","Нд"].forEach(function(d){h+="<div class='dow'>"+d+"</div>"});
+ var first=new Date(y,m,1),off=(first.getDay()+6)%7,n=new Date(y,m+1,0).getDate(),t=ymd(today());
+ for(var i=0;i<off;i++)h+="<div></div>";
+ for(var k=1;k<=n;k++){
+  var s=ymd(new Date(y,m,k)),ev="";
+  items.forEach(function(o){
+   if(o.type==="spend")return;
+   if(o.type==="sale"){ if(o.from===s) ev+="<button class='ev sale' data-id='"+o.id+"'>продаж "+o.costume+"</button>"; return}
+   if(o.ship===s) ev+="<button class='ev ship' data-id='"+o.id+"'>↑ "+o.costume+"</button>";
+   if(o.from&&o.to&&s>=o.from&&s<=o.to) ev+="<button class='ev rent' data-id='"+o.id+"'>"+o.costume+"</button>";
+   if(o.back===s) ev+="<button class='ev back' data-id='"+o.id+"'>↓ "+o.costume+"</button>";
+  });
+  h+="<div class='cell"+(s===t?" today":"")+"'><span class='d'>"+k+"</span>"+ev+"</div>";
+ }
+ h+="</div><div class='leg'><span><i style='background:var(--blue)'></i>відправка</span><span><i style='background:var(--lime)'></i>дні оренди</span><span><i style='background:var(--orange)'></i>повернення до нас</span><span><i style='background:var(--violet)'></i>продаж</span></div>";
+ v.innerHTML=h;
+ $("#pm").onclick=function(){cur=new Date(y,m-1,1);draw()};
+ $("#nm").onclick=function(){cur=new Date(y,m+1,1);draw()};
+ v.querySelectorAll(".ev").forEach(function(b){b.onclick=function(){openForm(items.filter(function(o){return o.id===b.dataset.id})[0])}});
+}
+
+/* ---------- список ---------- */
+function list(filter){
+ var L=items.filter(filter).sort(function(a,b){return String(a.from).localeCompare(String(b.from))});
+ if(!L.length){$("#view").innerHTML="<div class='empty'>Порожньо. Тисни «+ Запис».</div>";return}
+ $("#view").innerHTML=L.map(card).join("");
+ $("#view").querySelectorAll("[data-act]").forEach(function(b){
+  b.onclick=function(){
+   var o=items.filter(function(x){return x.id===b.dataset.id})[0],a=b.dataset.act;
+   if(a==="edit")return openForm(o);
+   if(a==="del"){if(confirm("Видалити запис?")){items=items.filter(function(x){return x.id!==o.id});save();draw();toast("Видалено")}return}
+   o[a]=!o[a];
+   if(a==="depBack"&&o.depBack)o.done=true;
+   save();draw();toast("Збережено")}});
+}
+function card(o){
+ if(o.type==="spend")return "<div class='item sale'><div class='h'><span class='nm'>Витрата</span><span class='mono'>"+fm(o.from)+"</span></div><div class='sub'>"+esc(o.note||"")+"</div><div class='sumline'>− "+(+o.sum||0)+" ₴</div><div class='badges'><button class='b' data-act='edit' data-id='"+o.id+"'>Змінити</button><button class='b del' data-act='del' data-id='"+o.id+"'>Видалити</button></div></div>";
+ var days=(o.from&&o.to)?Math.max(1,Math.round((pd(o.to)-pd(o.from))/864e5)):0;
+ return "<div class='item"+(o.type==="sale"?" sale":"")+"'>"+
+  "<div class='h'><span class='nm'>"+esc(o.costume)+(o.type==="sale"?" · продаж":"")+"</span><span class='mono'>"+(o.city||"")+"</span></div>"+
+  "<div class='sub'>"+esc(o.client||"без імені")+(o.ttn?" · ТТН "+esc(o.ttn):"")+"</div>"+
+  (o.type==="sale"?"<div class='dates'>дата: "+fm(o.from)+"</div>":
+   "<div class='dates'>↑ "+fm(o.ship)+" · оренда "+fm(o.from)+"–"+fm(o.to)+" ("+days+" діб) · ↓ "+fm(o.back)+"</div>")+
+  "<div class='sumline'>сума "+(+o.sum||0)+" ₴"+(o.type!=="sale"?" · застава "+(+o.dep||0)+" ₴":"")+"</div>"+
+  "<div class='badges'>"+
+   "<button class='b"+(o.paid?" on":"")+"' data-act='paid' data-id='"+o.id+"'>"+(o.paid?"✓ оплачено":"оплачено")+"</button>"+
+   (o.type!=="sale"?"<button class='b dep"+(o.depTaken?" on":"")+"' data-act='depTaken' data-id='"+o.id+"'>"+(o.depTaken?"✓ застава у нас":"застава")+"</button>":"")+
+   "<button class='b"+(o.sent?" on":"")+"' data-act='sent' data-id='"+o.id+"'>"+(o.sent?"✓ відправлено":"відправлено")+"</button>"+
+   (o.type!=="sale"?"<button class='b"+(o.returned?" on":"")+"' data-act='returned' data-id='"+o.id+"'>"+(o.returned?"✓ повернули":"повернули")+"</button>":"")+
+   (o.type!=="sale"?"<button class='b dep"+(o.depBack?" on":"")+"' data-act='depBack' data-id='"+o.id+"'>"+(o.depBack?"✓ заставу віддали":"віддати заставу")+"</button>":"")+
+   "<button class='b' data-act='edit' data-id='"+o.id+"'>Змінити</button>"+
+   "<button class='b del' data-act='del' data-id='"+o.id+"'>Видалити</button>"+
+  "</div></div>";
+}
+function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+
+/* ---------- гроші ---------- */
+function moneyView(){
+ var rows=items.slice().sort(function(a,b){return String(b.from).localeCompare(String(a.from))}).map(function(o){
+  var plus=o.type!=="spend"&&o.paid, minus=o.type==="spend";
+  return "<div class='item' style='border-left-color:"+(minus?"var(--red)":"var(--lime)")+"'><div class='h'><span class='nm' style='font-size:15px'>"+
+   esc(o.type==="spend"?("Витрата: "+(o.note||"")):(o.costume+(o.type==="sale"?" · продаж":" · оренда")))+
+   "</span><span class='mono'>"+fm(o.from)+"</span></div><div class='sumline'>"+(minus?"−":(plus?"+":"очікується "))+(+o.sum||0)+" ₴"+(plus?"":"")+"</div></div>"}).join("");
+ $("#view").innerHTML=(rows||"<div class='empty'>Ще немає записів.</div>")+
+  "<p class='note'>«Отримано» рахується тільки з позначкою «оплачено». Застави не вважаються доходом — вони повертаються клієнту.</p>";
+}
+
+/* ---------- форма ---------- */
+function openForm(o){
+ ed=o||null;
+ var d=o||{type:"rent",costume:"Щур",from:ymd(today()),dep:800};
+ var v=$("#view");
+ tab="form";drawTabs();
+ v.innerHTML="<div class='add'>"+
+  "<label>Тип</label><select id='f_type'><option value='rent'>Оренда</option><option value='sale'>Продаж</option><option value='spend'>Витрата</option></select>"+
+  "<div id='f_costbox'><label>Костюм</label><select id='f_cost'>"+COST.map(function(c){return "<option>"+c+"</option>"}).join("")+"</select></div>"+
+  "<label>Клієнт (імʼя, нік, телефон)</label><input id='f_client' type='text'>"+
+  "<div class='row2'><div><label>Місто</label><input id='f_city' type='text'></div><div><label>ТТН</label><input id='f_ttn' type='text'></div></div>"+
+  "<div class='row2'><div><label id='l_from'>Оренда з</label><input id='f_from' type='date'></div><div><label>Оренда по</label><input id='f_to' type='date'></div></div>"+
+  "<div class='row2'><div><label>Відправила</label><input id='f_ship' type='date'></div><div><label>Чекаю назад</label><input id='f_back' type='date'></div></div>"+
+  "<div class='row2'><div><label>Сума, ₴</label><input id='f_sum' type='number' inputmode='numeric'></div><div><label>Застава, ₴</label><input id='f_dep' type='number' inputmode='numeric'></div></div>"+
+  "<label>Нотатка</label><textarea id='f_note'></textarea>"+
+  "<button class='btn lime' id='f_save' type='button'>Зберегти</button>"+
+  "<button class='btn' id='f_cancel' type='button' style='background:var(--dark3)'>Скасувати</button></div>";
+ $("#f_type").value=d.type;$("#f_cost").value=d.costume||"Щур";
+ $("#f_client").value=d.client||"";$("#f_city").value=d.city||"";$("#f_ttn").value=d.ttn||"";
+ $("#f_from").value=d.from||"";$("#f_to").value=d.to||"";$("#f_ship").value=d.ship||"";$("#f_back").value=d.back||"";
+ $("#f_sum").value=d.sum!=null?d.sum:"";$("#f_dep").value=d.dep!=null?d.dep:800;$("#f_note").value=d.note||"";
+ function sync(){var t=$("#f_type").value;
+  $("#f_costbox").hidden=(t==="spend");
+  $("#l_from").textContent=t==="rent"?"Оренда з":"Дата";
+  ["f_to","f_ship","f_back","f_dep"].forEach(function(id){$("#"+id).closest("div").hidden=(t!=="rent")});
+  auto()}
+ function auto(){
+  if($("#f_type").value!=="rent")return;
+  var f=$("#f_from").value,t=$("#f_to").value,c=$("#f_cost").value;
+  if(f&&t&&!$("#f_sum").value){var dd=Math.max(1,Math.round((pd(t)-pd(f))/864e5));$("#f_sum").value=dd*(PRICE[c]||200)}
+  if(f&&!$("#f_ship").value){var s=pd(f);s.setDate(s.getDate()-2);$("#f_ship").value=ymd(s)}
+  if(t&&!$("#f_back").value){var b=pd(t);b.setDate(b.getDate()+2);$("#f_back").value=ymd(b)}}
+ $("#f_type").onchange=sync;$("#f_from").onchange=auto;$("#f_to").onchange=auto;$("#f_cost").onchange=auto;
+ sync();
+ $("#f_cancel").onclick=function(){tab="cal";draw()};
+ $("#f_save").onclick=function(){
+  var o=ed||{id:uid()};
+  o.type=$("#f_type").value;o.costume=$("#f_cost").value;o.client=$("#f_client").value.trim();
+  o.city=$("#f_city").value.trim();o.ttn=$("#f_ttn").value.trim();
+  o.from=$("#f_from").value;o.to=$("#f_to").value;o.ship=$("#f_ship").value;o.back=$("#f_back").value;
+  o.sum=+$("#f_sum").value||0;o.dep=+$("#f_dep").value||0;o.note=$("#f_note").value.trim();
+  if(o.type!=="rent"){o.to="";o.ship="";o.back=""}
+  if(!ed)items.push(o);
+  save();tab="cal";draw();toast(ed?"Оновлено":"Додано")};
+}
+
+function draw(){
+ drawTabs();money();
+ if(tab==="cal")calendar();
+ else if(tab==="now")list(function(o){return o.type!=="spend"&&!o.done});
+ else if(tab==="all")list(function(){return true});
+ else if(tab==="money")moneyView();
+}
+$("#fab").onclick=function(){openForm(null)};
+load();
+if(!items.length){
+ items=[{id:uid(),type:"rent",costume:"Павук",client:"anastasia (Direct)",city:"",ttn:"20451543462280",
+  from:ymd(new Date(today().getFullYear(),today().getMonth(),today().getDate()+(7-today().getDay())%7||0)),
+  sum:200,dep:800,paid:true,depTaken:false,sent:true,note:"відправлено 23.09, дві маски в комплекті"}];
+ var o=items[0];var f=pd(o.from);var b=new Date(f);b.setDate(f.getDate()+1);o.to=ymd(b);
+ var sh=new Date(f);sh.setDate(f.getDate()-2);o.ship=ymd(sh);
+ var bk=new Date(b);bk.setDate(b.getDate()+2);o.back=ymd(bk);
+ save()}
+draw();
+})();
+</script></body></html>
