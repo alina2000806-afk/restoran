@@ -206,7 +206,7 @@ function card(o){
   "<div class='sumline'>сума "+(+o.sum||0)+" ₴"+(o.type!=="sale"?" · застава "+(+o.dep||0)+" ₴":"")+"</div>"+
   "<div class='badges'>"+
    "<button class='b"+(o.paid?" on":"")+"' data-act='paid' data-id='"+o.id+"'>"+(o.paid?"✓ оплачено":"оплачено")+"</button>"+
-   (o.type!=="sale"?"<button class='b dep"+(o.depTaken?" on":"")+"' data-act='depTaken' data-id='"+o.id+"'>"+(o.depTaken?"✓ застава у нас":"застава")+"</button>":"")+
+   (o.type!=="sale"?"<button class='b dep"+(o.depTaken?" on":"")+"' data-act='depTaken' data-id='"+o.id+"'>"+(o.depTaken?"✓ застава у нас":"застава не взята")+"</button>":"")+
    "<button class='b"+(o.sent?" on":"")+"' data-act='sent' data-id='"+o.id+"'>"+(o.sent?"✓ відправлено":"відправлено")+"</button>"+
    (o.type!=="sale"?"<button class='b"+(o.returned?" on":"")+"' data-act='returned' data-id='"+o.id+"'>"+(o.returned?"✓ повернули":"повернули")+"</button>":"")+
    (o.type!=="sale"?"<button class='b dep"+(o.depBack?" on":"")+"' data-act='depBack' data-id='"+o.id+"'>"+(o.depBack?"✓ заставу віддали":"віддати заставу")+"</button>":"")+
@@ -224,13 +224,13 @@ function moneyView(){
    esc(o.type==="spend"?("Витрата: "+(o.note||"")):(o.costume+(o.type==="sale"?" · продаж":" · оренда")))+
    "</span><span class='mono'>"+fm(o.from)+"</span></div><div class='sumline'>"+(minus?"−":(plus?"+":"очікується "))+(+o.sum||0)+" ₴"+(plus?"":"")+"</div></div>"}).join("");
  $("#view").innerHTML=(rows||"<div class='empty'>Ще немає записів.</div>")+
-  "<p class='note'>«Отримано» рахується тільки з позначкою «оплачено». Застави не вважаються доходом — вони повертаються клієнту.</p>";
+  "<p class='note'>Правило: у календар потрапляють лише ОПЛАЧЕНІ броні (оренда оплачена наперед). Застава — окремо: може бути ще не взята, взята готівкою або йти накладеним платежем. Застави не є доходом, ми їх повертаємо.</p>";
 }
 
 /* ---------- форма ---------- */
 function openForm(o){
  ed=o||null;
- var d=o||{type:"rent",costume:"Щур",from:ymd(today()),dep:800};
+ var d=o||{type:"rent",costume:"Щур",from:ymd(today()),dep:800,paid:true};
  var v=$("#view");
  tab="form";drawTabs();
  v.innerHTML="<div class='add'>"+
