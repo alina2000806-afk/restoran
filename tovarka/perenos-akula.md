@@ -31,3 +31,8 @@
 
 ## Первое действие
 В 2–3 строках скажи Алине, что сессия акулы готова и что делаем сегодня.
+
+## TikTok и Threads (24.09)
+- Видео: `akula/video/akula-tiktok-1.mp4`, `akula-tiktok-2.mp4` (без музыки — звук добавлять в TikTok).
+- Подписи и 7 постов Threads: https://claude.ai/artifact/CAw8t3S66t5umi1Gr3dWk6
+- Отдельный TikTok только под акулу. Щура сюда не смешивать.
