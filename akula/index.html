@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Акула-Скелет — надувний костюм на Хелловін</title>
+<meta name="description" content="Надувний костюм Акула-Скелет на Хелловін. Універсальний розмір. 1190 ₴. Доставка Новою поштою до 14 днів. Кількість обмежена.">
+<meta property="og:title" content="Акула-Скелет — костюм на Хелловін за 1190 ₴">
+<meta property="og:description" content="Надувний, універсальний розмір. Передоплата 200 ₴. Кількість обмежена.">
+<meta property="og:image" content="og.jpg">
+<meta name="theme-color" content="#0D0A14">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik+Wet+Paint&family=Unbounded:wght@700;900&family=Golos+Text:wght@400;500;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<script src="../orenda/config.js"></script>
+<style>
+:root{
+  --night:#0D0A14; --grave:#17111F; --card:#1F1729; --bone:#F3EEDD; --muted:#B6AAC2; --line:#352A45;
+  --pumpkin:#FF7A1A; --toxic:#9BFF3C; --blood:#FF3B4E; --moon:#FFE7A6;
+  --drip:"Rubik Wet Paint","Unbounded","Arial Black",sans-serif;
+  --disp:"Unbounded","Arial Black",system-ui,sans-serif;
+  --body:"Golos Text",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--night);color:var(--bone);font-family:var(--body);font-size:17px;line-height:1.55;overflow-x:hidden}
+img{max-width:100%;height:auto;display:block}
+a{color:inherit}
+h1,h2,h3{margin:0;line-height:1.05;text-wrap:balance}
+h2{font-family:var(--disp);font-weight:900;font-size:clamp(26px,5.6vw,44px)}
+h3{font-family:var(--disp);font-weight:700;font-size:17px}
+p{margin:0}
+.wrap{max-width:1060px;margin:0 auto;padding-inline:16px}
+section{padding-block:56px}
+.eyebrow{font-family:var(--mono);font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--pumpkin);font-weight:700}
+.btn{display:inline-flex;justify-content:center;align-items:center;gap:8px;font-family:var(--disp);font-weight:700;font-size:17px;text-decoration:none;background:var(--pumpkin);color:#1A0E03;border:none;border-radius:99px;padding:17px 28px;cursor:pointer;box-shadow:0 0 0 3px #1A0E03,0 0 0 5px var(--pumpkin),0 10px 40px rgba(255,122,26,.45)}
+.btn:hover{background:#FF8E3D}
+.btn:focus-visible,input:focus-visible,label.opt:focus-within,summary:focus-visible{outline:3px solid var(--toxic);outline-offset:3px}
+
+/* top bar */
+.bar{position:sticky;top:0;z-index:30;background:var(--blood);color:#fff;padding-top:env(safe-area-inset-top,0px);font-family:var(--mono);font-size:13px;font-weight:700;text-align:center}
+.bar div{padding:8px 12px}
+
+/* hero */
+.hero{position:relative;overflow:hidden;padding-block:26px 40px;background:
+  radial-gradient(circle at 78% 18%,rgba(255,231,166,.9) 0 70px,rgba(255,231,166,.18) 71px 150px,transparent 151px),
+  radial-gradient(ellipse at 50% 110%,rgba(155,255,60,.18),transparent 60%),
+  linear-gradient(180deg,#221537,var(--night) 75%)}
+.hero .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:12px;align-items:center;position:relative;z-index:2}
+.hero .wrap>*{min-width:0}
+@media (max-width:780px){.hero .wrap{grid-template-columns:1fr}.hero-img{order:-1;max-width:420px;margin:0 auto}}
+.hero h1{font-family:var(--drip);font-weight:400;font-size:clamp(58px,13vw,128px);line-height:.9;color:var(--bone);text-shadow:0 4px 0 #000}
+.hero h1 span{display:block;color:var(--toxic);text-shadow:0 0 24px rgba(155,255,60,.55),0 4px 0 #000}
+.hero .sub{font-family:var(--disp);font-weight:700;font-size:clamp(17px,3vw,22px);margin-top:14px}
+.hero .lead{margin-top:10px;color:var(--muted);max-width:46ch}
+.pricebox{display:flex;flex-wrap:wrap;align-items:center;gap:18px;margin-top:22px}
+.price{font-family:var(--disp);font-weight:900;font-size:clamp(40px,8vw,60px);color:var(--moon);line-height:1}
+.price small{display:block;font-family:var(--mono);font-size:13px;font-weight:500;color:var(--muted);margin-top:6px}
+.badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.badges span{font-size:14px;font-weight:700;border:1.5px solid var(--line);background:rgba(23,17,31,.7);border-radius:99px;padding:6px 12px}
+.badges span.hot{border-color:var(--blood);color:#FFC7CD}
+.hero-img{position:relative}
+.hero-img img{filter:drop-shadow(0 20px 40px rgba(0,0,0,.7)) drop-shadow(0 0 30px rgba(155,255,60,.18))}
+@media (prefers-reduced-motion:no-preference){.hero-img img{animation:float 4.5s ease-in-out infinite}@keyframes float{50%{transform:translateY(-12px) rotate(-1.5deg)}}}
+.bat{position:absolute;z-index:1;opacity:.8}
+.stamp{position:absolute;right:4%;bottom:6%;background:var(--blood);color:#fff;font-family:var(--disp);font-weight:900;font-size:13px;line-height:1.15;text-align:center;width:104px;height:104px;border-radius:50%;display:grid;place-items:center;transform:rotate(-12deg);border:3px dashed #fff;padding:8px}
+
+/* deadline strip */
+.dead{background:var(--toxic);color:#0D0A14}
+.dead .wrap{display:flex;flex-wrap:wrap;gap:14px 28px;align-items:center;justify-content:space-between;padding-block:18px}
+.dead b{font-family:var(--disp);font-size:clamp(17px,3vw,22px)}
+.count{display:flex;gap:8px;font-variant-numeric:tabular-nums}
+.count div{background:#0D0A14;color:var(--toxic);border-radius:12px;padding:6px 10px;text-align:center;min-width:62px}
+.count b{display:block;font-family:var(--mono);font-size:24px;color:var(--toxic)}
+.count small{font-size:11px;font-family:var(--mono);color:var(--bone)}
+
+/* why */
+.why{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:24px}
+@media (max-width:780px){.why{grid-template-columns:1fr}}
+.why div{background:var(--card);border:1.5px solid var(--line);border-radius:20px;padding:20px;display:flex;flex-direction:column;gap:8px}
+.why .ic{font-family:var(--drip);font-size:34px;color:var(--pumpkin);line-height:1}
+.why p{color:var(--muted);font-size:15.5px}
+
+/* gallery */
+.gal{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:24px}
+.gal figure{margin:0;border-radius:22px;padding:18px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.gal figure:nth-child(1){background:radial-gradient(circle at 50% 35%,#3A2458,#17111F 70%)}
+.gal figure:nth-child(2){background:radial-gradient(circle at 50% 35%,#5A2A10,#17111F 70%)}
+.gal img{aspect-ratio:1/1;object-fit:contain;width:100%}
+.gal figcaption{font-size:14.5px;color:var(--muted);text-align:center}
+
+/* steps */
+.steps{list-style:none;margin:24px 0 0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:14px;counter-reset:s}
+@media (max-width:780px){.steps{grid-template-columns:1fr 1fr}}
+.steps li{counter-increment:s;display:flex;flex-direction:column;gap:6px;border-top:3px solid var(--pumpkin);padding-top:12px;min-width:0}
+.steps li::before{content:counter(s);font-family:var(--drip);font-size:40px;color:var(--pumpkin);line-height:1}
+.steps span{color:var(--muted);font-size:15px}
+
+/* order */
+.order{display:grid;grid-template-columns:1.05fr .95fr;gap:28px;align-items:start}
+.order>*{min-width:0}
+@media (max-width:780px){.order{grid-template-columns:1fr}}
+form{background:var(--card);border:2px solid var(--pumpkin);border-radius:26px;padding:22px;display:flex;flex-direction:column;gap:14px;box-shadow:0 0 60px rgba(255,122,26,.18)}
+.f{display:flex;flex-direction:column;gap:5px;font-weight:500;font-size:15px}
+input{font:500 17px var(--body);color:var(--bone);background:var(--grave);border:1.5px solid var(--line);border-radius:12px;padding:13px}
+input::placeholder{color:#7D7090}
+.qty{display:flex;align-items:center;gap:12px}
+.qty button{width:46px;height:46px;border-radius:12px;border:2px solid var(--bone);background:transparent;color:var(--bone);font:700 22px var(--disp);cursor:pointer}
+.qty output{font:900 24px var(--disp);min-width:30px;text-align:center}
+fieldset{border:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+legend{font-weight:500;font-size:15px;margin-bottom:6px}
+label.opt{display:flex;gap:10px;align-items:flex-start;border:1.5px solid var(--line);border-radius:14px;padding:12px;cursor:pointer}
+label.opt:has(input:checked){border-color:var(--pumpkin);background:rgba(255,122,26,.08)}
+label.opt input{margin-top:4px;accent-color:var(--pumpkin)}
+label.opt small{display:block;color:var(--muted);font-size:13.5px}
+.sum{background:var(--grave);border-radius:16px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;font-variant-numeric:tabular-nums}
+.sum .r{display:flex;justify-content:space-between;gap:10px;font-size:15px}
+.sum .r span:last-child{font-family:var(--mono);text-align:right}
+.sum .big{font-family:var(--disp);font-size:24px;color:var(--moon)}
+#msg{font-size:15px;border-radius:14px;padding:14px}
+#msg.ok{background:rgba(155,255,60,.12);border:1.5px solid var(--toxic)}
+#msg.err{background:rgba(255,59,78,.14);border:1.5px solid var(--blood)}
+.copybox{white-space:pre-wrap;font-family:var(--mono);font-size:13px;background:var(--grave);border-radius:10px;padding:10px;margin-top:8px;user-select:all}
+.go-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.go-links a,.go-links button{font:700 14px var(--body);background:var(--bone);color:var(--night);border:none;border-radius:99px;padding:10px 16px;text-decoration:none;cursor:pointer}
+
+.faq details{border-bottom:1.5px solid var(--line);padding-block:14px}
+.faq summary{font-family:var(--disp);font-weight:700;font-size:15.5px;cursor:pointer}
+.faq p{margin-top:8px;color:var(--muted);font-size:15.5px}
+.limit{background:rgba(255,59,78,.12);border:1.5px solid var(--blood);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:6px}
+.limit b{font-family:var(--disp)}
+
+footer{border-top:1.5px solid var(--line);padding-block:28px 100px;font-size:15px;color:var(--muted)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between}
+footer a{color:var(--bone)}
+.phone{font-family:var(--mono);font-weight:700;color:var(--bone);user-select:all}
+
+/* sticky mobile CTA */
+.sticky{position:fixed;left:0;right:0;bottom:0;z-index:40;background:rgba(13,10,20,.94);backdrop-filter:blur(8px);border-top:1.5px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));display:none;align-items:center;justify-content:space-between;gap:12px}
+.sticky b{font-family:var(--disp);font-size:20px;color:var(--moon)}
+.sticky .btn{padding:13px 22px;font-size:15px;box-shadow:none}
+@media (max-width:780px){.sticky{display:flex}}
+</style>
+</head>
+<body>
+
+<div class="bar"><div id="bar">🎃 Кількість обмежена · замовлення на Хелловін до 15 жовтня</div></div>
+
+<header class="hero">
+  <svg class="bat" style="left:6%;top:40px;width:54px" viewBox="0 0 64 28" fill="#000" aria-hidden="true"><path d="M32 8c2-4 4-4 4-4l1 4c3-1 6 0 8-3 2 5 8 6 12 4-2 6-7 7-10 12-3-3-7-2-9 1-2-2-4-3-6-3s-4 1-6 3c-2-3-6-4-9-1C14 16 9 15 7 9c4 2 10 1 12-4 2 3 5 4 8 3l1-4s2 0 4 4z"/></svg>
+  <svg class="bat" style="left:42%;top:14px;width:34px" viewBox="0 0 64 28" fill="#000" aria-hidden="true"><path d="M32 8c2-4 4-4 4-4l1 4c3-1 6 0 8-3 2 5 8 6 12 4-2 6-7 7-10 12-3-3-7-2-9 1-2-2-4-3-6-3s-4 1-6 3c-2-3-6-4-9-1C14 16 9 15 7 9c4 2 10 1 12-4 2 3 5 4 8 3l1-4s2 0 4 4z"/></svg>
+  <div class="wrap">
+    <div>
+      <div class="eyebrow">Надувний костюм на Хелловін</div>
+      <h1>Акула<span>Скелет</span></h1>
+      <p class="sub">Найстрашніше смішний костюм цього Хелловіну</p>
+      <p class="lead">Чорна акула з кістками на весь зріст. Одягаєш, вмикаєш вентилятор — і ти головна подія вечірки. Фото з тобою робитимуть усі.</p>
+      <div class="pricebox">
+        <div class="price">1 190 ₴<small>доставка Новою поштою — за тарифом НП</small></div>
+        <a class="btn" href="#order">Замовити →</a>
+      </div>
+      <div class="badges">
+        <span class="hot">Кількість обмежена</span>
+        <span>Універсальний розмір</span>
+        <span>Доставка до 14 днів</span>
+        <span>Передоплата 200 ₴</span>
+      </div>
+    </div>
+    <div class="hero-img">
+      <img src="shark_a.webp" alt="Надувний костюм Акула-Скелет спереду: чорний із білими кістками" width="900" height="896" fetchpriority="high">
+      <div class="stamp">Хелловін<br>2026</div>
+    </div>
+  </div>
+</header>
+
+<div class="dead"><div class="wrap">
+  <b id="deadText">Встигніть до Хелловіну: замовлення до 15 жовтня</b>
+  <div class="count" id="count" aria-label="Скільки лишилось до кінця прийому замовлень на Хелловін"></div>
+</div></div>
+
+<main>
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Чому саме вона</div>
+    <h2>Страшно. Смішно. Помітно.</h2>
+    <div class="why">
+      <div><span class="ic">01</span><h3>Видно з іншого кінця залу</h3><p>Акула на зріст людини з кістками, що світлішають на чорному. На фото вона виходить головною.</p></div>
+      <div><span class="ic">02</span><h3>Один розмір на всіх</h3><p>Надувний крій, універсальний розмір. Не треба вгадувати з мірками, як з одягом.</p></div>
+      <div><span class="ic">03</span><h3>Смішна, а не жахлива</h3><p>Підходить і на корпоратив, і на вечірку з друзями, і щоб налякати дітей так, що вони сміятимуться.</p></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="eyebrow">Подивіться з усіх боків</div>
+    <h2>Акула-Скелет</h2>
+    <div class="gal">
+      <figure><img loading="lazy" src="shark_a.webp" alt="Костюм спереду: ребра, хребет і кістки рук та ніг" width="900" height="896"><figcaption>Спереду: скелет на весь зріст</figcaption></figure>
+      <figure><img loading="lazy" src="shark_b.webp" alt="Костюм збоку: плавник, хвіст і відкрита паща" width="900" height="896"><figcaption>Збоку: плавник, хвіст і паща</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="eyebrow">Як отримати</div>
+    <h2>Від заявки до вечірки</h2>
+    <ol class="steps">
+      <li><h3>Заявка</h3><span>Ім'я, телефон і відділення Нової пошти — 30 секунд.</span></li>
+      <li><h3>Оплата</h3><span>200 ₴ передоплати або вся сума на карту.</span></li>
+      <li><h3>До 14 днів</h3><span>Костюм їде до нас, перевіряємо й пакуємо.</span></li>
+      <li><h3>Нова пошта</h3><span>Відправляємо й надсилаємо номер ТТН.</span></li>
+    </ol>
+  </div>
+</section>
+
+<section id="order" style="padding-top:0">
+  <div class="wrap order">
+    <form id="f" novalidate>
+      <h2 style="font-size:clamp(26px,5vw,34px)">Забронювати акулу</h2>
+      <label class="f" for="name">Ім'я<input id="name" autocomplete="name" placeholder="Олена"></label>
+      <label class="f" for="phone">Телефон<input id="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="096 000 00 00"></label>
+      <label class="f" for="np">Місто і відділення Нової пошти<input id="np" placeholder="Київ, відділення 25"></label>
+      <div class="f">Кількість
+        <div class="qty"><button type="button" id="minus" aria-label="Менше">−</button><output id="q">1</output><button type="button" id="plus" aria-label="Більше">+</button></div>
+      </div>
+      <fieldset>
+        <legend>Як оплатити</legend>
+        <label class="opt"><input type="radio" name="pay" id="pay-part" value="part" checked><span>Передоплата 200 ₴<small>Решта накладеним платежем у відділенні Нової пошти.</small></span></label>
+        <label class="opt"><input type="radio" name="pay" id="pay-full" value="full"><span>Уся сума на карту<small>Реквізити надішлемо після заявки.</small></span></label>
+      </fieldset>
+      <div class="sum" id="sum"></div>
+      <button class="btn" type="submit" id="go">Забронювати →</button>
+      <div id="msg" hidden></div>
+    </form>
+
+    <div style="display:flex;flex-direction:column;gap:18px">
+      <div class="limit"><b>Кількість обмежена</b><span>Партія під Хелловін невелика. Бронь закріплюємо за вами після передоплати.</span></div>
+      <div class="faq">
+        <div class="eyebrow">Питання</div>
+        <details open><summary>Чому доставка до 14 днів?</summary><p>Костюм їде до нас, ми перевіряємо його й відправляємо вам Новою поштою. Номер ТТН надішлемо одразу. Щоб устигнути на Хелловін, замовляйте до 15 жовтня.</p></details>
+        <details><summary>Який розмір?</summary><p>Універсальний, для дорослих. Костюм надувний, тому сидить вільно.</p></details>
+        <details><summary>Хто платить за доставку?</summary><p>Доставку оплачує отримувач за тарифом Нової пошти. Якщо обираєте передоплату 200 ₴, решту суми сплачуєте накладеним платежем при отриманні.</p></details>
+        <details><summary>Навіщо передоплата?</summary><p>Партія обмежена. 200 ₴ закріплюють костюм саме за вами.</p></details>
+        <details><summary>Можна кілька штук?</summary><p>Так, для компанії — вкажіть кількість у формі. Акули зграєю — найкраще групове фото на Хелловін.</p></details>
+      </div>
+      <div>
+        <div class="eyebrow">Швидше голосом</div>
+        <p style="margin-top:6px">Viber, Telegram або дзвінок: <span class="phone">096 695 87 12</span> — Аліна</p>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer><div class="wrap">
+  <div>Акула-Скелет · доставка по всій Україні · офіційно, ФОП</div>
+  <div><a href="https://instagram.com/kostyumy_v_orendu" target="_blank" rel="noopener">Instagram</a> · <a href="https://www.threads.com/@kostyumy_v_orendu" target="_blank" rel="noopener">Threads</a></div>
+</div></footer>
+
+<div class="sticky"><b>1 190 ₴</b><a class="btn" href="#order">Замовити</a></div>
+
+<script>
+(function(){
+var PRICE=1190, PREPAY=200, DAYS=14, PHONE='+380966958712';
+var $=function(s){return document.querySelector(s)};
+var fmt=function(n){return n.toLocaleString('uk-UA')};
+
+// дедлайн: 31.10 мінус 14 днів мінус 2 дні НП
+var now=new Date(), y=now.getFullYear(), last=new Date(y,9,31-DAYS-2,23,59,59);
+function tick(){
+  var ms=last-new Date();
+  if(ms<=0){
+    $('#deadText').textContent='На Хелловін уже не встигаємо, але акула лякає цілий рік: доставка до 14 днів';
+    $('#count').innerHTML='';$('#bar').textContent='Кількість обмежена · доставка до 14 днів';return;
+  }
+  var d=Math.floor(ms/864e5),h=Math.floor(ms/36e5)%24,m=Math.floor(ms/6e4)%60,s=Math.floor(ms/1e3)%60;
+  $('#count').innerHTML=[[d,'днів'],[h,'год'],[m,'хв'],[s,'сек']].map(function(x){return '<div><b>'+String(x[0]).padStart(2,'0')+'</b><small>'+x[1]+'</small></div>'}).join('');
+}
+tick();setInterval(tick,1000);
+
+var q=1;
+function sum(){
+  var full=$('#pay-full').checked, tot=PRICE*q;
+  $('#q').textContent=q;
+  $('#sum').innerHTML='<div class="r"><span>Акула-Скелет × '+q+'</span><span>'+fmt(tot)+' ₴</span></div>'+
+   (full?'<div class="r"><span>Оплата на карту зараз</span><span>'+fmt(tot)+' ₴</span></div>'
+        :'<div class="r"><span>Передоплата зараз</span><span>'+fmt(PREPAY)+' ₴</span></div><div class="r"><span>При отриманні</span><span>'+fmt(tot-PREPAY)+' ₴</span></div>')+
+   '<div class="r"><span>Доставка</span><span>за тарифом НП</span></div><div class="big">'+fmt(tot)+' ₴</div>';
+}
+$('#plus').onclick=function(){if(q<10){q++;sum()}};
+$('#minus').onclick=function(){if(q>1){q--;sum()}};
+document.querySelectorAll('[name=pay]').forEach(function(r){r.onchange=sum});
+sum();
+
+function msg(h,c){var m=$('#msg');m.hidden=false;m.className=c;m.innerHTML=h;m.scrollIntoView({behavior:'smooth',block:'nearest'})}
+$('#f').addEventListener('submit',function(e){
+  e.preventDefault();
+  var name=$('#name').value.trim(),ph=$('#phone').value.trim(),np=$('#np').value.trim();
+  if(!name||!ph||!np)return msg("Заповніть ім'я, телефон і відділення Нової пошти.","err");
+  if(ph.replace(/\D/g,'').length<10)return msg("Перевірте номер телефону: потрібно 10 цифр, наприклад 096 000 00 00.","err");
+  var full=$('#pay-full').checked, tot=PRICE*q;
+  var text='Хочу Акулу-Скелет × '+q+' = '+fmt(tot)+' ₴\n'+name+', '+ph+'\nНП: '+np+'\nОплата: '+(full?'уся сума на карту':'передоплата 200 ₴ + накладений платіж');
+  var fallback=function(){
+    msg('<b>Останній крок:</b> надішліть цей текст Аліні — вона підтвердить бронь і надішле реквізити.<div class="copybox" id="cb">'+text.replace(/</g,'&lt;')+'</div>'+
+      '<div class="go-links"><button type="button" id="cp">Скопіювати</button><a href="viber://chat?number=%2B380966958712">Viber</a><a href="https://ig.me/m/kostyumy_v_orendu" target="_blank" rel="noopener">Instagram Direct</a></div>'+
+      '<p style="margin-top:8px;font-size:14px;color:var(--muted)">Або подзвоніть: <span class="phone">096 695 87 12</span></p>','ok');
+    $('#cp').onclick=function(){var b=this;(navigator.clipboard?navigator.clipboard.writeText(text):Promise.reject()).then(function(){b.textContent='Скопійовано ✓'}).catch(function(){var r=document.createRange();r.selectNodeContents($('#cb'));var s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent='Виділено — скопіюйте'})};
+  };
+  var API=window.BOOKING_API||"";
+  if(!API)return fallback();
+  var b=$('#go');b.disabled=true;
+  fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'order',product:'Акула-Скелет',qty:q,total:tot,pay:full?'full':'prepay200',city:np,contact:name+', '+ph,comment:text,source:'сайт-акула'})})
+   .then(function(r){return r.json()}).then(function(j){b.disabled=false;
+     if(j.ok){msg('Заявку прийнято'+(j.id?', № '+j.id:'')+'. Аліна напише найближчим часом і надішле реквізити на '+fmt(full?tot:PREPAY)+' ₴.','ok');b.hidden=true}
+     else fallback()})
+   .catch(function(){b.disabled=false;fallback()});
+});
+})();
+</script>
+</body>
+</html>
