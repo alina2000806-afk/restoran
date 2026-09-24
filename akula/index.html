@@ -137,10 +137,12 @@ footer a{color:var(--bone)}
 .phone{font-family:var(--mono);font-weight:700;color:var(--bone);user-select:all}
 
 /* sticky mobile CTA */
-.sticky{position:fixed;left:0;right:0;bottom:0;z-index:40;background:rgba(13,10,20,.94);backdrop-filter:blur(8px);border-top:1.5px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));display:none;align-items:center;justify-content:space-between;gap:12px}
+.sticky{position:fixed;left:0;right:0;bottom:0;z-index:40;background:rgba(13,10,20,.94);backdrop-filter:blur(8px);border-top:1.5px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;justify-content:center;gap:12px}
+.sticky .in{width:100%;max-width:1060px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.sticky .note{font-size:14px;color:var(--muted)}
+@media (max-width:780px){.sticky .note{display:none}}
 .sticky b{font-family:var(--disp);font-size:20px;color:var(--moon)}
 .sticky .btn{padding:13px 22px;font-size:15px;box-shadow:none}
-@media (max-width:780px){.sticky{display:flex}}
 </style>
 </head>
 <body>
@@ -260,7 +262,7 @@ footer a{color:var(--bone)}
   <div><a href="https://instagram.com/kostyumy_v_orendu" target="_blank" rel="noopener">Instagram</a> · <a href="https://www.threads.com/@kostyumy_v_orendu" target="_blank" rel="noopener">Threads</a></div>
 </div></footer>
 
-<div class="sticky"><b>1 190 ₴</b><a class="btn" href="#order">Замовити</a></div>
+<div class="sticky"><div class="in"><b>1 190 ₴</b><span class="note">Акула-Скелет · кількість обмежена · замовлення на Хелловін до 15 жовтня</span><a class="btn" href="#order">Замовити</a></div></div>
 
 <script>
 (function(){
