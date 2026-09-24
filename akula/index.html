@@ -11,7 +11,7 @@
 <meta name="theme-color" content="#0D0A14">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik+Wet+Paint&family=Unbounded:wght@700;900&family=Golos+Text:wght@400;500;700&family=JetBrains+Mono:wght@500;700&display=swap">
-<script src="../orenda/config.js"></script>
+<script src="config.js"></script>
 <style>
 :root{
   --night:#0D0A14; --grave:#17111F; --card:#1F1729; --bone:#F3EEDD; --muted:#B6AAC2; --line:#352A45;
@@ -157,7 +157,7 @@ footer a{color:var(--bone)}
       <div class="eyebrow">Надувний костюм на Хелловін</div>
       <h1>Акула<span>Скелет</span></h1>
       <p class="sub">Найстрашніше смішний костюм цього Хелловіну</p>
-      <p class="lead">Чорна акула з кістками на весь зріст. Одягаєш, вмикаєш вентилятор — і ти головна подія вечірки. Фото з тобою робитимуть усі.</p>
+      <p class="lead">Чорна акула з кістками на весь зріст. Одягаєш, вмикаєш вентилятор — і ти головна подія вечірки. Батарейки вже в комплекті. Фото з тобою робитимуть усі.</p>
       <div class="pricebox">
         <div class="price">1 190 ₴<small>доставка Новою поштою — за тарифом НП</small></div>
         <a class="btn" href="#order">Замовити →</a>
@@ -165,6 +165,7 @@ footer a{color:var(--bone)}
       <div class="badges">
         <span class="hot">Кількість обмежена</span>
         <span>Універсальний розмір</span>
+        <span>Під ключ: батарейки в комплекті</span>
         <span>Доставка до 14 днів</span>
         <span>Передоплата 200 ₴</span>
       </div>
@@ -243,6 +244,7 @@ footer a{color:var(--bone)}
       <div class="faq">
         <div class="eyebrow">Питання</div>
         <details open><summary>Чому доставка до 14 днів?</summary><p>Костюм їде до нас, ми перевіряємо його й відправляємо вам Новою поштою. Номер ТТН надішлемо одразу. Щоб устигнути на Хелловін, замовляйте до 15 жовтня.</p></details>
+        <details><summary>Що в комплекті?</summary><p>Костюм, вбудований вентилятор і батарейки. Докуповувати нічого не треба.</p></details>
         <details><summary>Який розмір?</summary><p>Універсальний, для дорослих. Костюм надувний, тому сидить вільно.</p></details>
         <details><summary>Хто платить за доставку?</summary><p>Доставку оплачує отримувач за тарифом Нової пошти. Якщо обираєте передоплату 200 ₴, решту суми сплачуєте накладеним платежем при отриманні.</p></details>
         <details><summary>Навіщо передоплата?</summary><p>Партія обмежена. 200 ₴ закріплюють костюм саме за вами.</p></details>
@@ -311,7 +313,7 @@ $('#f').addEventListener('submit',function(e){
       '<p style="margin-top:8px;font-size:14px;color:var(--muted)">Або подзвоніть: <span class="phone">096 695 87 12</span></p>','ok');
     $('#cp').onclick=function(){var b=this;(navigator.clipboard?navigator.clipboard.writeText(text):Promise.reject()).then(function(){b.textContent='Скопійовано ✓'}).catch(function(){var r=document.createRange();r.selectNodeContents($('#cb'));var s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent='Виділено — скопіюйте'})};
   };
-  var API=window.BOOKING_API||"";
+  var API=window.ORDERS_API||"";
   if(!API)return fallback();
   var b=$('#go');b.disabled=true;
   fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'order',product:'Акула-Скелет',qty:q,total:tot,pay:full?'full':'prepay200',city:np,contact:name+', '+ph,comment:text,source:'сайт-акула'})})
