@@ -36,3 +36,6 @@
 - Видео: `akula/video/akula-tiktok-1.mp4`, `akula-tiktok-2.mp4` (без музыки — звук добавлять в TikTok).
 - Подписи и 7 постов Threads: https://claude.ai/artifact/CAw8t3S66t5umi1Gr3dWk6
 - Отдельный TikTok только под акулу. Щура сюда не смешивать.
+
+## Пакет на запуск 25.09
+- 5 видео `akula/video/`, 5 сторис и 5 слайдов карусели `akula/soc/`. План на 25.09–1.10, подписи, стикеры сторис, 14 постов Threads: https://claude.ai/artifact/CAw8t3S66t5umi1Gr3dWk6

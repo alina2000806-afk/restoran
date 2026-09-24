@@ -26,3 +26,6 @@
 - Видео: `orenda/video-shchur/shchur-tiktok-1.mp4`, `shchur-tiktok-2.mp4` (без музыки — звук добавлять в TikTok). AI-кадры подписаны «візуалізація»; на реальном постере аренда 250 ₴ закрыта наклейкой «1 300 ₴».
 - Подписи и 7 постов Threads: https://claude.ai/artifact/3h5V5wYYPWYDoMDWv5P3J7
 - Отдельный TikTok только под Щура. Акулу сюда не смешивать.
+
+## Пакет на запуск 25.09
+- 5 видео `orenda/video-shchur/`, 5 сторис и 5 слайдов карусели `orenda/soc-shchur/`. План на 25.09–1.10, подписи, стикеры сторис, 14 постов Threads: https://claude.ai/artifact/3h5V5wYYPWYDoMDWv5P3J7
