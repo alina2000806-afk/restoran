@@ -133,6 +133,18 @@ function load(){
  var seed=window.OBLIK_SEED||[],have={};items.forEach(function(o){have[o.id]=1});
  var added=0;seed.forEach(function(o){if(!have[o.id]){items.push(JSON.parse(JSON.stringify(o)));added++}});
  if(added){save()}
+ patch();
+}
+/* Разова правка вже збережених записів: сід їх не перезаписує, тому виправлення
+   приходять через OBLIK_PATCH і застосовуються один раз (id правки запамʼятовується). */
+function patch(){
+ var P=window.OBLIK_PATCH;if(!P||!P.id||!P.fix)return;
+ var done="";try{done=localStorage.getItem("oblikPatch")||""}catch(e){}
+ if(done===P.id)return;
+ var n=0;
+ items.forEach(function(o){var f=P.fix[o.id];if(!f)return;for(var k in f){if(Object.prototype.hasOwnProperty.call(f,k))o[k]=f[k]}n++});
+ try{localStorage.setItem("oblikPatch",P.id)}catch(e){}
+ if(n)save();
 }
 function save(){try{localStorage.setItem("oblik",JSON.stringify(items))}catch(e){}}
 function uid(){return "z"+Date.now().toString(36)+Math.random().toString(36).slice(2,5)}
