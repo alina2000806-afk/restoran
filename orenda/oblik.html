@@ -93,12 +93,29 @@ h2{font-size:20px;margin:22px 0 10px}
 :focus-visible{outline:3px solid var(--lime);outline-offset:2px}
 [hidden]{display:none!important}
 .note{font-size:13px;color:var(--mut);margin-top:10px;background:var(--soft);border-radius:12px;padding:10px 12px}
+
+/* баланс */
+.m.hd b{color:#2f7a24}.m.rd b{color:var(--orange)}.m.rt b{color:#2b45c9}.m.al b{color:var(--dark)}
+.bcard{display:flex;gap:12px;align-items:center;background:var(--card);border:3px solid var(--dark);box-shadow:0 5px 0 var(--dark);border-radius:18px;padding:10px 12px;margin-top:10px}
+.bcard img{width:56px;flex:none}
+.bcard .bn{font-family:Unbounded;font-size:15px;text-transform:uppercase;letter-spacing:-.02em}
+.bcard .bh{font-family:Unbounded;font-size:20px;margin-left:auto;text-align:right;white-space:nowrap}
+.bcard .bs{font-size:13px;color:var(--mut);font-weight:600;margin-top:2px}
+.bcard.over{border-color:var(--red);background:#ffe6e2}
+.wk{overflow-x:auto;margin-top:8px}
+.wk table{border-collapse:collapse;width:100%;min-width:480px;font-size:13px;background:var(--card);border:3px solid var(--dark)}
+.wk th,.wk td{padding:6px 5px;text-align:center;border-bottom:1px solid var(--line)}
+.wk th:first-child,.wk td:first-child{text-align:left;font-weight:700;padding-left:8px}
+.wk .z{color:var(--red);font-weight:700}
+.stock{display:grid;grid-template-columns:1fr 90px;gap:8px;align-items:center;margin-top:6px;font-weight:700}
+.warn{background:#ffe6e2;border:2px solid var(--red);color:var(--red);border-radius:12px;padding:10px 12px;margin-top:10px;font-weight:700;font-size:13px}
 </style></head><body><div class="wrap">
 
 <div class="head"><div class="top"><h1>Облік</h1><span class="mono" id="sync">локально на цьому пристрої</span></div>
  <div class="hband"><img src="media/st/pavuk.png" alt=""><img src="media/st/rat.png" alt=""><img src="media/st/guard.png" alt=""><img src="media/st/batman.png" alt=""><img src="media/st/shark.png" alt=""><img src="media/st/biomeh.png" alt=""></div></div>
 
 <div class="money" id="money"></div>
+<div class="money" id="bal" style="cursor:pointer" title="Відкрити баланс"></div>
 
 <div class="tabs" role="tablist" id="tabs"></div>
 <div id="view"></div>
@@ -113,8 +130,8 @@ h2{font-size:20px;margin:22px 0 10px}
 (function(){
 "use strict";
 var API=window.BOOKING_API||"", KEY="";
-var COST=["Павук","Бетмен","Охоронець","Біомеханіка","Щур","Акула"];
 var PRICE={"Павук":200,"Бетмен":200,"Охоронець":200,"Біомеханіка":200,"Щур":250,"Акула":250};
+function price(c){return PRICE[c]!=null?PRICE[c]:(String(c).indexOf("Акула")===0?250:200)}
 var ST={"Павук":"pavuk","Бетмен":"batman","Охоронець":"guard","Біомеханіка":"biomeh","Щур":"rat","Акула":"shark"};
 var CLR={"Павук":"var(--pink)","Бетмен":"var(--violet)","Охоронець":"var(--lime)","Біомеханіка":"var(--blue)","Щур":"var(--orange)","Акула":"var(--blue)"};
 function stKey(name){name=String(name||"");for(var k in ST){if(name.indexOf(k)===0)return ST[k]}return ""}
@@ -167,7 +184,7 @@ function money(){
 }
 
 /* ---------- вкладки ---------- */
-var TABS=[{id:"cal",n:"Календар"},{id:"now",n:"В роботі",f:function(o){return o.type!=="spend"&&!o.done}},
+var TABS=[{id:"cal",n:"Календар"},{id:"bal",n:"Баланс"},{id:"now",n:"В роботі",f:function(o){return o.type!=="spend"&&!o.done}},
  {id:"all",n:"Усі записи",f:function(){return true}},{id:"money",n:"Гроші"}];
 function drawTabs(){
  $("#tabs").innerHTML="";
@@ -214,6 +231,7 @@ function list(filter){
    if(a==="edit")return openForm(o);
    if(a==="del"){if(confirm("Видалити запис?")){items=items.filter(function(x){return x.id!==o.id});save();draw();toast("Видалено")}return}
    o[a]=!o[a];
+   if(a==="returned")o.returnedAt=o.returned?ymd(today()):"";
    if(a==="depTaken")o.depTakenAt=o.depTaken?(o.depTakenAt||ymd(today())):"";
    if(a==="depBack"){o.depBackAt=o.depBack?(o.depBackAt||ymd(today())):"";if(o.depBack){o.depTaken=true;o.done=true}}
    save();draw();toast("Збережено")}});
@@ -263,15 +281,90 @@ function moneyView(){
  $("#mn").onclick=function(){mcur=new Date(mcur.getFullYear(),mcur.getMonth()+1,1);draw()};
 }
 
+/* ---------- костюми, кількість і баланс ---------- */
+var STOCK0={"Павук":1,"Бетмен":1,"Охоронець":1,"Біомеханіка":1,"Щур":4,"Акула рожева":2,"Акула скелет":1,"Акула блакитна":1};
+var COST=Object.keys(STOCK0);
+var bcur=ymd(today());
+function stock(){var r={};COST.forEach(function(c){r[c]=STOCK0[c]});
+ try{var x=JSON.parse(localStorage.getItem("oblik_stock")||"{}");COST.forEach(function(c){if(typeof x[c]==="number"&&x[c]>=0)r[c]=x[c]})}catch(e){}
+ return r}
+function lines(o){
+ if(o.lines&&o.lines.length)return o.lines;
+ var m=String(o.costume||"").match(/^(.*?)\s*[×x]\s*(\d+)$/);
+ if(m)return [{c:m[1].trim(),n:+m[2]}];
+ return [{c:o.costume,n:1}]}
+function label(L){return L.map(function(l){return l.n>1?l.c+" ×"+l.n:l.c}).join(" + ")}
+function addDays(s,n){var d=pd(s);d.setDate(d.getDate()+n);return ymd(d)}
+function lagOf(o){return /харк/i.test(o.city||"")?1:2}
+/* де костюм із цього запису в день s: "road" — в дорозі, "rent" — в клієнта, "" — вдома */
+function stateOf(o,s){
+ if(o.type!=="rent"||!o.from)return "";
+ var from=o.from,to=o.to||o.from,ship=o.ship||from,back=o.back||addDays(to,1);
+ if(s<ship)return "";
+ if(s<from)return "road";
+ if(s<back)return "rent";
+ if(!(o.returned||o.done))return "road";
+ var arr=o.returnedAt||addDays(back,lagOf(o));
+ return s<arr?"road":""}
+function counts(s){
+ var st=stock(),r={};
+ COST.forEach(function(c){r[c]={all:st[c],road:0,rent:0,home:0}});
+ items.forEach(function(o){var k=stateOf(o,s);if(!k)return;lines(o).forEach(function(l){if(r[l.c])r[l.c][k]+=l.n})});
+ COST.forEach(function(c){r[c].home=r[c].all-r[c].road-r[c].rent});
+ return r}
+function totals(r){var t={all:0,home:0,road:0,rent:0};
+ COST.forEach(function(c){t.all+=r[c].all;t.road+=r[c].road;t.rent+=r[c].rent;t.home+=Math.max(0,r[c].home)});
+ return t}
+function balTiles(t){
+ return "<div class='m hd'><b>"+t.home+"</b><span>на руках</span></div>"+
+  "<div class='m rt'><b>"+t.road+"</b><span>в дорозі</span></div>"+
+  "<div class='m rd'><b>"+t.rent+"</b><span>в оренді</span></div>"+
+  "<div class='m al'><b>"+t.all+"</b><span>всього костюмів</span></div>"}
+function balTop(){
+ $("#bal").innerHTML=balTiles(totals(counts(ymd(today()))));
+ $("#bal").onclick=function(){tab="bal";draw()}}
+function balView(){
+ var v=$("#view"),s=bcur,r=counts(s),t=totals(r),isT=(s===ymd(today()));
+ var h="<div class='calhead'><button type='button' id='bp'>‹</button><h3>"+(isT?"Сьогодні · ":"")+
+  pd(s).toLocaleDateString("uk-UA",{day:"numeric",month:"long"})+"</h3><button type='button' id='bn'>›</button></div>";
+ if(!isT)h+="<button class='b on' id='bt' type='button'>Повернутись до сьогодні</button>";
+ h+="<div class='money'>"+balTiles(t)+"</div>";
+ COST.forEach(function(c){var x=r[c];
+  h+="<div class='bcard"+(x.home<0?" over":"")+"'><img src='media/st/"+stKey(c)+".png' alt=''><div><div class='bn'>"+c+"</div>"+
+   "<div class='bs'>в дорозі "+x.road+" · в оренді "+x.rent+"</div>"+
+   (x.home<0?"<div class='bs' style='color:var(--red)'>⚠ перебронь: бракує "+(-x.home)+"</div>":"")+
+   "</div><div class='bh'>"+Math.max(0,x.home)+" з "+x.all+"</div></div>"});
+ var days=[];for(var i=0;i<7;i++)days.push(addDays(s,i));
+ var rc=days.map(counts);
+ h+="<h2>Вільно по днях</h2><div class='wk'><table><thead><tr><th></th>"+days.map(function(d){return "<th>"+fm(d)+"</th>"}).join("")+"</tr></thead><tbody>"+
+  COST.map(function(c){return "<tr><td>"+c+"</td>"+rc.map(function(x){var n=x[c].home;return "<td"+(n<0?" class='z'":"")+">"+n+"</td>"}).join("")+"</tr>"}).join("")+
+  "</tbody></table></div><p class='mhint'>Число — скільки цього костюма лежить у тебе на руках у той день. Дорога туди й назад враховується.</p>";
+ var od=items.filter(function(o){
+  if(o.type!=="rent"||o.returned||o.done)return false;
+  var b=o.back||addDays(o.to||o.from,1);return ymd(today())>addDays(b,lagOf(o)+2)});
+ if(od.length)h+="<div class='warn'>⚠ Не відмічено «повернули»: "+od.map(function(o){return esc(o.costume)+" ("+fm(o.from)+")"}).join(", ")+". Поки не відмічено, ці костюми рахуються в дорозі. Відкрий «В роботі» і натисни «повернули».</div>";
+ var st=stock();
+ h+="<h2>Скільки всього</h2><div class='add'>"+COST.map(function(c){return "<div class='stock'><span>"+c+"</span><input type='number' min='0' inputmode='numeric' data-c='"+c+"' value='"+st[c]+"'></div>"}).join("")+
+  "<button class='btn lime' id='st_save' type='button'>Зберегти кількість</button></div>";
+ v.innerHTML=h;
+ $("#bp").onclick=function(){bcur=addDays(bcur,-1);draw()};
+ $("#bn").onclick=function(){bcur=addDays(bcur,1);draw()};
+ if($("#bt"))$("#bt").onclick=function(){bcur=ymd(today());draw()};
+ $("#st_save").onclick=function(){var o={};v.querySelectorAll(".stock input").forEach(function(e){o[e.dataset.c]=Math.max(0,Math.round(+e.value||0))});
+  try{localStorage.setItem("oblik_stock",JSON.stringify(o))}catch(e){}
+  draw();toast("Кількість збережено")};
+}
+
 /* ---------- форма ---------- */
 function openForm(o){
  ed=o||null;
- var d=o||{type:"rent",costume:"Щур",from:ymd(today()),dep:800,paid:true};
+ var d=o||{type:"rent",lines:[{c:"Щур",n:1}],from:ymd(today()),paid:true};
+ var L=lines(d).map(function(l){return {c:l.c,n:l.n}}),autoSum=!o||!+d.sum,autoDep=!o;
  var v=$("#view");
  tab="form";drawTabs();$("#fab").hidden=true;
  v.innerHTML="<div class='add'>"+
   "<label>Тип</label><select id='f_type'><option value='rent'>Оренда</option><option value='sale'>Продаж</option><option value='spend'>Витрата</option></select>"+
-  "<div id='f_costbox'><label>Костюм</label><div class='costrow'><select id='f_cost'>"+COST.map(function(c){return "<option>"+c+"</option>"}).join("")+"</select><img id='f_st' src='media/st/rat.png' alt=''></div></div>"+
+  "<div id='f_costbox'><label>Костюми (можна кілька)</label><div id='f_lines'></div><button class='btn ghost' id='f_addline' type='button' style='margin-top:10px;padding:12px;min-height:46px;font-size:14px'>+ Додати ще костюм</button></div>"+
   "<label>Клієнт (імʼя, нік, телефон)</label><input id='f_client' type='text'>"+
   "<div class='row2'><div><label>Місто</label><input id='f_city' type='text'></div><div><label>ТТН</label><input id='f_ttn' type='text'></div></div>"+
   "<div class='row2'><div><label id='l_from'>Оренда з</label><input id='f_from' type='date'></div><div><label>Оренда по</label><input id='f_to' type='date'></div></div>"+
@@ -283,13 +376,24 @@ function openForm(o){
   "<button class='btn lime' id='f_save' type='button'>Зберегти запис</button>"+
   "<button class='btn ghost' id='f_cancel' type='button'>Скасувати, не зберігати</button>"+
   (o?"<button class='btn red' id='f_del' type='button'>Видалити запис</button>":"")+"</div>";
- $("#f_type").value=d.type;$("#f_cost").value=d.costume||"Щур";
+ $("#f_type").value=d.type;
  $("#f_client").value=d.client||"";$("#f_city").value=d.city||"";$("#f_ttn").value=d.ttn||"";
  $("#f_from").value=d.from||"";$("#f_to").value=d.to||"";$("#f_ship").value=d.ship||"";$("#f_back").value=d.back||"";
- $("#f_sum").value=d.sum!=null?d.sum:"";$("#f_dep").value=d.dep!=null?d.dep:800;$("#f_note").value=d.note||"";
+ $("#f_sum").value=d.sum!=null?d.sum:"";$("#f_dep").value=d.dep!=null?d.dep:800*units();$("#f_note").value=d.note||"";
  $("#f_paid").checked=d.paid!==false&&(o?!!o.paid:true);
  $("#f_dtk").value=d.depTaken?(d.depTakenAt||depTakenDate(d)):"";$("#f_dbk").value=d.depBack?(d.depBackAt||depBackDate(d)):"";
- function stset(){var k=stKey($("#f_cost").value);if(k&&$("#f_st")){$("#f_st").src="media/st/"+k+".png";$("#f_st").style.transform="rotate(-6deg) scale(1.06)";setTimeout(function(){if($("#f_st"))$("#f_st").style.transform=""},220)}}
+ function units(){return L.reduce(function(a,l){return a+l.n},0)}
+ function drawLines(){
+  var w=$("#f_lines");
+  w.innerHTML=L.map(function(l,i){
+   var opts=COST.slice();if(opts.indexOf(l.c)<0)opts.push(l.c);
+   return "<div class='costrow' style='margin-top:8px'><img src='media/st/"+(stKey(l.c)||"rat")+".png' alt='' style='width:48px'>"+
+    "<select class='ls' data-i='"+i+"' aria-label='Костюм'>"+opts.map(function(c){return "<option"+(c===l.c?" selected":"")+">"+c+"</option>"}).join("")+"</select>"+
+    "<input class='lq' data-i='"+i+"' type='number' min='1' inputmode='numeric' value='"+l.n+"' style='width:74px;flex:none' aria-label='Кількість'>"+
+    (L.length>1?"<button class='b del lx' data-i='"+i+"' type='button' aria-label='Прибрати'>✕</button>":"")+"</div>"}).join("");
+  w.querySelectorAll(".ls").forEach(function(e){e.onchange=function(){L[+e.dataset.i].c=e.value;drawLines();auto()}});
+  w.querySelectorAll(".lq").forEach(function(e){e.oninput=function(){L[+e.dataset.i].n=Math.max(1,Math.round(+e.value)||1);auto()}});
+  w.querySelectorAll(".lx").forEach(function(e){e.onclick=function(){L.splice(+e.dataset.i,1);drawLines();auto()}})}
  function sync(){var t=$("#f_type").value;
   $("#f_costbox").hidden=(t==="spend");
   $("#l_from").textContent=t==="rent"?"Оренда з":"Дата";
@@ -298,18 +402,21 @@ function openForm(o){
   auto()}
  function auto(){
   if($("#f_type").value!=="rent")return;
-  var f=$("#f_from").value,t=$("#f_to").value,c=$("#f_cost").value;
-  if(f&&t&&!$("#f_sum").value){var dd=Math.max(1,Math.round((pd(t)-pd(f))/864e5));$("#f_sum").value=dd*(PRICE[c]||200)}
+  var f=$("#f_from").value,t=$("#f_to").value;
+  if(f&&t&&(autoSum||!$("#f_sum").value)){var dd=Math.max(1,Math.round((pd(t)-pd(f))/864e5)),tot=0;L.forEach(function(l){tot+=l.n*price(l.c)});$("#f_sum").value=tot*dd;autoSum=true}
+  if(autoDep)$("#f_dep").value=800*units();
   var np=!/харк/i.test($("#f_city").value||""), lag=np?2:1;
   if(f&&!$("#f_ship").value){var s=pd(f);s.setDate(s.getDate()-lag);$("#f_ship").value=ymd(s)}
   if(t&&!$("#f_back").value){var b=pd(t);b.setDate(b.getDate()+lag);$("#f_back").value=ymd(b)}}
- $("#f_type").onchange=sync;$("#f_city").onchange=auto;$("#f_from").onchange=auto;$("#f_to").onchange=auto;$("#f_cost").onchange=function(){stset();auto()};
- sync();stset();
+ $("#f_type").onchange=sync;$("#f_city").onchange=auto;$("#f_from").onchange=auto;$("#f_to").onchange=auto;
+ $("#f_sum").oninput=function(){autoSum=false};$("#f_dep").oninput=function(){autoDep=false};
+ $("#f_addline").onclick=function(){L.push({c:"Щур",n:1});drawLines();auto()};
+ drawLines();sync();
  $("#f_cancel").onclick=function(){tab="cal";draw()};
  if($("#f_del"))$("#f_del").onclick=function(){if($("#f_del").dataset.sure){items=items.filter(function(x){return x.id!==o.id});save();tab="cal";draw();toast("Видалено")}else{$("#f_del").dataset.sure=1;$("#f_del").textContent="Точно видалити? Натисни ще раз"}};
  $("#f_save").onclick=function(){
   var o=ed||{id:uid()};
-  o.type=$("#f_type").value;o.costume=$("#f_cost").value;o.client=$("#f_client").value.trim();
+  o.type=$("#f_type").value;o.lines=L.map(function(l){return {c:l.c,n:l.n}});o.costume=label(L);o.client=$("#f_client").value.trim();
   o.city=$("#f_city").value.trim();o.ttn=$("#f_ttn").value.trim();
   o.from=$("#f_from").value;o.to=$("#f_to").value;o.ship=$("#f_ship").value;o.back=$("#f_back").value;
   o.sum=+$("#f_sum").value||0;o.dep=+$("#f_dep").value||0;o.note=$("#f_note").value.trim();
@@ -322,8 +429,9 @@ function openForm(o){
 }
 
 function draw(){
- $("#fab").hidden=false;drawTabs();money();
+ $("#fab").hidden=false;drawTabs();money();balTop();
  if(tab==="cal")calendar();
+ else if(tab==="bal")balView();
  else if(tab==="now")list(function(o){return o.type!=="spend"&&!o.done});
  else if(tab==="all")list(function(){return true});
  else if(tab==="money")moneyView();
