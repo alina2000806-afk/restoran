@@ -190,7 +190,7 @@ function drawTabs(){
  $("#tabs").innerHTML="";
  TABS.forEach(function(t){
   var b=document.createElement("button");b.className="tab";b.type="button";b.setAttribute("role","tab");
-  b.setAttribute("aria-selected",tab===t.id?"true":"false");
+  b.setAttribute("aria-selected",(tab===t.id||(tab==="st"&&t.id==="bal"))?"true":"false");
   var c=t.f?items.filter(t.f).length:0;
   b.innerHTML=t.n+(c?"<b>"+c+"</b>":"");
   b.onclick=function(){tab=t.id;draw()};$("#tabs").appendChild(b)})}
@@ -284,7 +284,7 @@ function moneyView(){
 /* ---------- костюми, кількість і баланс ---------- */
 var STOCK0={"Павук":1,"Бетмен":1,"Охоронець":1,"Біомеханіка":1,"Щур":5,"Акула рожева":2,"Акула скелет":1,"Акула блакитна":1};
 var COST=Object.keys(STOCK0);
-var bcur=ymd(today());
+var bcur=ymd(today()),fk="road",fd=ymd(today());
 function stock(){var r={};COST.forEach(function(c){r[c]=STOCK0[c]});
  try{var x=JSON.parse(localStorage.getItem("oblik_stock")||"{}");COST.forEach(function(c){if(typeof x[c]==="number"&&x[c]>=0)r[c]=x[c]})}catch(e){}
  return r}
@@ -315,13 +315,19 @@ function totals(r){var t={all:0,home:0,road:0,rent:0};
  COST.forEach(function(c){t.all+=r[c].all;t.road+=r[c].road;t.rent+=r[c].rent;t.home+=Math.max(0,r[c].home)});
  return t}
 function balTiles(t){
- return "<div class='m hd'><b>"+t.home+"</b><span>на руках</span></div>"+
-  "<div class='m rt'><b>"+t.road+"</b><span>в дорозі</span></div>"+
-  "<div class='m rd'><b>"+t.rent+"</b><span>в оренді</span></div>"+
-  "<div class='m al'><b>"+t.all+"</b><span>всього костюмів</span></div>"}
+ return "<div class='m hd' data-k='home'><b>"+t.home+"</b><span>на руках</span></div>"+
+  "<div class='m rt' data-k='road' style='cursor:pointer'><b>"+t.road+"</b><span>в дорозі ›</span></div>"+
+  "<div class='m rd' data-k='rent' style='cursor:pointer'><b>"+t.rent+"</b><span>в оренді ›</span></div>"+
+  "<div class='m al' data-k='all'><b>"+t.all+"</b><span>всього костюмів</span></div>"}
 function balTop(){
  $("#bal").innerHTML=balTiles(totals(counts(ymd(today()))));
- $("#bal").onclick=function(){tab="bal";draw()}}
+ $("#bal").onclick=function(e){var m=e.target.closest(".m"),k=m&&m.dataset.k;
+  if(k==="road"||k==="rent"){fk=k;fd=ymd(today());tab="st"}else tab="bal";draw()}}
+function stView(){
+ var title=(fk==="road"?"В дорозі":"В оренді")+" · "+pd(fd).toLocaleDateString("uk-UA",{day:"numeric",month:"long"});
+ list(function(o){return stateOf(o,fd)===fk});
+ $("#view").insertAdjacentHTML("afterbegin","<div class='calhead'><button type='button' id='sb'>‹</button><h3>"+title+"</h3></div>");
+ $("#sb").onclick=function(){tab="bal";bcur=fd;draw()}}
 function balView(){
  var v=$("#view"),s=bcur,r=counts(s),t=totals(r),isT=(s===ymd(today()));
  var h="<div class='calhead'><button type='button' id='bp'>‹</button><h3>"+(isT?"Сьогодні · ":"")+
@@ -349,6 +355,7 @@ function balView(){
  h+="<h2>Скільки всього</h2><div class='add'>"+COST.map(function(c){return "<div class='stock'><span>"+c+"</span><input type='number' min='0' inputmode='numeric' data-c='"+c+"' value='"+st[c]+"'></div>"}).join("")+
   "<button class='btn lime' id='st_save' type='button'>Зберегти кількість</button></div>";
  v.innerHTML=h;
+ v.querySelectorAll(".money .m").forEach(function(m){var k=m.dataset.k;if(k==="road"||k==="rent")m.onclick=function(){fk=k;fd=s;tab="st";draw()}});
  v.querySelectorAll("[data-edit]").forEach(function(b){b.onclick=function(){openForm(items.filter(function(o){return o.id===b.dataset.edit})[0])}});
  $("#bp").onclick=function(){bcur=addDays(bcur,-1);draw()};
  $("#bn").onclick=function(){bcur=addDays(bcur,1);draw()};
@@ -435,6 +442,7 @@ function draw(){
  $("#fab").hidden=false;drawTabs();money();balTop();
  if(tab==="cal")calendar();
  else if(tab==="bal")balView();
+ else if(tab==="st")stView();
  else if(tab==="now")list(function(o){return o.type!=="spend"&&!o.done});
  else if(tab==="all")list(function(){return true});
  else if(tab==="money")moneyView();
