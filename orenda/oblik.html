@@ -232,6 +232,7 @@ function list(filter){
    if(a==="del"){if(confirm("Видалити запис?")){items=items.filter(function(x){return x.id!==o.id});save();draw();toast("Видалено")}return}
    o[a]=!o[a];
    if(a==="returned")o.returnedAt=o.returned?ymd(today()):"";
+   if(a==="returned"&&o.returned)o.wait=false;
    if(a==="depTaken")o.depTakenAt=o.depTaken?(o.depTakenAt||ymd(today())):"";
    if(a==="depBack"){o.depBackAt=o.depBack?(o.depBackAt||ymd(today())):"";if(o.depBack){o.depTaken=true;o.done=true}}
    save();draw();toast("Збережено")}});
@@ -250,6 +251,7 @@ function card(o){
    "<button class='b"+(o.paid?" on":"")+"' data-act='paid' data-id='"+o.id+"'>"+(o.paid?"✓ оплачено":"оплачено")+"</button>"+
    (o.type!=="sale"?"<button class='b dep"+(o.depTaken?" on":"")+"' data-act='depTaken' data-id='"+o.id+"'>"+(o.depTaken?"✓ застава у нас":"застава не взята")+"</button>":"")+
    "<button class='b"+(o.sent?" on":"")+"' data-act='sent' data-id='"+o.id+"'>"+(o.pickup?(o.sent?"✓ віддала":"віддала"):(o.sent?"✓ відправлено":"відправлено"))+"</button>"+
+   (o.type==="rent"&&!o.pickup&&!o.returned?"<button class='b dep"+(o.wait?" on":"")+"' data-act='wait' data-id='"+o.id+"'>"+(o.wait?"✓ чекає на пошті":"чекає на пошті")+"</button>":"")+
    (o.type!=="sale"?"<button class='b"+(o.returned?" on":"")+"' data-act='returned' data-id='"+o.id+"'>"+(o.returned?"✓ повернули":"повернули")+"</button>":"")+
    (o.type!=="sale"?"<button class='b dep"+(o.depBack?" on":"")+"' data-act='depBack' data-id='"+o.id+"'>"+(o.depBack?"✓ заставу віддали":"віддати заставу")+"</button>":"")+
    "<button class='b' data-act='edit' data-id='"+o.id+"'>Змінити</button>"+
@@ -306,7 +308,8 @@ function stateOf(o,s){
  if(s<from)return "road";
  if(s<back)return "rent";
  var arr=o.returnedAt||addDays(back,lagOf(o));
- return s<arr?"road":""}
+ if(s<arr)return "road";
+ return (o.wait&&!(o.returned||o.done))?"road":""}
 function counts(s){
  var st=stock(),r={};
  COST.forEach(function(c){r[c]={all:st[c],road:0,rent:0,home:0}});
@@ -339,7 +342,7 @@ function balView(){
  COST.forEach(function(c){var x=r[c];
   var who=items.filter(function(o){return stateOf(o,s)&&lines(o).some(function(l){return l.c===c})}).map(function(o){
    var n=lines(o).filter(function(l){return l.c===c}).reduce(function(a,l){return a+l.n},0);
-   return "<div class='bs'><button class='b' type='button' data-edit='"+o.id+"' style='min-height:34px;padding:4px 10px;margin-top:4px;text-align:left'>"+(stateOf(o,s)==="road"?"в дорозі ":"в оренді ")+n+" · "+esc(o.client||"без імені")+" · "+fm(o.ship)+"–"+fm(o.back)+" ✎</button></div>"}).join("");
+   return "<div class='bs'><button class='b' type='button' data-edit='"+o.id+"' style='min-height:34px;padding:4px 10px;margin-top:4px;text-align:left'>"+(stateOf(o,s)==="road"?"в дорозі ":"в оренді ")+n+(o.wait&&stateOf(o,s)==="road"?" (на пошті)":"")+" · "+esc(o.client||"без імені")+" · "+fm(o.ship)+"–"+fm(o.back)+" ✎</button></div>"}).join("");
   h+="<div class='bcard"+(x.home<0?" over":"")+"'><img src='media/st/"+stKey(c)+".png' alt=''><div><div class='bn'>"+c+"</div>"+
    "<div class='bs'>в дорозі "+x.road+" · в оренді "+x.rent+"</div>"+who+
    (x.home<0?"<div class='bs' style='color:var(--red)'>⚠ перебронь: бракує "+(-x.home)+"</div>":"")+
