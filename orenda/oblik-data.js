@@ -19,3 +19,13 @@ window.OBLIK_DROP = function(o){
  return (o.client==="anastasia (Direct)" && String(o.id).charAt(0)==="z") ||
         (o.costume==="Павук" && o.ship==="2026-09-25");
 };
+
+/* Разові виправлення записів у браузері Аліни. Кожне застосовується один раз (позначка fx1). */
+window.OBLIK_FIX = function(o){
+ if(o.fx1||o.type!=="rent")return false;
+ // замовлення на 4 щури на 15.10, телефон 0985680010 — самовивіз, ще не віддали
+ if(String(o.client||"").replace(/\D/g,"").indexOf("0985680010")>=0 && /Щур/.test(o.costume||"") && o.from==="2026-10-15"){
+  o.pickup=true;o.ship=o.from;o.back=o.to||o.from;o.ttn="";o.sent=false;o.fx1=true;return true;
+ }
+ return false;
+};

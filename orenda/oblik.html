@@ -147,6 +147,7 @@ function toast(t){var e=$("#toast");e.textContent=t;e.hidden=false;clearTimeout(
 function load(){
  try{items=JSON.parse(localStorage.getItem("oblik")||"[]")}catch(e){items=[]}
  if(typeof window.OBLIK_DROP==="function"){var before=items.length;items=items.filter(function(o){try{return !window.OBLIK_DROP(o)}catch(e){return true}});if(items.length!==before)save()}
+ if(typeof window.OBLIK_FIX==="function"){var fx=0;items.forEach(function(o){try{if(window.OBLIK_FIX(o))fx++}catch(e){}});if(fx)save()}
  var seed=window.OBLIK_SEED||[],have={};items.forEach(function(o){have[o.id]=1});
  var added=0;seed.forEach(function(o){if(!have[o.id]){items.push(JSON.parse(JSON.stringify(o)));added++}});
  if(added){save()}
@@ -251,7 +252,6 @@ function card(o){
    "<button class='b"+(o.paid?" on":"")+"' data-act='paid' data-id='"+o.id+"'>"+(o.paid?"✓ оплачено":"оплачено")+"</button>"+
    (o.type!=="sale"?"<button class='b dep"+(o.depTaken?" on":"")+"' data-act='depTaken' data-id='"+o.id+"'>"+(o.depTaken?"✓ застава у нас":"застава не взята")+"</button>":"")+
    "<button class='b"+(o.sent?" on":"")+"' data-act='sent' data-id='"+o.id+"'>"+(o.pickup?(o.sent?"✓ віддала":"віддала"):(o.sent?"✓ відправлено":"відправлено"))+"</button>"+
-   (o.type==="rent"&&!o.pickup&&!o.returned?"<button class='b dep"+(o.wait?" on":"")+"' data-act='wait' data-id='"+o.id+"'>"+(o.wait?"✓ чекає на пошті":"чекає на пошті")+"</button>":"")+
    (o.type!=="sale"?"<button class='b"+(o.returned?" on":"")+"' data-act='returned' data-id='"+o.id+"'>"+(o.returned?"✓ повернули":"повернули")+"</button>":"")+
    (o.type!=="sale"?"<button class='b dep"+(o.depBack?" on":"")+"' data-act='depBack' data-id='"+o.id+"'>"+(o.depBack?"✓ заставу віддали":"віддати заставу")+"</button>":"")+
    "<button class='b' data-act='edit' data-id='"+o.id+"'>Змінити</button>"+
@@ -307,9 +307,9 @@ function stateOf(o,s){
  if(s<ship)return "";
  if(s<from)return "road";
  if(s<back)return "rent";
+ if(!(o.returned||o.done))return "road";
  var arr=o.returnedAt||addDays(back,lagOf(o));
- if(s<arr)return "road";
- return (o.wait&&!(o.returned||o.done))?"road":""}
+ return s<arr?"road":""}
 function counts(s){
  var st=stock(),r={};
  COST.forEach(function(c){r[c]={all:st[c],road:0,rent:0,home:0}});
@@ -342,7 +342,7 @@ function balView(){
  COST.forEach(function(c){var x=r[c];
   var who=items.filter(function(o){return stateOf(o,s)&&lines(o).some(function(l){return l.c===c})}).map(function(o){
    var n=lines(o).filter(function(l){return l.c===c}).reduce(function(a,l){return a+l.n},0);
-   return "<div class='bs'><button class='b' type='button' data-edit='"+o.id+"' style='min-height:34px;padding:4px 10px;margin-top:4px;text-align:left'>"+(stateOf(o,s)==="road"?"в дорозі ":"в оренді ")+n+(o.wait&&stateOf(o,s)==="road"?" (на пошті)":"")+" · "+esc(o.client||"без імені")+" · "+fm(o.ship)+"–"+fm(o.back)+" ✎</button></div>"}).join("");
+   return "<div class='bs'><button class='b' type='button' data-edit='"+o.id+"' style='min-height:34px;padding:4px 10px;margin-top:4px;text-align:left'>"+(stateOf(o,s)==="road"?"в дорозі ":"в оренді ")+n+" · "+esc(o.client||"без імені")+" · "+fm(o.ship)+"–"+fm(o.back)+" ✎</button></div>"}).join("");
   h+="<div class='bcard"+(x.home<0?" over":"")+"'><img src='media/st/"+stKey(c)+".png' alt=''><div><div class='bn'>"+c+"</div>"+
    "<div class='bs'>в дорозі "+x.road+" · в оренді "+x.rent+"</div>"+who+
    (x.home<0?"<div class='bs' style='color:var(--red)'>⚠ перебронь: бракує "+(-x.home)+"</div>":"")+
@@ -355,7 +355,7 @@ function balView(){
  var od=items.filter(function(o){
   if(o.type!=="rent"||o.returned||o.done)return false;
   var b=o.back||addDays(o.to||o.from,1);return ymd(today())>addDays(b,lagOf(o)+2)});
- if(od.length)h+="<div class='warn'>⚠ Не відмічено «повернули» (я вже рахую їх вдома): "+od.map(function(o){return esc(o.costume)+" ("+fm(o.from)+")"}).join(", ")+". Якщо костюм ще не повернувся, відкрий «В роботі» і зміни дату «назад».</div>";
+ if(od.length)h+="<div class='warn'>⚠ Давно мали повернутись, але не відмічено «повернули»: "+od.map(function(o){return esc(o.costume)+" ("+fm(o.from)+")"}).join(", ")+". Поки не відмічено, вони рахуються в дорозі. Коли отримаєш — відкрий «В роботі» і натисни «повернули».</div>";
  var st=stock();
  h+="<h2>Скільки всього</h2><div class='add'>"+COST.map(function(c){return "<div class='stock'><span>"+c+"</span><input type='number' min='0' inputmode='numeric' data-c='"+c+"' value='"+st[c]+"'></div>"}).join("")+
   "<button class='btn lime' id='st_save' type='button'>Зберегти кількість</button></div>";
