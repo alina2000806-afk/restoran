@@ -329,8 +329,11 @@ function balView(){
  if(!isT)h+="<button class='b on' id='bt' type='button'>Повернутись до сьогодні</button>";
  h+="<div class='money'>"+balTiles(t)+"</div>";
  COST.forEach(function(c){var x=r[c];
+  var who=items.filter(function(o){return stateOf(o,s)&&lines(o).some(function(l){return l.c===c})}).map(function(o){
+   var n=lines(o).filter(function(l){return l.c===c}).reduce(function(a,l){return a+l.n},0);
+   return "<div class='bs'><button class='b' type='button' data-edit='"+o.id+"' style='min-height:34px;padding:4px 10px;margin-top:4px;text-align:left'>"+(stateOf(o,s)==="road"?"в дорозі ":"в оренді ")+n+" · "+esc(o.client||"без імені")+" · "+fm(o.ship)+"–"+fm(o.back)+" ✎</button></div>"}).join("");
   h+="<div class='bcard"+(x.home<0?" over":"")+"'><img src='media/st/"+stKey(c)+".png' alt=''><div><div class='bn'>"+c+"</div>"+
-   "<div class='bs'>в дорозі "+x.road+" · в оренді "+x.rent+"</div>"+
+   "<div class='bs'>в дорозі "+x.road+" · в оренді "+x.rent+"</div>"+who+
    (x.home<0?"<div class='bs' style='color:var(--red)'>⚠ перебронь: бракує "+(-x.home)+"</div>":"")+
    "</div><div class='bh'>"+Math.max(0,x.home)+" з "+x.all+"</div></div>"});
  var days=[];for(var i=0;i<7;i++)days.push(addDays(s,i));
@@ -346,6 +349,7 @@ function balView(){
  h+="<h2>Скільки всього</h2><div class='add'>"+COST.map(function(c){return "<div class='stock'><span>"+c+"</span><input type='number' min='0' inputmode='numeric' data-c='"+c+"' value='"+st[c]+"'></div>"}).join("")+
   "<button class='btn lime' id='st_save' type='button'>Зберегти кількість</button></div>";
  v.innerHTML=h;
+ v.querySelectorAll("[data-edit]").forEach(function(b){b.onclick=function(){openForm(items.filter(function(o){return o.id===b.dataset.edit})[0])}});
  $("#bp").onclick=function(){bcur=addDays(bcur,-1);draw()};
  $("#bn").onclick=function(){bcur=addDays(bcur,1);draw()};
  if($("#bt"))$("#bt").onclick=function(){bcur=ymd(today());draw()};
