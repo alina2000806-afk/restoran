@@ -303,7 +303,6 @@ function stateOf(o,s){
  if(s<ship)return "";
  if(s<from)return "road";
  if(s<back)return "rent";
- if(!(o.returned||o.done))return "road";
  var arr=o.returnedAt||addDays(back,lagOf(o));
  return s<arr?"road":""}
 function counts(s){
@@ -342,7 +341,7 @@ function balView(){
  var od=items.filter(function(o){
   if(o.type!=="rent"||o.returned||o.done)return false;
   var b=o.back||addDays(o.to||o.from,1);return ymd(today())>addDays(b,lagOf(o)+2)});
- if(od.length)h+="<div class='warn'>⚠ Не відмічено «повернули»: "+od.map(function(o){return esc(o.costume)+" ("+fm(o.from)+")"}).join(", ")+". Поки не відмічено, ці костюми рахуються в дорозі. Відкрий «В роботі» і натисни «повернули».</div>";
+ if(od.length)h+="<div class='warn'>⚠ Не відмічено «повернули» (я вже рахую їх вдома): "+od.map(function(o){return esc(o.costume)+" ("+fm(o.from)+")"}).join(", ")+". Якщо костюм ще не повернувся, відкрий «В роботі» і зміни дату «назад».</div>";
  var st=stock();
  h+="<h2>Скільки всього</h2><div class='add'>"+COST.map(function(c){return "<div class='stock'><span>"+c+"</span><input type='number' min='0' inputmode='numeric' data-c='"+c+"' value='"+st[c]+"'></div>"}).join("")+
   "<button class='btn lime' id='st_save' type='button'>Зберегти кількість</button></div>";
