@@ -29,7 +29,7 @@ h2{font-size:20px;margin:22px 0 10px}
 .m{background:var(--card);border:3px solid var(--dark);box-shadow:0 5px 0 var(--dark);border-radius:18px;padding:13px}
 .m b{display:block;font-family:Unbounded;font-size:clamp(18px,5.4vw,26px);letter-spacing:-.03em;overflow-wrap:anywhere}
 .m span{font-size:13px;color:var(--mut);font-weight:600}
-.m.in b{color:#2f7a24}.m.out b{color:var(--red)}.m.net b{color:#2b45c9}.m.dep b{color:var(--orange)}
+.m.in,.m.dep{cursor:pointer}.m.in b{color:#2f7a24}.m.out b{color:var(--red)}.m.net b{color:#2b45c9}.m.dep b{color:var(--orange)}
 
 /* табы */
 .tabs{display:flex;gap:7px;overflow-x:auto;margin:16px -14px 0;padding:0 14px 6px}
@@ -178,10 +178,45 @@ function onHand(){var d=0;items.forEach(function(o){if(o.type==="rent"&&o.depTak
 function money(){
  var key=mk(ymd(today())),r=stats(key),nm=today().toLocaleDateString("uk-UA",{month:"long"});
  $("#money").innerHTML=
-  "<div class='m in'><b>"+nf(r.inc)+" ₴</b><span>заробила за "+nm+"</span></div>"+
+  "<div class='m in'><b>"+nf(r.inc)+" ₴</b><span>заробила за "+nm+" ›</span></div>"+
   "<div class='m out'><b>"+nf(r.out)+" ₴</b><span>витрати за "+nm+"</span></div>"+
   "<div class='m net'><b>"+nf(r.net)+" ₴</b><span>чистими за "+nm+"</span></div>"+
-  "<div class='m dep'><b>"+nf(onHand())+" ₴</b><span>застав на руках зараз</span></div>";
+  "<div class='m dep'><b>"+nf(onHand())+" ₴</b><span>застав на руках зараз ›</span></div>";
+ $("#money").onclick=function(e){var m=e.target.closest(".m");if(!m)return;
+  if(m.classList.contains("in")){mcur=new Date();tab="earn";draw()}else if(m.classList.contains("dep")){tab="deps";draw()}};
+}
+/* заробіток по костюмах: сума замовлення ділиться між костюмами за ціною доби */
+function earnStats(key){
+ var by={},tot=0,cnt=0;
+ items.forEach(function(o){
+  if(o.type==="spend"||!o.paid||mk(o.from)!==key)return;
+  var L=lines(o),W=0;L.forEach(function(l){W+=price(l.c)*l.n});
+  cnt++;tot+=+o.sum||0;
+  L.forEach(function(l){var x=by[l.c]||(by[l.c]={rent:0,sale:0,sum:0});
+   if(o.type==="sale")x.sale+=l.n;else x.rent+=l.n;
+   x.sum+=W?(+o.sum||0)*price(l.c)*l.n/W:0});
+ });
+ return {by:by,tot:tot,cnt:cnt}}
+function earnView(){
+ var key=mk(ymd(mcur)),e=earnStats(key),names=Object.keys(e.by).sort(function(a,b){return e.by[b].sum-e.by[a].sum});
+ var h="<div class='calhead'><button type='button' id='ep'>‹</button><h3>Заробила · "+mname(key)+"</h3><button type='button' id='en'>›</button></div>"+
+  "<div class='msum'><div class='m in'><b>"+nf(e.tot)+" ₴</b><span>всього ("+e.cnt+" зам.)</span></div></div>";
+ if(!names.length)h+="<div class='empty'>За цей місяць оплачених замовлень немає.</div>";
+ names.forEach(function(c){var x=e.by[c];
+  h+="<div class='bcard'>"+(stKey(c)?"<img src='media/st/"+stKey(c)+".png' alt=''>":"")+"<div><div class='bn'>"+esc(c)+"</div><div class='bs'>"+
+   (x.rent?"оренд: "+x.rent+" шт":"")+(x.rent&&x.sale?" · ":"")+(x.sale?"продаж: "+x.sale+" шт":"")+"</div></div><div class='bh'>"+nf(Math.round(x.sum))+" ₴</div></div>"});
+ h+="<p class='mhint'>Тільки оплачені замовлення, за датою оренди. Якщо в замовленні кілька костюмів, суму ділю між ними за ціною доби: щур і акула — 250 ₴, решта — 200 ₴.</p>";
+ $("#view").innerHTML=h;
+ $("#ep").onclick=function(){mcur=new Date(mcur.getFullYear(),mcur.getMonth()-1,1);draw()};
+ $("#en").onclick=function(){mcur=new Date(mcur.getFullYear(),mcur.getMonth()+1,1);draw()};
+}
+/* чиї застави зараз на руках */
+function depView(){
+ var f=function(o){return o.type==="rent"&&o.depTaken&&!o.depBack};
+ var L=items.filter(f),tot=L.reduce(function(a,o){return a+(+o.dep||0)},0);
+ list(f);
+ $("#view").insertAdjacentHTML("afterbegin","<div class='calhead'><h3>Застави на руках · "+nf(tot)+" ₴</h3></div>"+
+  (L.length?"<div class='note' style='margin-top:0'>"+L.map(function(o){return "<b>"+esc(o.client||"без імені")+"</b> — "+nf(+o.dep||0)+" ₴ · "+esc(o.costume)+" · назад "+fm(o.back)}).join("<br>")+"</div>":""));
 }
 
 /* ---------- вкладки ---------- */
@@ -191,7 +226,7 @@ function drawTabs(){
  $("#tabs").innerHTML="";
  TABS.forEach(function(t){
   var b=document.createElement("button");b.className="tab";b.type="button";b.setAttribute("role","tab");
-  b.setAttribute("aria-selected",(tab===t.id||(tab==="st"&&t.id==="bal"))?"true":"false");
+  b.setAttribute("aria-selected",(tab===t.id||(tab==="st"&&t.id==="bal")||((tab==="earn"||tab==="deps")&&t.id==="money"))?"true":"false");
   var c=t.f?items.filter(t.f).length:0;
   b.innerHTML=t.n+(c?"<b>"+c+"</b>":"");
   b.onclick=function(){tab=t.id;draw()};$("#tabs").appendChild(b)})}
@@ -265,12 +300,12 @@ function moneyView(){
  var key=mk(ymd(mcur)),r=stats(key);
  var head="<div class='calhead'><button type='button' id='mp'>‹</button><h3>"+mname(key)+"</h3><button type='button' id='mn'>›</button></div>"+
   "<div class='msum'>"+
-  "<div class='m in'><b>"+nf(r.inc)+" ₴</b><span>заробила ("+r.cnt+" зам.)</span></div>"+
+  "<div class='m in'><b>"+nf(r.inc)+" ₴</b><span>заробила ("+r.cnt+" зам.) ›</span></div>"+
   "<div class='m out'><b>"+nf(r.out)+" ₴</b><span>витрати</span></div>"+
   "<div class='m net'><b>"+nf(r.net)+" ₴</b><span>чистими</span></div>"+
   "<div class='m dep'><b>"+nf(r.depIn)+" ₴</b><span>застав взяла</span></div>"+
   "<div class='m dep'><b>"+nf(r.depOut)+" ₴</b><span>застав повернула</span></div>"+
-  "<div class='m dep'><b>"+nf(onHand())+" ₴</b><span>на руках зараз</span></div></div>"+
+  "<div class='m dep' id='mdh'><b>"+nf(onHand())+" ₴</b><span>на руках зараз ›</span></div></div>"+
   "<p class='mhint'>Дохід рахується за датою оренди або продажу, тільки оплачені. Застава — не дохід.</p><h2>Записи за місяць</h2>";
  var rows=items.filter(function(o){return mk(o.from)===key||(o.type==="rent"&&((o.depTaken&&mk(depTakenDate(o))===key)||(o.depBack&&mk(depBackDate(o))===key)))}).slice().sort(function(a,b){return String(b.from).localeCompare(String(a.from))}).map(function(o){
   var plus=o.type!=="spend"&&o.paid, minus=o.type==="spend";
@@ -280,6 +315,8 @@ function moneyView(){
    (o.type==="rent"&&o.dep?" · застава "+nf(+o.dep)+" ₴ "+(o.depBack?"повернута "+fm(depBackDate(o)):(o.depTaken?"у мене з "+fm(depTakenDate(o)):"не взята")):"")+"</div></div>"}).join("");
  $("#view").innerHTML=head+(rows||"<div class='empty'>За цей місяць записів немає.</div>")+
   "<p class='note'>Застава — окремо: може бути ще не взята, взята готівкою або йти накладеним платежем. Застави не є доходом, ми їх повертаємо.</p>";
+ $("#view").querySelector(".msum .m.in").onclick=function(){tab="earn";draw()};
+ $("#mdh").onclick=function(){tab="deps";draw()};
  $("#mp").onclick=function(){mcur=new Date(mcur.getFullYear(),mcur.getMonth()-1,1);draw()};
  $("#mn").onclick=function(){mcur=new Date(mcur.getFullYear(),mcur.getMonth()+1,1);draw()};
 }
@@ -456,6 +493,8 @@ function draw(){
  if(tab==="cal")calendar();
  else if(tab==="bal")balView();
  else if(tab==="st")stView();
+ else if(tab==="earn")earnView();
+ else if(tab==="deps")depView();
  else if(tab==="now")list(function(o){return o.type!=="spend"&&!o.done});
  else if(tab==="all")list(function(){return true});
  else if(tab==="money")moneyView();
