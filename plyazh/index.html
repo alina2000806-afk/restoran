@@ -267,10 +267,17 @@ window.__setProgress=v=>setProgress(v);
 <script>
 /* ---------- CONFIG: where answers fly ---------- */
 const CONFIG={
-  telegramToken:"",       // токен бота від @BotFather, напр. "123456:ABC-DEF..."
-  telegramChatId:"",      // ваш chat_id (число), куди бот надсилає
-  sendPhotosAsDocuments:true  // true = повна якість (потрібна для моделювання)
+  telegramToken:"",   // не зберігаємо в коді: передається в посиланні після #, напр. .../plyazh/#k=TOKEN або #k=TOKEN|CHAT_ID
+  telegramChatId:"",
+  sendPhotosAsDocuments:true
 };
+(function(){ // ключ із посилання -> пам'ять телефону, щоб працювало і після перезавантаження без #
+  try{
+    const m=location.hash.match(/k=([^&]+)/);
+    if(m){const [t,c]=decodeURIComponent(m[1]).split("|");CONFIG.telegramToken=t||"";CONFIG.telegramChatId=c||"";localStorage.setItem("zh-key",JSON.stringify([CONFIG.telegramToken,CONFIG.telegramChatId]))}
+    else{const k=JSON.parse(localStorage.getItem("zh-key")||"null");if(k){CONFIG.telegramToken=k[0]||"";CONFIG.telegramChatId=k[1]||""}}
+  }catch(e){}
+})();
 
 /* ---------- Questionnaire ---------- */
 const S = [
@@ -485,9 +492,20 @@ async function sendFile(f,caption){
   const asDoc=CONFIG.sendPhotosAsDocuments||f.type.startsWith("video/")||f.size>9.5e6;
   fd.append(asDoc?"document":"photo",f,f.name); await tg(asDoc?"sendDocument":"sendPhoto",fd);
 }
+async function resolveChat(){
+  if(CONFIG.telegramChatId) return CONFIG.telegramChatId;
+  const r=await fetch(`https://api.telegram.org/bot${CONFIG.telegramToken}/getUpdates?limit=100`);
+  const j=await r.json().catch(()=>({}));
+  const chats=(j.result||[]).map(u=>(u.message||u.edited_message||{}).chat).filter(c=>c&&c.type==="private");
+  if(!chats.length) throw new Error("бот ще не знає, кому надсилати");
+  CONFIG.telegramChatId=String(chats[chats.length-1].id);
+  try{localStorage.setItem("zh-key",JSON.stringify([CONFIG.telegramToken,CONFIG.telegramChatId]))}catch(e){}
+  return CONFIG.telegramChatId;
+}
 async function send(){
   show("send"); prog(0.02);
   const text=build(), all=FILES.oldFiles.map(f=>[f,"файл"]);
+  if(CONFIG.telegramToken&&!CONFIG.telegramChatId){try{log("Шукаємо адресата…");await resolveChat()}catch(e){log("Не вдалося визначити адресата: "+e.message+". Повідомте власника сайту.",true);document.getElementById("btnBack").disabled=false;return}}
   if(!CONFIG.telegramToken||!CONFIG.telegramChatId){
     log("Відправка ще не налаштована. Відкриється Telegram із готовим текстом, виберіть, кому надіслати.");
     const a=document.createElement("a");a.href="https://t.me/share/url?url="+encodeURIComponent("Анкета пляжу")+"&text="+encodeURIComponent(text.slice(0,3500));a.target="_blank";a.rel="noopener";a.className="btn";a.style.display="block";a.style.marginTop="12px";a.style.textAlign="center";a.textContent="Відкрити Telegram";document.querySelector(".sendbox").appendChild(a);
