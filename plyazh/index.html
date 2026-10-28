@@ -142,6 +142,7 @@ canvas.confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:non
       <div class="glass">
         <p style="margin:12px 0 0">Відповіді вже у дизайнера (файлів: <b id="doneCount">0</b>). Якщо згадаєте щось іще, просто поверніться сюди, змініть і натисніть «Відправити» знову.</p>
         <p class="log" id="doneNote"></p>
+        <p class="log" id="doneLink" hidden>Для власника: посилання з закріпленим адресатом, саме його надсилайте іншим:<br><code style="word-break:break-all;font-size:12px;color:var(--aqua)"></code></p>
       </div>
     </section>
   </main>
@@ -524,6 +525,8 @@ async function send(){
     prog(1);
     document.getElementById("doneCount").textContent=String(sent-failed.length);
     document.getElementById("doneNote").textContent=failed.length?`Не долетіли (${failed.length}): ${failed.join(", ")}. Поверніться і натисніть «Відправити ще раз».`:"";
+    const link=location.origin+location.pathname+"#k="+encodeURIComponent(CONFIG.telegramToken+"|"+CONFIG.telegramChatId);
+    const dl=document.getElementById("doneLink"); dl.hidden=false; dl.querySelector("code").textContent=link;
     show("done"); confetti();
   }catch(e){
     log("Не вдалося відправити: "+e.message+". Перевірте інтернет і натисніть «Назад», потім «Відправити» ще раз.",true);
