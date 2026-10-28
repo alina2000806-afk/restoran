@@ -1,0 +1,548 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Пляж на Журавлівці</title>
+<meta name="theme-color" content="#0b1522">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&family=Manrope:wght@500;600;800&display=swap">
+<style>
+/* Single deliberate dark theme: a night-to-day river scene in WebGL behind glass panels */
+:root{
+  --bg:#0b1522; --fg:#f4f1ea; --muted:rgba(244,241,234,.62); --glass:rgba(255,255,255,.07); --glass-2:rgba(255,255,255,.12); --stroke:rgba(255,255,255,.14);
+  --accent:#ff7a59; --accent-2:#ffb36b; --aqua:#4fd1c5; --ok:#4fd1a0; --danger:#ff6b6b;
+  --display:"Unbounded",system-ui,sans-serif; --body:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.5;overflow-x:hidden}
+#gl{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:0;background:radial-gradient(120% 80% at 50% 0%,#1d3a52,#0b1522 70%)}
+.veil{position:fixed;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(11,21,34,0) 0%,rgba(11,21,34,.15) 45%,rgba(11,21,34,.78) 100%)}
+.ui{position:relative;z-index:2;min-height:100%;display:flex;flex-direction:column;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.col{max-width:640px;margin:0 auto;width:100%}
+
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:calc(14px + env(safe-area-inset-top,0px)) 8px}
+.brand{font-family:var(--display);font-weight:800;font-size:13px;letter-spacing:.14em;text-transform:uppercase}
+.brand small{display:block;font-family:var(--body);font-weight:600;letter-spacing:.08em;font-size:11px;color:var(--muted)}
+.ring{--p:0;width:52px;height:52px;border-radius:50%;background:conic-gradient(var(--accent) calc(var(--p)*1%),rgba(255,255,255,.12) 0);display:grid;place-items:center;font-variant-numeric:tabular-nums;font-weight:800;font-size:12px;transition:--p .5s}
+.ring i{width:42px;height:42px;border-radius:50%;background:rgba(11,21,34,.85);display:grid;place-items:center;font-style:normal;backdrop-filter:blur(6px)}
+
+.spacer{flex:1;min-height:clamp(120px,30vh,280px)}
+.stage{padding-bottom:110px}
+.hello{animation:rise .6s cubic-bezier(.2,.8,.2,1) both}
+.hello h1{font-family:var(--display);font-weight:800;font-size:clamp(34px,8.5vw,60px);line-height:1;margin:0;text-wrap:balance;letter-spacing:-.01em}
+.hello h1 span{background:linear-gradient(90deg,var(--accent-2),var(--accent));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hello p{color:var(--muted);max-width:34em;margin:14px 0 0;font-size:16.5px}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.pill{font-size:12.5px;font-weight:700;padding:8px 12px;border-radius:99px;background:var(--glass);border:1px solid var(--stroke);backdrop-filter:blur(10px)}
+
+.step{display:none;animation:rise .5s cubic-bezier(.2,.8,.2,1) both}
+.step.on{display:block}
+@keyframes rise{from{opacity:0;transform:translateY(18px) scale(.985)}to{opacity:1;transform:none}}
+.kicker{font-family:var(--display);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent-2);font-weight:600}
+.step h2{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,40px);line-height:1.05;margin:8px 0 0;text-wrap:balance;letter-spacing:-.01em}
+.step .hint{color:var(--muted);margin:8px 0 0;font-size:15px}
+.glass{margin-top:18px;background:var(--glass);border:1px solid var(--stroke);border-radius:24px;padding:8px 18px 14px;backdrop-filter:blur(18px) saturate(140%);-webkit-backdrop-filter:blur(18px) saturate(140%);box-shadow:0 30px 80px -40px rgba(0,0,0,.8), inset 0 1px 0 rgba(255,255,255,.08)}
+.q{padding-block:16px;border-bottom:1px solid var(--stroke)}
+.q:last-child{border-bottom:0;padding-bottom:6px}
+.q .t{display:block;font-weight:800;font-size:16px;line-height:1.3}
+.q .t .star{color:var(--accent)}
+.q .why{font-size:13.5px;color:var(--muted);margin:4px 0 0}
+textarea,input[type=text],input[type=number]{width:100%;font:inherit;font-size:16px;color:var(--fg);background:rgba(0,0,0,.25);border:1px solid var(--stroke);border-radius:14px;padding:12px 14px;margin-top:10px;transition:border-color .2s,box-shadow .2s}
+textarea{min-height:66px;resize:vertical}
+input::placeholder,textarea::placeholder{color:rgba(244,241,234,.4)}
+input:focus,textarea:focus{outline:none;border-color:var(--aqua);box-shadow:0 0 0 3px rgba(79,209,197,.25)}
+button:focus-visible,a:focus-visible,label:focus-within{outline:3px solid var(--aqua);outline-offset:2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.chip{font:inherit;font-weight:700;font-size:14px;border:1px solid var(--stroke);background:var(--glass);color:var(--fg);border-radius:99px;padding:10px 14px;cursor:pointer;min-height:42px;line-height:1.2;text-align:left;transition:transform .15s,background .2s,border-color .2s}
+.chip:active{transform:scale(.95)}
+.chip[aria-pressed="true"]{background:linear-gradient(135deg,var(--accent),#ff9a76);border-color:transparent;color:#1a0d08;animation:pop .35s cubic-bezier(.2,.8,.2,1)}
+@keyframes pop{45%{transform:scale(1.07)}}
+.obj{display:grid;grid-template-columns:1fr auto;gap:6px 10px;align-items:center;padding:9px 0;border-bottom:1px dashed var(--stroke)}
+.obj:last-child{border-bottom:0}
+.obj .name{font-size:15px}
+.obj .ctl{display:flex;gap:6px;align-items:center}
+.obj .chip{padding:8px 12px;min-height:36px}
+.obj input[type=number]{width:70px;margin:0;padding:8px;text-align:center;font-variant-numeric:tabular-nums}
+.obj input[hidden]{display:none}
+.check{display:flex;gap:12px;align-items:flex-start;padding:11px 0;border-bottom:1px dashed var(--stroke);cursor:pointer}
+.check:last-child{border-bottom:0}
+.check input{width:24px;height:24px;margin:1px 0 0;accent-color:var(--accent);flex:none}
+.check b{font-weight:800;display:block}
+.check span span{font-size:13.5px;color:var(--muted);display:block;margin-top:2px}
+.check input:checked ~ span b{text-decoration:line-through;opacity:.55}
+.tip{margin-top:12px;padding:12px 14px;border-radius:14px;background:rgba(255,179,107,.1);border:1px solid rgba(255,179,107,.25);font-size:14px}
+
+/* photo uploader */
+.drop{margin-top:10px;border:1.5px dashed rgba(79,209,197,.5);border-radius:18px;padding:18px;text-align:center;background:rgba(79,209,197,.06);cursor:pointer;transition:background .2s}
+.drop:hover{background:rgba(79,209,197,.12)}
+.drop b{font-family:var(--display);font-size:14px;display:block}
+.drop span{color:var(--muted);font-size:13.5px}
+.drop input{position:absolute;opacity:0;width:1px;height:1px}
+.thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:6px;margin-top:10px}
+.thumbs img,.thumbs .vid{width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px;background:#000;display:grid;place-items:center;font-size:11px;color:var(--muted)}
+.thumbs .more{aspect-ratio:1;border-radius:10px;background:var(--glass-2);display:grid;place-items:center;font-weight:800}
+.count{font-size:13px;color:var(--aqua);font-weight:700;margin-top:8px}
+
+/* bottom nav */
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:3;padding:10px max(16px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));background:linear-gradient(180deg,rgba(11,21,34,0),rgba(11,21,34,.9) 40%)}
+.nav .col{display:flex;gap:10px}
+.btn{font:inherit;font-family:var(--display);font-weight:600;font-size:14px;letter-spacing:.02em;border:0;border-radius:16px;padding:15px 18px;cursor:pointer;background:linear-gradient(135deg,var(--accent),#ff9a76);color:#1a0d08;min-height:54px;flex:1;transition:transform .15s,filter .2s;box-shadow:0 14px 30px -14px rgba(255,122,89,.7)}
+.btn:hover{filter:brightness(1.05)}
+.btn:active{transform:scale(.97)}
+.btn.ghost{background:var(--glass);color:var(--fg);border:1px solid var(--stroke);flex:0 0 auto;padding-inline:16px;box-shadow:none;backdrop-filter:blur(10px)}
+.btn:disabled{opacity:.35;cursor:default;transform:none}
+
+/* sending & done */
+.sendbox{margin-top:18px}
+.prog{height:10px;border-radius:99px;background:rgba(255,255,255,.1);overflow:hidden;margin-top:12px}
+.prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--aqua),var(--accent-2));transition:width .3s}
+.log{font-size:13.5px;color:var(--muted);margin-top:8px;min-height:1.4em}
+.done h2{font-size:clamp(30px,8vw,48px)}
+.big{font-family:var(--display);font-size:64px;line-height:1;margin:6px 0 0}
+.err{color:var(--danger);font-weight:700}
+canvas.confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:9}
+@media (prefers-reduced-motion:reduce){.step,.hello{animation:none}}
+</style>
+</head>
+<body>
+<canvas id="gl" aria-hidden="true"></canvas>
+<div class="veil"></div>
+
+<div class="ui">
+  <header class="top col">
+    <div class="brand">Журавлівка<small>Харків · річка Харків</small></div>
+    <div class="ring" id="ring"><i id="ringText">0%</i></div>
+  </header>
+  <div class="spacer"></div>
+
+  <main class="stage col">
+    <section class="hello step on" data-i="-1">
+      <h1>Намалюємо пляж <span>під ваш берег</span></h1>
+      <p>Дев'ять коротких кроків про ділянку, гостей, стиль і бюджет. Майже всюди достатньо натиснути варіант, а поруч завжди є вільне поле для свого. Що не знаєте, пропускайте. Наприкінці все само відправиться дизайнеру.</p>
+      <div class="pills"><span class="pill">9 кроків</span><span class="pill">≈ 10 хвилин</span><span class="pill">з телефону</span><span class="pill">без реєстрації</span></div>
+    </section>
+    <div id="steps"></div>
+
+    <section class="step" id="sendStep" data-i="send">
+      <div class="kicker">Фініш</div>
+      <h2>Відправляємо дизайнеру</h2>
+      <p class="hint">Не закривайте сторінку, поки йде відправка.</p>
+      <div class="glass sendbox">
+        <div class="prog"><i id="progBar"></i></div>
+        <div class="log" id="log">Готуємо текст…</div>
+      </div>
+    </section>
+
+    <section class="step done" id="doneStep" data-i="done">
+      <div class="kicker">Готово</div>
+      <h2>Все долетіло. Дякуємо!</h2>
+      <div class="glass">
+        <p style="margin:12px 0 0">Відповіді вже у дизайнера (файлів: <b id="doneCount">0</b>). Якщо згадаєте щось іще, просто поверніться сюди, змініть і натисніть «Відправити» знову.</p>
+        <p class="log" id="doneNote"></p>
+      </div>
+    </section>
+  </main>
+</div>
+
+<nav class="nav"><div class="col">
+  <button class="btn ghost" id="btnBack" type="button">Назад</button>
+  <button class="btn" id="btnNext" type="button">Почати</button>
+</div></nav>
+<canvas class="confetti" id="confetti" hidden></canvas>
+
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js"}}</script>
+<script type="module">
+/* ---------- 3D scene ---------- */
+let setProgress=()=>{};
+try{
+  const THREE=await import("three");
+  const canvas=document.getElementById("gl");
+  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false,powerPreference:"high-performance"});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,1.6));
+  renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=1.05;
+  const scene=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(42,1,.1,400);
+  camera.position.set(0,3.2,14);
+
+  // palette keyframes: dawn, day, sunset, night  (sky top, sky bottom/horizon, sun light color, ambient)
+  const KF=[
+    {top:"#1b2a4a",hor:"#f2a65a",sun:"#ffd9a0",amb:"#5a6a8a",water:"#1f5a6e",fog:"#e4a06a",light:1.4},
+    {top:"#3f8fd6",hor:"#cfe7f3",sun:"#ffffff",amb:"#9fbfd8",water:"#2e8fa3",fog:"#cfe7f3",light:2.2},
+    {top:"#2d2a5e",hor:"#ff7a4a",sun:"#ffb36b",amb:"#6a4a6a",water:"#2a4d6e",fog:"#ff9a66",light:1.6},
+    {top:"#05070f",hor:"#15233a",sun:"#9fb8ff",amb:"#1f2a44",water:"#0f2a3a",fog:"#15233a",light:.35},
+  ];
+  const col=h=>new THREE.Color(h);
+  const C={top:col(KF[0].top),hor:col(KF[0].hor)};
+  scene.background=C.hor.clone();
+  scene.fog=new THREE.Fog(C.hor.clone(),40,170);
+
+  // sky dome (gradient)
+  const skyMat=new THREE.ShaderMaterial({side:THREE.BackSide,depthWrite:false,uniforms:{top:{value:C.top},hor:{value:C.hor}},
+    vertexShader:`varying vec3 p;void main(){p=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
+    fragmentShader:`uniform vec3 top,hor;varying vec3 p;void main(){float h=normalize(p).y;float t=smoothstep(-.05,.6,h);gl_FragColor=vec4(mix(hor,top,t),1.);}`});
+  scene.add(new THREE.Mesh(new THREE.SphereGeometry(200,24,16),skyMat));
+
+  // sun
+  const sun=new THREE.Mesh(new THREE.SphereGeometry(2.6,24,24),new THREE.MeshBasicMaterial({color:0xffe3a8,fog:false}));
+  const glowTex=(()=>{const c=document.createElement("canvas");c.width=c.height=128;const g=c.getContext("2d");const r=g.createRadialGradient(64,64,0,64,64,64);r.addColorStop(0,"rgba(255,230,170,.9)");r.addColorStop(.35,"rgba(255,200,130,.35)");r.addColorStop(1,"rgba(255,180,110,0)");g.fillStyle=r;g.fillRect(0,0,128,128);return new THREE.CanvasTexture(c)})();
+  const glow=new THREE.Sprite(new THREE.SpriteMaterial({map:glowTex,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,fog:false}));glow.scale.set(30,30,1);sun.add(glow);
+  scene.add(sun);
+  const dir=new THREE.DirectionalLight(0xffffff,1.5);scene.add(dir);
+  const hemi=new THREE.HemisphereLight(0xffffff,0x223344,.8);scene.add(hemi);
+
+  // water
+  const WSEG=90;
+  const wgeo=new THREE.PlaneGeometry(260,160,WSEG,WSEG/2);wgeo.rotateX(-Math.PI/2);
+  const wmat=new THREE.MeshStandardMaterial({color:KF[0].water,metalness:.55,roughness:.28,flatShading:false});
+  const water=new THREE.Mesh(wgeo,wmat);water.position.set(0,0,-60);scene.add(water);
+  const wpos=wgeo.attributes.position, wbase=wpos.array.slice();
+
+  // sand (near shore), slightly wavy edge
+  const sgeo=new THREE.PlaneGeometry(120,40,40,10);sgeo.rotateX(-Math.PI/2);
+  const sp=sgeo.attributes.position;for(let i=0;i<sp.count;i++){const z=sp.getZ(i);const x=sp.getX(i);if(z<-14)sp.setY(i,-0.2+Math.sin(x*.25)*.15);else sp.setY(i,.15+(z+14)*.01)}
+  sgeo.computeVertexNormals();
+  const sand=new THREE.Mesh(sgeo,new THREE.MeshStandardMaterial({color:0xd9c08f,roughness:1}));sand.position.set(0,0,2);scene.add(sand);
+
+  // far shore (dark treeline)
+  const shore=new THREE.Mesh(new THREE.BoxGeometry(400,3,20),new THREE.MeshStandardMaterial({color:0x0f2c2c,roughness:1}));shore.position.set(0,1,-135);scene.add(shore);
+  for(let i=0;i<60;i++){const t=new THREE.Mesh(new THREE.ConeGeometry(1.5+Math.random()*2,4+Math.random()*7,6),new THREE.MeshStandardMaterial({color:0x0c2424,roughness:1}));t.position.set(-180+i*6+Math.random()*3,3,-128+Math.random()*6);scene.add(t)}
+
+  // loungers + umbrellas
+  const wood=new THREE.MeshStandardMaterial({color:0x8a5a34,roughness:.8});
+  const cloth=new THREE.MeshStandardMaterial({color:0xf3ead9,roughness:.9});
+  const mkLounger=(x,z,rot)=>{const g=new THREE.Group();const base=new THREE.Mesh(new THREE.BoxGeometry(.75,.12,1.9),wood);base.position.y=.35;const cush=new THREE.Mesh(new THREE.BoxGeometry(.68,.1,1.3),cloth);cush.position.set(0,.46,.25);const back=new THREE.Mesh(new THREE.BoxGeometry(.68,.1,.7),cloth);back.position.set(0,.6,-.6);back.rotation.x=-.9;[[-.3,-.8],[.3,-.8],[-.3,.8],[.3,.8]].forEach(([a,b])=>{const l=new THREE.Mesh(new THREE.BoxGeometry(.08,.3,.08),wood);l.position.set(a,.15,b);g.add(l)});g.add(base,cush,back);g.position.set(x,0,z);g.rotation.y=rot;scene.add(g)};
+  const mkUmbrella=(x,z)=>{const p=new THREE.Mesh(new THREE.CylinderGeometry(.04,.04,2.6,8),wood);p.position.set(x,1.3,z);const c=new THREE.Mesh(new THREE.ConeGeometry(1.4,.55,10,1,true),new THREE.MeshStandardMaterial({color:0xf7f1e4,side:THREE.DoubleSide,roughness:.9}));c.position.set(x,2.6,z);scene.add(p,c)};
+  const rows=[[-6.5,4],[-4.2,4.6],[-1.6,4.2],[1.4,4.5],[4.2,4.1],[6.8,4.6],[-5.4,7.2],[-2.6,7.6],[2.6,7.4],[5.6,7.1]];
+  rows.forEach(([x,z],i)=>mkLounger(x,z,(i%2?-.1:.1)));
+  [[-5.3,5.6],[0,5.8],[5.4,5.5]].forEach(([x,z])=>mkUmbrella(x,z));
+  // pavilion
+  (()=>{const g=new THREE.Group();[[-2,-1.2],[2,-1.2],[-2,1.2],[2,1.2]].forEach(([a,b])=>{const c=new THREE.Mesh(new THREE.BoxGeometry(.18,2.6,.18),wood);c.position.set(a,1.3,b);g.add(c)});const roof=new THREE.Mesh(new THREE.ConeGeometry(3.4,1.2,4),new THREE.MeshStandardMaterial({color:0x2a2a30,roughness:.7}));roof.position.y=3.1;roof.rotation.y=Math.PI/4;const deck=new THREE.Mesh(new THREE.BoxGeometry(4.6,.2,3),wood);deck.position.y=.1;g.add(roof,deck);g.position.set(10.5,0,1.5);g.rotation.y=-.35;scene.add(g)})();
+
+  // string lights
+  const pts=[],N=48;for(let i=0;i<N;i++){const t=i/(N-1);const x=-14+t*28;const y=4.2-Math.sin(t*Math.PI)*1.4+Math.sin(t*Math.PI*3)*.25;pts.push(x,y+1.5,0.5)}
+  const lights=new THREE.Points(new THREE.BufferGeometry().setAttribute("position",new THREE.Float32BufferAttribute(pts,3)),new THREE.PointsMaterial({color:0xffd27a,size:.28,map:glowTex,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,sizeAttenuation:true}));
+  scene.add(lights);
+  const lanterns=[];[[-3.2,6.2],[3.6,6.4],[8.6,2.8]].forEach(([x,z])=>{const m=new THREE.Mesh(new THREE.SphereGeometry(.14,10,10),new THREE.MeshBasicMaterial({color:0xffd27a}));m.position.set(x,.45,z);const pl=new THREE.PointLight(0xffb060,0,7,2);pl.position.copy(m.position).add(new THREE.Vector3(0,.4,0));scene.add(m,pl);lanterns.push(pl)});
+
+  // progress -> time of day
+  let target=0,p=0;
+  setProgress=v=>{target=Math.max(0,Math.min(1,v))};
+  const lerpC=(a,b,t)=>new THREE.Color(a).lerp(new THREE.Color(b),t);
+  function applyTime(t){ // t in 0..1 : dawn->day->sunset->night
+    const seg=t*3, i=Math.min(2,Math.floor(seg)), f=seg-i, a=KF[i], b=KF[i+1];
+    skyMat.uniforms.top.value.copy(lerpC(a.top,b.top,f));
+    skyMat.uniforms.hor.value.copy(lerpC(a.hor,b.hor,f));
+    scene.fog.color.copy(lerpC(a.fog,b.fog,f)); scene.background.copy(scene.fog.color);
+    wmat.color.copy(lerpC(a.water,b.water,f));
+    dir.color.copy(lerpC(a.sun,b.sun,f)); dir.intensity=a.light+(b.light-a.light)*f;
+    hemi.color.copy(lerpC(a.amb,b.amb,f)); hemi.intensity=.5+dir.intensity*.3;
+    const el=Math.sin(Math.min(t,0.85)/0.85*Math.PI); // sun arc
+    const ang=-0.9+t*1.8; sun.position.set(Math.sin(ang)*60, -4+el*42, -110+Math.cos(ang)*-10);
+    dir.position.copy(sun.position).normalize().multiplyScalar(50);
+    const night=THREE.MathUtils.smoothstep(t,.62,.95);
+    lights.material.opacity=.25+night*.75; lanterns.forEach(l=>l.intensity=night*2.4);
+    glow.material.opacity=1-night*.6;
+  }
+  function resize(){const w=innerWidth,h=innerHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix()}
+  addEventListener("resize",resize);resize();
+  let mx=0,my=0;addEventListener("pointermove",e=>{mx=(e.clientX/innerWidth-.5);my=(e.clientY/innerHeight-.5)},{passive:true});
+  const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const clock=new THREE.Clock();
+  renderer.setAnimationLoop(()=>{
+    const t=clock.getElapsedTime(); p+=(target-p)*.03; applyTime(p);
+    for(let i=0;i<wpos.count;i++){const x=wbase[i*3],z=wbase[i*3+2];wpos.array[i*3+1]=Math.sin(x*.18+t*1.1)*.22+Math.sin(z*.25+t*.8)*.18+Math.sin((x+z)*.1+t*.5)*.12}
+    wpos.needsUpdate=true; wgeo.computeVertexNormals();
+    camera.position.x+=((reduce?0:Math.sin(t*.12)*1.6+mx*1.2)-camera.position.x)*.02;
+    camera.position.y+=((3.2-my*.6)-camera.position.y)*.03;
+    camera.lookAt(0,1.4,-20);
+    renderer.render(scene,camera);
+  });
+}catch(e){console.warn("3D scene unavailable",e)}
+window.__setProgress=v=>setProgress(v);
+</script>
+
+<script>
+/* ---------- CONFIG: where answers fly ---------- */
+const CONFIG={
+  telegramToken:"",   // не зберігаємо в коді: передається в посиланні після #, напр. .../plyazh/#k=TOKEN або #k=TOKEN|CHAT_ID
+  telegramChatId:"",
+  sendPhotosAsDocuments:true
+};
+(function(){ // ключ із посилання -> пам'ять телефону, щоб працювало і після перезавантаження без #
+  try{
+    const m=location.hash.match(/k=([^&]+)/);
+    if(m){const [t,c]=decodeURIComponent(m[1]).split("|");CONFIG.telegramToken=t||"";CONFIG.telegramChatId=c||"";localStorage.setItem("zh-key",JSON.stringify([CONFIG.telegramToken,CONFIG.telegramChatId]))}
+    else{const k=JSON.parse(localStorage.getItem("zh-key")||"null");if(k){CONFIG.telegramToken=k[0]||"";CONFIG.telegramChatId=k[1]||""}}
+  }catch(e){}
+})();
+
+/* ---------- Questionnaire ---------- */
+const S = [
+ {t:"Ділянка і межі", h:"Посилання на карту важливіше за все інше: розміри ми знімемо з супутника.", q:[
+  {k:"map", t:"Де це на карті", w:"Якщо зручно, посилання з Google Maps. Якщо ні, просто опишіть: «Журавлівка, за мостом, біля бази …». Знайдемо самі.", type:"text"},
+  {k:"bounds", t:"Де починається і де закінчується ваша зона", r:1, w:"Своїми словами: «від червоної альтанки до повороту доріжки», або через орієнтири на фото.", type:"area"},
+  {k:"sides", t:"Що межує з ділянкою з боків", type:"chips", multi:true, o:["Чужий пляж","Паркан або межа бази","Дорога чи проїзд","Ліс, зарості","Житлові будинки","Нічого, вільний берег"]},
+  {k:"promenade", t:"Плиткова доріжка вздовж берега", r:1, w:"На фото це міська набережна. Чи можна її перекривати, чи люди гуляють нею вільно?", type:"chips", o:["Публічна, перекривати не можна","Можна зробити частину нашої території","Належить нам повністю","Не знаю"]},
+  {k:"entry", t:"Звідки люди заходитимуть", type:"chips", multi:true, o:["З боку дороги, де в'їзд","З набережної пішки","З води (човни, сапи)","З сусідньої бази"]},
+  {k:"pavilion", t:"Червона альтанка біля води", type:"chips", o:["Залишається як є","Перебудувати в стилі проєкту","Знести","Не знаю"]},
+  {k:"pole", t:"Ліхтарний стовп і дроти над ділянкою", type:"chips", o:["Залишаються","Можна прибрати або перенести","Не знаю"]},
+  {k:"slope", t:"Перепад від доріжки до води", type:"chips", o:["Рівно","Невелика сходинка","Схил близько метра","Крутий спуск"]},
+  {k:"ground", t:"Що під ногами на пляжі", type:"chips", o:["Природний пісок","Привізний пісок","Земля з травою","Щебінь або суміш"]},
+  {k:"flood", t:"Чи заливає берег навесні або після дощів", type:"chips", o:["Ні, сухо","Трохи, біля самої води","Так, помітно","Не знаю"]},
+ ]},
+ {t:"Вода і берег", h:"Від цього залежить, чи малювати пірс, купальню, зону для сапів.", q:[
+  {k:"depth", t:"Глибина біля берега", type:"chips", o:["Мілко, по коліно далеко","Швидко глибшає","Обрив біля берега","Не знаю"]},
+  {k:"bottom", t:"Дно", type:"chips", o:["Пісок","Мул","Каміння","Корчі, зарості"]},
+  {k:"swim", t:"Купання", r:1, type:"chips", o:["Так, це пляж для купання","Ні, тільки відпочинок на березі","Поки не вирішили"]},
+  {k:"waterUse", t:"Що хочете на воді", type:"chips", multi:true, o:["Пірс або понтон","Сапи та каяки","Купальня з огорожею","Човни, катамарани","Нічого, тільки вид"]},
+  {k:"reed", t:"Очерет і кущі біля води", type:"chips", o:["Залишити як природний елемент","Частково вичистити","Прибрати повністю"]},
+  {k:"sunset", t:"Куди сідає сонце відносно пляжу", w:"На фото захід над водою. Так і є?", type:"chips", o:["Над водою, навпроти пляжу","Збоку вздовж берега","За спиною, за деревами","Не звертав уваги"]},
+ ]},
+ {t:"Дерева і зелень", h:"Дерева вирішують, де стануть лежаки й альтанки, і дають тінь.", q:[
+  {k:"trees", t:"Скільки приблизно дерев на ділянці", type:"text", ph:"наприклад, близько 15"},
+  {k:"treesRemove", t:"Чи можна прибирати дерева", type:"chips", o:["Жодного не можна","Можна окремі, за погодженням","Можна будь-які","Не знаю"]},
+  {k:"shade", t:"Тінь удень", type:"chips", o:["Дерева дають багато тіні","Тінь тільки вранці або ввечері","Майже немає тіні"]},
+  {k:"planting", t:"Нові рослини в проєкті", type:"chips", multi:true, o:["Пальми в кадках","Трави і злаки","Живопліт замість паркану","Газон","Нічого не садимо"]},
+ ]},
+ {t:"Світло, вода, туалет, під'їзд", h:"Інженерія визначає, де стоятиме бар і чи буде вечірнє підсвічування.", q:[
+  {k:"power", t:"Електрика", r:1, type:"chips", o:["Є підключення на ділянці","Є поруч, треба тягнути","Тільки генератор","Немає і не знаю, звідки"]},
+  {k:"powerKw", t:"Яка потужність доступна", w:"Якщо знаєте: кіловати або «як у квартирі».", type:"text"},
+  {k:"waterSup", t:"Вода", type:"chips", o:["Водогін","Свердловина","Привізна","Немає"]},
+  {k:"sewer", t:"Туалет і стоки", type:"chips", o:["Є каналізація","Септик","Біотуалети","Поки нічого"]},
+  {k:"access", t:"Під'їзд для постачання і сміттєвоза", type:"chips", o:["Машина під'їжджає до будь-якої точки","Тільки до краю ділянки","Тільки пішки від дороги"]},
+  {k:"existingLight", t:"Освітлення зараз", type:"chips", o:["Міські ліхтарі на набережній","Нічого, темно","Своє тимчасове"]},
+ ]},
+ {t:"Дозволи та обмеження", h:"Впливає на те, що можна малювати: капітальне чи розбірне.", q:[
+  {k:"land", t:"Статус землі", type:"chips", o:["Оренда","Власність","Дозвіл на сезонну торгівлю","Поки оформлюємо"]},
+  {k:"capital", t:"Чи можна будувати з фундаментом", r:1, w:"У прибережній смузі 25–100 м капітальні споруди зазвичай заборонені.", type:"chips", o:["Можна капітальне","Тільки розбірне сезонне","Не знаю"]},
+  {k:"alco", t:"Алкоголь і кальяни", type:"chips", o:["Буде і те, і те","Тільки алкоголь","Тільки кальяни","Ні того, ні іншого"]},
+  {k:"noise", t:"Музика і шум", type:"chips", o:["Можна гучно до ночі","Тихо після 22:00","Тільки фонова музика","Сусіди поруч, обережно"]},
+  {k:"fence", t:"Огорожа території", type:"chips", o:["Повністю закрита","Умовна: кадки, канати","Без огорожі"]},
+ ]},
+ {t:"Формат і гості", h:"Для кого це місце і скільки людей має вмістити.", q:[
+  {k:"format", t:"Формат входу", r:1, type:"chips", o:["Платний вхід","Безкоштовний вхід, платні лежаки","Закритий клуб","Івенти та оренда повністю"]},
+  {k:"audience", t:"Для кого", type:"chips", multi:true, o:["Сім'ї з дітьми","Молодь 20–35","Пари","Корпоративи","Весілля та бенкети","Туристи"]},
+  {k:"capacity", t:"Скільки людей максимум одночасно", r:1, type:"text", ph:"наприклад, 150"},
+  {k:"priceLevel", t:"Ціновий рівень", type:"chips", o:["Доступний, для всіх","Середній","Преміум"]},
+  {k:"hours", t:"Режим роботи", type:"chips", o:["Тільки день","День і вечір із підсвічуванням","До ночі, з музикою"]},
+  {k:"season", t:"Сезон", type:"chips", o:["Тільки літо","Травень–вересень","Цілий рік"]},
+  {k:"food", t:"Їжа", type:"chips", multi:true, o:["Тільки напої","Снеки і закуски","Гриль","Повноцінна кухня","Фудтраки"]},
+  {k:"kids", t:"Діти", type:"chips", o:["Дитяча зона обов'язково","Невеликий куточок","Без дитячої зони"]},
+ ]},
+ {t:"Що будуємо", h:"Позначте «так» і впишіть кількість. Якщо не впевнені, пишіть приблизно.", q:[
+  {k:"objects", t:"Об'єкти", r:1, type:"objects", o:[
+    "Лежаки одинарні","Лежаки на двох із балдахіном","Парасолі","Крісла-мішки","Альтанки звичайні","Альтанки VIP зі шторами",
+    "Бар","Кальянна точка","Кухня або гриль-зона","Стійка адміністратора","Каса та вхідна група","Будка охорони","Шлагбаум",
+    "Туалет","Душ","Кабінки для перевдягання","Камери схову","Будиночки з ночівлею","Дитяча зона","Волейбол","Прокат сапів",
+    "Пірс або понтон","Сцена або діджей","Фотозона","Парковка (машин)","Велопарковка","Госпблок, склад","Сміттєві контейнери"]},
+  {k:"gazeboSize", t:"Альтанки: на скільки людей кожна", type:"text", ph:"наприклад, 2 на 8 і 1 на 20"},
+  {k:"wow", t:"Головна фішка місця", w:"Одна річ, заради якої приїжджатимуть.", type:"area"},
+  {k:"phases", t:"Що будуємо цього сезону, а що пізніше", type:"chips", o:["Усе відразу","Спочатку лежаки, бар, туалет","Спочатку мінімум, далі подивимось"]},
+ ]},
+ {t:"Стиль і матеріали", h:"На попередніх картинках три різні стилі. Обираємо один і тримаємось його.", q:[
+  {k:"style", t:"Стиль", r:1, type:"chips", o:["Світле дерево і льон, як картинка із заходом сонця","Темне дерево і чорний метал, як бар","Червоні дахи, як альтанки на набережній","Світлий зруб, як будиночки","Білий середземноморський","Бохо з ротангом і макраме"]},
+  {k:"floor", t:"Підлога в зонах відпочинку", type:"chips", multi:true, o:["Пісок","Дерев'яний настил","Газон","Терасна дошка біля бару","Гравій"]},
+  {k:"materials", t:"Матеріали, які подобаються", type:"chips", multi:true, o:["Натуральне дерево","Чорний метал","Ротанг, лоза","Тканини, штори","Бетон","Камінь"]},
+  {k:"colors", t:"Кольори", type:"chips", multi:true, o:["Бежевий і білий","Теракота","Темно-зелений","Чорний і графіт","Яскраві акценти"]},
+  {k:"lightMood", t:"Вечірнє світло", type:"chips", multi:true, o:["Гірлянди над зоною","Ліхтарі на піску","Підсвічування дерев","Неонова вивіска","Свічки і вогонь"]},
+  {k:"refs", t:"Місця, які подобаються", w:"Назви закладів або посилання, 3–5 прикладів.", type:"area"},
+  {k:"dislike", t:"Що в попередніх картинках не сподобалося", type:"area"},
+  {k:"like", t:"Що в попередніх картинках сподобалося", type:"area"},
+  {k:"brand", t:"Назва проєкту, логотип, фірмові кольори", type:"text"},
+ ]},
+ {t:"Бюджет і результат", h:"Останній крок. Що саме ви хочете отримати від візуалізації.", q:[
+  {k:"budget", t:"Бюджет на благоустрій, вилка", r:1, w:"Від цього залежить, малювати настили і штори чи пісок і прості лежаки.", type:"chips", o:["До 10 тис. $","10–30 тис. $","30–70 тис. $","Понад 70 тис. $","Поки не рахували"]},
+  {k:"suppliers", t:"Уже обрані лежаки, альтанки, бар", w:"Посилання або назви моделей, якщо придивилися.", type:"area"},
+  {k:"purpose", t:"Для кого візуалізація", r:1, type:"chips", multi:true, o:["Для себе, зрозуміти задум","Для інвестора або партнера","Для міськради та погоджень","Для реклами і соцмереж","Для будівельників"]},
+  {k:"views", t:"Які види потрібні", type:"chips", multi:true, o:["Генплан згори з розмірами","Вид із набережної","Вид від води","Вечірній вид","Усередині альтанки","Бар зблизька","Відеообліт"]},
+  {k:"deadline", t:"Коли потрібен результат", type:"text", ph:"наприклад, до 15 листопада"},
+  {k:"oldFiles", t:"Якщо зручно, додайте фото або файли сюди", w:"Необов'язково: фото ділянки можна надіслати і окремо.", type:"files"},
+  {k:"extra", t:"Що ще важливо сказати", type:"area"},
+  {k:"contact", t:"Як вас звати і як зв'язатися", r:1, type:"text", ph:"ім'я, телефон або @telegram"},
+ ]},
+];
+const TIPS={0:"Не знаєте відповіді? Пропускайте або пишіть у вільне поле.",6:"Краще викреслити зайве потім, ніж забути потрібне зараз.",8:"Ви майже на місці. Натисніть «Відправити», і все само долетить."};
+
+const KEY="zhuravlivka-v3";
+let A={}; try{A=JSON.parse(localStorage.getItem(KEY)||"{}")||{}}catch(e){A={}}
+const FILES={oldFiles:[]};
+let cur=-1;
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(A))}catch(e){}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const star=q=>"";
+
+function render(){
+  const root=document.getElementById("steps"); let html="";
+  S.forEach((s,si)=>{
+    html+=`<section class="step" data-i="${si}"><div class="kicker">Крок ${si+1} з ${S.length}</div><h2>${esc(s.t)}</h2>${s.h?`<p class="hint">${esc(s.h)}</p>`:""}<div class="glass">`;
+    s.q.forEach(q=>{
+      const id="q_"+q.k; const v=A[q.k];
+      html+=`<div class="q"><label class="t" for="${id}">${esc(q.t)}${star(q)}</label>${q.w?`<p class="why">${esc(q.w)}</p>`:""}`;
+      if(q.type==="text") html+=`<input type="text" id="${id}" data-k="${q.k}" value="${esc(v||"")}" placeholder="${esc(q.ph||"")}">`;
+      else if(q.type==="area") html+=`<textarea id="${id}" data-k="${q.k}">${esc(v||"")}</textarea>`;
+      else if(q.type==="chips"){
+        const sel=q.multi?(v||[]):(v?[v]:[]);
+        const opts=[...q.o,"Інше"];
+        html+=`<div class="chips" id="${id}" role="group">`+opts.map(o=>`<button type="button" class="chip" data-k="${q.k}" data-multi="${q.multi?1:0}" data-o="${esc(o)}" aria-pressed="${sel.includes(o)}">${esc(o)}</button>`).join("")+`</div>`;
+        html+=`<input type="text" id="${id}_other" data-k="${q.k}_other" value="${esc(A[q.k+"_other"]||"")}" placeholder="Свій варіант або коментар">`;
+      }
+      else if(q.type==="objects"){
+        const ob=v||{};
+        html+=`<div id="${id}">`+q.o.map(o=>{const r=ob[o]||{};return `<div class="obj"><span class="name">${esc(o)}</span><span class="ctl">
+          <button type="button" class="chip" data-ok="${esc(o)}" data-yes="1" aria-pressed="${r.yes===true}">так</button>
+          <button type="button" class="chip" data-ok="${esc(o)}" data-yes="0" aria-pressed="${r.yes===false}">ні</button>
+          <input type="number" min="0" inputmode="numeric" aria-label="кількість" data-oq="${esc(o)}" value="${esc(r.n||"")}" placeholder="шт" ${r.yes===true?"":"hidden"}></span></div>`}).join("")+`</div><input type="text" id="${id}_other" data-k="${q.k}_other" value="${esc(A[q.k+"_other"]||"")}" placeholder="Чого немає в списку? Напишіть тут">`;
+      }
+      else if(q.type==="checks"){
+        const ch=v||{};
+        html+=`<div id="${id}">`+q.o.map(([a,b])=>`<label class="check"><input type="checkbox" data-ck="${esc(a)}" ${ch[a]?"checked":""}><span><b>${esc(a)}</b><span>${esc(b)}</span></span></label>`).join("")+`</div>`;
+      }
+      else if(q.type==="files"){
+        html+=`<label class="drop" id="${id}"><input type="file" multiple accept="image/*,video/*" data-f="${q.k}"><b>Натисніть, щоб додати фото або відео</b><span>Можна вибрати відразу багато. Знімайте просто з камери, без стискання.</span></label><div class="count" id="${id}_count"></div><div class="thumbs" id="${id}_thumbs"></div>`;
+      }
+      html+=`</div>`;
+    });
+    if(TIPS[si]) html+=`<div class="tip">${esc(TIPS[si])}</div>`;
+    html+=`</div></section>`;
+  });
+  root.innerHTML=html;
+  root.addEventListener("input",e=>{const t=e.target;
+    if(t.dataset.k!==undefined && !t.classList.contains("chip")){A[t.dataset.k]=t.value;save();ring()}
+    if(t.dataset.oq){A.objects=A.objects||{};A.objects[t.dataset.oq]=Object.assign(A.objects[t.dataset.oq]||{},{n:t.value});save()}});
+  root.addEventListener("change",e=>{const t=e.target;
+    if(t.dataset.ck){A.photos=A.photos||{};A.photos[t.dataset.ck]=t.checked;save();ring()}
+    if(t.dataset.f){addFiles(t.dataset.f,t.files);t.value=""}});
+  root.addEventListener("click",e=>{
+    const b=e.target.closest("button.chip"); if(!b) return;
+    if(b.dataset.ok){const o=b.dataset.ok,yes=b.dataset.yes==="1";A.objects=A.objects||{};const c=A.objects[o]||{};c.yes=(c.yes===yes)?undefined:yes;A.objects[o]=c;
+      const row=b.parentElement;row.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",String((x.dataset.yes==="1")===c.yes)));
+      const inp=row.querySelector("input");inp.hidden=c.yes!==true;if(c.yes===true)inp.focus();save();ring();return}
+    const k=b.dataset.k,o=b.dataset.o;
+    if(b.dataset.multi==="1"){const arr=A[k]||[];const i=arr.indexOf(o);i>=0?arr.splice(i,1):arr.push(o);A[k]=arr;b.setAttribute("aria-pressed",String(i<0))}
+    else{A[k]=(A[k]===o)?"":o;b.parentElement.querySelectorAll(".chip").forEach(x=>x.setAttribute("aria-pressed",String(x.dataset.o===A[k])))}
+    save();ring();if(o==="Інше"&&A[k]&&(Array.isArray(A[k])?A[k].includes(o):A[k]===o))document.getElementById("q_"+k+"_other").focus()});
+  show(-1,false);
+}
+function addFiles(k,list){
+  for(const f of list){if(!FILES[k].some(x=>x.name===f.name&&x.size===f.size))FILES[k].push(f)}
+  const th=document.getElementById("q_"+k+"_thumbs"),cnt=document.getElementById("q_"+k+"_count");
+  const arr=FILES[k];cnt.textContent=arr.length?`Додано: ${arr.length} файл(ів), ${(arr.reduce((a,f)=>a+f.size,0)/1048576).toFixed(0)} МБ`:"";
+  th.innerHTML="";arr.slice(0,23).forEach(f=>{if(f.type.startsWith("image/")){const img=document.createElement("img");img.src=URL.createObjectURL(f);img.onload=()=>URL.revokeObjectURL(img.src);img.alt="";th.appendChild(img)}else{const d=document.createElement("div");d.className="vid";d.textContent="відео";th.appendChild(d)}});
+  if(arr.length>23){const m=document.createElement("div");m.className="more";m.textContent="+"+(arr.length-23);th.appendChild(m)}
+  ring();
+}
+function answered(q){const v=A[q.k];if(A[q.k+"_other"]&&String(A[q.k+"_other"]).trim())return true;
+  if(q.type==="files") return FILES[q.k].length>0;
+  if(q.type==="objects") return v&&Object.values(v).some(r=>r.yes!==undefined);
+  if(q.type==="checks") return v&&Object.values(v).some(Boolean);
+  return Array.isArray(v)?v.length>0:!!(v&&String(v).trim());}
+function ring(){const all=S.flatMap(s=>s.q);const n=all.filter(answered).length;const pct=Math.round(100*n/all.length);
+  document.getElementById("ring").style.setProperty("--p",pct);document.getElementById("ringText").textContent=pct+"%"}
+function show(i,scroll=true){
+  cur=i;
+  document.querySelectorAll(".step").forEach(s=>{const d=s.dataset.i;s.classList.toggle("on",d===String(i))});
+  const back=document.getElementById("btnBack"),next=document.getElementById("btnNext");
+  back.disabled=i===-1||i==="send"; next.hidden=i==="send";
+  next.textContent=i===-1?"Почати":(i===S.length-1?"Відправити дизайнеру":(i==="done"?"Відправити ще раз":"Далі"));
+  const p=typeof i==="number"?Math.max(0,(i+1)/S.length):1;
+  window.__setProgress&&window.__setProgress(i==="done"?1:p*.97);
+  ring();
+  if(scroll) window.scrollTo({top:0,behavior:"smooth"});
+}
+document.getElementById("btnNext").addEventListener("click",()=>{
+  if(cur==="done"){show(S.length-1);return}
+  if(cur===S.length-1){send();return}
+  show(cur+1)});
+document.getElementById("btnBack").addEventListener("click",()=>{if(cur==="done"){show(S.length-1);return}show(Math.max(-1,cur-1))});
+
+/* ---------- Build text ---------- */
+function build(){
+  const d=new Date().toLocaleString("uk-UA"); let out=`🏖 АНКЕТА: ПЛЯЖ НА ЖУРАВЛІВЦІ\n${d}\n`;
+  S.forEach((s,si)=>{out+=`\n━━ ${si+1}. ${s.t} ━━\n`;
+    s.q.forEach(q=>{const v=A[q.k];
+      if(q.type==="files"){out+=`${q.t}: ${FILES[q.k].length} файл(ів)\n`;return}
+      if(q.type==="objects"){const rows=Object.entries(v||{}).filter(([,r])=>r.yes!==undefined);
+        if(!rows.length){out+=`${q.t}: ${A.objects_other||"—"}\n`;return}
+        out+=`${q.t}:\n`+rows.map(([o,r])=>`  • ${o}: ${r.yes?"так"+(r.n?", "+r.n+" шт":""):"ні"}`).join("\n")+(A.objects_other?`\n  • інше: ${A.objects_other}`:"")+"\n";return}
+      if(q.type==="checks"){const done=Object.entries(v||{}).filter(([,x])=>x).map(([a])=>a);const not=q.o.map(([a])=>a).filter(a=>!(v||{})[a]);
+        out+=`Знято: ${done.length?done.join("; "):"—"}\nНе знято: ${not.length?not.join("; "):"усе"}\n`;return}
+      let s2=Array.isArray(v)?v.join(", "):(v||"");
+      if(A[q.k+"_other"]) s2+=(s2?"; ":"")+A[q.k+"_other"];
+      out+=`${q.t}: ${s2.trim()||"—"}\n`;});});
+  return out;
+}
+
+/* ---------- Send to Telegram ---------- */
+const log=(m,err)=>{const l=document.getElementById("log");l.textContent=m;l.classList.toggle("err",!!err)};
+const prog=v=>document.getElementById("progBar").style.width=(v*100)+"%";
+async function tg(method,body){
+  const r=await fetch(`https://api.telegram.org/bot${CONFIG.telegramToken}/${method}`,{method:"POST",body});
+  const j=await r.json().catch(()=>({}));
+  if(!r.ok||!j.ok) throw new Error(j.description||("HTTP "+r.status));
+  return j;
+}
+async function sendText(text){
+  for(let i=0;i<text.length;i+=3900){const fd=new FormData();fd.append("chat_id",CONFIG.telegramChatId);fd.append("text",text.slice(i,i+3900));fd.append("disable_web_page_preview","true");await tg("sendMessage",fd)}
+}
+async function sendFile(f,caption){
+  const fd=new FormData();fd.append("chat_id",CONFIG.telegramChatId);fd.append("caption",caption.slice(0,1000));
+  const asDoc=CONFIG.sendPhotosAsDocuments||f.type.startsWith("video/")||f.size>9.5e6;
+  fd.append(asDoc?"document":"photo",f,f.name); await tg(asDoc?"sendDocument":"sendPhoto",fd);
+}
+async function resolveChat(){
+  if(CONFIG.telegramChatId) return CONFIG.telegramChatId;
+  const r=await fetch(`https://api.telegram.org/bot${CONFIG.telegramToken}/getUpdates?limit=100`);
+  const j=await r.json().catch(()=>({}));
+  const chats=(j.result||[]).map(u=>(u.message||u.edited_message||{}).chat).filter(c=>c&&c.type==="private");
+  if(!chats.length) throw new Error("бот ще не знає, кому надсилати");
+  CONFIG.telegramChatId=String(chats[chats.length-1].id);
+  try{localStorage.setItem("zh-key",JSON.stringify([CONFIG.telegramToken,CONFIG.telegramChatId]))}catch(e){}
+  return CONFIG.telegramChatId;
+}
+async function send(){
+  show("send"); prog(0.02);
+  const text=build(), all=FILES.oldFiles.map(f=>[f,"файл"]);
+  if(CONFIG.telegramToken&&!CONFIG.telegramChatId){try{log("Шукаємо адресата…");await resolveChat()}catch(e){log("Не вдалося визначити адресата: "+e.message+". Повідомте власника сайту.",true);document.getElementById("btnBack").disabled=false;return}}
+  if(!CONFIG.telegramToken||!CONFIG.telegramChatId){
+    log("Відправка ще не налаштована. Відкриється Telegram із готовим текстом, виберіть, кому надіслати.");
+    const a=document.createElement("a");a.href="https://t.me/share/url?url="+encodeURIComponent("Анкета пляжу")+"&text="+encodeURIComponent(text.slice(0,3500));a.target="_blank";a.rel="noopener";a.className="btn";a.style.display="block";a.style.marginTop="12px";a.style.textAlign="center";a.textContent="Відкрити Telegram";document.querySelector(".sendbox").appendChild(a);
+    document.getElementById("btnBack").disabled=false;return;
+  }
+  try{
+    log("Надсилаємо відповіді…"); await sendText(text); prog(0.12);
+    let sent=0,failed=[];
+    for(const [f,tag] of all){
+      log(`Надсилаємо файл ${sent+1} з ${all.length}: ${f.name}`);
+      try{await sendFile(f,`${tag} · ${f.name}`)}catch(e){failed.push(f.name);console.warn(e)}
+      sent++; prog(0.12+0.86*sent/Math.max(1,all.length));
+    }
+    const machine="#DATA:"+btoa(unescape(encodeURIComponent(JSON.stringify({A,files:all.map(([f,t])=>[t,f.name,f.size]),failed}))));
+    try{await sendText(machine)}catch(e){}
+    prog(1);
+    document.getElementById("doneCount").textContent=String(sent-failed.length);
+    document.getElementById("doneNote").textContent=failed.length?`Не долетіли (${failed.length}): ${failed.join(", ")}. Поверніться і натисніть «Відправити ще раз».`:"";
+    show("done"); confetti();
+  }catch(e){
+    log("Не вдалося відправити: "+e.message+". Перевірте інтернет і натисніть «Назад», потім «Відправити» ще раз.",true);
+    document.getElementById("btnBack").disabled=false;
+  }
+}
+function confetti(){
+  if(matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const c=document.getElementById("confetti"),x=c.getContext("2d");c.hidden=false;
+  c.width=innerWidth*devicePixelRatio;c.height=innerHeight*devicePixelRatio;x.scale(devicePixelRatio,devicePixelRatio);
+  const cols=["#ff7a59","#ffb36b","#4fd1c5","#f4f1ea","#ffd36b"];
+  const P=Array.from({length:160},()=>({x:Math.random()*innerWidth,y:-20-Math.random()*innerHeight*.5,r:4+Math.random()*6,vy:2+Math.random()*3,vx:(Math.random()-.5)*2,a:Math.random()*6,c:cols[Math.random()*cols.length|0]}));
+  const t0=performance.now();
+  (function f(now){x.clearRect(0,0,innerWidth,innerHeight);
+    P.forEach(p=>{p.y+=p.vy;p.x+=p.vx+Math.sin(p.y/30);p.a+=.1;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);x.restore()});
+    if(now-t0<3400) requestAnimationFrame(f); else {x.clearRect(0,0,innerWidth,innerHeight);c.hidden=true}})(t0);
+}
+addEventListener("beforeunload",e=>{if(FILES.oldFiles.length){if(cur!=="done"){e.preventDefault();e.returnValue=""}}});
+render();
+</script>
+</body>
+</html>
