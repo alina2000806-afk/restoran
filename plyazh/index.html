@@ -123,6 +123,7 @@ canvas.confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:non
       <h1>Намалюємо пляж <span>під ваш берег</span></h1>
       <p>Дев'ять коротких кроків про ділянку, гостей, стиль і бюджет. Майже всюди достатньо натиснути варіант, а поруч завжди є вільне поле для свого. Що не знаєте, пропускайте. Наприкінці все само відправиться дизайнеру.</p>
       <div class="pills"><span class="pill">9 кроків</span><span class="pill">≈ 10 хвилин</span><span class="pill">з телефону</span><span class="pill">без реєстрації</span></div>
+      <button type="button" id="btnReset" class="chip" style="margin-top:16px" hidden>Почати заново, стерти попередні відповіді</button>
     </section>
     <div id="steps"></div>
 
@@ -140,7 +141,7 @@ canvas.confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:non
       <div class="kicker">Готово</div>
       <h2>Все долетіло. Дякуємо!</h2>
       <div class="glass">
-        <p style="margin:12px 0 0">Відповіді вже у дизайнера (файлів: <b id="doneCount">0</b>). Якщо згадаєте щось іще, просто поверніться сюди, змініть і натисніть «Відправити» знову.</p>
+        <p style="margin:12px 0 0">Відповіді вже у дизайнера.<b id="doneCount" hidden></b> Якщо згадаєте щось іще, натисніть «Назад», допишіть і відправте ще раз, поки не закрили сторінку.</p>
         <p class="log" id="doneNote"></p>
         <p class="log" id="doneLink" hidden>Для власника: посилання з закріпленим адресатом, саме його надсилайте іншим:<br><code style="word-break:break-all;font-size:12px;color:var(--aqua)"></code></p>
       </div>
@@ -360,14 +361,13 @@ const S = [
   {k:"purpose", t:"Для кого візуалізація", r:1, type:"chips", multi:true, o:["Для себе, зрозуміти задум","Для інвестора або партнера","Для міськради та погоджень","Для реклами і соцмереж","Для будівельників"]},
   {k:"views", t:"Які види потрібні", type:"chips", multi:true, o:["Генплан згори з розмірами","Вид із набережної","Вид від води","Вечірній вид","Усередині альтанки","Бар зблизька","Відеообліт"]},
   {k:"deadline", t:"Коли потрібен результат", type:"text", ph:"наприклад, до 15 листопада"},
-  {k:"oldFiles", t:"Якщо зручно, додайте фото або файли сюди", w:"Необов'язково: фото ділянки можна надіслати і окремо.", type:"files"},
   {k:"extra", t:"Що ще важливо сказати", type:"area"},
   {k:"contact", t:"Як вас звати і як зв'язатися", r:1, type:"text", ph:"ім'я, телефон або @telegram"},
  ]},
 ];
 const TIPS={0:"Не знаєте відповіді? Пропускайте або пишіть у вільне поле.",6:"Краще викреслити зайве потім, ніж забути потрібне зараз.",8:"Ви майже на місці. Натисніть «Відправити», і все само долетить."};
 
-const KEY="zhuravlivka-v3";
+const KEY="zhuravlivka-v4";
 let A={}; try{A=JSON.parse(localStorage.getItem(KEY)||"{}")||{}}catch(e){A={}}
 const FILES={oldFiles:[]};
 let cur=-1;
@@ -529,6 +529,7 @@ async function send(){
     document.getElementById("doneNote").textContent=failed.length?`Не долетіли (${failed.length}): ${failed.join(", ")}. Поверніться і натисніть «Відправити ще раз».`:"";
     const link=location.origin+location.pathname+"#k="+encodeURIComponent(CONFIG.telegramToken+"|"+CONFIG.telegramChatId);
     const dl=document.getElementById("doneLink"); dl.hidden=false; dl.querySelector("code").textContent=link;
+    try{localStorage.removeItem(KEY)}catch(e){}
     show("done"); confetti();
   }catch(e){
     log("Не вдалося відправити: "+e.message+". Перевірте інтернет і натисніть «Назад», потім «Відправити» ще раз.",true);
@@ -548,6 +549,10 @@ function confetti(){
 }
 addEventListener("beforeunload",e=>{if(FILES.oldFiles.length){if(cur!=="done"){e.preventDefault();e.returnValue=""}}});
 render();
+(function(){const b=document.getElementById("btnReset");
+  const has=Object.keys(A).some(k=>{const v=A[k];return v&&(typeof v!=="object"||Object.keys(v).length)});
+  b.hidden=!has;
+  b.addEventListener("click",()=>{try{localStorage.removeItem(KEY)}catch(e){};location.reload()});})();
 </script>
 </body>
 </html>
