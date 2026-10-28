@@ -1,0 +1,18 @@
+name: tg-chatid
+on:
+  workflow_dispatch:
+    inputs:
+      token:
+        description: "Bot token"
+        required: true
+jobs:
+  get:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Find chats that wrote to the bot
+        env:
+          TOKEN: ${{ inputs.token }}
+        run: |
+          echo "::add-mask::$TOKEN"
+          curl -s "https://api.telegram.org/bot$TOKEN/getUpdates" \
+            | jq -c '[.result[] | (.message // .edited_message // .my_chat_member // {}).chat | select(. != null) | {id, type, first_name, username}] | unique'
