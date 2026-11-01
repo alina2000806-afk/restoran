@@ -22,7 +22,13 @@ window.OBLIK_DROP = function(o){
 
 /* Разові виправлення записів у браузері Аліни. Кожне застосовується один раз (позначка fx1). */
 window.OBLIK_FIX = function(o){
- if(o.fx1||o.type!=="rent")return false;
+ if(o.type!=="rent")return false;
+ // 3 щури, OLX, 0665385327, оренда 01.11, повернення 02.11 — костюми ще в клієнта, застава 2000 у мене
+ if(!o.fx2 && String(o.client||"").replace(/\D/g,"").indexOf("0665385327")>=0 && o.from==="2026-11-01"){
+  o.returned=false;o.returnedAt="";o.done=false;o.depBack=false;o.depBackAt="";
+  o.depTaken=true;o.depTakenAt=o.depTakenAt||o.from;o.fx2=true;return true;
+ }
+ if(o.fx1)return false;
  // замовлення на 4 щури на 15.10, телефон 0985680010 — самовивіз, ще не віддали
  if(String(o.client||"").replace(/\D/g,"").indexOf("0985680010")>=0 && /Щур/.test(o.costume||"") && o.from==="2026-10-15"){
   o.pickup=true;o.ship=o.from;o.back=o.to||o.from;o.ttn="";o.sent=false;o.fx1=true;return true;
