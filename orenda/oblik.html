@@ -365,7 +365,8 @@ function lagOf(o){return /харк/i.test(o.city||"")?1:2}
 /* де костюм із цього запису в день s: "road" — в дорозі, "rent" — в клієнта, "" — вдома */
 function stateOf(o,s){
  if(o.type!=="rent"||!o.from)return "";
- if((o.returned||o.done)&&s>=(o.returnedAt||ymd(today())))return "";
+ /* «повернули» знімає костюм з оренди; закрита застава сама по собі — ні, тоді діють дати оренди */
+ if(o.returned&&s>=(o.returnedAt||ymd(today())))return "";
  if(o.pickup){var ret=o.back||o.to||o.from;return (s>=o.from&&s<=ret)?"rent":""}
  var from=o.from,to=o.to||o.from,ship=o.ship||from,back=o.back||addDays(to,1);
  if(s<ship)return "";
