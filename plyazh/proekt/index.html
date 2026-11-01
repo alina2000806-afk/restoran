@@ -57,6 +57,8 @@ h2{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,40px);l
 figure{margin:0}
 figure img{width:100%;height:auto;display:block;border-radius:18px;border:1px solid var(--stroke)}
 figcaption{font-size:13px;color:var(--muted);margin-top:8px}
+figcaption a{color:var(--accent-2)}
+.viz img{image-rendering:auto}
 .photos{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
 @media (max-width:560px){.photos{grid-template-columns:1fr}}
 .photos img{aspect-ratio:4/3;object-fit:cover}
@@ -116,7 +118,7 @@ pre{white-space:pre-wrap;background:rgba(0,0,0,.28);border:1px solid var(--strok
       <h1>Пляж, який <span>хочеться показувати</span></h1>
       <p>Концепція благоустрою ділянки від кафе «Червона мавпа» до точки «Пляж Основа». Генплан за вашим ескізом, перелік об'єктів, стиль і готові види для візуалізації. Усе зібрано з анкети і фотофіксації 30 жовтня.</p>
       <div class="pills"><span class="pill">≈ 200 м берега</span><span class="pill">вода з двох боків</span><span class="pill">до 500 гостей</span><span class="pill">30–70 тис. $</span><span class="pill">цілий рік</span></div>
-      <nav class="toc"><a href="#dilyanka">Ділянка</a><a href="#genplan">Генплан</a><a href="#obiekty">Об'єкти</a><a href="#styl">Стиль</a><a href="#vydy">Види для візуалізації</a><a href="#pytannya">Що уточнити</a></nav>
+      <nav class="toc"><a href="#dilyanka">Ділянка</a><a href="#genplan">Генплан</a><a href="#obiekty">Об'єкти</a><a href="#styl">Стиль</a><a href="#viz">Візуалізації</a><a href="#vydy">Наступні види</a></nav>
     </section>
 
     <!-- 1 -->
@@ -238,77 +240,60 @@ pre{white-space:pre-wrap;background:rgba(0,0,0,.28);border:1px solid var(--strok
       </div>
     </section>
 
+    <!-- viz -->
+    <section class="part" id="viz">
+      <div class="kicker">05 · Візуалізації</div>
+      <h2>Як це виглядатиме</h2>
+      <p class="hint">Перші чотири концепт-картинки у вибраному стилі. Тут прев'ю, повний розмір відкривається за посиланням.</p>
+      <div class="photos viz">
+        <figure><a href="https://www.canva.com/M/MAHZrs6pGtM" target="_blank" rel="noopener"><img src="foto/viz-plyazh.png" alt="Головний пляж" loading="lazy"></a><figcaption>Головний пляж із набережної · <a href="https://www.canva.com/M/MAHZrs6pGtM" target="_blank" rel="noopener">повний розмір</a></figcaption></figure>
+        <figure><a href="https://www.canva.com/M/MAHZrkEah4U" target="_blank" rel="noopener"><img src="foto/viz-vip.png" alt="VIP-альтанки" loading="lazy"></a><figcaption>Зона VIP-альтанок · <a href="https://www.canva.com/M/MAHZrkEah4U" target="_blank" rel="noopener">повний розмір</a></figcaption></figure>
+        <figure><a href="https://www.canva.com/M/MAHZrkqFUcg" target="_blank" rel="noopener"><img src="foto/viz-bar.png" alt="Бар" loading="lazy"></a><figcaption>Бар зблизька · <a href="https://www.canva.com/M/MAHZrkqFUcg" target="_blank" rel="noopener">повний розмір</a></figcaption></figure>
+        <figure><a href="https://www.canva.com/M/MAHZrvDG8eA" target="_blank" rel="noopener"><img src="foto/viz-domyky.png" alt="Будиночки з чанами" loading="lazy"></a><figcaption>Будиночки з чанами · <a href="https://www.canva.com/M/MAHZrvDG8eA" target="_blank" rel="noopener">повний розмір</a></figcaption></figure>
+      </div>
+    </section>
+
     <!-- 5 -->
     <section class="part" id="vydy">
-      <div class="kicker">05 · Види для візуалізації</div>
-      <h2>Десять картинок на ваших фото</h2>
+      <div class="kicker">06 · Наступні види</div>
+      <h2>Ще шість видів на ваших фото</h2>
       <p class="hint">Для кожного виду береться реальне фото місця і на його основі генерується картинка. Під кожним фото готовий промпт для генератора зображень (англійською, так точніше). Фото і промпт відправляються разом.</p>
 
-      <article class="view"><div class="num">Вид 1</div><h3>Головний пляж із набережної</h3>
-        <img src="foto/plyazh.jpg" alt="" loading="lazy">
-        <details><summary>Промпт</summary><pre id="p1">Edit this photo. Keep the exact location, camera angle, the two big trees, the water and the far shore. Make it summer, bright afternoon. Turn the sand into a tidy city beach: rows of light wooden sun loungers with natural linen cushions and beige canvas umbrellas, a wooden boardwalk path from the promenade to the water, a small wooden pier with a SUP and kayak rack at the shore, a few people relaxing and kids near the water. Light pale wood, linen fabric, some charred-black wood accents (shou sugi ban), string lights hanging between the trees. Clean, calm, premium but simple. Photorealistic, same lens and lighting as the original.</pre><button class="btn" onclick="cp('p1',this)">Скопіювати</button></details>
-      </article>
 
-      <article class="view"><div class="num">Вид 2</div><h3>Набережна і вхід на пляж</h3>
+      <article class="view"><div class="num">Вид 1</div><h3>Набережна і вхід на пляж</h3>
         <img src="foto/vhid.jpg" alt="" loading="lazy">
         <details><summary>Промпт</summary><pre id="p2">Edit this photo. Keep the same promenade, trees, curb line and water on the right. Summer day. Along the sandy side add a welcoming beach entrance: a light wooden arch with a small sign, a wooden reception kiosk in pale wood with charred-wood accents, a row of six wooden changing cabins and outdoor showers further along, large wooden planters with grasses and ropes as a soft boundary instead of a fence. Wooden deck walkways leading onto the sand, string lights crossing above the promenade between the trees, people walking in. Natural materials only: pale wood, linen, black charred wood. Photorealistic, same camera.</pre><button class="btn" onclick="cp('p2',this)">Скопіювати</button></details>
       </article>
 
-      <article class="view"><div class="num">Вид 3</div><h3>Зона VIP-альтанок</h3>
-        <img src="foto/altanky.jpg" alt="" loading="lazy">
-        <details><summary>Промпт</summary><pre id="p3">Edit this photo. Keep the trees, the sand and the water in the background. Summer evening, golden hour. Place four VIP gazebos among the trees: open timber frames of pale wood on wooden decks, white and natural linen curtains tied to the posts, low tables, soft cushions, warm string lights along the roofs, lanterns standing in the sand. Between the gazebos a small hookah lounge with low sofas. A few guests relaxing. Natural materials, pale wood, linen, charred-wood details. Photorealistic, same camera angle and lens.</pre><button class="btn" onclick="cp('p3',this)">Скопіювати</button></details>
-      </article>
 
-      <article class="view"><div class="num">Вид 4</div><h3>Усередині VIP-альтанки</h3>
+      <article class="view"><div class="num">Вид 2</div><h3>Усередині VIP-альтанки</h3>
         <img src="foto/altanky.jpg" alt="" loading="lazy">
         <details><summary>Промпт</summary><pre id="p4">Using this location as reference, generate a photorealistic view from inside a VIP beach gazebo looking out at the lake and the trees. Open timber frame of pale wood, wooden deck floor, natural linen curtains gently blown by the wind, a low wooden table with drinks, soft beige cushions and a linen sofa, a small lantern, string lights under the roof. Late afternoon summer light, water sparkling, sand and trees outside. Calm, premium, simple. Same place and vegetation as the photo.</pre><button class="btn" onclick="cp('p4',this)">Скопіювати</button></details>
       </article>
 
-      <article class="view"><div class="num">Вид 5</div><h3>Бар зблизька</h3>
-        <img src="foto/bar.jpg" alt="" loading="lazy">
-        <details><summary>Промпт</summary><pre id="p5">Edit this photo. Keep the trees, the water and the far shore. Summer. In the foreground on the sand build a beach bar: a long counter made of charred black wood (shou sugi ban) with a pale wood top, wooden bar stools, a light timber canopy with a reed or shingle roof, a decking floor around it, shelves with bottles, a grill zone next to it, string lights hanging over the deck, a few people at the counter and a bartender. Natural materials, pale wood, linen, black charred wood. Photorealistic, close-up view of the bar, same camera lens.</pre><button class="btn" onclick="cp('p5',this)">Скопіювати</button></details>
-      </article>
 
-      <article class="view"><div class="num">Вид 6</div><h3>Будиночки з чанами на боці ліска</h3>
-        <div class="pair"><img src="foto/domyky.jpg" alt="" loading="lazy"><img src="foto/domyky2.jpg" alt="" loading="lazy"></div>
-        <details><summary>Промпт</summary><pre id="p6">Edit this photo. Keep the trees, the quiet water and the reeds. Summer, soft evening light. Place two small guest cabins among the trees on the shore: compact timber cabins on piles, pale wood walls with charred black wood accents, large windows facing the water, each with a wooden terrace and a round wooden hot tub (wood-fired "chan") on the deck, steam rising, lanterns and string lights, a path of wooden decking to the water. Cozy, private, natural. Photorealistic, same camera angle.</pre><button class="btn" onclick="cp('p6',this)">Скопіювати</button></details>
-      </article>
 
-      <article class="view"><div class="num">Вид 7</div><h3>Волейбол і дитяча зона</h3>
+      <article class="view"><div class="num">Вид 3</div><h3>Волейбол і дитяча зона</h3>
         <img src="foto/voleybol.jpg" alt="" loading="lazy">
         <details><summary>Промпт</summary><pre id="p7">Edit this photo. Keep the trees, the existing poles and the water in the background. Summer day. Make the sandy area a clean beach volleyball court with a new net on the existing poles, rope boundary lines, wooden benches for spectators, people playing. On the left under the trees a small wooden kids' corner: a low wooden play structure, a sandbox and a shade sail in natural linen. Pale wood, linen, charred-wood accents. Photorealistic, same camera.</pre><button class="btn" onclick="cp('p7',this)">Скопіювати</button></details>
       </article>
 
-      <article class="view"><div class="num">Вид 8</div><h3>Мис і фотозона</h3>
+      <article class="view"><div class="num">Вид 4</div><h3>Мис і фотозона</h3>
         <img src="foto/mys.jpg" alt="" loading="lazy">
         <details><summary>Промпт</summary><pre id="p8">Edit this photo. Keep the trees, the water and the shoreline. Summer. Remove the yellow metal box. On the sandy cape add a photo spot: a wooden swing hanging from a pale timber frame near the water, a few wooden loungers, a small wooden pontoon with two catamarans and kayaks moored, lanterns standing in the sand, string lights between the trees. People taking photos. Natural materials, pale wood, linen. Photorealistic, same camera angle.</pre><button class="btn" onclick="cp('p8',this)">Скопіювати</button></details>
       </article>
 
-      <article class="view"><div class="num">Вид 9</div><h3>Вечірній вид</h3>
+      <article class="view"><div class="num">Вид 5</div><h3>Вечірній вид</h3>
         <img src="foto/vechir.jpg" alt="" loading="lazy">
         <details><summary>Промпт</summary><pre id="p9">Edit this photo. Keep the trees, the sand and the lake with the sunset. Summer evening, sun just setting. Fill the beach with warm life: wooden loungers with linen cushions, open timber gazebos with linen curtains, warm string lights hanging between the trees and over the gazebos, lanterns standing in the sand, soft uplighting on the tree trunks, a beach bar glowing in the distance with a charred-wood counter, people sitting and walking, reflections on the water. Warm, cozy, premium but natural. Photorealistic, same camera.</pre><button class="btn" onclick="cp('p9',this)">Скопіювати</button></details>
       </article>
 
-      <article class="view"><div class="num">Вид 10</div><h3>Генплан згори</h3>
+      <article class="view"><div class="num">Вид 6</div><h3>Генплан згори</h3>
         <img src="foto/suputnyk.jpg" alt="" loading="lazy" style="max-width:360px">
         <details><summary>Промпт</summary><pre id="p10">Using this satellite image as the exact base, generate a top-down architectural masterplan rendering of a city beach on this narrow spit of land between two lakes. Keep the shape of the land, the central path and the trees. Summer, soft shadows. From south (bottom, entrance) to north (top, cape): entrance with reception and six changing cabins, showers and toilets near the entrance; on the east side a beach volleyball court, a small kids' corner, a bar with kitchen and grill in the middle, and two small guest cabins with round hot tubs on terraces in the wooded part; on the west side four VIP gazebos with linen curtains near the entrance, then a long beach with rows of wooden loungers and umbrellas, five open gazebos, a SUP and kayak rental with a small pier; at the northern cape a photo spot with a swing and a pontoon with catamarans. Wooden deck paths, pale wood, linen, charred-wood accents, string lights. Clean readable masterplan style, slight 3D feel, with short labels.</pre><button class="btn" onclick="cp('p10',this)">Скопіювати</button></details>
       </article>
     </section>
 
-    <!-- 6 -->
-    <section class="part" id="pytannya">
-      <div class="kicker">06 · Що уточнити</div>
-      <h2>Сім питань перед фінальними картинками</h2>
-      <div class="glass pad">
-        <label class="check"><i></i><span><b>Вода</b><span>Є підключення чи потрібна свердловина</span></span></label>
-        <label class="check"><i></i><span><b>Електрика</b><span>Доступна потужність для бару, кухні та освітлення</span></span></label>
-        <label class="check"><i></i><span><b>Зона «М» на мисі</b><span>Що саме там планується</span></span></label>
-        <label class="check"><i></i><span><b>Альтанки</b><span>На скільки людей кожна VIP і звичайна</span></span></label>
-        <label class="check"><i></i><span><b>Назва і логотип</b><span>Для вивіски на вході та фотозон</span></span></label>
-        <label class="check"><i></i><span><b>Доріжка</b><span>Чи входить плиткова доріжка в територію повністю</span></span></label>
-        <label class="check"><i></i><span><b>Режим</b><span>Години роботи і як працює бар узимку</span></span></label>
-      </div>
-    </section>
 
     <footer class="foot">Фото ділянки і ескізи: замовник, 30.10.2026. Генплан орієнтовний.</footer>
   </main>
