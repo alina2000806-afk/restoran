@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Пляж на Журавлівці — концепція</title>
+<meta name="description" content="Концепція благоустрою пляжу на Журавлівці: генплан, об'єкти, стиль і види для візуалізації">
+<meta name="theme-color" content="#0b1522">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&family=Manrope:wght@500;600;800&display=swap">
+<style>
+:root{
+  --bg:#0b1522; --fg:#f4f1ea; --muted:rgba(244,241,234,.62); --glass:rgba(255,255,255,.07); --glass-2:rgba(255,255,255,.12); --stroke:rgba(255,255,255,.14);
+  --accent:#ff7a59; --accent-2:#ffb36b; --aqua:#4fd1c5; --ok:#4fd1a0;
+  --display:"Unbounded",system-ui,sans-serif; --body:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.5;overflow-x:hidden}
+#gl{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:0;background:radial-gradient(120% 80% at 50% 0%,#1d3a52,#0b1522 70%)}
+.veil{position:fixed;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(11,21,34,0) 0%,rgba(11,21,34,.25) 40%,rgba(11,21,34,.82) 100%)}
+.ui{position:relative;z-index:2;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.col{max-width:720px;margin:0 auto;width:100%}
+
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:calc(14px + env(safe-area-inset-top,0px)) 8px}
+.brand{font-family:var(--display);font-weight:800;font-size:13px;letter-spacing:.14em;text-transform:uppercase}
+.brand small{display:block;font-family:var(--body);font-weight:600;letter-spacing:.08em;font-size:11px;color:var(--muted)}
+.date{font-size:12px;color:var(--muted);font-weight:700;text-align:right}
+
+.hero{min-height:calc(100vh - 80px);display:flex;flex-direction:column;justify-content:flex-end;padding-bottom:48px;animation:rise .7s cubic-bezier(.2,.8,.2,1) both}
+.hero h1{font-family:var(--display);font-weight:800;font-size:clamp(34px,8.5vw,64px);line-height:1;margin:0;text-wrap:balance;letter-spacing:-.01em}
+.hero h1 span{background:linear-gradient(90deg,var(--accent-2),var(--accent));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:var(--muted);max-width:36em;margin:14px 0 0;font-size:16.5px}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.pill{font-size:12.5px;font-weight:700;padding:8px 12px;border-radius:99px;background:var(--glass);border:1px solid var(--stroke);backdrop-filter:blur(10px)}
+.toc{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.toc a{color:var(--fg);text-decoration:none;font-size:13px;font-weight:800;padding:9px 13px;border-radius:12px;background:var(--glass);border:1px solid var(--stroke);backdrop-filter:blur(10px)}
+.toc a:hover{background:var(--glass-2)}
+
+section.part{padding:36px 0 10px;scroll-margin-top:16px}
+.kicker{font-family:var(--display);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent-2);font-weight:600}
+h2{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,40px);line-height:1.05;margin:8px 0 0;text-wrap:balance;letter-spacing:-.01em}
+.hint{color:var(--muted);margin:8px 0 0;font-size:15px}
+.glass{margin-top:18px;background:var(--glass);border:1px solid var(--stroke);border-radius:24px;padding:8px 18px 14px;backdrop-filter:blur(18px) saturate(140%);-webkit-backdrop-filter:blur(18px) saturate(140%);box-shadow:0 30px 80px -40px rgba(0,0,0,.8), inset 0 1px 0 rgba(255,255,255,.08)}
+.glass.pad{padding:16px 18px 18px}
+.q{padding-block:14px;border-bottom:1px solid var(--stroke)}
+.q:last-child{border-bottom:0;padding-bottom:6px}
+.q .t{display:block;font-weight:800;font-size:16px;line-height:1.3}
+.q .why{font-size:14px;color:var(--muted);margin:4px 0 0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
+@media (max-width:560px){.grid2{grid-template-columns:1fr}}
+.card{background:var(--glass);border:1px solid var(--stroke);border-radius:20px;padding:14px 16px;backdrop-filter:blur(14px)}
+.card b{font-family:var(--display);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-2);display:block;margin-bottom:6px}
+.card p{margin:0;font-size:15px}
+
+figure{margin:0}
+figure img{width:100%;height:auto;display:block;border-radius:18px;border:1px solid var(--stroke)}
+figcaption{font-size:13px;color:var(--muted);margin-top:8px}
+figcaption a{color:var(--accent-2)}
+.viz img{image-rendering:auto}
+.photos{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+@media (max-width:560px){.photos{grid-template-columns:1fr}}
+.photos img{aspect-ratio:4/3;object-fit:cover}
+
+.plan{display:grid;grid-template-columns:minmax(200px,260px) 1fr;gap:16px;align-items:start}
+@media (max-width:600px){.plan{grid-template-columns:1fr}}
+svg.map{width:100%;height:auto;border-radius:18px;border:1px solid var(--stroke)}
+.leg{display:grid;grid-template-columns:auto 1fr;gap:7px 10px;align-items:start;font-size:14px}
+.leg .k{display:inline-block;min-width:34px;height:24px;border-radius:7px;text-align:center;font-weight:800;font-size:11px;line-height:24px;color:#fff;padding:0 6px;font-family:var(--display)}
+
+table{border-collapse:collapse;width:100%;font-size:14.5px;margin-top:6px}
+td,th{border-bottom:1px solid var(--stroke);padding:9px 8px 9px 0;text-align:left;vertical-align:top}
+th{font-family:var(--display);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
+td.n{font-family:var(--display);font-weight:800;color:var(--accent-2);white-space:nowrap}
+tr:last-child td{border-bottom:0}
+
+.view{margin-top:18px;background:var(--glass);border:1px solid var(--stroke);border-radius:24px;padding:14px 16px 16px;backdrop-filter:blur(18px) saturate(140%);box-shadow:0 30px 80px -40px rgba(0,0,0,.8)}
+.view .num{font-family:var(--display);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--aqua);font-weight:600}
+.view h3{font-family:var(--display);font-weight:800;font-size:clamp(18px,4.5vw,24px);margin:4px 0 10px;line-height:1.15}
+.view .pair{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media (max-width:560px){.view .pair{grid-template-columns:1fr}}
+.view img{width:100%;height:auto;display:block;border-radius:16px;border:1px solid var(--stroke)}
+details{margin-top:12px}
+summary{cursor:pointer;font-weight:800;font-size:14px;color:var(--accent-2);list-style:none;display:flex;align-items:center;gap:8px}
+summary::before{content:"";width:8px;height:8px;border-right:2px solid var(--accent-2);border-bottom:2px solid var(--accent-2);transform:rotate(-45deg);transition:transform .2s}
+details[open] summary::before{transform:rotate(45deg)}
+pre{white-space:pre-wrap;background:rgba(0,0,0,.28);border:1px solid var(--stroke);border-radius:14px;padding:12px 14px;font:13.5px/1.5 ui-monospace,Menlo,Consolas,monospace;margin:10px 0 0;color:rgba(244,241,234,.9)}
+.btn{font:inherit;font-family:var(--display);font-weight:600;font-size:13px;border:0;border-radius:14px;padding:11px 16px;cursor:pointer;background:linear-gradient(135deg,var(--accent),#ff9a76);color:#1a0d08;margin-top:10px;transition:transform .15s,filter .2s;box-shadow:0 14px 30px -14px rgba(255,122,89,.7)}
+.btn:active{transform:scale(.97)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.chip{font-weight:700;font-size:13.5px;border:1px solid var(--stroke);background:var(--glass);color:var(--fg);border-radius:99px;padding:8px 13px}
+.chip.on{background:linear-gradient(135deg,var(--accent),#ff9a76);border-color:transparent;color:#1a0d08}
+.check{display:flex;gap:12px;align-items:flex-start;padding:11px 0;border-bottom:1px dashed var(--stroke)}
+.check:last-child{border-bottom:0}
+.check i{flex:none;width:24px;height:24px;border-radius:8px;border:2px solid var(--aqua);margin-top:1px}
+.check b{font-weight:800;display:block}
+.check span span{font-size:13.5px;color:var(--muted);display:block;margin-top:2px}
+.foot{padding:40px 0 calc(40px + env(safe-area-inset-bottom,0px));color:var(--muted);font-size:13px}
+@keyframes rise{from{opacity:0;transform:translateY(18px) scale(.985)}to{opacity:1;transform:none}}
+.part{animation:rise .6s cubic-bezier(.2,.8,.2,1) both}
+@media (prefers-reduced-motion:reduce){.part,.hero{animation:none}}
+</style>
+</head>
+<body>
+<canvas id="gl" aria-hidden="true"></canvas>
+<div class="veil"></div>
+
+<div class="ui">
+  <header class="top col">
+    <div class="brand">Журавлівка<small>Харків · річка Харків · концепція</small></div>
+    <div class="date">01.11.2026<br>за анкетою від 30.10</div>
+  </header>
+
+  <main class="col">
+    <section class="hero">
+      <div class="kicker">Пляж на Журавлівці</div>
+      <h1>Пляж, який <span>хочеться показувати</span></h1>
+      <p>Концепція благоустрою ділянки від кафе «Червона мавпа» до точки «Пляж Основа». Генплан за вашим ескізом, перелік об'єктів, стиль і готові види для візуалізації. Усе зібрано з анкети і фотофіксації 30 жовтня.</p>
+      <div class="pills"><span class="pill">≈ 200 м берега</span><span class="pill">вода з двох боків</span><span class="pill">до 500 гостей</span><span class="pill">30–70 тис. $</span><span class="pill">цілий рік</span></div>
+      <nav class="toc"><a href="#dilyanka">Ділянка</a><a href="#genplan">Генплан</a><a href="#obiekty">Об'єкти</a><a href="#styl">Стиль</a><a href="#viz">Візуалізації</a></nav>
+    </section>
+
+    <!-- 1 -->
+    <section class="part" id="dilyanka">
+      <div class="kicker">01 · Ділянка</div>
+      <h2>Вузька коса між двома плесами</h2>
+      <p class="hint">Плиткова доріжка йде по хребту коси. Ліворуч, на захід, широкий природний піщаний берег з великою водою. Праворуч, на схід, лісок і тиха затока з очеретом. Вхід з півдня, з боку дороги, машина під'їжджає до будь-якої точки.</p>
+      <div class="photos">
+        <figure><img src="foto/plyazh.jpg" alt="Головний пляж" loading="lazy"><figcaption>Головний пляж, захід. Природний пісок, сухо навіть навесні.</figcaption></figure>
+        <figure><img src="foto/naberezhna.jpg" alt="Набережна" loading="lazy"><figcaption>Доріжка вздовж берега. Міські ліхтарі лишаються.</figcaption></figure>
+        <figure><img src="foto/domyky.jpg" alt="Тиха вода, лісок" loading="lazy"><figcaption>Східний бік: лісок, затока, очерет частково вичистимо.</figcaption></figure>
+        <figure><img src="foto/mys.jpg" alt="Мис" loading="lazy"><figcaption>Мис біля «Парк Основа». Найкращий вид на захід сонця.</figcaption></figure>
+      </div>
+      <div class="grid2">
+        <div class="card"><b>Межі</b><p>Від кафе «Червона мавпа» до «Пляж Основа». З боків чужий пляж, дорога і зарості. Доріжка може стати частиною території, це ще погоджується.</p></div>
+        <div class="card"><b>Вода і дно</b><p>Пляж для купання. Глибина різна, дно піщане з водоростями, приберемо. На воді: пірс або понтон, сапи, каяки, човни, катамарани.</p></div>
+        <div class="card"><b>Дерева</b><p>Близько 25–30 дерев, тінь ділянками. Лишаються всі, окремі прибираємо за погодженням. Нові рослини тільки біля альтанок і будиночків.</p></div>
+        <div class="card"><b>Комунікації</b><p>Електрика на ділянці є, потужність уточнюється. Вода уточнюється. Біотуалети. Освітлення зараз тільки міські ліхтарі.</p></div>
+      </div>
+    </section>
+
+    <!-- 2 -->
+    <section class="part" id="genplan">
+      <div class="kicker">02 · Генплан</div>
+      <h2>Що і де стоїть</h2>
+      <p class="hint">Схема за вашим ескізом на карті. Північ угорі, вхід знизу. Розміри приблизні, за супутниковим знімком; перед погодженням у міськраді потрібна геодезія.</p>
+      <div class="glass pad">
+        <div class="plan">
+<svg class="map" viewBox="0 0 300 760" role="img" aria-label="Схема генплану">
+<defs><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="#ff7a59" stroke-width="2"/></pattern></defs>
+<rect width="300" height="760" fill="#15324a"/>
+<path d="M150 18 C205 30 230 70 215 120 L205 210 C200 260 200 330 195 400 L195 520 C195 600 200 660 205 745 L80 745 C90 660 85 580 90 500 L95 380 C100 300 90 230 95 170 C100 110 95 40 150 18 Z" fill="#d9c08f"/>
+<path d="M200 330 L195 400 L195 520 L185 520 C175 470 180 400 180 330 Z" fill="#5f8a5a" opacity=".8"/>
+<path d="M200 230 L205 215 L215 140 L208 130 C195 160 192 200 192 230 Z" fill="#5f8a5a" opacity=".8"/>
+<path d="M205 600 L205 745 L195 745 L192 600 Z" fill="#5f8a5a" opacity=".8"/>
+<path d="M150 28 C160 80 150 150 148 230 L146 745" fill="none" stroke="#b9a67f" stroke-width="12"/>
+<path d="M150 28 C160 80 150 150 148 230 L146 745" fill="none" stroke="#8d7a56" stroke-width="1" stroke-dasharray="4 4"/>
+<g font-family="Unbounded,system-ui,sans-serif" font-weight="800" font-size="12" text-anchor="middle" fill="#fff">
+<path d="M150 22 C200 34 220 70 212 110 L135 100 C115 70 125 36 150 22Z" fill="#ffb36b" opacity=".9"/><text x="165" y="70" fill="#1a0d08">М</text>
+<rect x="104" y="120" width="36" height="85" rx="8" fill="#3d6fb0" opacity=".9"/><text x="122" y="168">Б</text>
+<rect x="158" y="130" width="42" height="95" rx="8" fill="#3d6fb0" opacity=".9"/><text x="179" y="183">Б</text>
+<circle cx="150" cy="118" r="9" fill="#ff7a59"/><text x="150" y="122" font-size="9">Ф</text>
+<rect x="156" y="250" width="30" height="30" rx="8" fill="#c0392b"/><text x="171" y="270">Б</text>
+<rect x="96" y="238" width="44" height="240" rx="10" fill="#c0392b" opacity=".9"/><text x="118" y="360">Б</text>
+<rect x="92" y="300" width="14" height="40" rx="4" fill="#4fd1c5"/><text x="99" y="325" font-size="9" fill="#1a0d08">С</text>
+<circle cx="118" cy="470" r="9" fill="#ff7a59"/><text x="118" y="474" font-size="9">Ф</text>
+<rect x="158" y="300" width="40" height="150" rx="10" fill="#6b4e2e"/><text x="178" y="380">Д</text>
+<rect x="163" y="315" width="30" height="40" rx="5" fill="#c9a373"/><circle cx="178" cy="365" r="5" fill="#4fd1c5"/>
+<rect x="163" y="395" width="30" height="40" rx="5" fill="#c9a373"/><circle cx="178" cy="445" r="5" fill="#4fd1c5"/>
+<rect x="156" y="462" width="44" height="46" rx="10" fill="#1a0d08"/><text x="178" y="482" font-size="11">Бар</text><text x="178" y="497" font-size="8" font-weight="400">кухня · кальян</text>
+<rect x="96" y="490" width="46" height="100" rx="10" fill="#ff7a59" opacity=".45"/><rect x="96" y="490" width="46" height="100" rx="10" fill="url(#hatch)" stroke="#ff7a59" stroke-width="2"/><text x="119" y="536" font-size="11">VIP</text><text x="119" y="551" font-size="8" font-weight="400">4 альтанки</text>
+<rect x="158" y="530" width="42" height="70" rx="10" fill="#2a7f9e"/><text x="179" y="570">ВП</text>
+<rect x="158" y="612" width="42" height="34" rx="10" fill="#4fd1a0"/><text x="179" y="634" fill="#1a0d08" font-size="10">Діти</text>
+<rect x="96" y="606" width="46" height="60" rx="10" fill="#6b6259"/><text x="119" y="630" font-size="8.5">кабінки 6</text><text x="119" y="643" font-size="8.5">душ 4</text><text x="119" y="656" font-size="8.5">туалет 2</text>
+<circle cx="120" cy="700" r="18" fill="#3a8a4a"/><text x="120" y="705">А</text>
+<text x="146" y="757" font-size="9" fill="#f4f1ea" font-family="Manrope,sans-serif" font-weight="700">ВХІД З ДОРОГИ ↓</text>
+</g>
+<text x="20" y="30" font-size="12" font-weight="800" fill="#f4f1ea" font-family="Unbounded,sans-serif">Пн ↑</text>
+<line x1="20" y1="740" x2="60" y2="740" stroke="#f4f1ea" stroke-width="3"/><text x="22" y="732" font-size="9" fill="#f4f1ea" font-family="Manrope,sans-serif" font-weight="700">≈ 20 м</text>
+</svg>
+          <div class="leg">
+            <span class="k" style="background:#3a8a4a">А</span><span>Вхід, адміністрація, каса, прокат лежаків</span>
+            <span class="k" style="background:#6b6259">·</span><span>Сервіс біля входу: 6 кабінок, 4 душі, 2 біотуалети в дерев'яних коробах</span>
+            <span class="k" style="background:#4fd1a0;color:#1a0d08">Діти</span><span>Невеликий дитячий куточок у тіні, подалі від бару</span>
+            <span class="k" style="background:#ff7a59">VIP</span><span>4 VIP-альтанки зі шторами (червона штриховка на ескізі), поруч кальянна точка</span>
+            <span class="k" style="background:#2a7f9e">ВП</span><span>Волейбол. Стовпи вже стоять, лишається сітка і лавки</span>
+            <span class="k" style="background:#1a0d08">Бар</span><span>Бар, повноцінна кухня, гриль, снеки. Фудтраки по сезону поруч</span>
+            <span class="k" style="background:#6b4e2e">Д</span><span>2 будиночки з ночівлею, у кожного власний чан на терасі. На боці ліска, вихід до тихої води</span>
+            <span class="k" style="background:#c0392b">Б</span><span>Пляж: лежаки, 5 звичайних альтанок, прокат сапів і каяків (С), пірс або понтон</span>
+            <span class="k" style="background:#3d6fb0">Б</span><span>Північна частина пляжу (синім на ескізі): лежаки і тихі зони без будівель</span>
+            <span class="k" style="background:#ffb36b;color:#1a0d08">М</span><span>Мис біля «Парк Основа»: оглядова точка, фотозона, човни й катамарани</span>
+            <span class="k" style="background:#ff7a59">Ф</span><span>2 фотозони: на мисі та на головному пляжі</span>
+          </div>
+        </div>
+      </div>
+      <div class="photos">
+        <figure><img src="foto/eskiz1.jpg" alt="Ескіз, південна частина" loading="lazy" style="aspect-ratio:auto"><figcaption>Ваш ескіз: вхід, альтанки, волейбол, бар, домики</figcaption></figure>
+        <figure><img src="foto/eskiz2.jpg" alt="Ескіз, північна частина" loading="lazy" style="aspect-ratio:auto"><figcaption>Ваш ескіз: пляж, північна частина, мис</figcaption></figure>
+      </div>
+    </section>
+
+    <!-- 3 -->
+    <section class="part" id="obiekty">
+      <div class="kicker">03 · Об'єкти</div>
+      <h2>Усе будуємо одним етапом</h2>
+      <p class="hint">Перелік з анкети з кількістю і тим, як кожен об'єкт виглядає у вибраному стилі.</p>
+      <div class="glass pad">
+        <table>
+          <tr><th>Об'єкт</th><th>Шт.</th><th>Вигляд</th></tr>
+          <tr><td>VIP-альтанки зі шторами</td><td class="n">4</td><td>Каркас зі світлого дерева, лляні штори, настил, низький стіл, подушки, гірлянда по периметру</td></tr>
+          <tr><td>Альтанки звичайні</td><td class="n">5</td><td>Відкриті, дерев'яні, лава і стіл, дах з дранки або тканини</td></tr>
+          <tr><td>Будиночки з ночівлею і чаном</td><td class="n">2</td><td>Невеликі, на палях, велике вікно на воду, тераса, дерев'яний чан на дровах</td></tr>
+          <tr><td>Бар</td><td class="n">1</td><td>Стійка з обпаленого дерева, терасна дошка, навіс, барні стільці, гірлянди</td></tr>
+          <tr><td>Кухня, гриль-зона</td><td class="n">1</td><td>Закритий блок за баром і відкритий гриль, місце для фудтраків</td></tr>
+          <tr><td>Кальянна точка</td><td class="n">1</td><td>Низькі дивани, подушки, тепла підсвітка</td></tr>
+          <tr><td>Волейбол</td><td class="n">1</td><td>Пісок, нова сітка, лавки для глядачів</td></tr>
+          <tr><td>Дитяча зона</td><td class="n">1</td><td>Дерев'яний майданчик, пісочниця, тінь з льону</td></tr>
+          <tr><td>Прокат сапів</td><td class="n">1</td><td>Стелаж для сапів і каяків, невеликий понтон</td></tr>
+          <tr><td>Фотозони</td><td class="n">2</td><td>Гойдалка над водою на мисі, дерев'яна рама з написом на пляжі</td></tr>
+          <tr><td>Кабінки для перевдягання</td><td class="n">6</td><td>Дерев'яні, обпалене дерево</td></tr>
+          <tr><td>Душ</td><td class="n">4</td><td>Вуличні, на дерев'яному настилі</td></tr>
+          <tr><td>Туалет</td><td class="n">2</td><td>Біотуалети в дерев'яному коробі</td></tr>
+          <tr><td>Лежаки</td><td class="n">—</td><td>Дерев'яні з лляними матрацами, парасолі з натуральної тканини</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <!-- 4 -->
+    <section class="part" id="styl">
+      <div class="kicker">04 · Стиль</div>
+      <h2>Світле дерево, льон і захід сонця</h2>
+      <p class="hint">Один стиль на всю територію, щоб місце читалось як єдине. Вибрано в анкеті.</p>
+      <div class="chips"><span class="chip on">Світле дерево і льон</span><span class="chip">Темне дерево і метал</span><span class="chip">Червоні дахи</span><span class="chip">Світлий зруб</span><span class="chip">Білий середземноморський</span><span class="chip">Бохо</span></div>
+      <div class="grid2">
+        <div class="card"><b>Матеріали</b><p>Натуральне дерево, світлий настил, терасна дошка біля бару. Акценти з обпаленого дерева (shou sugi ban): стійка бару, кабінки, рами фотозон.</p></div>
+        <div class="card"><b>Тканини</b><p>Льон і бавовна натуральних відтінків: штори альтанок, матраци лежаків, парасолі.</p></div>
+        <div class="card"><b>Вечірнє світло</b><p>Гірлянди над зонами, ліхтарі на піску, підсвітка стовбурів дерев. Тихо після 22:00, світло лишається.</p></div>
+        <div class="card"><b>Огорожа</b><p>Без парканів. Кадки з травами, канати на дерев'яних стовпчиках, настили як межі зон.</p></div>
+      </div>
+    </section>
+
+    <!-- viz -->
+    <section class="part" id="viz">
+      <div class="kicker">05 · Візуалізації</div>
+      <h2>Як це виглядатиме</h2>
+      <p class="hint">Дев'ять видів у вибраному стилі: світле дерево, льон, обпалене дерево, гірлянди. Кожна картинка відкривається у повному розмірі.</p>
+      <div class="photos viz">
+        <figure><a href="https://www.canva.com/M/MAHZr6AXwkM" target="_blank" rel="noopener"><img src="foto/viz-vhid.png" alt="Вхід" loading="lazy"></a><figcaption>Вхід з набережної: арка, рецепція, кабінки, кадки замість паркана</figcaption></figure>
+        <figure><a href="https://www.canva.com/M/MAHZrs6pGtM" target="_blank" rel="noopener"><img src="foto/viz-plyazh.png" alt="Головний пляж" loading="lazy"></a><figcaption>Головний пляж: лежаки, парасолі, настили до води, пірс із сапами</figcaption></figure>
+        <figure><a href="https://www.canva.com/M/MAHZrkEah4U" target="_blank" rel="noopener"><img src="foto/viz-vip.png" alt="VIP-альтанки" loading="lazy"></a><figcaption>Зона VIP-альтанок зі шторами, кальянна між ними</figcaption></figure>
+        <figure><a href="https://www.canva.com/M/MAHZrxvXZbQ" target="_blank" rel="noopener"><img src="foto/viz-vseredyni.png" alt="Усередині альтанки" loading="lazy"></a><figcaption>Усередині VIP-альтанки: льон, подушки, вид на воду</figcaption></figure>
+        <figure><a href="https://www.canva.com/M/MAHZrkqFUcg" target="_blank" rel="noopener"><img src="foto/viz-bar.png" alt="Бар" loading="lazy"></a><figcaption>Бар зблизька: стійка з обпаленого дерева, навіс, гриль поруч</figcaption></figure>
+        <figure><a href="https://www.canva.com/M/MAHZrvDG8eA" target="_blank" rel="noopener"><img src="foto/viz-domyky.png" alt="Будиночки з чанами" loading="lazy"></a><figcaption>Два будиночки з чанами на боці ліска, вихід до тихої води</figcaption></figure>
+        <figure><a href="https://www.canva.com/M/MAHZrwzqhPM" target="_blank" rel="noopener"><img src="foto/viz-voleybol.png" alt="Волейбол і діти" loading="lazy"></a><figcaption>Волейбол на існуючих стовпах і дитячий куточок у тіні</figcaption></figure>
+        <figure><a href="https://www.canva.com/M/MAHZr1OLKB8" target="_blank" rel="noopener"><img src="foto/viz-mys.png" alt="Мис" loading="lazy"></a><figcaption>Мис: гойдалка над водою, понтон з катамаранами</figcaption></figure>
+        <figure><a href="https://www.canva.com/M/MAHZr6mp8cQ" target="_blank" rel="noopener"><img src="foto/viz-vechir.png" alt="Вечір" loading="lazy"></a><figcaption>Вечір: гірлянди, ліхтарі на піску, підсвітка дерев, бар світиться</figcaption></figure>
+      </div>
+      <div class="glass pad" style="margin-top:18px">
+        <div class="plan">
+          <a href="https://www.canva.com/M/MAHZr_woKZE" target="_blank" rel="noopener"><img src="foto/viz-genplan.png" alt="Генплан згори" loading="lazy" style="width:100%;border-radius:18px;border:1px solid var(--stroke)"></a>
+          <div><div class="kicker">Генплан згори</div><p style="margin:8px 0 0">Уся коса в один погляд: вхід і сервіс унизу, волейбол і дитяча зона праворуч, бар у центрі, домики з чанами в ліску, довгий пляж з лежаками ліворуч, мис із фотозоною нагорі. Схема з розмірами у розділі 02.</p></div>
+        </div>
+      </div>
+    </section>
+
+
+
+    <footer class="foot">Фото ділянки і ескізи: замовник, 30.10.2026. Генплан орієнтовний.</footer>
+  </main>
+</div>
+
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js"}}</script>
+<script type="module">
+let setProgress=()=>{};
+try{
+  const THREE=await import("three");
+  const canvas=document.getElementById("gl");
+  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false,powerPreference:"high-performance"});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,1.6));
+  renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=1.05;
+  const scene=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(42,1,.1,400);
+  camera.position.set(0,3.2,14);
+  const KF=[
+    {top:"#1b2a4a",hor:"#f2a65a",sun:"#ffd9a0",amb:"#5a6a8a",water:"#1f5a6e",fog:"#e4a06a",light:1.4},
+    {top:"#3f8fd6",hor:"#cfe7f3",sun:"#ffffff",amb:"#9fbfd8",water:"#2e8fa3",fog:"#cfe7f3",light:2.2},
+    {top:"#2d2a5e",hor:"#ff7a4a",sun:"#ffb36b",amb:"#6a4a6a",water:"#2a4d6e",fog:"#ff9a66",light:1.6},
+    {top:"#05070f",hor:"#15233a",sun:"#9fb8ff",amb:"#1f2a44",water:"#0f2a3a",fog:"#15233a",light:.35},
+  ];
+  const col=h=>new THREE.Color(h);
+  const C={top:col(KF[0].top),hor:col(KF[0].hor)};
+  scene.background=C.hor.clone();
+  scene.fog=new THREE.Fog(C.hor.clone(),40,170);
+  const skyMat=new THREE.ShaderMaterial({side:THREE.BackSide,depthWrite:false,uniforms:{top:{value:C.top},hor:{value:C.hor}},
+    vertexShader:`varying vec3 p;void main(){p=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
+    fragmentShader:`uniform vec3 top,hor;varying vec3 p;void main(){float h=normalize(p).y;float t=smoothstep(-.05,.6,h);gl_FragColor=vec4(mix(hor,top,t),1.);}`});
+  scene.add(new THREE.Mesh(new THREE.SphereGeometry(200,24,16),skyMat));
+  const sun=new THREE.Mesh(new THREE.SphereGeometry(2.6,24,24),new THREE.MeshBasicMaterial({color:0xffe3a8,fog:false}));
+  const glowTex=(()=>{const c=document.createElement("canvas");c.width=c.height=128;const g=c.getContext("2d");const r=g.createRadialGradient(64,64,0,64,64,64);r.addColorStop(0,"rgba(255,230,170,.9)");r.addColorStop(.35,"rgba(255,200,130,.35)");r.addColorStop(1,"rgba(255,180,110,0)");g.fillStyle=r;g.fillRect(0,0,128,128);return new THREE.CanvasTexture(c)})();
+  const glow=new THREE.Sprite(new THREE.SpriteMaterial({map:glowTex,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,fog:false}));glow.scale.set(30,30,1);sun.add(glow);
+  scene.add(sun);
+  const dir=new THREE.DirectionalLight(0xffffff,1.5);scene.add(dir);
+  const hemi=new THREE.HemisphereLight(0xffffff,0x223344,.8);scene.add(hemi);
+  const WSEG=90;
+  const wgeo=new THREE.PlaneGeometry(260,160,WSEG,WSEG/2);wgeo.rotateX(-Math.PI/2);
+  const wmat=new THREE.MeshStandardMaterial({color:KF[0].water,metalness:.55,roughness:.28});
+  const water=new THREE.Mesh(wgeo,wmat);water.position.set(0,0,-60);scene.add(water);
+  const wpos=wgeo.attributes.position, wbase=wpos.array.slice();
+  const sgeo=new THREE.PlaneGeometry(120,40,40,10);sgeo.rotateX(-Math.PI/2);
+  const sp=sgeo.attributes.position;for(let i=0;i<sp.count;i++){const z=sp.getZ(i);const x=sp.getX(i);if(z<-14)sp.setY(i,-0.2+Math.sin(x*.25)*.15);else sp.setY(i,.15+(z+14)*.01)}
+  sgeo.computeVertexNormals();
+  const sand=new THREE.Mesh(sgeo,new THREE.MeshStandardMaterial({color:0xd9c08f,roughness:1}));sand.position.set(0,0,2);scene.add(sand);
+  const shore=new THREE.Mesh(new THREE.BoxGeometry(400,3,20),new THREE.MeshStandardMaterial({color:0x0f2c2c,roughness:1}));shore.position.set(0,1,-135);scene.add(shore);
+  for(let i=0;i<60;i++){const t=new THREE.Mesh(new THREE.ConeGeometry(1.5+Math.random()*2,4+Math.random()*7,6),new THREE.MeshStandardMaterial({color:0x0c2424,roughness:1}));t.position.set(-180+i*6+Math.random()*3,3,-128+Math.random()*6);scene.add(t)}
+  const wood=new THREE.MeshStandardMaterial({color:0xc9a373,roughness:.8});
+  const cloth=new THREE.MeshStandardMaterial({color:0xf3ead9,roughness:.9});
+  const mkLounger=(x,z,rot)=>{const g=new THREE.Group();const base=new THREE.Mesh(new THREE.BoxGeometry(.75,.12,1.9),wood);base.position.y=.35;const cush=new THREE.Mesh(new THREE.BoxGeometry(.68,.1,1.3),cloth);cush.position.set(0,.46,.25);const back=new THREE.Mesh(new THREE.BoxGeometry(.68,.1,.7),cloth);back.position.set(0,.6,-.6);back.rotation.x=-.9;[[-.3,-.8],[.3,-.8],[-.3,.8],[.3,.8]].forEach(([a,b])=>{const l=new THREE.Mesh(new THREE.BoxGeometry(.08,.3,.08),wood);l.position.set(a,.15,b);g.add(l)});g.add(base,cush,back);g.position.set(x,0,z);g.rotation.y=rot;scene.add(g)};
+  const mkUmbrella=(x,z)=>{const p=new THREE.Mesh(new THREE.CylinderGeometry(.04,.04,2.6,8),wood);p.position.set(x,1.3,z);const c=new THREE.Mesh(new THREE.ConeGeometry(1.4,.55,10,1,true),new THREE.MeshStandardMaterial({color:0xf7f1e4,side:THREE.DoubleSide,roughness:.9}));c.position.set(x,2.6,z);scene.add(p,c)};
+  [[-6.5,4],[-4.2,4.6],[-1.6,4.2],[1.4,4.5],[4.2,4.1],[6.8,4.6],[-5.4,7.2],[-2.6,7.6],[2.6,7.4],[5.6,7.1]].forEach(([x,z],i)=>mkLounger(x,z,(i%2?-.1:.1)));
+  [[-5.3,5.6],[0,5.8],[5.4,5.5]].forEach(([x,z])=>mkUmbrella(x,z));
+  (()=>{const g=new THREE.Group();[[-2,-1.2],[2,-1.2],[-2,1.2],[2,1.2]].forEach(([a,b])=>{const c=new THREE.Mesh(new THREE.BoxGeometry(.18,2.6,.18),wood);c.position.set(a,1.3,b);g.add(c)});const roof=new THREE.Mesh(new THREE.ConeGeometry(3.4,1.2,4),new THREE.MeshStandardMaterial({color:0x2a2a30,roughness:.7}));roof.position.y=3.1;roof.rotation.y=Math.PI/4;const deck=new THREE.Mesh(new THREE.BoxGeometry(4.6,.2,3),wood);deck.position.y=.1;g.add(roof,deck);g.position.set(10.5,0,1.5);g.rotation.y=-.35;scene.add(g)})();
+  const pts=[],N=48;for(let i=0;i<N;i++){const t=i/(N-1);const x=-14+t*28;const y=4.2-Math.sin(t*Math.PI)*1.4+Math.sin(t*Math.PI*3)*.25;pts.push(x,y+1.5,0.5)}
+  const lights=new THREE.Points(new THREE.BufferGeometry().setAttribute("position",new THREE.Float32BufferAttribute(pts,3)),new THREE.PointsMaterial({color:0xffd27a,size:.28,map:glowTex,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,sizeAttenuation:true}));
+  scene.add(lights);
+  const lanterns=[];[[-3.2,6.2],[3.6,6.4],[8.6,2.8]].forEach(([x,z])=>{const m=new THREE.Mesh(new THREE.SphereGeometry(.14,10,10),new THREE.MeshBasicMaterial({color:0xffd27a}));m.position.set(x,.45,z);const pl=new THREE.PointLight(0xffb060,0,7,2);pl.position.copy(m.position).add(new THREE.Vector3(0,.4,0));scene.add(m,pl);lanterns.push(pl)});
+  let target=0,p=0;
+  setProgress=v=>{target=Math.max(0,Math.min(1,v))};
+  const lerpC=(a,b,t)=>new THREE.Color(a).lerp(new THREE.Color(b),t);
+  function applyTime(t){
+    const seg=t*3, i=Math.min(2,Math.floor(seg)), f=seg-i, a=KF[i], b=KF[i+1];
+    skyMat.uniforms.top.value.copy(lerpC(a.top,b.top,f));
+    skyMat.uniforms.hor.value.copy(lerpC(a.hor,b.hor,f));
+    scene.fog.color.copy(lerpC(a.fog,b.fog,f)); scene.background.copy(scene.fog.color);
+    wmat.color.copy(lerpC(a.water,b.water,f));
+    dir.color.copy(lerpC(a.sun,b.sun,f)); dir.intensity=a.light+(b.light-a.light)*f;
+    hemi.color.copy(lerpC(a.amb,b.amb,f)); hemi.intensity=.5+dir.intensity*.3;
+    const el=Math.sin(Math.min(t,0.85)/0.85*Math.PI);
+    const ang=-0.9+t*1.8; sun.position.set(Math.sin(ang)*60, -4+el*42, -110+Math.cos(ang)*-10);
+    dir.position.copy(sun.position).normalize().multiplyScalar(50);
+    const night=THREE.MathUtils.smoothstep(t,.62,.95);
+    lights.material.opacity=.25+night*.75; lanterns.forEach(l=>l.intensity=night*2.4);
+    glow.material.opacity=1-night*.6;
+  }
+  function resize(){const w=innerWidth,h=innerHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix()}
+  addEventListener("resize",resize);resize();
+  let mx=0,my=0;addEventListener("pointermove",e=>{mx=(e.clientX/innerWidth-.5);my=(e.clientY/innerHeight-.5)},{passive:true});
+  const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const clock=new THREE.Clock();
+  renderer.setAnimationLoop(()=>{
+    const t=clock.getElapsedTime(); p+=(target-p)*.03; applyTime(p);
+    for(let i=0;i<wpos.count;i++){const x=wbase[i*3],z=wbase[i*3+2];wpos.array[i*3+1]=Math.sin(x*.18+t*1.1)*.22+Math.sin(z*.25+t*.8)*.18+Math.sin((x+z)*.1+t*.5)*.12}
+    wpos.needsUpdate=true; wgeo.computeVertexNormals();
+    camera.position.x+=((reduce?0:Math.sin(t*.12)*1.6+mx*1.2)-camera.position.x)*.02;
+    camera.position.y+=((3.2-my*.6)-camera.position.y)*.03;
+    camera.lookAt(0,1.4,-20);
+    renderer.render(scene,camera);
+  });
+}catch(e){console.warn("3D scene unavailable",e)}
+// scroll drives time of day: dawn at the top, night at the end
+const onScroll=()=>{const max=document.documentElement.scrollHeight-innerHeight;setProgress(max>0?scrollY/max:0)};
+addEventListener("scroll",onScroll,{passive:true});onScroll();
+</script>
+</body>
+</html>
