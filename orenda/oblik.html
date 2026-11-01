@@ -292,6 +292,8 @@ function list(filter){
    var o=items.filter(function(x){return x.id===b.dataset.id})[0],a=b.dataset.act;
    if(a==="edit")return openForm(o);
    if(a==="del"){if(confirm("Видалити запис?")){items=items.filter(function(x){return x.id!==o.id});save();draw();toast("Видалено")}return}
+   if(a==="returned"&&!o.returned&&o.type==="rent"){var bk=o.back||o.to||o.from;
+    if(bk&&ymd(today())<bk&&!confirm("Повернення тільки "+fm(bk)+". Костюм точно вже в тебе?"))return}
    o[a]=!o[a];
    if(a==="returned")o.returnedAt=o.returned?ymd(today()):"";
    if(a==="returned"&&o.returned)o.wait=false;
