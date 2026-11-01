@@ -16,9 +16,10 @@ h2{font-size:20px;margin:22px 0 10px}
 .head h1{color:var(--dark)}
 .head .mono{color:#3d4a12!important}
 .hband{display:flex;gap:2px;justify-content:space-between;margin:6px -6px -10px}
-.hband img{width:16%;max-width:74px;filter:drop-shadow(0 6px 0 rgba(22,16,14,.18))}
+.hband img{width:14%;min-width:0;max-width:74px;filter:drop-shadow(0 6px 0 rgba(22,16,14,.18))}
 @media(prefers-reduced-motion:no-preference){.hband img{animation:bob 3.4s ease-in-out infinite}
 .hband img:nth-child(2){animation-delay:-.5s}.hband img:nth-child(3){animation-delay:-1s}.hband img:nth-child(4){animation-delay:-1.5s}.hband img:nth-child(5){animation-delay:-2s}.hband img:nth-child(6){animation-delay:-2.5s}
+.hband img:nth-child(7){animation-delay:-3s}
 @keyframes bob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-8px) rotate(3deg)}}}
 .top{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;flex-wrap:wrap}
 .top .mono{color:#3d4a12;max-width:100%;text-align:right;font-size:11px}
@@ -112,7 +113,7 @@ h2{font-size:20px;margin:22px 0 10px}
 </style></head><body><div class="wrap">
 
 <div class="head"><div class="top"><h1>Облік</h1><span class="mono" id="sync">локально на цьому пристрої</span></div>
- <div class="hband"><img src="media/st/pavuk.png" alt=""><img src="media/st/rat.png" alt=""><img src="media/st/guard.png" alt=""><img src="media/st/batman.png" alt=""><img src="media/st/shark_pink.png" alt=""><img src="media/st/biomeh.png" alt=""></div></div>
+ <div class="hband"><img src="media/st/pavuk.png" alt=""><img src="media/st/rat.png" alt=""><img src="media/st/guard.png" alt=""><img src="media/st/batman.png" alt=""><img src="media/st/shark_pink.png" alt=""><img src="media/st/biomeh.png" alt=""><img src="media/st/superman.png" alt=""></div></div>
 
 <div class="money" id="money"></div>
 <div class="money" id="bal" style="cursor:pointer" title="Відкрити баланс"></div>
@@ -130,10 +131,10 @@ h2{font-size:20px;margin:22px 0 10px}
 (function(){
 "use strict";
 var API=window.BOOKING_API||"", KEY="";
-var PRICE={"Павук":200,"Бетмен":200,"Охоронець":200,"Біомеханіка":200,"Щур":250,"Акула":250};
+var PRICE={"Павук":200,"Бетмен":200,"Охоронець":200,"Біомеханіка":200,"Супермен":200,"Щур":250,"Акула":250};
 function price(c){return PRICE[c]!=null?PRICE[c]:(String(c).indexOf("Акула")===0?250:200)}
-var ST={"Павук":"pavuk","Бетмен":"batman","Охоронець":"guard","Біомеханіка":"biomeh","Щур":"rat","Акула рожева":"shark_pink","Акула блакитна":"shark_blue","Акула скелет":"shark_skeleton","Акула":"shark_blue"};
-var CLR={"Павук":"var(--pink)","Бетмен":"var(--violet)","Охоронець":"var(--lime)","Біомеханіка":"var(--blue)","Щур":"var(--orange)","Акула рожева":"var(--pink)","Акула скелет":"var(--violet)","Акула":"var(--blue)"};
+var ST={"Павук":"pavuk","Бетмен":"batman","Охоронець":"guard","Біомеханіка":"biomeh","Супермен":"superman","Щур":"rat","Акула рожева":"shark_pink","Акула блакитна":"shark_blue","Акула скелет":"shark_skeleton","Акула":"shark_blue"};
+var CLR={"Павук":"var(--pink)","Бетмен":"var(--violet)","Охоронець":"var(--lime)","Біомеханіка":"var(--blue)","Супермен":"var(--red)","Щур":"var(--orange)","Акула рожева":"var(--pink)","Акула скелет":"var(--violet)","Акула":"var(--blue)"};
 function stKey(name){name=String(name||"");for(var k in ST){if(name.indexOf(k)===0)return ST[k]}return ""}
 function stImg(name,cls){var k=stKey(name);return k?"<img class='"+(cls||"stk")+"' src='media/st/"+k+".png' alt=''>":""}
 function clr(name){name=String(name||"");for(var k in CLR){if(name.indexOf(k)===0)return CLR[k]}return "var(--lime)"}
@@ -348,7 +349,7 @@ function moneyView(){
 }
 
 /* ---------- костюми, кількість і баланс ---------- */
-var STOCK0={"Павук":1,"Бетмен":1,"Охоронець":1,"Біомеханіка":1,"Щур":5,"Акула рожева":2,"Акула скелет":1,"Акула блакитна":1};
+var STOCK0={"Павук":1,"Бетмен":1,"Охоронець":1,"Біомеханіка":1,"Супермен":1,"Щур":5,"Акула рожева":2,"Акула скелет":1,"Акула блакитна":1};
 var COST=Object.keys(STOCK0);
 var bcur=ymd(today()),fk="road",fd=ymd(today());
 function stock(){var r={};COST.forEach(function(c){r[c]=STOCK0[c]});
