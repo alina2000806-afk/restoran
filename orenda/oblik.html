@@ -112,7 +112,7 @@ h2{font-size:20px;margin:22px 0 10px}
 </style></head><body><div class="wrap">
 
 <div class="head"><div class="top"><h1>Облік</h1><span class="mono" id="sync">локально на цьому пристрої</span></div>
- <div class="hband"><img src="media/st/pavuk.png" alt=""><img src="media/st/rat.png" alt=""><img src="media/st/guard.png" alt=""><img src="media/st/batman.png" alt=""><img src="media/st/shark.png" alt=""><img src="media/st/biomeh.png" alt=""></div></div>
+ <div class="hband"><img src="media/st/pavuk.png" alt=""><img src="media/st/rat.png" alt=""><img src="media/st/guard.png" alt=""><img src="media/st/batman.png" alt=""><img src="media/st/shark_pink.png" alt=""><img src="media/st/biomeh.png" alt=""></div></div>
 
 <div class="money" id="money"></div>
 <div class="money" id="bal" style="cursor:pointer" title="Відкрити баланс"></div>
@@ -132,8 +132,8 @@ h2{font-size:20px;margin:22px 0 10px}
 var API=window.BOOKING_API||"", KEY="";
 var PRICE={"Павук":200,"Бетмен":200,"Охоронець":200,"Біомеханіка":200,"Щур":250,"Акула":250};
 function price(c){return PRICE[c]!=null?PRICE[c]:(String(c).indexOf("Акула")===0?250:200)}
-var ST={"Павук":"pavuk","Бетмен":"batman","Охоронець":"guard","Біомеханіка":"biomeh","Щур":"rat","Акула":"shark"};
-var CLR={"Павук":"var(--pink)","Бетмен":"var(--violet)","Охоронець":"var(--lime)","Біомеханіка":"var(--blue)","Щур":"var(--orange)","Акула":"var(--blue)"};
+var ST={"Павук":"pavuk","Бетмен":"batman","Охоронець":"guard","Біомеханіка":"biomeh","Щур":"rat","Акула рожева":"shark_pink","Акула блакитна":"shark_blue","Акула скелет":"shark_skeleton","Акула":"shark_blue"};
+var CLR={"Павук":"var(--pink)","Бетмен":"var(--violet)","Охоронець":"var(--lime)","Біомеханіка":"var(--blue)","Щур":"var(--orange)","Акула рожева":"var(--pink)","Акула скелет":"var(--violet)","Акула":"var(--blue)"};
 function stKey(name){name=String(name||"");for(var k in ST){if(name.indexOf(k)===0)return ST[k]}return ""}
 function stImg(name,cls){var k=stKey(name);return k?"<img class='"+(cls||"stk")+"' src='media/st/"+k+".png' alt=''>":""}
 function clr(name){name=String(name||"");for(var k in CLR){if(name.indexOf(k)===0)return CLR[k]}return "var(--lime)"}
@@ -483,7 +483,7 @@ function openForm(o){
   $("#f_pkbox").hidden=(t!=="rent");
   var pk0=(t==="rent"&&$("#f_pk").value==="1");
   $("#l_ship").textContent=pk0?"Віддала":"Відправила";$("#l_back").textContent=pk0?"Повернення":"Відправляють назад";
-  $("#f_ttn").closest("div").hidden=pk0;
+  $("#f_ttn").closest("div").hidden=pk0;$("#f_city").closest("div").hidden=pk0;
   $("#f_deprow").hidden=(t!=="rent");$("#f_paid").closest("label").hidden=(t==="spend");
   auto()}
  function auto(){
@@ -505,7 +505,7 @@ function openForm(o){
  $("#f_save").onclick=function(){
   var o=ed||{id:uid()};
   o.type=$("#f_type").value;o.lines=L.map(function(l){return {c:l.c,n:l.n}});o.costume=label(L);o.client=$("#f_client").value.trim();o.chat=$("#f_chat").value.trim();
-  o.city=$("#f_city").value.trim();o.ttn=$("#f_ttn").value.trim();
+  o.city=$("#f_city").value.trim();if(o.type==="rent"&&$("#f_pk").value==="1")o.city="Харків";o.ttn=$("#f_ttn").value.trim();
   o.pickup=(o.type==="rent"&&$("#f_pk").value==="1");if(o.pickup)o.ttn="";
   o.from=$("#f_from").value;o.to=$("#f_to").value;o.ship=$("#f_ship").value;o.back=$("#f_back").value;
   o.sum=+$("#f_sum").value||0;o.dep=+$("#f_dep").value||0;o.note=$("#f_note").value.trim();
