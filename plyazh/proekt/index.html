@@ -100,6 +100,53 @@ pre{white-space:pre-wrap;background:rgba(0,0,0,.28);border:1px solid var(--strok
 @keyframes rise{from{opacity:0;transform:translateY(18px) scale(.985)}to{opacity:1;transform:none}}
 .part{animation:rise .6s cubic-bezier(.2,.8,.2,1) both}
 @media (prefers-reduced-motion:reduce){.part,.hero{animation:none}}
+
+/* 3D model */
+#m3d{position:relative;height:min(78vh,640px);border-radius:24px;overflow:hidden;overflow:clip;border:1px solid var(--stroke);background:#0d1a26;margin-top:18px;touch-action:none;box-shadow:0 30px 80px -40px rgba(0,0,0,.8)}
+#m3d canvas{width:100%;height:100%;display:block}
+#m3d .m3d-load{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);font-weight:800;font-size:14px;transition:opacity .4s}
+#m3d.ready .m3d-load{opacity:0;pointer-events:none}
+#m3d .m3d-labels{position:absolute;inset:0;pointer-events:none;overflow:hidden;overflow:clip}
+.m3d-tag{position:absolute;left:0;top:0;pointer-events:auto;font:800 12px/1 var(--body);color:#1a0d08;background:rgba(255,255,255,.92);border:0;border-radius:99px;padding:7px 10px;white-space:nowrap;cursor:pointer;box-shadow:0 6px 16px -6px rgba(0,0,0,.5);transition:opacity .25s}
+.m3d-tag::after{content:"";position:absolute;left:50%;bottom:-5px;width:8px;height:8px;background:inherit;transform:translateX(-50%) rotate(45deg);border-radius:2px;z-index:-1}
+.m3d-bar{position:absolute;left:10px;right:10px;top:10px;display:flex;flex-wrap:wrap;gap:6px;z-index:3}
+.m3d-bar button,.m3d-walk button{font:800 12.5px/1 var(--body);color:var(--fg);background:rgba(11,21,34,.62);border:1px solid var(--stroke);border-radius:12px;padding:10px 12px;cursor:pointer;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.m3d-bar button.on,.m3d-walk button.on{background:linear-gradient(135deg,var(--accent),#ff9a76);color:#1a0d08;border-color:transparent}
+.m3d-bar .sp{flex:1}
+.m3d-hint{position:absolute;left:12px;bottom:12px;font-size:12px;color:rgba(255,255,255,.8);background:rgba(11,21,34,.5);padding:7px 10px;border-radius:10px;z-index:2;pointer-events:none;backdrop-filter:blur(8px)}
+#m3d.walking .m3d-hint{display:none}
+.m3d-walk{position:absolute;left:0;right:0;bottom:12px;display:flex;justify-content:space-between;align-items:flex-end;padding:0 12px;z-index:3;pointer-events:none}
+.m3d-walk>*{pointer-events:auto}
+.m3d-pad{display:grid;grid-template-columns:repeat(3,48px);grid-template-rows:repeat(2,48px);gap:6px}
+.m3d-pad button{padding:0;font-size:18px;user-select:none;-webkit-user-select:none;touch-action:none}
+.m3d-pad .u{grid-column:2}.m3d-pad .l{grid-column:1;grid-row:2}.m3d-pad .d{grid-column:2;grid-row:2}.m3d-pad .r{grid-column:3;grid-row:2}
+.m3d-walk .help{font-size:12px;color:rgba(255,255,255,.85);background:rgba(11,21,34,.55);padding:8px 10px;border-radius:10px;max-width:46%;backdrop-filter:blur(8px)}
+.m3d-card{position:absolute;right:10px;top:58px;width:min(300px,calc(100% - 20px));background:rgba(11,21,34,.82);border:1px solid var(--stroke);border-radius:18px;padding:10px;z-index:4;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);animation:rise .35s both}
+.m3d-card img{width:100%;border-radius:12px;display:block;aspect-ratio:4/3;object-fit:cover}
+.m3d-card b{display:block;font-family:var(--display);font-size:14px;margin:10px 4px 4px}
+.m3d-card p{margin:0 4px 4px;font-size:13.5px;color:var(--muted)}
+.m3d-card .x{position:absolute;right:16px;top:16px;width:30px;height:30px;border-radius:99px;border:0;background:rgba(11,21,34,.7);color:#fff;font-size:16px;cursor:pointer}
+#m3d.full{position:fixed;inset:0;height:100%;width:100%;margin:0;border-radius:0;z-index:50;border:0}
+body.noscroll{overflow:hidden}
+@media (max-width:560px){#m3d{height:72vh}.m3d-walk .help{display:none}.m3d-card{top:auto;bottom:130px}}
+.m3d-walk[hidden],.m3d-card[hidden]{display:none}
+/* before / after */
+.ba{position:relative;overflow:hidden;border-radius:18px;border:1px solid var(--stroke);aspect-ratio:4/3;user-select:none;-webkit-user-select:none;touch-action:pan-y;cursor:ew-resize}
+.ba img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border:0;border-radius:0}
+.ba .after{clip-path:inset(0 0 0 var(--pos,50%))}
+.ba .line{position:absolute;top:0;bottom:0;left:var(--pos,50%);width:2px;background:#fff;transform:translateX(-1px);box-shadow:0 0 12px rgba(0,0,0,.5)}
+.ba .knob{position:absolute;top:50%;left:var(--pos,50%);width:44px;height:44px;border-radius:99px;background:#fff;color:#1a0d08;transform:translate(-50%,-50%);display:grid;place-items:center;font-weight:800;box-shadow:0 8px 20px rgba(0,0,0,.4)}
+.ba .tg{position:absolute;top:10px;font:800 11px/1 var(--display);letter-spacing:.12em;text-transform:uppercase;padding:7px 9px;border-radius:99px;background:rgba(11,21,34,.7);color:#fff}
+.ba .tg.l{left:10px}.ba .tg.r{right:10px;background:linear-gradient(135deg,var(--accent),#ff9a76);color:#1a0d08}
+.bagrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
+@media (max-width:560px){.bagrid{grid-template-columns:1fr}}
+
+.author{margin:48px 0 0;display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between}
+.author .who{font-family:var(--display);font-weight:800;font-size:18px}
+.author .who small{display:block;font-family:var(--body);font-weight:600;font-size:13px;color:var(--muted);margin-top:4px}
+.author .links{display:flex;flex-wrap:wrap;gap:8px}
+.author .links a{color:var(--fg);text-decoration:none;font-weight:800;font-size:14px;padding:11px 14px;border-radius:14px;background:var(--glass);border:1px solid var(--stroke);backdrop-filter:blur(10px)}
+.author .links a.tg{background:linear-gradient(135deg,var(--accent),#ff9a76);color:#1a0d08;border-color:transparent}
 </style>
 </head>
 <body>
@@ -118,7 +165,7 @@ pre{white-space:pre-wrap;background:rgba(0,0,0,.28);border:1px solid var(--strok
       <h1>Пляж, який <span>хочеться показувати</span></h1>
       <p>Концепція благоустрою ділянки від кафе «Червона мавпа» до точки «Пляж Основа». Генплан за вашим ескізом, перелік об'єктів, стиль і готові види для візуалізації. Усе зібрано з анкети і фотофіксації 30 жовтня.</p>
       <div class="pills"><span class="pill">≈ 200 м берега</span><span class="pill">вода з двох боків</span><span class="pill">до 500 гостей</span><span class="pill">30–70 тис. $</span><span class="pill">цілий рік</span></div>
-      <nav class="toc"><a href="#dilyanka">Ділянка</a><a href="#genplan">Генплан</a><a href="#obiekty">Об'єкти</a><a href="#styl">Стиль</a><a href="#viz">Візуалізації</a></nav>
+      <nav class="toc"><a href="#dilyanka">Ділянка</a><a href="#genplan">Генплан</a><a href="#obiekty">Об'єкти</a><a href="#styl">Стиль</a><a href="#model">3D-прогулянка</a><a href="#viz">Візуалізації</a><a href="#bulo">Було / буде</a></nav>
     </section>
 
     <!-- 1 -->
@@ -240,9 +287,40 @@ pre{white-space:pre-wrap;background:rgba(0,0,0,.28);border:1px solid var(--strok
       </div>
     </section>
 
+    <!-- 3d -->
+    <section class="part" id="model">
+      <div class="kicker">05 · 3D-модель</div>
+      <h2>Пройдіться пляжем</h2>
+      <p class="hint">Крутіть косу пальцем, наближайте, тисніть на назви зон. «Прогулянка» ставить вас на доріжку на рівні очей: ідіть кнопками або W A S D, озирайтесь, тягнучи по екрану. «Авто» проведе від входу до мису саме.</p>
+      <div id="m3d">
+        <canvas aria-label="3D-модель пляжу"></canvas>
+        <div class="m3d-load">Завантажуємо 3D…</div>
+        <div class="m3d-labels"></div>
+        <div class="m3d-bar">
+          <button type="button" data-act="walk">🚶 Прогулянка</button>
+          <button type="button" data-act="night">☾ Ніч</button>
+          <button type="button" data-act="all">Огляд</button>
+          <span class="sp"></span>
+          <button type="button" data-act="full">⤢ На весь екран</button>
+        </div>
+        <div class="m3d-hint">Тягніть, щоб обертати · два пальці, щоб наблизити</div>
+        <div class="m3d-walk" hidden>
+          <div class="m3d-pad">
+            <button type="button" class="u" data-mv="fwd" aria-label="Вперед">▲</button>
+            <button type="button" class="l" data-mv="turnL" aria-label="Повернути ліворуч">↶</button>
+            <button type="button" class="d" data-mv="back" aria-label="Назад">▼</button>
+            <button type="button" class="r" data-mv="turnR" aria-label="Повернути праворуч">↷</button>
+          </div>
+          <span class="help">Тягніть по екрану, щоб озирнутись. Тисніть на назву зони, щоб побачити картинку.</span>
+          <button type="button" data-act="auto">▶ Авто</button>
+        </div>
+        <div class="m3d-card" hidden><button type="button" class="x" aria-label="Закрити">✕</button><img alt=""><b></b><p></p></div>
+      </div>
+    </section>
+
     <!-- viz -->
     <section class="part" id="viz">
-      <div class="kicker">05 · Візуалізації</div>
+      <div class="kicker">06 · Візуалізації</div>
       <h2>Як це виглядатиме</h2>
       <p class="hint">Дев'ять видів у вибраному стилі: світле дерево, льон, обпалене дерево, гірлянди. Кожна картинка відкривається у повному розмірі.</p>
       <div class="photos viz">
@@ -266,11 +344,32 @@ pre{white-space:pre-wrap;background:rgba(0,0,0,.28);border:1px solid var(--strok
 
 
 
-    <footer class="foot">Фото ділянки і ескізи: замовник, 30.10.2026. Генплан орієнтовний.</footer>
+    <footer class="foot">
+      <div class="glass pad author">
+        <div class="who">Аліна<small>Автор концепції і сайту</small></div>
+        <div class="links"><a href="tel:+380966958712">📞 096 695 87 12</a><a class="tg" href="https://t.me/+380966958712" target="_blank" rel="noopener">Telegram</a></div>
+      </div>
+      <p style="margin-top:18px">Фото ділянки і ескізи: замовник, 30.10.2026. Генплан орієнтовний.</p>
+    </footer>
+    <!-- before/after -->
+    <section class="part" id="bulo">
+      <div class="kicker">07 · Було / буде</div>
+      <h2>Той самий берег, до і після</h2>
+      <p class="hint">Тягніть повзунок: ліворуч ділянка зараз (ваші фото 30 жовтня), праворуч як вона виглядатиме.</p>
+      <div class="bagrid">
+        <figure><div class="ba"><img src="foto/plyazh.jpg" alt="Зараз: Головний пляж" loading="lazy"><img class="after" src="foto/viz-plyazh.jpg" alt="Буде: Головний пляж" loading="lazy"><span class="line"></span><span class="knob">⟷</span><span class="tg l">Зараз</span><span class="tg r">Буде</span></div><figcaption>Головний пляж</figcaption></figure>
+        <figure><div class="ba"><img src="foto/altanky.jpg" alt="Зараз: Зона альтанок" loading="lazy"><img class="after" src="foto/viz-vip.jpg" alt="Буде: Зона альтанок" loading="lazy"><span class="line"></span><span class="knob">⟷</span><span class="tg l">Зараз</span><span class="tg r">Буде</span></div><figcaption>Зона альтанок</figcaption></figure>
+        <figure><div class="ba"><img src="foto/bar.jpg" alt="Зараз: Бар" loading="lazy"><img class="after" src="foto/viz-bar.jpg" alt="Буде: Бар" loading="lazy"><span class="line"></span><span class="knob">⟷</span><span class="tg l">Зараз</span><span class="tg r">Буде</span></div><figcaption>Бар</figcaption></figure>
+        <figure><div class="ba"><img src="foto/domyky.jpg" alt="Зараз: Будиночки з чанами" loading="lazy"><img class="after" src="foto/viz-domyky.jpg" alt="Буде: Будиночки з чанами" loading="lazy"><span class="line"></span><span class="knob">⟷</span><span class="tg l">Зараз</span><span class="tg r">Буде</span></div><figcaption>Будиночки з чанами</figcaption></figure>
+        <figure><div class="ba"><img src="foto/voleybol.jpg" alt="Зараз: Волейбол" loading="lazy"><img class="after" src="foto/viz-voleybol.jpg" alt="Буде: Волейбол" loading="lazy"><span class="line"></span><span class="knob">⟷</span><span class="tg l">Зараз</span><span class="tg r">Буде</span></div><figcaption>Волейбол</figcaption></figure>
+        <figure><div class="ba"><img src="foto/mys.jpg" alt="Зараз: Мис" loading="lazy"><img class="after" src="foto/viz-mys.jpg" alt="Буде: Мис" loading="lazy"><span class="line"></span><span class="knob">⟷</span><span class="tg l">Зараз</span><span class="tg r">Буде</span></div><figcaption>Мис</figcaption></figure>
+      </div>
+    </section>
+
   </main>
 </div>
 
-<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js"}}</script>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>
 <script type="module">
 let setProgress=()=>{};
 try{
@@ -360,6 +459,16 @@ try{
 // scroll drives time of day: dawn at the top, night at the end
 const onScroll=()=>{const max=document.documentElement.scrollHeight-innerHeight;setProgress(max>0?scrollY/max:0)};
 addEventListener("scroll",onScroll,{passive:true});onScroll();
+</script>
+<script type="module" src="model3d.js"></script>
+<script>
+document.querySelectorAll(".ba").forEach(el=>{
+  const set=x=>{const r=el.getBoundingClientRect();el.style.setProperty("--pos",Math.max(0,Math.min(100,(x-r.left)/r.width*100))+"%")};
+  let on=false;
+  el.addEventListener("pointerdown",e=>{on=true;el.setPointerCapture(e.pointerId);set(e.clientX)});
+  el.addEventListener("pointermove",e=>{if(on)set(e.clientX)});
+  el.addEventListener("pointerup",()=>on=false);el.addEventListener("pointercancel",()=>on=false);
+});
 </script>
 </body>
 </html>
