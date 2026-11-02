@@ -245,7 +245,7 @@ function stats(key){
  var r={inc:0,out:0,depIn:0,depOut:0,cnt:0};
  items.forEach(function(o){
   if(o.type==="spend"){if(mk(o.from)===key)r.out+=+o.sum||0;return}
-  if(o.paid&&mk(o.from)===key){r.inc+=+o.sum||0;r.cnt++}
+  if(mk(o.from)===key&&paidSum(o)>0){r.inc+=paidSum(o);r.cnt++}
   if(o.type==="rent"){
    if(o.depTaken&&mk(depTakenDate(o))===key)r.depIn+=+o.dep||0;
    if(o.depBack&&mk(depBackDate(o))===key)r.depOut+=+o.dep||0;
@@ -269,34 +269,35 @@ function money(){
 function earnStats(key){
  var by={},tot=0,cnt=0;
  items.forEach(function(o){
-  if(o.type==="spend"||!o.paid||mk(o.from)!==key)return;
+  if(o.type==="spend"||mk(o.from)!==key||paidSum(o)<=0)return;
   var L=lines(o),W=0;L.forEach(function(l){W+=price(l.c)*l.n});
-  cnt++;tot+=+o.sum||0;
+  var got=paidSum(o);cnt++;tot+=got;
   L.forEach(function(l){var x=by[l.c]||(by[l.c]={rent:0,sale:0,sum:0});
    if(o.type==="sale")x.sale+=l.n;else x.rent+=l.n;
-   x.sum+=W?(+o.sum||0)*price(l.c)*l.n/W:0});
+   x.sum+=W?got*price(l.c)*l.n/W:0});
  });
  return {by:by,tot:tot,cnt:cnt}}
 function earnView(){
  var key=mk(ymd(mcur)),e=earnStats(key),names=Object.keys(e.by).sort(function(a,b){return e.by[b].sum-e.by[a].sum});
  var h="<div class='calhead'><button type='button' id='ep'>‹</button><h3>Заробила · "+mname(key)+"</h3><button type='button' id='en'>›</button></div>"+
   "<div class='msum'><div class='m in'><b>"+nf(e.tot)+" ₴</b><span>всього ("+e.cnt+" зам.)</span></div></div>";
- var pays=items.filter(function(o){return o.type!=="spend"&&o.paid&&mk(o.from)===key}).sort(function(a,b){return String(a.from).localeCompare(String(b.from))});
- var unpaid=items.filter(function(o){return o.type!=="spend"&&!o.paid&&mk(o.from)===key});
+ var pays=items.filter(function(o){return o.type!=="spend"&&paidSum(o)>0&&mk(o.from)===key}).sort(function(a,b){return String(a.from).localeCompare(String(b.from))});
+ var unpaid=items.filter(function(o){return o.type!=="spend"&&restSum(o)>0&&mk(o.from)===key});
  if(!names.length)h+="<div class='empty'>За цей місяць оплачених замовлень немає.</div>";
  if(pays.length){h+="<h2>Кожна оплата</h2><div class='plist'>"+pays.map(function(o){
    return "<button type='button' class='pay' data-edit='"+o.id+"'><span class='pd'>"+fm(o.from)+"</span>"+stImg(o.costume,"pst")+
     "<span class='pt'><b>"+esc(o.costume)+(o.type==="sale"?" · продаж":"")+"</b><small>"+esc(o.client||"без імені")+(o.chat?" · "+esc(o.chat):"")+
-    (o.type==="rent"&&o.to&&o.to!==o.from?" · "+fm(o.from)+"–"+fm(o.to):"")+"</small></span><span class='pv'>+"+nf(+o.sum||0)+" ₴</span></button>"}).join("")+
+    (o.type==="rent"&&o.to&&o.to!==o.from?" · "+fm(o.from)+"–"+fm(o.to):"")+(!o.paid?" · <span style='color:var(--orange)'>передоплата, залишок "+nf(restSum(o))+" ₴</span>":"")+"</small></span><span class='pv'>+"+nf(paidSum(o))+" ₴</span></button>"}).join("")+
    "<div class='pay tot'><span class='pt'><b>Разом</b></span><span class='pv'>"+nf(e.tot)+" ₴</span></div></div>"}
- if(unpaid.length)h+="<h2>Ще не оплачено</h2><div class='plist'>"+unpaid.map(function(o){
+ if(unpaid.length)h+="<h2>Ще мають доплатити</h2><div class='plist'>"+unpaid.map(function(o){
    return "<button type='button' class='pay' data-edit='"+o.id+"'><span class='pd'>"+fm(o.from)+"</span>"+stImg(o.costume,"pst")+
-    "<span class='pt'><b>"+esc(o.costume)+"</b><small>"+esc(o.client||"без імені")+"</small></span><span class='pv' style='color:var(--mut)'>"+nf(+o.sum||0)+" ₴</span></button>"}).join("")+"</div>";
+    "<span class='pt'><b>"+esc(o.costume)+"</b><small>"+esc(o.client||"без імені")+(+o.prepay?" · передоплата "+nf(+o.prepay)+" з "+nf(+o.sum||0)+" ₴":"")+"</small></span><span class='pv' style='color:var(--orange)'>"+nf(restSum(o))+" ₴</span></button>"}).join("")+
+   "<div class='pay tot' style='background:#FFE1C2'><span class='pt'><b>Разом чекаю</b></span><span class='pv'>"+nf(unpaid.reduce(function(a,o){return a+restSum(o)},0))+" ₴</span></div></div>";
  if(names.length)h+="<h2>По костюмах</h2>";
  names.forEach(function(c){var x=e.by[c];
   h+="<div class='bcard'>"+(stKey(c)?"<img src='media/st/"+stKey(c)+".png' alt=''>":"")+"<div><div class='bn'>"+esc(c)+"</div><div class='bs'>"+
    (x.rent?"оренд: "+x.rent+" шт":"")+(x.rent&&x.sale?" · ":"")+(x.sale?"продаж: "+x.sale+" шт":"")+"</div></div><div class='bh'>"+nf(Math.round(x.sum))+" ₴</div></div>"});
- h+="<p class='mhint'>Дата оплати — це дата початку оренди (або дата продажу). Тільки оплачені замовлення. Якщо в замовленні кілька костюмів, суму ділю між ними за ціною доби: щур і акула — 250 ₴, решта — 200 ₴.</p>";
+ h+="<p class='mhint'>Дата оплати — це дата початку оренди (або дата продажу). Рахую те, що вже отримала: повну оплату або передоплату. Якщо в замовленні кілька костюмів, суму ділю між ними за ціною доби: щур і акула — 250 ₴, решта — 200 ₴.</p>";
  $("#view").innerHTML=h;
  $("#view").querySelectorAll("[data-edit]").forEach(function(b){b.onclick=function(){openForm(items.filter(function(o){return o.id===b.dataset.edit})[0])}});
  $("#ep").onclick=function(){mcur=new Date(mcur.getFullYear(),mcur.getMonth()-1,1);draw()};
@@ -309,7 +310,7 @@ function analysis(key){
  var e=earnStats(key);
  items.forEach(function(o){if(o.type==="spend"||mk(o.from)!==key)return;
   if(o.type==="sale"){T.sale++;return}
-  T.ord++;if(o.pickup)T.pick++;else T.post++;if(!o.paid)T.unpaid++;
+  T.ord++;if(o.pickup)T.pick++;else T.post++;if(restSum(o)>0)T.unpaid++;
   var seen={};lines(o).forEach(function(l){var x=by[l.c];if(!x)return;x.units+=l.n;T.units+=l.n;if(!seen[l.c]){x.ord++;seen[l.c]=1}})});
  for(var d=1;d<=nd;d++){var s=ymd(new Date(y,m,d));
   items.forEach(function(o){var k=stateOf(o,s);if(!k)return;lines(o).forEach(function(l){var x=by[l.c];if(!x)return;if(k==="rent")x.rentD+=l.n;else x.roadD+=l.n})})}
@@ -323,7 +324,7 @@ function analysis(key){
   "<div class='m rd'><b>"+T.rentD+"</b><span>костюмо-днів в оренді</span></div>"+
   "<div class='m rt'><b>"+T.roadD+"</b><span>костюмо-днів у дорозі</span></div>"+
   "<div class='m'><b>"+pct(T.rentD+T.roadD,T.cap)+"%</b><span>завантаженість складу</span></div>"+
-  "<div class='m'><b>"+T.unpaid+"</b><span>оренд не оплачено</span></div></div>";
+  "<div class='m'><b>"+T.unpaid+"</b><span>оренд з боргом</span></div></div>";
  h+="<div class='wk'><table><thead><tr><th>Костюм</th><th>оренд</th><th>шт</th><th>днів в оренді</th><th>днів у дорозі</th><th>заванта­женість</th><th>дохід</th></tr></thead><tbody>"+
   COST.map(function(c){var x=by[c];return "<tr><td>"+c+"</td><td>"+x.ord+"</td><td>"+x.units+"</td><td>"+x.rentD+"</td><td>"+x.roadD+"</td><td>"+pct(x.rentD+x.roadD,x.cap)+"%</td><td>"+nf(x.inc)+" ₴</td></tr>"}).join("")+
   "</tbody></table></div><p class='mhint'>Костюмо-день — один костюм протягом одного дня. Завантаженість — яку частку місяця костюми були не вдома (в оренді або в дорозі).</p>";
@@ -385,16 +386,16 @@ function todayBlock(){
  items.forEach(function(o){
   if(o.type==="spend")return;
   var ship=o.ship||o.from||"",back=o.back||o.to||o.from||"";
-  if(o.type==="sale"){if(!o.sent&&o.from&&o.from<=t)g.ship.push(o);if(!o.paid&&o.from&&o.from<=t)g.unpaid.push(o);return}
+  if(o.type==="sale"){if(!o.sent&&o.from&&o.from<=t)g.ship.push(o);if(restSum(o)>0&&o.from&&o.from<=t)g.unpaid.push(o);return}
   if(!o.sent&&ship===t)g.ship.push(o);else if(!o.sent&&ship&&ship<t)g.lateShip.push(o);
   if(!o.returned&&back===t)g.back.push(o);else if(!o.returned&&back&&back<addDays(t,-(o.pickup?0:lagOf(o))))g.late.push(o);
-  if(!o.paid&&o.from&&o.from<=t&&!o.returned)g.unpaid.push(o)});
+  if(restSum(o)>0&&o.from&&o.from<=t&&!o.returned)g.unpaid.push(o)});
  var h="";
  if(g.lateShip.length){h+="<div class='k' style='color:var(--red)'>⚠ Прострочена відправка</div>";g.lateShip.forEach(function(o){row(o,esc(o.costume)+" · мало бути "+fm(o.ship||o.from),"sent",o.pickup?"✓ віддала":"✓ відправила")});h+=rows.join("");rows=[]}
  if(g.ship.length){h+="<div class='k'>Сьогодні відправити / віддати</div>";g.ship.forEach(function(o){row(o,esc(o.costume)+(o.pickup?" · самовивіз":" · поштою"+(o.addr?" · "+esc(o.addr):"")),"sent",o.pickup?"✓ віддала":"✓ відправила")});h+=rows.join("");rows=[]}
  if(g.back.length){h+="<div class='k'>Сьогодні повертають</div>";g.back.forEach(function(o){row(o,esc(o.costume)+(o.pickup?" · приносять":" · відправляють назад"),"returned","✓ повернули")});h+=rows.join("");rows=[]}
  if(g.late.length){h+="<div class='k' style='color:var(--red)'>⚠ Давно мали повернутись</div>";g.late.forEach(function(o){row(o,esc(o.costume)+" · мало бути "+fm(o.back||o.to),"returned","✓ повернули")});h+=rows.join("");rows=[]}
- if(g.unpaid.length){h+="<div class='k'>Не оплачено</div>";g.unpaid.forEach(function(o){row(o,esc(o.costume)+" · "+nf(+o.sum||0)+" ₴ · "+fm(o.from),"paid","✓ оплатили")});h+=rows.join("");rows=[]}
+ if(g.unpaid.length){h+="<div class='k'>Чекаю оплату</div>";g.unpaid.forEach(function(o){row(o,esc(o.costume)+" · "+(+o.prepay?"доплатити "+nf(restSum(o))+" ₴ (передоплата "+nf(+o.prepay)+")":nf(+o.sum||0)+" ₴")+" · "+fm(o.from),"paid","✓ оплатили")});h+=rows.join("");rows=[]}
  var bk=backupAge();
  if(bk!==null&&bk>=7&&items.length)h+="<div class='k' style='color:var(--red)'>💾 Копія даних</div><div class='tl'><span class='tt'>"+(bk>=3650?"Ти ще не робила резервну копію":"Остання копія була "+bk+" дн. тому")+"<small>Записи живуть тільки в цьому телефоні. Збережи копію в Telegram або на диск.</small></span><button class='b' id='bk_now'>Зробити</button></div>";
  if(!h)h="<div class='empty' style='padding:10px 0'>На сьогодні справ немає 🎉</div>";
@@ -472,9 +473,9 @@ function card(o){
   (o.type==="sale"?"<div class='dates'>дата: "+fm(o.from)+"</div>":
    (o.pickup?"<div class='dates'>самовивіз · оренда "+fm(o.from)+(o.to&&o.to!==o.from?"–"+fm(o.to):"")+" ("+days+" діб) · повернення "+fm(o.back)+"</div>":
    "<div class='dates'>віддали "+fm(o.ship)+" · оренда "+fm(o.from)+(o.to&&o.to!==o.from?"–"+fm(o.to):"")+" ("+days+" діб) · назад "+fm(o.back)+"</div>"))+
-  "<div class='sumline'>сума "+(+o.sum||0)+" ₴"+(o.type!=="sale"?" · застава "+(+o.dep||0)+" ₴":"")+(o.note?"<br><span style='font-weight:500;font-family:Golos Text'>📝 "+esc(o.note)+"</span>":"")+"</div>"+
+  "<div class='sumline'>сума "+(+o.sum||0)+" ₴"+(!o.paid&&+o.prepay?" · <span style='color:var(--orange)'>передоплата "+nf(+o.prepay)+" ₴, залишок "+nf(restSum(o))+" ₴</span>":"")+(o.type!=="sale"?" · застава "+(+o.dep||0)+" ₴":"")+(o.note?"<br><span style='font-weight:500;font-family:Golos Text'>📝 "+esc(o.note)+"</span>":"")+"</div>"+
   "<div class='badges'>"+
-   "<button class='b"+(o.paid?" on":"")+"' data-act='paid' data-id='"+o.id+"'>"+(o.paid?"✓ оплачено":"оплачено")+"</button>"+
+   "<button class='b"+(o.paid?" on":"")+"' data-act='paid' data-id='"+o.id+"'>"+(o.paid?"✓ оплачено":(+o.prepay?"доплатили "+nf(restSum(o))+" ₴":"оплачено"))+"</button>"+
    (o.type!=="sale"?"<button class='b dep"+(o.depTaken?" on":"")+"' data-act='depTaken' data-id='"+o.id+"'>"+(o.depTaken?"✓ застава у нас":"застава не взята")+"</button>":"")+
    "<button class='b"+(o.sent?" on":"")+"' data-act='sent' data-id='"+o.id+"'>"+(o.pickup?(o.sent?"✓ віддала":"віддала"):(o.sent?"✓ відправлено":"відправлено"))+"</button>"+
    (o.type!=="sale"?"<button class='b"+(o.returned?" on":"")+"' data-act='returned' data-id='"+o.id+"'>"+(o.returned?"✓ повернули":"повернули")+"</button>":"")+
@@ -506,6 +507,9 @@ function splitClient(o){
  if(o.name!=null||o.phone!=null)return {name:o.name||"",phone:o.phone||""};
  var c=String(o.client||""),m=c.match(/\+?\d[\d\s\-()]{7,}\d/);
  return m?{name:c.replace(m[0],"").replace(/[\s,·]+$/,"").replace(/^[\s,·]+/,"").trim(),phone:m[0].trim()}:{name:c.trim(),phone:""}}
+/* скільки реально отримала за запис: повна сума, або передоплата */
+function paidSum(o){return o.type==="spend"?0:(o.paid?(+o.sum||0):(+o.prepay||0))}
+function restSum(o){return o.type==="spend"?0:Math.max(0,(+o.sum||0)-paidSum(o))}
 function tel(s){return esc(s).replace(/(\+?\d[\d\s\-()]{7,}\d)/g,function(m){return "<a href='tel:"+m.replace(/[^\d+]/g,"")+"'>"+m+"</a>"})}
 function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
 
@@ -520,12 +524,12 @@ function moneyView(){
   "<div class='m dep'><b>"+nf(r.depIn)+" ₴</b><span>застав взяла</span></div>"+
   "<div class='m dep'><b>"+nf(r.depOut)+" ₴</b><span>застав повернула</span></div>"+
   "<div class='m dep' id='mdh'><b>"+nf(onHand())+" ₴</b><span>на руках зараз ›</span></div></div>"+
-  "<p class='mhint'>Дохід рахується за датою оренди або продажу, тільки оплачені. Застава — не дохід.</p><h2>Записи за місяць</h2>";
+  "<p class='mhint'>Дохід рахується за датою оренди або продажу: повна оплата або передоплата. Застава — не дохід.</p><h2>Записи за місяць</h2>";
  var rows=items.filter(function(o){return mk(o.from)===key||(o.type==="rent"&&((o.depTaken&&mk(depTakenDate(o))===key)||(o.depBack&&mk(depBackDate(o))===key)))}).slice().sort(function(a,b){return String(b.from).localeCompare(String(a.from))}).map(function(o){
-  var plus=o.type!=="spend"&&o.paid, minus=o.type==="spend";
+  var got=paidSum(o),rest=restSum(o),minus=o.type==="spend";
   return "<div class='item' style='border-left-color:"+(minus?"var(--red)":"var(--lime)")+"'><div class='h'><span class='nm' style='font-size:15px'>"+
    esc(o.type==="spend"?("Витрата: "+(o.note||"")):(o.costume+(o.type==="sale"?" · продаж":" · оренда")))+
-   "</span><span class='mono'>"+fm(o.from)+"</span></div><div class='sumline'>"+(minus?"−":(plus?"+":"не оплачено "))+(+o.sum||0)+" ₴"+
+   "</span><span class='mono'>"+fm(o.from)+"</span></div><div class='sumline'>"+(minus?"−"+(+o.sum||0)+" ₴":(got?"+"+nf(got)+" ₴":"не оплачено "+(+o.sum||0)+" ₴")+(got&&rest?" · <span style='color:var(--orange)'>залишок "+nf(rest)+" ₴</span>":""))+
    (o.type==="rent"&&o.dep?" · застава "+nf(+o.dep)+" ₴ "+(o.depBack?"повернута "+fm(depBackDate(o)):(o.depTaken?"у мене з "+fm(depTakenDate(o)):"не взята")):"")+"</div></div>"}).join("");
  $("#view").innerHTML=head.replace("<h2>Записи за місяць</h2>",analysis(key)+"<h2>Записи за місяць</h2>")+(rows||"<div class='empty'>За цей місяць записів немає.</div>")+
   "<p class='note'>Застава — окремо: може бути ще не взята, взята готівкою або йти накладеним платежем. Застави не є доходом, ми їх повертаємо.</p>";
@@ -659,7 +663,8 @@ function openForm(o,pre){
   "<div class='row2'><div><label id='l_ship'>Відправила</label><input id='f_ship' type='date'></div><div><label id='l_back'>Відправляють назад</label><input id='f_back' type='date'></div></div>"+
   "<div class='row2'><div><label>Сума, ₴</label><input id='f_sum' type='number' inputmode='numeric'></div><div><label>Застава, ₴</label><input id='f_dep' type='number' inputmode='numeric'></div></div>"+
   "<div class='row2' id='f_deprow'><div><label>Заставу взяла (дата)</label><input id='f_dtk' type='date'></div><div><label>Заставу повернула (дата)</label><input id='f_dbk' type='date'></div></div>"+
-  "<label class='chk'><input id='f_paid' type='checkbox'> Оплачено</label>"+
+  "<div class='row2' id='f_payrow'><div><label>Передоплата, ₴</label><input id='f_prepay' type='number' inputmode='numeric' placeholder='0'></div><div><label>Залишок</label><div id='f_rest' style='padding:12px 0;font-family:\"JetBrains Mono\";font-weight:700'>—</div></div></div>"+
+  "<label class='chk'><input id='f_paid' type='checkbox'> Оплачено повністю</label>"+
   "<label>Нотатка</label><textarea id='f_note'></textarea>"+
   "<button class='btn lime' id='f_save' type='button'>Зберегти запис</button>"+
   "<button class='btn ghost' id='f_cancel' type='button'>Скасувати, не зберігати</button>"+
@@ -677,7 +682,9 @@ function openForm(o,pre){
  $("#f_pkseg").querySelectorAll("button").forEach(function(b){b.onclick=function(){$("#f_pk").value=b.dataset.v;drawSeg();$("#f_pk").onchange()}});drawSeg();
  $("#f_from").value=d.from||"";$("#f_to").value=d.to||"";$("#f_ship").value=d.ship||"";$("#f_back").value=d.back||"";
  $("#f_sum").value=d.sum!=null?d.sum:"";$("#f_dep").value=d.dep!=null?d.dep:800*units();$("#f_note").value=d.note||"";
- $("#f_paid").checked=d.paid!==false&&(o?!!o.paid:true);
+ $("#f_paid").checked=d.paid!==false&&(o?!!o.paid:true);$("#f_prepay").value=d.prepay?d.prepay:"";
+ function restUI(){var sum=+$("#f_sum").value||0,pp=+$("#f_prepay").value||0,full=$("#f_paid").checked;$("#f_rest").textContent=full?"0 ₴ — оплачено":(pp?nf(Math.max(0,sum-pp))+" ₴ доплатити":nf(sum)+" ₴ не оплачено");$("#f_rest").style.color=full?"#2f7a24":(pp?"var(--orange)":"var(--red)")}
+ $("#f_prepay").oninput=function(){if(+this.value>0)$("#f_paid").checked=false;restUI()};$("#f_paid").onchange=restUI;$("#f_sum").addEventListener("input",restUI);restUI();
  $("#f_dtk").value=d.depTaken?(d.depTakenAt||depTakenDate(d)):"";$("#f_dbk").value=d.depBack?(d.depBackAt||depBackDate(d)):"";
  function units(){return L.reduce(function(a,l){return a+l.n},0)}
  function drawLines(){
@@ -699,7 +706,7 @@ function openForm(o,pre){
   var pk0=(t==="rent"&&$("#f_pk").value==="1");
   $("#l_ship").textContent=pk0?"Віддала":"Відправила";$("#l_back").textContent=pk0?"Повернення":"Відправляють назад";
   $("#f_npbox").hidden=(pk0||t==="spend");
-  $("#f_deprow").hidden=(t!=="rent");$("#f_paid").closest("label").hidden=(t==="spend");
+  $("#f_deprow").hidden=(t!=="rent");$("#f_paid").closest("label").hidden=(t==="spend");$("#f_payrow").hidden=(t==="spend");
   auto()}
  function auto(){
   if($("#f_type").value!=="rent")return;
@@ -732,7 +739,7 @@ function openForm(o,pre){
   o.pickup=(o.type==="rent"&&$("#f_pk").value==="1");if(o.pickup)o.ttn="";
   o.from=$("#f_from").value;o.to=$("#f_to").value;o.ship=$("#f_ship").value;o.back=$("#f_back").value;
   o.sum=+$("#f_sum").value||0;o.dep=+$("#f_dep").value||0;o.note=$("#f_note").value.trim();
-  o.paid=o.type==="spend"?false:$("#f_paid").checked;
+  o.paid=o.type==="spend"?false:$("#f_paid").checked;o.prepay=o.type==="spend"?0:(+$("#f_prepay").value||0);
   if(o.type==="rent"){var dt=$("#f_dtk").value,db=$("#f_dbk").value;
    o.depTaken=!!(dt||db);o.depTakenAt=dt||(db?db:"");o.depBack=!!db;o.depBackAt=db;if(db)o.done=true}
   o.addr=$("#f_addr").value.trim();if(o.pickup){o.addr="";o.rcpt="";o.ttn=""}
