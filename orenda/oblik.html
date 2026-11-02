@@ -269,13 +269,13 @@ function calendar(){
   items.forEach(function(o){
    if(o.type==="spend")return;
    if(o.type==="sale"){ if(o.from===s) ev+="<button class='ev sale' data-id='"+o.id+"'>продаж "+o.costume+"</button>"; return}
-   if(o.ship===s) ev+="<button class='ev ship' data-id='"+o.id+"'>↑ віддали "+o.costume+"</button>";
+   if((o.ship||(o.from?addDays(o.from,o.pickup?0:-lagOf(o)):""))===s) ev+="<button class='ev ship' data-id='"+o.id+"'>↑ "+(o.pickup?"віддаю ":"відправка ")+o.costume+"</button>";
    if(o.from&&o.to&&s>=o.from&&s<=o.to) ev+="<button class='ev rent' data-id='"+o.id+"'>"+o.costume+"</button>";
    if(o.back===s) ev+="<button class='ev back' data-id='"+o.id+"'>↓ назад "+o.costume+"</button>";
   });
   h+="<div class='cell"+(s===t?" today":"")+"'><span class='d'>"+k+"</span>"+ev+"</div>";
  }
- h+="</div><div class='leg'><span><i style='background:var(--blue)'></i>віддали костюм</span><span><i style='background:var(--lime)'></i>день оренди</span><span><i style='background:var(--orange)'></i>відправляють назад</span><span><i style='background:var(--violet)'></i>продаж</span></div>";
+ h+="</div><div class='leg'><span><i style='background:var(--blue)'></i>відправка / віддаю</span><span><i style='background:var(--lime)'></i>день оренди</span><span><i style='background:var(--orange)'></i>відправляють назад</span><span><i style='background:var(--violet)'></i>продаж</span></div>";
  v.innerHTML=h;
  $("#pm").onclick=function(){cur=new Date(y,m-1,1);draw()};
  $("#nm").onclick=function(){cur=new Date(y,m+1,1);draw()};
@@ -442,7 +442,7 @@ function balView(){
 function openForm(o){
  ed=o||null;var ret=(tab==="form"?"cal":tab);
  var d=o||{type:"rent",lines:[{c:"Щур",n:1}],from:ymd(today()),paid:true};
- var L=lines(d).map(function(l){return {c:l.c,n:l.n}}),autoSum=!o||!+d.sum,autoDep=!o;
+ var L=lines(d).map(function(l){return {c:l.c,n:l.n}}),autoSum=!o||!+d.sum,autoDep=!o,autoShip=!o||!d.ship||(d.from&&d.ship===addDays(d.from,d.pickup?0:-lagOf(d))),autoBack=!o||!d.back||(d.to&&d.back===addDays(d.to,d.pickup?0:lagOf(d)));
  var v=$("#view");
  tab="form";drawTabs();$("#fab").hidden=true;
  v.innerHTML="<div class='add'>"+
@@ -495,12 +495,13 @@ function openForm(o){
   if(f&&t&&(autoSum||!$("#f_sum").value)){var dd=Math.max(1,Math.round((pd(t)-pd(f))/864e5)),tot=0;L.forEach(function(l){tot+=l.n*price(l.c)});$("#f_sum").value=tot*dd;autoSum=true}
   if(autoDep)$("#f_dep").value=800*units();
   var pk=$("#f_pk").value==="1", np=!/харк/i.test($("#f_city").value||""), lag=pk?0:(np?2:1);
-  if(f&&!$("#f_ship").value){var s=pd(f);s.setDate(s.getDate()-lag);$("#f_ship").value=ymd(s)}
-  if(t&&!$("#f_back").value){var b=pd(t);b.setDate(b.getDate()+lag);$("#f_back").value=ymd(b)}}
+  if(f&&(autoShip||!$("#f_ship").value))$("#f_ship").value=addDays(f,-lag);
+  if(t&&(autoBack||!$("#f_back").value))$("#f_back").value=addDays(t,lag)}
  $("#f_pk").onchange=function(){var pk=this.value==="1",np=!/харк/i.test($("#f_city").value||""),lag=pk?0:(np?2:1),f=$("#f_from").value,t=$("#f_to").value;
   if(f)$("#f_ship").value=addDays(f,-lag);if(t)$("#f_back").value=addDays(t,lag);sync()};
  $("#f_type").onchange=sync;$("#f_city").onchange=auto;$("#f_from").onchange=auto;$("#f_to").onchange=auto;
  $("#f_sum").oninput=function(){autoSum=false};$("#f_dep").oninput=function(){autoDep=false};
+ $("#f_ship").onchange=function(){autoShip=false};$("#f_back").onchange=function(){autoBack=false};
  $("#f_addline").onclick=function(){L.push({c:"Щур",n:1});drawLines();auto()};
  drawLines();sync();
  $("#f_cancel").onclick=function(){tab=ret;draw()};

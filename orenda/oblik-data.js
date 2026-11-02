@@ -28,6 +28,8 @@ window.OBLIK_FIX = function(o){
   o.returned=false;o.returnedAt="";o.done=false;o.depBack=false;o.depBackAt="";
   o.depTaken=true;o.depTakenAt=o.depTakenAt||o.from;o.fx2=true;return true;
  }
+ // 3 щури, Турка (Львівська обл.), Viber — відправка поштою 02.11
+ if(!o.fx3 && /Турка/i.test(o.client||"") && !o.pickup && (o.from||"")>="2026-11-02"){o.ship="2026-11-02";o.fx3=true;return true}
  if(o.fx1)return false;
  // замовлення на 4 щури на 15.10, телефон 0985680010 — самовивіз, ще не віддали
  if(String(o.client||"").replace(/\D/g,"").indexOf("0985680010")>=0 && /Щур/.test(o.costume||"") && o.from==="2026-10-15"){
