@@ -3,7 +3,7 @@
 <title>Облік Аліни</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@800;900&family=Golos+Text:wght@500;600;700&family=JetBrains+Mono:wght@600;700&display=swap">
 <style>
-:root{--lime:#C6F833;--lime2:#a8e01f;--pink:#FF4DA0;--blue:#5170FF;--orange:#FF7A29;--violet:#B15CFF;--dark:#16100E;--paper:#FFF4E2;--card:#FFFFFF;--soft:#FFE9C7;--line:#E8D7BC;--red:#E23B2E;--mut:#7a6a5c}
+:root{--lime:#D4FF3A;--lime2:#B6F000;--pink:#FF3D8F;--blue:#3D5BFF;--orange:#FF6B1A;--violet:#9D4DFF;--dark:#111;--paper:#FFFDF2;--card:#FFFFFF;--soft:#FFF4C2;--line:#111;--red:#FF2E2E;--mut:#5a5a5a;--grid:rgba(17,17,17,.07);--r:12px}
 *{box-sizing:border-box}
 html,body{background:var(--paper)}
 body{margin:0;color:var(--dark);font-family:"Golos Text",system-ui,sans-serif;font-size:16px;line-height:1.35;padding-inline:12px;padding-block:12px 120px;overflow-x:hidden;background-image:radial-gradient(rgba(22,16,14,.07) 1.5px,transparent 1.6px);background-size:18px 18px}
@@ -138,6 +138,33 @@ h2{font-size:20px;margin:22px 0 10px}
 .wk .z{color:var(--red);font-weight:700}
 .stock{display:grid;grid-template-columns:1fr 90px;gap:8px;align-items:center;margin-top:6px;font-weight:700}
 .warn{background:#ffe6e2;border:2px solid var(--red);color:var(--red);border-radius:12px;padding:10px 12px;margin-top:10px;font-weight:700;font-size:13px}
+
+/* ---- Кислотний поп ---- */
+body{background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:28px 28px;background-position:-1px -1px}
+.head{background:var(--pink);box-shadow:8px 8px 0 var(--dark);border-radius:14px}
+.head h1{color:#fff;text-shadow:4px 4px 0 var(--dark);font-size:clamp(34px,10vw,52px)}.head .mono,.top .mono{color:#fff!important}
+.m,.item,.add,.bcard,.todo,.plist,.search,.wk table,.tab,.calhead button,.b,.btn,.fab,.chp,.seg,.toast,.note,.warn,.fs{border-radius:var(--r)!important}
+.m,.item,.add,.bcard,.todo,.plist{box-shadow:6px 6px 0 var(--dark)}
+#money .m.in{background:var(--lime)}#money .m.net{background:#DDE3FF}#money .m.dep{background:#FFE1C2}
+#bal .m.hd{background:#DFFFC2}#bal .m.rt{background:#DDE3FF}#bal .m.rd{background:#FFE1C2}
+.msum .m.in{background:var(--lime)}.msum .m.net{background:#DDE3FF}.msum .m.dep{background:#FFE1C2}.msum .m.out{background:#FFE3E3}
+.m b{color:var(--dark)!important;font-size:clamp(22px,6.4vw,30px)}.m span{color:var(--dark);font-weight:700}
+.tab{box-shadow:4px 4px 0 var(--dark)}.tab[aria-selected=true]{background:var(--dark);color:var(--lime);border-color:var(--dark)}
+.cell{border:2px solid var(--dark);border-radius:8px;background:#fff}.cell.today{background:var(--lime);box-shadow:none}.cell.sel{background:#FFD6E7;border-color:var(--pink);box-shadow:none}
+.ev{border:1.5px solid var(--dark)}
+.item{border-left:14px solid var(--lime)}
+.b{box-shadow:3px 3px 0 var(--dark)}.b.on{background:var(--dark);color:var(--lime);border-color:var(--dark)}.b.dep.on{background:var(--orange);color:#fff}
+.btn{box-shadow:6px 6px 0 var(--dark)}.btn.lime{background:var(--lime)}.btn.ghost{box-shadow:6px 6px 0 var(--dark)}.btn.red{box-shadow:6px 6px 0 var(--red)}
+.btn:active,.b:active,.tab:active{transform:translate(3px,3px);box-shadow:none}
+.fab{background:var(--lime);color:var(--dark);box-shadow:6px 6px 0 var(--dark)}
+.chip{border:2px solid var(--dark)}.chip.ok{background:var(--lime)}.chip.cl{background:var(--orange);color:#fff}.chip.rd{background:var(--blue);color:#fff}
+.chp.on,.seg button.on{background:var(--dark);color:var(--lime)}
+.toast{box-shadow:6px 6px 0 var(--dark)}
+.pay.tot{background:var(--lime)}.wk th{background:var(--lime)}
+h2{background:var(--dark);color:var(--lime);display:inline-block;padding:6px 12px;border-radius:8px;font-size:17px}
+.fs{border:2px solid var(--dark);background:#FFFDF2}.note{border:2px solid var(--dark);background:#fff}
+.add input,.add select,.add textarea{border-radius:10px}.add input:focus,.add select:focus,.add textarea:focus{outline:0;box-shadow:4px 4px 0 var(--dark)}
+.search{box-shadow:4px 4px 0 var(--dark)}
 </style></head><body><div class="wrap">
 
 <div class="head"><div class="top"><h1>Облік</h1><span class="mono" id="sync">локально на цьому пристрої</span></div>
