@@ -48,7 +48,7 @@ h2{font-size:20px;margin:22px 0 10px}
 .cell.today{border-color:var(--dark);box-shadow:inset 0 0 0 3px var(--lime)}
 .cell .d{font-family:"JetBrains Mono";font-size:11px;color:var(--mut);font-weight:700}
 .cell .ev{display:block;min-width:0;max-width:100%;border-radius:5px;padding:2px 3px;margin-top:2px;font-weight:700;font-size:9px;color:#16100e;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;border:0;width:100%;text-align:left}
-.ev.rent{background:var(--lime)}.ev.ship{background:var(--blue);color:#fff}.ev.back{background:var(--orange)}.ev.sale{background:var(--violet);color:#fff}
+.ev.rent{background:var(--lime)}.ev.ship{background:var(--blue);color:#fff}.ev.back{background:var(--orange)}.ev.arr{background:var(--pink);color:#fff}.ev.sale{background:var(--violet);color:#fff}
 .leg{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--mut);margin-top:8px;font-weight:600}
 .leg i{width:11px;height:11px;border-radius:3px;display:inline-block;margin-right:5px}
 
@@ -382,19 +382,22 @@ function todayBlock(){
  var t=ymd(today()),rows=[];
  function row(o,txt,act,lbl){rows.push("<div class='tl'>"+stImg(o.costume,"pst")+"<span class='tt'>"+txt+"<small>"+tel(o.client||"без імені")+(o.city&&!o.pickup?" · "+esc(o.city):"")+"</small></span>"+
   (act?"<button class='b' data-act='"+act+"' data-id='"+o.id+"'>"+lbl+"</button>":"")+"<button class='b' data-act='edit' data-id='"+o.id+"' style='min-height:34px;padding:4px 8px;flex:none'>✎</button></div>")}
- var g={ship:[],back:[],late:[],lateShip:[],unpaid:[]};
+ var g={ship:[],back:[],arr:[],late:[],lateShip:[],unpaid:[]};
  items.forEach(function(o){
   if(o.type==="spend")return;
   var ship=o.ship||o.from||"",back=o.back||o.to||o.from||"";
   if(o.type==="sale"){if(!o.sent&&o.from&&o.from<=t)g.ship.push(o);if(restSum(o)>0&&o.from&&o.from<=t)g.unpaid.push(o);return}
   if(!o.sent&&ship===t)g.ship.push(o);else if(!o.sent&&ship&&ship<t)g.lateShip.push(o);
-  if(!o.returned&&back===t)g.back.push(o);else if(!o.returned&&back&&back<addDays(t,-(o.pickup?0:lagOf(o))))g.late.push(o);
+  var arr=arriveOf(o);
+  if(!o.returned&&!o.pickup&&back===t)g.back.push(o);
+  if(!o.returned&&arr===t)g.arr.push(o);else if(!o.returned&&arr&&arr<t)g.late.push(o);
   if(restSum(o)>0&&o.from&&o.from<=t&&!o.returned)g.unpaid.push(o)});
  var h="";
  if(g.lateShip.length){h+="<div class='k' style='color:var(--red)'>⚠ Прострочена відправка</div>";g.lateShip.forEach(function(o){row(o,esc(o.costume)+" · мало бути "+fm(o.ship||o.from),"sent",o.pickup?"✓ віддала":"✓ відправила")});h+=rows.join("");rows=[]}
  if(g.ship.length){h+="<div class='k'>Сьогодні відправити / віддати</div>";g.ship.forEach(function(o){row(o,esc(o.costume)+(o.pickup?" · самовивіз":" · поштою"+(o.addr?" · "+esc(o.addr):"")),"sent",o.pickup?"✓ віддала":"✓ відправила")});h+=rows.join("");rows=[]}
- if(g.back.length){h+="<div class='k'>Сьогодні повертають</div>";g.back.forEach(function(o){row(o,esc(o.costume)+(o.pickup?" · приносять":" · відправляють назад"),"returned","✓ повернули")});h+=rows.join("");rows=[]}
- if(g.late.length){h+="<div class='k' style='color:var(--red)'>⚠ Давно мали повернутись</div>";g.late.forEach(function(o){row(o,esc(o.costume)+" · мало бути "+fm(o.back||o.to),"returned","✓ повернули")});h+=rows.join("");rows=[]}
+ if(g.back.length){h+="<div class='k'>Сьогодні відправляють назад</div>";g.back.forEach(function(o){row(o,esc(o.costume)+" · приїде "+arrTxt(o),"","")});h+=rows.join("");rows=[]}
+ if(g.arr.length){h+="<div class='k'>Сьогодні повертаються до мене</div>";g.arr.forEach(function(o){row(o,esc(o.costume)+(o.pickup?" · приносять":" · приїде поштою")+(o.arriveT?" о "+o.arriveT:""),"returned","✓ отримала")});h+=rows.join("");rows=[]}
+ if(g.late.length){h+="<div class='k' style='color:var(--red)'>⚠ Мали вже повернутись</div>";g.late.forEach(function(o){row(o,esc(o.costume)+" · мало бути "+arrTxt(o),"returned","✓ отримала")});h+=rows.join("");rows=[]}
  if(g.unpaid.length){h+="<div class='k'>Чекаю оплату</div>";g.unpaid.forEach(function(o){row(o,esc(o.costume)+" · "+(+o.prepay?"доплатити "+nf(restSum(o))+" ₴ (передоплата "+nf(+o.prepay)+")":nf(+o.sum||0)+" ₴")+" · "+fm(o.from),"paid","✓ оплатили")});h+=rows.join("");rows=[]}
  var bk=backupAge();
  if(bk!==null&&bk>=7&&items.length)h+="<div class='k' style='color:var(--red)'>💾 Копія даних</div><div class='tl'><span class='tt'>"+(bk>=3650?"Ти ще не робила резервну копію":"Остання копія була "+bk+" дн. тому")+"<small>Записи живуть тільки в цьому телефоні. Збережи копію в Telegram або на диск.</small></span><button class='b' id='bk_now'>Зробити</button></div>";
@@ -402,7 +405,7 @@ function todayBlock(){
  return "<div class='todo'><h3>Сьогодні · "+today().toLocaleDateString("uk-UA",{day:"numeric",month:"long"})+"</h3>"+h+"</div>"}
 function dayPanel(s){
  var L=items.filter(function(o){if(o.type==="spend")return false;if(o.type==="sale")return o.from===s;
-  var ship=o.ship||(o.from?addDays(o.from,o.pickup?0:-lagOf(o)):"");return ship===s||o.back===s||(o.from&&s>=o.from&&s<=(o.to||o.from))});
+  var ship=o.ship||(o.from?addDays(o.from,o.pickup?0:-lagOf(o)):"");return ship===s||o.back===s||arriveOf(o)===s||(o.from&&s>=o.from&&s<=(o.to||o.from))});
  if(!L.length)return "<div class='dayp'><div class='calhead'><h3>"+pd(s).toLocaleDateString("uk-UA",{day:"numeric",month:"long"})+"</h3><button type='button' id='dp_add' class='b'>+ запис на цей день</button></div><div class='empty' style='padding:8px 0'>Нічого немає.</div></div>";
  return "<div class='dayp'><div class='calhead'><h3>"+pd(s).toLocaleDateString("uk-UA",{day:"numeric",month:"long"})+"</h3><button type='button' id='dp_add' class='b'>+ запис</button></div>"+L.map(card).join("")+"</div>"}
 function calendar(){
@@ -418,11 +421,12 @@ function calendar(){
    if(o.type==="sale"){ if(o.from===s) ev+="<button class='ev sale' data-id='"+o.id+"'>продаж "+o.costume+"</button>"; return}
    if((o.ship||(o.from?addDays(o.from,o.pickup?0:-lagOf(o)):""))===s) ev+="<button class='ev ship' data-id='"+o.id+"'>↑ "+(o.pickup?"віддаю ":"відправка ")+o.costume+"</button>";
    if(o.from&&o.to&&s>=o.from&&s<=o.to) ev+="<button class='ev rent' data-id='"+o.id+"'>"+o.costume+"</button>";
-   if(o.back===s) ev+="<button class='ev back' data-id='"+o.id+"'>↓ назад "+o.costume+"</button>";
+   if(o.back===s&&!o.pickup) ev+="<button class='ev back' data-id='"+o.id+"'>↓ назад "+o.costume+"</button>";
+   if(arriveOf(o)===s) ev+="<button class='ev arr' data-id='"+o.id+"'>⌂ "+(o.arriveT?o.arriveT+" ":"")+o.costume+"</button>";
   });
   h+="<div class='cell"+(s===t?" today":"")+(s===cday?" sel":"")+"' data-day='"+s+"'><span class='d'>"+k+"</span>"+ev+"</div>";
  }
- h+="</div><div class='leg'><span><i style='background:var(--blue)'></i>відправка / віддаю</span><span><i style='background:var(--lime)'></i>день оренди</span><span><i style='background:var(--orange)'></i>відправляють назад</span><span><i style='background:var(--violet)'></i>продаж</span></div>";
+ h+="</div><div class='leg'><span><i style='background:var(--blue)'></i>відправка / віддаю</span><span><i style='background:var(--lime)'></i>день оренди</span><span><i style='background:var(--orange)'></i>відправляють назад</span><span><i style='background:var(--pink)'></i>повертається до мене</span><span><i style='background:var(--violet)'></i>продаж</span></div>";
  if(cday&&cday.slice(0,7)===mk(ymd(new Date(y,m,1))))h+=dayPanel(cday);
  h+="<p class='mhint'>Натисни на день — побачиш усе, що на нього заплановано.</p>";
  v.innerHTML=h;
@@ -471,8 +475,8 @@ function card(o){
   "<div class='h'><span class='nm'>"+esc(o.costume)+(o.type==="sale"?" · продаж":"")+"</span><span class='mono'>"+(o.pickup?"самовивіз":(o.city||""))+"</span></div>"+
   "<div class='sub'>"+tel(o.client||"без імені")+(o.chat?" · 💬 "+esc(o.chat):"")+(o.pickup?" · віддаю сама":"")+(o.ttn?" · ТТН "+esc(o.ttn):"")+(o.addr&&!o.pickup?"<br>📦 "+esc(o.addr)+(o.rcpt?" · "+esc(o.rcpt):""):"")+"</div>"+(statusOf(o)||"")+
   (o.type==="sale"?"<div class='dates'>дата: "+fm(o.from)+"</div>":
-   (o.pickup?"<div class='dates'>самовивіз · оренда "+fm(o.from)+(o.to&&o.to!==o.from?"–"+fm(o.to):"")+" ("+days+" діб) · повернення "+fm(o.back)+"</div>":
-   "<div class='dates'>віддали "+fm(o.ship)+" · оренда "+fm(o.from)+(o.to&&o.to!==o.from?"–"+fm(o.to):"")+" ("+days+" діб) · назад "+fm(o.back)+"</div>"))+
+   (o.pickup?"<div class='dates'>самовивіз · оренда "+fm(o.from)+(o.to&&o.to!==o.from?"–"+fm(o.to):"")+" ("+days+" діб) · повернення "+arrTxt(o)+"</div>":
+   "<div class='dates'>віддали "+fm(o.ship)+" · оренда "+fm(o.from)+(o.to&&o.to!==o.from?"–"+fm(o.to):"")+" ("+days+" діб) · назад "+fm(o.back)+" · <b>приїде "+arrTxt(o)+"</b></div>"))+
   "<div class='sumline'>сума "+(+o.sum||0)+" ₴"+(!o.paid&&+o.prepay?" · <span style='color:var(--orange)'>передоплата "+nf(+o.prepay)+" ₴, залишок "+nf(restSum(o))+" ₴</span>":"")+(o.type!=="sale"?" · застава "+(+o.dep||0)+" ₴":"")+(o.note?"<br><span style='font-weight:500;font-family:Golos Text'>📝 "+esc(o.note)+"</span>":"")+"</div>"+
   "<div class='badges'>"+
    "<button class='b"+(o.paid?" on":"")+"' data-act='paid' data-id='"+o.id+"'>"+(o.paid?"✓ оплачено":(+o.prepay?"доплатили "+nf(restSum(o))+" ₴":"оплачено"))+"</button>"+
@@ -555,18 +559,21 @@ function lines(o){
 function label(L){return L.map(function(l){return l.n>1?l.c+" ×"+l.n:l.c}).join(" + ")}
 function addDays(s,n){var d=pd(s);d.setDate(d.getDate()+n);return ymd(d)}
 function lagOf(o){return /харк/i.test(o.city||"")?1:2}
+/* коли костюм має бути знову в мене: вписана дата приїзду, або для самовивозу — день повернення, або назад + дорога */
+function arriveOf(o){if(o.arrive)return o.arrive;var b=o.back||o.to||o.from;if(!b)return "";return o.pickup?b:addDays(b,lagOf(o))}
+function arrTxt(o){var a=arriveOf(o);return a?fm(a)+(o.arriveT?" "+o.arriveT:""):"—"}
 /* де костюм із цього запису в день s: "road" — в дорозі, "rent" — в клієнта, "" — вдома */
 function stateOf(o,s){
  if(o.type!=="rent"||!o.from)return "";
  /* «повернули» знімає костюм з оренди; закрита застава сама по собі — ні, тоді діють дати оренди */
  if(o.returned&&s>=(o.returnedAt||ymd(today())))return "";
- if(o.pickup){var ret=o.back||o.to||o.from;return (s>=o.from&&s<=ret)?"rent":""}
+ if(o.pickup){var ret=o.arrive||o.back||o.to||o.from;return (s>=o.from&&s<=ret)?"rent":""}
  var from=o.from,to=o.to||o.from,ship=o.ship||from,back=o.back||addDays(to,1);
  if(s<ship)return "";
  if(s<from)return "road";
  if(s<back)return "rent";
  if(!(o.returned||o.done))return "road";
- var arr=o.returnedAt||addDays(back,lagOf(o));
+ var arr=o.returnedAt||arriveOf(o);
  return s<arr?"road":""}
 function counts(s){
  var st=stock(),r={};
@@ -612,7 +619,7 @@ function balView(){
   "</tbody></table></div><p class='mhint'>Число — скільки цього костюма лежить у тебе на руках у той день. Дорога туди й назад враховується.</p>";
  var od=items.filter(function(o){
   if(o.type!=="rent"||o.returned||o.done)return false;
-  var b=o.back||addDays(o.to||o.from,1);return ymd(today())>addDays(b,lagOf(o)+2)});
+  var a=arriveOf(o);return a&&ymd(today())>addDays(a,2)});
  if(od.length)h+="<div class='warn'>⚠ Давно мали повернутись, але не відмічено «повернули»: "+od.map(function(o){return esc(o.costume)+" ("+fm(o.from)+")"}).join(", ")+". Поки не відмічено, вони рахуються в дорозі. Коли отримаєш — відкрий «В роботі» і натисни «повернули».</div>";
  var st=stock();
  h+="<h2>Скільки всього</h2><div class='add'>"+COST.map(function(c){return "<div class='stock'><span>"+c+"</span><input type='number' min='0' inputmode='numeric' data-c='"+c+"' value='"+st[c]+"'></div>"}).join("")+
@@ -631,7 +638,7 @@ function balView(){
 /* чи вистачить костюмів на всі дні цього запису (з урахуванням решти записів) */
 function overbook(o){
  var rest=items.filter(function(x){return x.id!==o.id}),st=stock(),bad={};
- var a=o.ship||o.from,b=o.back||o.to||o.from;if(!a||!b)return "";
+ var a=o.ship||o.from,b=arriveOf(o)||o.back||o.to||o.from;if(!a||!b)return "";
  for(var s=a;s<=b;s=addDays(s,1)){
   var mine=stateOf(o,s);if(!mine)continue;
   var used={};rest.forEach(function(x){if(!stateOf(x,s))return;lines(x).forEach(function(l){used[l.c]=(used[l.c]||0)+l.n})});
@@ -643,7 +650,7 @@ function openForm(o,pre){
  ed=o||null;var ret=(tab==="form"?"cal":tab);formRet=ret;
  var d=o||{type:"rent",lines:[{c:"Щур",n:1}],from:(pre&&pre.from)||ymd(today()),to:(pre&&pre.from)||"",paid:true};
  try{if(!(history.state&&history.state.f))history.pushState({f:1},"")}catch(e){}
- var L=lines(d).map(function(l){return {c:l.c,n:l.n}}),autoSum=!o||!+d.sum,autoDep=!o,autoShip=!o||!d.ship||(d.from&&d.ship===addDays(d.from,d.pickup?0:-lagOf(d))),autoBack=!o||!d.back||(d.to&&d.back===addDays(d.to,d.pickup?0:lagOf(d)));
+ var L=lines(d).map(function(l){return {c:l.c,n:l.n}}),autoSum=!o||!+d.sum,autoDep=!o,autoShip=!o||!d.ship||(d.from&&d.ship===addDays(d.from,d.pickup?0:-lagOf(d))),autoBack=!o||!d.back||(d.to&&d.back===addDays(d.to,d.pickup?0:lagOf(d))),autoArr=!d.arrive;
  var v=$("#view");
  tab="form";drawTabs();$("#fab").hidden=true;
  v.innerHTML="<div class='add'>"+
@@ -661,6 +668,7 @@ function openForm(o,pre){
   "<label>ТТН</label><input id='f_ttn' type='text' inputmode='numeric'></div>"+
   "<div class='row2'><div><label id='l_from'>Оренда з</label><input id='f_from' type='date'></div><div><label>Оренда по</label><input id='f_to' type='date'></div></div>"+
   "<div class='row2'><div><label id='l_ship'>Відправила</label><input id='f_ship' type='date'></div><div><label id='l_back'>Відправляють назад</label><input id='f_back' type='date'></div></div>"+
+  "<div class='row2' id='f_arrrow'><div><label id='l_arr'>Приїде до мене (дата)</label><input id='f_arr' type='date'></div><div><label>Час</label><input id='f_arrT' type='time'></div></div>"+
   "<div class='row2'><div><label>Сума, ₴</label><input id='f_sum' type='number' inputmode='numeric'></div><div><label>Застава, ₴</label><input id='f_dep' type='number' inputmode='numeric'></div></div>"+
   "<div class='row2' id='f_deprow'><div><label>Заставу взяла (дата)</label><input id='f_dtk' type='date'></div><div><label>Заставу повернула (дата)</label><input id='f_dbk' type='date'></div></div>"+
   "<div class='row2' id='f_payrow'><div><label>Передоплата, ₴</label><input id='f_prepay' type='number' inputmode='numeric' placeholder='0'></div><div><label>Залишок</label><div id='f_rest' style='padding:12px 0;font-family:\"JetBrains Mono\";font-weight:700'>—</div></div></div>"+
@@ -680,7 +688,7 @@ function openForm(o,pre){
  $("#f_tseg").querySelectorAll("button").forEach(function(b){b.onclick=function(){$("#f_type").value=b.dataset.v;drawT();sync()}});drawT();
  function drawSeg(){$("#f_pkseg").querySelectorAll("button").forEach(function(b){b.classList.toggle("on",b.dataset.v===$("#f_pk").value)})}
  $("#f_pkseg").querySelectorAll("button").forEach(function(b){b.onclick=function(){$("#f_pk").value=b.dataset.v;drawSeg();$("#f_pk").onchange()}});drawSeg();
- $("#f_from").value=d.from||"";$("#f_to").value=d.to||"";$("#f_ship").value=d.ship||"";$("#f_back").value=d.back||"";
+ $("#f_from").value=d.from||"";$("#f_to").value=d.to||"";$("#f_ship").value=d.ship||"";$("#f_back").value=d.back||"";$("#f_arr").value=d.arrive||"";$("#f_arrT").value=d.arriveT||"";
  $("#f_sum").value=d.sum!=null?d.sum:"";$("#f_dep").value=d.dep!=null?d.dep:800*units();$("#f_note").value=d.note||"";
  $("#f_paid").checked=d.paid!==false&&(o?!!o.paid:true);$("#f_prepay").value=d.prepay?d.prepay:"";
  function restUI(){var sum=+$("#f_sum").value||0,pp=+$("#f_prepay").value||0,full=$("#f_paid").checked;$("#f_rest").textContent=full?"0 ₴ — оплачено":(pp?nf(Math.max(0,sum-pp))+" ₴ доплатити":nf(sum)+" ₴ не оплачено");$("#f_rest").style.color=full?"#2f7a24":(pp?"var(--orange)":"var(--red)")}
@@ -705,6 +713,7 @@ function openForm(o,pre){
   $("#f_pkbox").hidden=(t!=="rent");
   var pk0=(t==="rent"&&$("#f_pk").value==="1");
   $("#l_ship").textContent=pk0?"Віддала":"Відправила";$("#l_back").textContent=pk0?"Повернення":"Відправляють назад";
+  $("#f_arrrow").hidden=(t!=="rent");$("#l_arr").textContent=pk0?"Приносять (дата)":"Приїде до мене (дата)";$("#f_back").closest("div").hidden=(t!=="rent"||pk0);
   $("#f_npbox").hidden=(pk0||t==="spend");
   $("#f_deprow").hidden=(t!=="rent");$("#f_paid").closest("label").hidden=(t==="spend");$("#f_payrow").hidden=(t==="spend");
   auto()}
@@ -715,12 +724,13 @@ function openForm(o,pre){
   if(autoDep)$("#f_dep").value=800*units();
   var pk=$("#f_pk").value==="1", np=!/харк/i.test($("#f_city").value||""), lag=pk?0:(np?2:1);
   if(f&&(autoShip||!$("#f_ship").value))$("#f_ship").value=addDays(f,-lag);
-  if(t&&(autoBack||!$("#f_back").value))$("#f_back").value=addDays(t,lag)}
+  if(t&&(autoBack||!$("#f_back").value))$("#f_back").value=addDays(t,lag);
+  var bk=$("#f_back").value;if(bk&&autoArr)$("#f_arr").value=pk?bk:addDays(bk,lag)}
  $("#f_pk").onchange=function(){var pk=this.value==="1",np=!/харк/i.test($("#f_city").value||""),lag=pk?0:(np?2:1),f=$("#f_from").value,t=$("#f_to").value;
   if(f)$("#f_ship").value=addDays(f,-lag);if(t)$("#f_back").value=addDays(t,lag);sync()};
  $("#f_type").onchange=sync;$("#f_city").onchange=auto;$("#f_from").onchange=auto;$("#f_to").onchange=auto;
  $("#f_sum").oninput=function(){autoSum=false};$("#f_dep").oninput=function(){autoDep=false};
- $("#f_ship").onchange=function(){autoShip=false};$("#f_back").onchange=function(){autoBack=false};
+ $("#f_ship").onchange=function(){autoShip=false};$("#f_back").onchange=function(){autoBack=false;auto()};$("#f_arr").onchange=function(){autoArr=false};
  $("#f_addline").onclick=function(){L.push({c:"Щур",n:1});drawLines();auto()};
  drawLines();sync();
  window.scrollTo({top:v.getBoundingClientRect().top+window.pageYOffset-8,behavior:"smooth"});
@@ -737,13 +747,14 @@ function openForm(o,pre){
   o.type=$("#f_type").value;o.lines=L.map(function(l){return {c:l.c,n:l.n}});o.costume=label(L);o.name=$("#f_name").value.trim();o.phone=$("#f_phone").value.trim();o.client=(o.name+" "+o.phone).trim();o.rcpt=$("#f_rcpt").value.trim();o.chat=$("#f_chat").value.trim();
   o.city=$("#f_city").value.trim();if(o.type==="rent"&&$("#f_pk").value==="1")o.city="Харків";o.ttn=$("#f_ttn").value.trim();
   o.pickup=(o.type==="rent"&&$("#f_pk").value==="1");if(o.pickup)o.ttn="";
-  o.from=$("#f_from").value;o.to=$("#f_to").value;o.ship=$("#f_ship").value;o.back=$("#f_back").value;
+  o.from=$("#f_from").value;o.to=$("#f_to").value;o.ship=$("#f_ship").value;o.back=$("#f_back").value;o.arrive=$("#f_arr").value;o.arriveT=$("#f_arrT").value;
+  if(o.pickup&&o.arrive)o.back=o.arrive;
   o.sum=+$("#f_sum").value||0;o.dep=+$("#f_dep").value||0;o.note=$("#f_note").value.trim();
   o.paid=o.type==="spend"?false:$("#f_paid").checked;o.prepay=o.type==="spend"?0:(+$("#f_prepay").value||0);
   if(o.type==="rent"){var dt=$("#f_dtk").value,db=$("#f_dbk").value;
    o.depTaken=!!(dt||db);o.depTakenAt=dt||(db?db:"");o.depBack=!!db;o.depBackAt=db;if(db)o.done=true}
   o.addr=$("#f_addr").value.trim();if(o.pickup){o.addr="";o.rcpt="";o.ttn=""}
-  if(o.type!=="rent"){o.to="";o.ship="";o.back=""}
+  if(o.type!=="rent"){o.to="";o.ship="";o.back="";o.arrive="";o.arriveT=""}
   if(o.type==="rent"){var ob=overbook(o);if(ob&&!confirm("⚠ Не вистачає костюмів: "+ob+". Все одно зберегти?"))return}
   if(!ed)items.push(o);
   save();out();toast(ed?"Оновлено":"Додано")};
