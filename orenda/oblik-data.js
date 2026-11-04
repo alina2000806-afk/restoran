@@ -3,7 +3,7 @@
 window.OBLIK_SEED = [
  {id:"a-polina-1105", type:"rent", lines:[{c:"Щур",n:2}], costume:"Щур ×2", name:"Поліна", phone:"0505263898", client:"Поліна 0505263898",
   pickup:true, city:"Харків", ship:"2026-11-04", shipT:"19:00", from:"2026-11-05", to:"2026-11-05", back:"2026-11-06", arrive:"2026-11-06", arriveT:"",
-  sum:500, dep:1600, prepay:0, paid:false, note:"час повернення 6-го ще не знає"},
+  sum:500, dep:1600, prepay:0, paid:true, depTaken:false, note:"час повернення 6-го ще не знає"},
  {id:"b-pavuk-0923", type:"rent", costume:"Павук", client:"клієнт з Direct", city:"Харків",
   ttn:"", ship:"2026-09-22", from:"2026-09-23", to:"2026-09-23", back:"2026-09-24",
   sum:200, dep:500, paid:true, depTaken:true, sent:true,
@@ -33,6 +33,8 @@ window.OBLIK_FIX = function(o){
  }
  // 3 щури, Турка (Львівська обл.), Viber — відправка поштою 02.11
  if(!o.fx3 && /Турка/i.test(o.client||"") && !o.pickup && (o.from||"")>="2026-11-02"){o.ship="2026-11-02";o.fx3=true;return true}
+ // Поліна: оплачено, застава не взята
+ if(!o.fx4 && o.id==="a-polina-1105"){o.paid=true;o.prepay=0;o.depTaken=false;o.depBack=false;o.fx4=true;return true}
  if(o.fx1)return false;
  // замовлення на 4 щури на 15.10, телефон 0985680010 — самовивіз, ще не віддали
  if(String(o.client||"").replace(/\D/g,"").indexOf("0985680010")>=0 && /Щур/.test(o.costume||"") && o.from==="2026-10-15"){
