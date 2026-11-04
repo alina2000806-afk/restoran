@@ -1,6 +1,9 @@
 /* Записи, які веде Стас. Сторінка підтягує їх і зливає зі змінами Аліни (за id).
    ship — коли костюм пішов від нас; from/to — дні оренди; back — коли клієнт відправляє його назад. */
 window.OBLIK_SEED = [
+ {id:"a-polina-1105", type:"rent", lines:[{c:"Щур",n:2}], costume:"Щур ×2", name:"Поліна", phone:"0505263898", client:"Поліна 0505263898",
+  pickup:true, city:"Харків", ship:"2026-11-04", shipT:"19:00", from:"2026-11-05", to:"2026-11-05", back:"2026-11-06", arrive:"2026-11-06", arriveT:"",
+  sum:500, dep:1600, prepay:0, paid:false, note:"час повернення 6-го ще не знає"},
  {id:"b-pavuk-0923", type:"rent", costume:"Павук", client:"клієнт з Direct", city:"Харків",
   ttn:"", ship:"2026-09-22", from:"2026-09-23", to:"2026-09-23", back:"2026-09-24",
   sum:200, dep:500, paid:true, depTaken:true, sent:true,

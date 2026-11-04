@@ -567,7 +567,7 @@ function stateOf(o,s){
  if(o.type!=="rent"||!o.from)return "";
  /* «повернули» знімає костюм з оренди; закрита застава сама по собі — ні, тоді діють дати оренди */
  if(o.returned&&s>=(o.returnedAt||ymd(today())))return "";
- if(o.pickup){var ret=o.arrive||o.back||o.to||o.from;return (s>=o.from&&s<=ret)?"rent":""}
+ if(o.pickup){var st0=o.ship||o.from,ret=o.arrive||o.back||o.to||o.from;return (s>=st0&&s<=ret)?"rent":""}
  var from=o.from,to=o.to||o.from,ship=o.ship||from,back=o.back||addDays(to,1);
  if(s<ship)return "";
  if(s<from)return "road";
@@ -575,11 +575,15 @@ function stateOf(o,s){
  if(!(o.returned||o.done))return "road";
  var arr=o.returnedAt||arriveOf(o);
  return s<arr?"road":""}
-function counts(s){
- var st=stock(),r={};
- COST.forEach(function(c){r[c]={all:st[c],road:0,rent:0,home:0}});
- items.forEach(function(o){var k=stateOf(o,s);if(!k)return;lines(o).forEach(function(l){if(r[l.c])r[l.c][k]+=l.n})});
- COST.forEach(function(c){r[c].home=r[c].all-r[c].road-r[c].rent});
+/* зайнятість у день s з урахуванням часу: якщо один повертає о 18:00, а інший забирає о 19:00 — костюм вільний */
+function counts(s,list){
+ var st=stock(),r={},ev={};if(!Array.isArray(list))list=items;
+ COST.forEach(function(c){r[c]={all:st[c],road:0,rent:0,home:0};ev[c]=[]});
+ list.forEach(function(o){var k=stateOf(o,s);if(!k)return;
+  var t0=(o.ship||o.from)===s&&o.shipT?o.shipT:"00:00",t1=arriveOf(o)===s&&o.arriveT?o.arriveT:"24:00";
+  lines(o).forEach(function(l){if(!r[l.c])return;r[l.c][k]+=l.n;ev[l.c].push([t0,1,l.n]);ev[l.c].push([t1,0,l.n])})});
+ COST.forEach(function(c){var e=ev[c].sort(function(a,b){return a[0]<b[0]?-1:a[0]>b[0]?1:a[1]-b[1]}),cur=0,peak=0;
+  e.forEach(function(x){cur+=x[1]?x[2]:-x[2];if(cur>peak)peak=cur});r[c].busy=peak;r[c].home=r[c].all-peak});
  return r}
 function totals(r){var t={all:0,home:0,road:0,rent:0};
  COST.forEach(function(c){t.all+=r[c].all;t.road+=r[c].road;t.rent+=r[c].rent;t.home+=Math.max(0,r[c].home)});
@@ -637,12 +641,12 @@ function balView(){
 
 /* чи вистачить костюмів на всі дні цього запису (з урахуванням решти записів) */
 function overbook(o){
- var rest=items.filter(function(x){return x.id!==o.id}),st=stock(),bad={};
+ var list=items.filter(function(x){return x.id!==o.id}).concat([o]),bad={};
  var a=o.ship||o.from,b=arriveOf(o)||o.back||o.to||o.from;if(!a||!b)return "";
  for(var s=a;s<=b;s=addDays(s,1)){
-  var mine=stateOf(o,s);if(!mine)continue;
-  var used={};rest.forEach(function(x){if(!stateOf(x,s))return;lines(x).forEach(function(l){used[l.c]=(used[l.c]||0)+l.n})});
-  lines(o).forEach(function(l){var free=(st[l.c]||0)-(used[l.c]||0)-l.n;if(free<0&&!bad[l.c])bad[l.c]=fm(s)+" бракує "+(-free)})}
+  if(!stateOf(o,s))continue;
+  var r=counts(s,list);
+  lines(o).forEach(function(l){if(r[l.c]&&r[l.c].home<0&&!bad[l.c])bad[l.c]=fm(s)+" бракує "+(-r[l.c].home)})}
  return Object.keys(bad).map(function(c){return c+": "+bad[c]}).join("; ")}
 /* ---------- форма ---------- */
 var formRet="cal";
