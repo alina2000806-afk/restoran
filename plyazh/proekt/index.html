@@ -170,6 +170,19 @@ body.noscroll{overflow:hidden}
 .step b{font-family:var(--display);font-size:clamp(17px,4.4vw,22px);font-weight:800}
 .step p{margin:6px 0 0;color:var(--muted);font-size:15.5px}
 @media (min-width:900px){.story{grid-template-columns:1fr 1fr;column-gap:22px}}
+
+/* lightbox */
+.photos figure img,.step img,.plan a img{cursor:zoom-in}
+.lb{position:fixed;inset:0;z-index:100;background:rgba(5,10,18,.94);display:flex;flex-direction:column;align-items:center;justify-content:center;touch-action:pan-y}
+.lb[hidden]{display:none}
+.lb img{max-width:96vw;max-height:78vh;border-radius:14px;object-fit:contain;user-select:none;-webkit-user-drag:none;transition:opacity .2s}
+.lb .lb-cap{max-width:min(760px,92vw);text-align:center;margin-top:12px;font-size:15px;color:var(--fg)}
+.lb .lb-n{font-family:var(--display);font-size:12px;letter-spacing:.12em;color:var(--accent-2);margin-top:6px}
+.lb button{position:absolute;border:1px solid var(--stroke);background:rgba(255,255,255,.12);color:#fff;border-radius:99px;width:52px;height:52px;font-size:24px;cursor:pointer;backdrop-filter:blur(8px)}
+.lb .lb-x{top:14px;right:14px}
+.lb .lb-p{left:14px;top:50%;transform:translateY(-50%)}
+.lb .lb-nx{right:14px;top:50%;transform:translateY(-50%)}
+@media (max-width:560px){.lb .lb-p,.lb .lb-nx{top:auto;bottom:18px;transform:none}}
 </style>
 </head>
 <body>
@@ -341,7 +354,7 @@ body.noscroll{overflow:hidden}
     <section class="part" id="viz">
       <div class="kicker">06 · Візуалізації</div>
       <h2>Один день на пляжі</h2>
-      <p class="hint">Усі кадри — фото цієї ділянки, перероблені в одному стилі: літо, тепле світло, дерево під горіх, графітові дахи, білі пластикові лежаки. Бюджетно, але охайно. Натисніть на фото, щоб відкрити у повному розмірі.</p>
+      <p class="hint">Усі кадри — фото цієї ділянки, перероблені в одному стилі: літо, тепле світло, дерево під горіх, графітові дахи, білі пластикові лежаки. Бюджетно, але охайно. Натисніть на фото — далі гортайте свайпом або стрілками.</p>
       <div class="palette">
         <span><i style="background:#6b4428"></i>Горіх</span><span><i style="background:#3a3d42"></i>Графіт</span><span><i style="background:#e9dcc3"></i>Пісок і полотно</span><span><i style="background:#ffffff"></i>Білі лежаки</span><span><i style="background:#111"></i>Чорні таблички</span><span><i style="background:#ffc46b"></i>Теплі гірлянди</span>
       </div>
@@ -549,6 +562,29 @@ function show(k){var d=S[k];chips.forEach(function(c){c.classList.toggle('on',c.
  window.dispatchEvent(new CustomEvent('beachstyle',{detail:{style:k,sw:d.sw}}));}
 chips.forEach(function(c){c.addEventListener('click',function(){show(c.dataset.style)})});
 show('light');
+})();
+</script>
+
+<div class="lb" hidden role="dialog" aria-modal="true" aria-label="Перегляд фото"><button type="button" class="lb-x" aria-label="Закрити">✕</button><button type="button" class="lb-p" aria-label="Попереднє фото">‹</button><img alt=""><div class="lb-cap"></div><div class="lb-n"></div><button type="button" class="lb-nx" aria-label="Наступне фото">›</button></div>
+<script>
+(() => {
+  const lb = document.querySelector('.lb'), im = lb.querySelector('img'), cap = lb.querySelector('.lb-cap'), num = lb.querySelector('.lb-n');
+  let list = [], i = 0;
+  const SEL = '.photos figure img, .step img, .plan a img';
+  const srcOf = el => el.closest('a[href^="foto/"]')?.getAttribute('href') || el.getAttribute('src');
+  const capOf = el => { const f = el.closest('figure,.step,.plan'); const c = f && f.querySelector('figcaption,.cap,.kicker'); return c ? c.innerText.replace(/\s+/g, ' ').trim() : (el.alt || ''); };
+  const show = k => { i = (k + list.length) % list.length; const el = list[i]; im.style.opacity = 0; im.onload = () => im.style.opacity = 1; im.src = srcOf(el); im.alt = el.alt || ''; cap.textContent = capOf(el); num.textContent = (i + 1) + ' / ' + list.length; const n = list[(i + 1) % list.length]; if (n) new Image().src = srcOf(n); };
+  const open = el => { const sec = el.closest('section') || document; list = [...sec.querySelectorAll(SEL)]; show(list.indexOf(el)); lb.hidden = false; document.body.style.overflow = 'hidden'; };
+  const close = () => { lb.hidden = true; document.body.style.overflow = ''; };
+  document.addEventListener('click', e => { const el = e.target.closest('img'); if (!el || !el.matches(SEL)) return; e.preventDefault(); open(el); });
+  lb.querySelector('.lb-x').onclick = close;
+  lb.querySelector('.lb-p').onclick = e => { e.stopPropagation(); show(i - 1); };
+  lb.querySelector('.lb-nx').onclick = e => { e.stopPropagation(); show(i + 1); };
+  lb.addEventListener('click', e => { if (e.target === lb) close(); });
+  document.addEventListener('keydown', e => { if (lb.hidden) return; if (e.key === 'Escape') close(); if (e.key === 'ArrowRight') show(i + 1); if (e.key === 'ArrowLeft') show(i - 1); });
+  let x0 = null, y0 = 0;
+  lb.addEventListener('touchstart', e => { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, { passive: true });
+  lb.addEventListener('touchend', e => { if (x0 === null) return; const dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0; x0 = null; if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) show(i + (dx < 0 ? 1 : -1)); else if (dy > 90) close(); }, { passive: true });
 })();
 </script>
 </body>
