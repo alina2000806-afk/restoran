@@ -155,6 +155,21 @@ body.noscroll{overflow:hidden}
 .author .links{display:flex;flex-wrap:wrap;gap:8px}
 .author .links a{color:var(--fg);text-decoration:none;font-weight:800;font-size:14px;padding:11px 14px;border-radius:14px;background:var(--glass);border:1px solid var(--stroke);backdrop-filter:blur(10px)}
 .author .links a.tg{background:linear-gradient(135deg,var(--accent),#ff9a76);color:#1a0d08;border-color:transparent}
+
+/* story */
+.palette{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.palette span{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;padding:6px 12px 6px 6px;border-radius:99px;background:var(--glass);border:1px solid var(--stroke)}
+.palette i{width:22px;height:22px;border-radius:50%;border:1px solid rgba(255,255,255,.35)}
+.story{position:relative;margin-top:22px;display:grid;gap:26px;padding-left:26px}
+.story::before{content:"";position:absolute;left:8px;top:6px;bottom:6px;width:2px;background:linear-gradient(var(--accent-2),var(--accent),#6b4428)}
+.step{position:relative}
+.step::before{content:"";position:absolute;left:-24px;top:14px;width:14px;height:14px;border-radius:50%;background:var(--accent-2);box-shadow:0 0 0 4px var(--bg)}
+.step img{width:100%;aspect-ratio:16/10;object-fit:cover;display:block;border-radius:20px;border:1px solid var(--stroke)}
+.step .cap{margin-top:10px}
+.step .tm{display:inline-block;font-family:var(--display);font-weight:800;font-size:12px;letter-spacing:.08em;padding:4px 10px;border-radius:99px;background:var(--glass-2);border:1px solid var(--stroke);color:var(--accent-2);margin-right:8px}
+.step b{font-family:var(--display);font-size:clamp(17px,4.4vw,22px);font-weight:800}
+.step p{margin:6px 0 0;color:var(--muted);font-size:15.5px}
+@media (min-width:900px){.story{grid-template-columns:1fr 1fr;column-gap:22px}}
 </style>
 </head>
 <body>
@@ -325,24 +340,65 @@ body.noscroll{overflow:hidden}
     <!-- viz -->
     <section class="part" id="viz">
       <div class="kicker">06 · Візуалізації</div>
-      <h2>Як це виглядатиме</h2>
-      <p class="hint">Фотореалістичні види, зроблені з реальних фото ділянки (той самий ракурс, дерева і вода). Бюджет середній: прості матеріали, білі пластикові лежаки. Кожна картинка відкривається у повному розмірі. Наприкінці — кадри з 3D-моделі.</p>
-      <div class="photos viz">
-        <figure><a href="foto/after-besidky.jpg" target="_blank" rel="noopener"><img src="foto/after-besidky.jpg" alt="Ряд беседок на пляжі" loading="lazy"></a><figcaption>Ряд беседок 6×4 м уздовж пляжу: брус під горіх з розкосами, борти з дошки, графітовий профнастил; перед ними білі пластикові лежаки</figcaption></figure>
-        <figure><a href="foto/after-besidky-lyudy.jpg" target="_blank" rel="noopener"><img src="foto/after-besidky-lyudy.jpg" alt="Беседки з відпочивальниками" loading="lazy"></a><figcaption>Беседки між деревами біля води: стіл і лавки всередині, компанії на 6–8 людей</figcaption></figure>
-        <figure><a href="foto/after-plyazh.jpg" target="_blank" rel="noopener"><img src="foto/after-plyazh.jpg" alt="Пляж" loading="lazy"></a><figcaption>Пляж: прості білі пластикові лежаки, бежеві парасолі, дерев'яні настили, гірлянди між деревами</figcaption></figure>
-        <figure><a href="foto/after-bar.jpg" target="_blank" rel="noopener"><img src="foto/after-bar.jpg" alt="Бар і кальянна" loading="lazy"></a><figcaption>Бар з навісом і барними стільцями, поруч дерев'яний кіоск «КАЛЬЯН» з віконцем «кальян на винос»</figcaption></figure>
-        <figure><a href="foto/after-domyky.jpg" target="_blank" rel="noopener"><img src="foto/after-domyky.jpg" alt="Будиночок з чаном" loading="lazy"></a><figcaption>Будиночок 8×5 м на палях у ліску, тераса і дерев'яний чан Ø 2 м (другий будиночок поруч)</figcaption></figure>
-        <figure><a href="foto/after-mys.jpg" target="_blank" rel="noopener"><img src="foto/after-mys.jpg" alt="Вечір на мисі" loading="lazy"></a><figcaption>Вечір на мисі: захід сонця, лежаки, гойдалка, гірлянди і ліхтарі на піску</figcaption></figure>
-        <figure><a href="foto/after-vip.jpg" target="_blank" rel="noopener"><img src="foto/after-vip.jpg" alt="VIP-альтанки" loading="lazy"></a><figcaption>4 VIP-альтанки зі шторами з льону на піску біля води</figcaption></figure>
-        <figure><a href="foto/after-voleybol.jpg" target="_blank" rel="noopener"><img src="foto/after-voleybol.jpg" alt="Волейбол і діти" loading="lazy"></a><figcaption>Волейбол: сітка на існуючих жовтих стовпах, лавки для глядачів</figcaption></figure>
-        <figure><a href="foto/3d-besidky2.jpg" target="_blank" rel="noopener"><img src="foto/3d-besidky2.jpg" alt="" loading="lazy"></a><figcaption>10 беседок 6×4 м уздовж пляжу (3D-модель)</figcaption></figure>
-        <figure><a href="foto/3d-besidky.jpg" target="_blank" rel="noopener"><img src="foto/3d-besidky.jpg" alt="" loading="lazy"></a><figcaption>Беседка зблизька: брус з розкосами, борти, дах з профнастилу (3D-модель)</figcaption></figure>
-        </div>
+      <h2>Один день на пляжі</h2>
+      <p class="hint">Усі кадри — фото цієї ділянки, перероблені в одному стилі: літо, тепле світло, дерево під горіх, графітові дахи, білі пластикові лежаки. Бюджетно, але охайно. Натисніть на фото, щоб відкрити у повному розмірі.</p>
+      <div class="palette">
+        <span><i style="background:#6b4428"></i>Горіх</span><span><i style="background:#3a3d42"></i>Графіт</span><span><i style="background:#e9dcc3"></i>Пісок і полотно</span><span><i style="background:#ffffff"></i>Білі лежаки</span><span><i style="background:#111"></i>Чорні таблички</span><span><i style="background:#ffc46b"></i>Теплі гірлянди</span>
+      </div>
+      <div class="story">
+        <article class="step">
+          <a href="foto/story-01.jpg" target="_blank" rel="noopener"><img src="foto/story-01.jpg" alt="Вхід" loading="lazy"></a>
+          <div class="cap"><span class="tm">10:00</span><b>01 · Вхід</b><p>Арка з бруса під горіх, табличка «ПЛЯЖ», рецепція з графітовим дахом, кадки зі злаками замість паркану.</p></div>
+        </article>
+        <article class="step">
+          <a href="foto/story-02.jpg" target="_blank" rel="noopener"><img src="foto/story-02.jpg" alt="Пляж" loading="lazy"></a>
+          <div class="cap"><span class="tm">11:00</span><b>02 · Пляж</b><p>Ряди однакових білих пластикових лежаків, бежеві парасолі на дерев'яних щоглах, настил до води, рятувальна вежа.</p></div>
+        </article>
+        <article class="step">
+          <a href="foto/story-03.jpg" target="_blank" rel="noopener"><img src="foto/story-03.jpg" alt="Беседки" loading="lazy"></a>
+          <div class="cap"><span class="tm">12:30</span><b>03 · Беседки</b><p>10 беседок 6×4 м уздовж пляжу: брус під горіх з розкосами, борти з дошки, графітовий профнастил. Людина сягає лише карниза.</p></div>
+        </article>
+        <article class="step">
+          <a href="foto/story-04.jpg" target="_blank" rel="noopener"><img src="foto/story-04.jpg" alt="Обід у беседці" loading="lazy"></a>
+          <div class="cap"><span class="tm">14:00</span><b>04 · Обід у беседці</b><p>Компанія на 6–8 людей за довгим столом, вид на воду крізь відкритий фронт.</p></div>
+        </article>
+        <article class="step">
+          <a href="foto/story-05.jpg" target="_blank" rel="noopener"><img src="foto/story-05.jpg" alt="VIP-альтанки" loading="lazy"></a>
+          <div class="cap"><span class="tm">15:00</span><b>05 · VIP-альтанки</b><p>4 альтанки зі шторами з бежевого полотна, м'які лави, у тому ж дереві й графіті.</p></div>
+        </article>
+        <article class="step">
+          <a href="foto/story-06.jpg" target="_blank" rel="noopener"><img src="foto/story-06.jpg" alt="Волейбол і діти" loading="lazy"></a>
+          <div class="cap"><span class="tm">16:00</span><b>06 · Волейбол і діти</b><p>Сітка на існуючих жовтих стовпах, лавки для глядачів, дитячий куточок у тіні.</p></div>
+        </article>
+        <article class="step">
+          <a href="foto/story-07.jpg" target="_blank" rel="noopener"><img src="foto/story-07.jpg" alt="Бар" loading="lazy"></a>
+          <div class="cap"><span class="tm">17:00</span><b>07 · Бар</b><p>Відкритий павільйон з бруса під горіх, графітовий дах, стійка з темної дошки, табличка «BAR», барні стільці.</p></div>
+        </article>
+        <article class="step">
+          <a href="foto/story-08.jpg" target="_blank" rel="noopener"><img src="foto/story-08.jpg" alt="Кальянна" loading="lazy"></a>
+          <div class="cap"><span class="tm">18:00</span><b>08 · Кальянна</b><p>Окремий кіоск поруч з баром: тут готують кальяни, які несуть по всій території. Табличка «HOOKAH».</p></div>
+        </article>
+        <article class="step">
+          <a href="foto/story-09.jpg" target="_blank" rel="noopener"><img src="foto/story-09.jpg" alt="Будиночки з чанами" loading="lazy"></a>
+          <div class="cap"><span class="tm">19:00</span><b>09 · Будиночки з чанами</b><p>Будиночок 8×5 м на палях у ліску, тераса і дерев'яний чан Ø 2 м. Двері вищі за людину.</p></div>
+        </article>
+        <article class="step">
+          <a href="foto/story-10.jpg" target="_blank" rel="noopener"><img src="foto/story-10.jpg" alt="Сапи і пірс" loading="lazy"></a>
+          <div class="cap"><span class="tm">19:30</span><b>10 · Сапи і пірс</b><p>Дерев'яний пірс, прокат сапів і каяків, стійка з дошками.</p></div>
+        </article>
+        <article class="step">
+          <a href="foto/story-11.jpg" target="_blank" rel="noopener"><img src="foto/story-11.jpg" alt="Захід на мисі" loading="lazy"></a>
+          <div class="cap"><span class="tm">20:30</span><b>11 · Захід на мисі</b><p>Лежаки, гойдалка, гірлянди на стовпах і ліхтарі на піску.</p></div>
+        </article>
+        <article class="step">
+          <a href="foto/story-12.jpg" target="_blank" rel="noopener"><img src="foto/story-12.jpg" alt="Вечір" loading="lazy"></a>
+          <div class="cap"><span class="tm">21:30</span><b>12 · Вечір</b><p>Гірлянди вмикаються по всій косі: беседки, бар і пляж світяться теплим світлом.</p></div>
+        </article>
+      </div>
       <div class="glass pad" style="margin-top:18px">
         <div class="plan">
           <a href="foto/viz-genplan.jpg" target="_blank" rel="noopener"><img src="foto/viz-genplan.jpg" alt="Генплан згори" loading="lazy" style="width:100%;border-radius:18px;border:1px solid var(--stroke)"></a>
-          <div><div class="kicker">Генплан згори</div><p style="margin:8px 0 0">Уся коса в один погляд: вхід і сервіс унизу, волейбол і дитяча зона праворуч, бар у центрі, домики з чанами в ліску, довгий пляж з лежаками ліворуч, мис із фотозоною нагорі. Схема з розмірами у розділі 02.</p></div>
+          <div><div class="kicker">Генплан згори</div><p style="margin:8px 0 0">Уся коса в один погляд: вхід і сервіс унизу, волейбол і дитяча зона праворуч, бар у центрі, будиночки з чанами в ліску, довгий пляж з лежаками ліворуч, мис нагорі. Схема з розмірами у розділі 02.</p></div>
         </div>
       </div>
     </section>
@@ -355,12 +411,13 @@ body.noscroll{overflow:hidden}
       <h2>Той самий берег, до і після</h2>
       <p class="hint">Тягніть повзунок: ліворуч фото ділянки 30 жовтня, праворуч те саме місце з того самого ракурсу після благоустрою.</p>
       <div class="bagrid">
-        <figure><div class="ba"><img src="foto/before-plyazh.jpg" alt="Зараз: Пляж і беседки" loading="lazy"><img class="after" src="foto/after-besidky.jpg" alt="Буде: Пляж і беседки" loading="lazy"><span class="line"></span><span class="knob">⟷</span><span class="tg l">Зараз</span><span class="tg r">Буде</span></div><figcaption>Пляж і беседки</figcaption></figure>
-        <figure><div class="ba"><img src="foto/before-vip.jpg" alt="Зараз: VIP-альтанки" loading="lazy"><img class="after" src="foto/after-vip.jpg" alt="Буде: VIP-альтанки" loading="lazy"><span class="line"></span><span class="knob">⟷</span><span class="tg l">Зараз</span><span class="tg r">Буде</span></div><figcaption>VIP-альтанки</figcaption></figure>
-        <figure><div class="ba"><img src="foto/before-bar.jpg" alt="Зараз: Бар" loading="lazy"><img class="after" src="foto/after-bar.jpg" alt="Буде: Бар" loading="lazy"><span class="line"></span><span class="knob">⟷</span><span class="tg l">Зараз</span><span class="tg r">Буде</span></div><figcaption>Бар</figcaption></figure>
-        <figure><div class="ba"><img src="foto/before-domyky.jpg" alt="Зараз: Будиночки з чанами" loading="lazy"><img class="after" src="foto/after-domyky.jpg" alt="Буде: Будиночки з чанами" loading="lazy"><span class="line"></span><span class="knob">⟷</span><span class="tg l">Зараз</span><span class="tg r">Буде</span></div><figcaption>Будиночки з чанами</figcaption></figure>
-        <figure><div class="ba"><img src="foto/before-voleybol.jpg" alt="Зараз: Волейбол" loading="lazy"><img class="after" src="foto/after-voleybol.jpg" alt="Буде: Волейбол" loading="lazy"><span class="line"></span><span class="knob">⟷</span><span class="tg l">Зараз</span><span class="tg r">Буде</span></div><figcaption>Волейбол</figcaption></figure>
-        <figure><div class="ba"><img src="foto/before-mys.jpg" alt="Зараз: Мис увечері" loading="lazy"><img class="after" src="foto/after-mys.jpg" alt="Буде: Мис увечері" loading="lazy"><span class="line"></span><span class="knob">⟷</span><span class="tg l">Зараз</span><span class="tg r">Буде</span></div><figcaption>Мис увечері</figcaption></figure>
+        <figure><div class="ba"><img src="foto/vhid.jpg" alt="Зараз: Вхід" loading="lazy"><img class="after" src="foto/story-01.jpg" alt="Буде: Вхід" loading="lazy"><span class="line"></span><span class="knob">⟷</span><span class="tg l">Зараз</span><span class="tg r">Буде</span></div><figcaption>Вхід</figcaption></figure>
+        <figure><div class="ba"><img src="foto/before-vip.jpg" alt="Зараз: VIP-альтанки" loading="lazy"><img class="after" src="foto/story-05.jpg" alt="Буде: VIP-альтанки" loading="lazy"><span class="line"></span><span class="knob">⟷</span><span class="tg l">Зараз</span><span class="tg r">Буде</span></div><figcaption>VIP-альтанки</figcaption></figure>
+        <figure><div class="ba"><img src="foto/before-voleybol.jpg" alt="Зараз: Волейбол і діти" loading="lazy"><img class="after" src="foto/story-06.jpg" alt="Буде: Волейбол і діти" loading="lazy"><span class="line"></span><span class="knob">⟷</span><span class="tg l">Зараз</span><span class="tg r">Буде</span></div><figcaption>Волейбол і діти</figcaption></figure>
+        <figure><div class="ba"><img src="foto/before-bar.jpg" alt="Зараз: Бар і кальянна" loading="lazy"><img class="after" src="foto/story-07.jpg" alt="Буде: Бар і кальянна" loading="lazy"><span class="line"></span><span class="knob">⟷</span><span class="tg l">Зараз</span><span class="tg r">Буде</span></div><figcaption>Бар і кальянна</figcaption></figure>
+        <figure><div class="ba"><img src="foto/before-domyky.jpg" alt="Зараз: Будиночок з чаном" loading="lazy"><img class="after" src="foto/story-09.jpg" alt="Буде: Будиночок з чаном" loading="lazy"><span class="line"></span><span class="knob">⟷</span><span class="tg l">Зараз</span><span class="tg r">Буде</span></div><figcaption>Будиночок з чаном</figcaption></figure>
+        <figure><div class="ba"><img src="foto/mys.jpg" alt="Зараз: Сапи і пірс" loading="lazy"><img class="after" src="foto/story-10.jpg" alt="Буде: Сапи і пірс" loading="lazy"><span class="line"></span><span class="knob">⟷</span><span class="tg l">Зараз</span><span class="tg r">Буде</span></div><figcaption>Сапи і пірс</figcaption></figure>
+        <figure><div class="ba"><img src="foto/before-mys.jpg" alt="Зараз: Захід на мисі" loading="lazy"><img class="after" src="foto/story-11.jpg" alt="Буде: Захід на мисі" loading="lazy"><span class="line"></span><span class="knob">⟷</span><span class="tg l">Зараз</span><span class="tg r">Буде</span></div><figcaption>Захід на мисі</figcaption></figure>
       </div>
     </section>
 
@@ -465,7 +522,7 @@ try{
 const onScroll=()=>{const max=document.documentElement.scrollHeight-innerHeight;setProgress(max>0?scrollY/max:0)};
 addEventListener("scroll",onScroll,{passive:true});onScroll();
 </script>
-<script type="module" src="model3d.js?v=1794156000"></script>
+<script type="module" src="model3d.js?v=1794170000"></script>
 <script>
 document.querySelectorAll(".ba").forEach(el=>{
   const set=x=>{const r=el.getBoundingClientRect();el.style.setProperty("--pos",Math.max(0,Math.min(100,(x-r.left)/r.width*100))+"%")};
