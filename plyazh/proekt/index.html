@@ -572,7 +572,7 @@ show('light');
   let list = [], i = 0;
   const SEL = '.photos figure img, .step img, .plan a img';
   const srcOf = el => el.closest('a[href^="foto/"]')?.getAttribute('href') || el.getAttribute('src');
-  const capOf = el => { const f = el.closest('figure,.step,.plan'); const c = f && f.querySelector('figcaption,.cap,.kicker'); return c ? c.innerText.replace(/\s+/g, ' ').trim() : (el.alt || ''); };
+  const capOf = el => { const f = el.closest('figure,.step,.plan'); const c = f && f.querySelector('figcaption,.cap,.kicker'); return c ? (c.children.length ? [...c.children].map(x => x.textContent.trim()).filter(Boolean).join(' · ') : c.textContent).replace(/\s+/g, ' ').trim() : (el.alt || ''); };
   const show = k => { i = (k + list.length) % list.length; const el = list[i]; im.style.opacity = 0; im.onload = () => im.style.opacity = 1; im.src = srcOf(el); im.alt = el.alt || ''; cap.textContent = capOf(el); num.textContent = (i + 1) + ' / ' + list.length; const n = list[(i + 1) % list.length]; if (n) new Image().src = srcOf(n); };
   const open = el => { const sec = el.closest('section') || document; list = [...sec.querySelectorAll(SEL)]; show(list.indexOf(el)); lb.hidden = false; document.body.style.overflow = 'hidden'; };
   const close = () => { lb.hidden = true; document.body.style.overflow = ''; };
