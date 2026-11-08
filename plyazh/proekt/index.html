@@ -129,6 +129,10 @@ button.chip:active{transform:scale(.95)}
 .m3d-card img{width:100%;border-radius:12px;display:block;aspect-ratio:4/3;object-fit:cover}
 .m3d-card b{display:block;font-family:var(--display);font-size:14px;margin:10px 4px 4px}
 .m3d-card p{margin:0 4px 4px;font-size:13.5px;color:var(--muted)}
+.m3d-card{max-height:calc(100% - 70px);overflow-y:auto}
+.m3d-card dl{display:grid;grid-template-columns:auto 1fr;gap:6px 10px;margin:8px 4px 4px;font-size:13px}
+.m3d-card dt{color:var(--accent-2);font-weight:700}
+.m3d-card dd{margin:0}
 .m3d-card .x{position:absolute;right:16px;top:16px;width:30px;height:30px;border-radius:99px;border:0;background:rgba(11,21,34,.7);color:#fff;font-size:16px;cursor:pointer}
 #m3d.full{position:fixed;inset:0;height:100%;width:100%;margin:0;border-radius:0;z-index:50;border:0}
 body.noscroll{overflow:hidden}
@@ -314,7 +318,7 @@ body.noscroll{overflow:hidden}
           <span class="help">Тягніть по екрану, щоб озирнутись. Тисніть на назву зони, щоб побачити картинку.</span>
           <button type="button" data-act="auto">▶ Авто</button>
         </div>
-        <div class="m3d-card" hidden><button type="button" class="x" aria-label="Закрити">✕</button><img alt=""><b></b><p></p></div>
+        <div class="m3d-card" hidden><button type="button" class="x" aria-label="Закрити">✕</button><img alt=""><b></b><p></p><dl></dl></div>
       </div>
     </section>
 
@@ -461,7 +465,7 @@ try{
 const onScroll=()=>{const max=document.documentElement.scrollHeight-innerHeight;setProgress(max>0?scrollY/max:0)};
 addEventListener("scroll",onScroll,{passive:true});onScroll();
 </script>
-<script type="module" src="model3d.js?v=1794154000"></script>
+<script type="module" src="model3d.js?v=1794156000"></script>
 <script>
 document.querySelectorAll(".ba").forEach(el=>{
   const set=x=>{const r=el.getBoundingClientRect();el.style.setProperty("--pos",Math.max(0,Math.min(100,(x-r.left)/r.width*100))+"%")};
