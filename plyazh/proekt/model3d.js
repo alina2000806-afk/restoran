@@ -64,6 +64,7 @@ const M = {
   roof: new THREE.MeshStandardMaterial({ color: 0x3b3f44, roughness: 0.55, metalness: 0.3 }),
   plastic: new THREE.MeshStandardMaterial({ color: 0xf4f4f2, roughness: 0.35 }),
   panel: new THREE.MeshStandardMaterial({ color: 0xb98a55, roughness: 0.85 }),
+  rail: new THREE.MeshStandardMaterial({ color: 0xd9a066, roughness: 0.6 }),
   trunk: new THREE.MeshStandardMaterial({ color: 0x5b4a3a, roughness: 1 }),
   poplar: new THREE.MeshStandardMaterial({ color: 0x4f7a3a, roughness: 0.9, flatShading: true }),
   bush: new THREE.MeshStandardMaterial({ color: 0x6b8f45, roughness: 0.9, flatShading: true }),
@@ -143,34 +144,42 @@ function lounger(x, z, rot = 0) {
   [[-0.28, -0.75], [0.28, -0.75], [-0.28, 0.85], [0.28, 0.85]].forEach(([a, c]) => add(g, box(0.06, 0.34, 0.06), M.plastic, a, 0.17, c));
   g.position.set(x, top, z); g.rotation.y = rot; scene.add(g);
 }
-// closed beach gazebo 6 x 4 m: timber frame with diagonal braces, 0.9 m half-walls on three sides, gable roof of profiled sheet
+// closed beach gazebo 6 x 4 m, as on the client's photo: timber posts in 3 bays, diagonal braces,
+// 0.9 m half-walls with a top rail on three sides, open gable trusses, gable roof of profiled sheet
 function beachGazebo(x, z, rot = 0) {
-  const g = new THREE.Group(); const W = 6, D = 4, H = 2.3, R = 1.1;
+  const g = new THREE.Group(); const W = 6, D = 4, H = 2.2, R = 1.0, P = 0.14;
   add(g, box(W + 0.2, 0.12, D + 0.2), M.deck, 0, 0.06, 0);
-  const posts = [];
-  for (const px of [-W / 2, 0, W / 2]) for (const pz of [-D / 2, D / 2]) posts.push([px, pz]);
-  posts.forEach(([px, pz]) => add(g, box(0.15, H, 0.15), M.wood, px, H / 2 + 0.1, pz));
-  // top plates
-  add(g, box(W + 0.3, 0.15, 0.15), M.wood, 0, H + 0.1, -D / 2); add(g, box(W + 0.3, 0.15, 0.15), M.wood, 0, H + 0.1, D / 2);
-  add(g, box(0.15, 0.15, D + 0.3), M.wood, -W / 2, H + 0.1, 0); add(g, box(0.15, 0.15, D + 0.3), M.wood, W / 2, H + 0.1, 0);
-  // diagonal knee braces at every post
-  posts.forEach(([px, pz]) => [-1, 1].forEach(sx => { if (Math.abs(px + sx * 0.6) > W / 2 + 0.01) return;
-    const br = add(g, box(0.85, 0.1, 0.1), M.wood, px + sx * 0.3, H - 0.25, pz); br.rotation.z = sx * 0.78; }));
-  // half walls: back and two ends, front (towards water) open
-  add(g, box(W, 0.9, 0.06), M.panel, 0, 0.55, -D / 2 + 0.05);
-  add(g, box(0.06, 0.9, D), M.panel, -W / 2 + 0.05, 0.55, 0);
-  add(g, box(0.06, 0.9, D), M.panel, W / 2 - 0.05, 0.55, 0);
-  add(g, box(W, 0.08, 0.14), M.wood, 0, 1.03, -D / 2 + 0.05);
-  // gable roof of profiled sheet
-  const slope = Math.atan2(R, D / 2), len = Math.hypot(R, D / 2) + 0.35;
-  [-1, 1].forEach(s => { const r = add(g, box(W + 0.7, 0.05, len), M.roof, 0, H + 0.2 + R / 2, s * D / 4); r.rotation.x = s * slope; });
-  add(g, box(0.15, R, 0.15), M.wood, -W / 2, H + 0.15 + R / 2, 0); add(g, box(0.15, R, 0.15), M.wood, W / 2, H + 0.15 + R / 2, 0);
-  add(g, box(W + 0.3, 0.15, 0.15), M.wood, 0, H + 0.15 + R, 0);
+  const xs = [-3, -1, 1, 3];
+  const beam = (x1, y1, z1, x2, y2, z2, t = 0.1, mat = M.wood) => {
+    const a = new THREE.Vector3(x1, y1, z1), b = new THREE.Vector3(x2, y2, z2), len = a.distanceTo(b);
+    const m = add(g, new THREE.BoxGeometry(t, t, len), mat, (x1 + x2) / 2, (y1 + y2) / 2, (z1 + z2) / 2);
+    m.lookAt(g.localToWorld(b.clone())); return m;
+  };
+  // posts on both long sides and in the middle of the short sides
+  xs.forEach(px => [-D / 2, D / 2].forEach(pz => add(g, box(P, H, P), M.wood, px, H / 2 + 0.1, pz)));
+  // top plates and tie beams
+  [-D / 2, D / 2].forEach(pz => add(g, box(W + 0.3, 0.16, 0.14), M.wood, 0, H + 0.1, pz));
+  xs.forEach(px => add(g, box(0.14, 0.16, D + 0.2), M.wood, px, H + 0.1, 0));
+  // diagonal braces in every bay of the long sides and both ends (inverted V from the plate down to the posts)
+  [-D / 2, D / 2].forEach(pz => xs.slice(0, 3).forEach((px, k) => {
+    const nx = xs[k + 1], mid = (px + nx) / 2;
+    beam(px, H - 0.75, pz, mid - 0.2, H + 0.02, pz); beam(nx, H - 0.75, pz, mid + 0.2, H + 0.02, pz);
+  }));
+  [-W / 2, W / 2].forEach(px => { beam(px, H - 0.75, -D / 2, px, H + 0.02, -0.35); beam(px, H - 0.75, D / 2, px, H + 0.02, 0.35); });
+  // half-walls (back and both ends), front towards the water left open; light top rail as on the photo
+  const wall = (cx, cz, w, d) => { add(g, box(w, 0.85, d), M.panel, cx, 0.55, cz); add(g, box(w + 0.06, 0.07, d + 0.1), M.rail, cx, 1.0, cz); };
+  wall(0, -D / 2 + 0.05, W, 0.05); wall(-W / 2 + 0.05, 0, 0.05, D); wall(W / 2 - 0.05, 0, 0.05, D);
+  // gable trusses: rafters at each tie beam, ridge, king post
+  xs.forEach(px => { beam(px, H + 0.18, -D / 2 - 0.1, px, H + 0.18 + R, 0); beam(px, H + 0.18, D / 2 + 0.1, px, H + 0.18 + R, 0); add(g, box(0.1, R, 0.1), M.wood, px, H + 0.18 + R / 2, 0); });
+  add(g, box(W + 0.5, 0.14, 0.14), M.wood, 0, H + 0.18 + R, 0);
+  // roof sheets with overhang
+  const slope = Math.atan2(R, D / 2), len = Math.hypot(R, D / 2) + 0.45;
+  [-1, 1].forEach(sd => { const r = add(g, box(W + 0.9, 0.04, len), M.roof, 0, H + 0.28 + R / 2, sd * (D / 4 + 0.08)); r.rotation.x = sd * slope; });
   // table and benches
   add(g, box(2.4, 0.06, 0.9), M.wood, 0, 0.85, -0.2); add(g, box(0.1, 0.75, 0.1), M.char, 0, 0.45, -0.2);
   [-0.95, 0.55].forEach(bz => add(g, box(2.4, 0.06, 0.35), M.wood, 0, 0.5, bz));
-  g.position.set(x, top, z); g.rotation.y = rot; scene.add(g);
-  for (let i = 0; i <= 8; i++) { const t = i / 8; const p = new THREE.Vector3(-W / 2 + t * W, H + 0.05 - Math.sin(t * Math.PI) * 0.25, D / 2).applyAxisAngle(new THREE.Vector3(0, 1, 0), rot).add(g.position); bulbs.push(p); }
+  g.position.set(x, top, z); g.rotation.y = rot; scene.add(g); g.updateMatrixWorld(true);
+  for (let k = 0; k <= 8; k++) { const t = k / 8; const p = new THREE.Vector3(-W / 2 + t * W, H - Math.sin(t * Math.PI) * 0.25, D / 2).applyAxisAngle(new THREE.Vector3(0, 1, 0), rot).add(g.position); bulbs.push(p); }
 }
 function umbrella(x, z) {
   add(scene, new THREE.CylinderGeometry(0.05, 0.05, 2.6, 6), M.wood, x, top + 1.3, z);
