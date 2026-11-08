@@ -261,7 +261,8 @@ for (let z = -42; z <= 40; z += 4.2) {
   lounger(-9.5, z, Math.PI / 2 - 0.04); lounger(-13.2, z + 1.2, Math.PI / 2 + 0.04);
   if (Math.round(z) % 3 === 0) umbrella(-11.3, z + 0.6);
 }
-[[-6.5, -48], [-6.5, -30], [-6.5, -12], [-6.5, 6], [-6.5, 24]].forEach(([x, z]) => gazebo(x, z, { size: 3.4, rot: Math.PI / 2 }));
+// 10 open gazebos along the main beach
+for (let i = 0; i < 10; i++) gazebo(-6.2, -50 + i * 8.6, { size: 3.4, rot: Math.PI / 2 });
 // North beach loungers both sides
 for (let z = -76; z <= -54; z += 4) { lounger(-11, z, Math.PI / 2); lounger(9, z, -Math.PI / 2); }
 // SUP / kayak rental + pier (west, upper)
@@ -344,12 +345,12 @@ applyMood(0);
 
 // ---------- labels, cards & fly-to ----------
 const ZONES = [
-  { id: "vhid", name: "Вхід", p: [1, 6, 100], cam: [30, 26, 140], img: "foto/viz-vhid.jpg", txt: "Арка, рецепція, 6 кабінок, 4 душі, 2 туалети. Кадки з травами замість паркана." },
+  { id: "vhid", name: "Вхід", p: [1, 6, 100], cam: [30, 26, 140], img: "foto/vhid.jpg", txt: "Арка, рецепція, 6 кабінок, 4 душі, 2 туалети. Кадки з травами замість паркана." },
   { id: "vip", name: "VIP-альтанки", p: [-12, 5, 65], cam: [-48, 22, 92], img: "foto/after-vip.jpg", txt: "4 альтанки зі шторами з льону, м'які дивани, гірлянди. Поруч кальянна." },
   { id: "volley", name: "Волейбол і діти", p: [11, 4, 45], cam: [40, 20, 72], img: "foto/after-voleybol.jpg", txt: "Майданчик на існуючих стовпах, лавки для глядачів, дитячий куточок під тентом." },
   { id: "bar", name: "Бар", p: [10.5, 6, 11], cam: [42, 18, 30], img: "foto/after-bar.jpg", txt: "Стійка з обпаленого дерева, кухня і гриль, тераса зі столиками." },
   { id: "cabins", name: "Будиночки з чанами", p: [11, 7, -27], cam: [50, 22, -10], img: "foto/after-domyky.jpg", txt: "Два будиночки на палях у ліску, на терасі в кожного свій чан." },
-  { id: "beach", name: "Пляж", p: [-11, 4, -5], cam: [-55, 26, 20], img: "foto/after-plyazh.jpg", txt: "Ряди лежаків з льоном, парасолі, 5 відкритих альтанок, настили до води." },
+  { id: "beach", name: "Пляж", p: [-11, 4, -5], cam: [-55, 26, 20], img: "foto/after-plyazh.jpg", txt: "Ряди лежаків з льоном, парасолі, 10 відкритих альтанок, настили до води." },
   { id: "sup", name: "Сапи і пірс", p: [-21, 3, -62], cam: [-55, 18, -40], img: "foto/after-plyazh.jpg", txt: "Прокат сапів і каяків, дерев'яний пірс." },
   { id: "mys", name: "Мис", p: [3, 7, -96], cam: [-30, 24, -130], img: "foto/after-mys.jpg", txt: "Гойдалка над водою, лежаки, понтон із катамаранами." },
 ];
@@ -483,4 +484,14 @@ renderer.setAnimationLoop(() => {
     z.el.style.transform = `translate(${(v.x * 0.5 + 0.5) * r.width}px,${(-v.y * 0.5 + 0.5) * r.height}px) translate(-50%,-100%)`;
   });
 });
+// style chips on the page recolour the model
+const STYLE_MAT = {
+  light: { wood: 0xd8b98a, deck: 0xc7a06b, roof: 0xa88c5f, char: 0x2b2622, linen: 0xf6f0e3 },
+  dark: { wood: 0x5a3e2b, deck: 0x3b2a1f, roof: 0x2a2a30, char: 0x1c1c1e, linen: 0xd9d4cc },
+  red: { wood: 0xc9a373, deck: 0xa9784a, roof: 0x9c3b2b, char: 0x5b4a3a, linen: 0xefe6d6 },
+  log: { wood: 0xe4c79a, deck: 0xc99e64, roof: 0x6b4e2e, char: 0xa9784a, linen: 0xf3ead9 },
+  white: { wood: 0xf4f4f2, deck: 0xe8e2d6, roof: 0xffffff, char: 0x2f6f86, linen: 0xffffff },
+  boho: { wood: 0xd9b98e, deck: 0xb5855a, roof: 0xc9a46a, char: 0x7a5a3a, linen: 0xf2e6d0 },
+};
+addEventListener("beachstyle", e => { const p = STYLE_MAT[e.detail.style]; if (!p) return; for (const k in p) M[k].color.setHex(p[k]); });
 host.classList.add("ready");
