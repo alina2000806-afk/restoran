@@ -56,12 +56,14 @@ const M = {
   wetSand: new THREE.MeshStandardMaterial({ color: 0xc9b07f, roughness: 1 }),
   grass: new THREE.MeshStandardMaterial({ color: 0x7f9a5a, roughness: 1 }),
   path: new THREE.MeshStandardMaterial({ color: 0xc4bfb4, roughness: 0.95 }),
-  wood: new THREE.MeshStandardMaterial({ color: 0xd8b98a, roughness: 0.75 }),
+  wood: new THREE.MeshStandardMaterial({ color: 0xa8743f, roughness: 0.7 }),
   deck: new THREE.MeshStandardMaterial({ color: 0xc7a06b, roughness: 0.8 }),
   char: new THREE.MeshStandardMaterial({ color: 0x2b2622, roughness: 0.85 }),
   linen: new THREE.MeshStandardMaterial({ color: 0xf6f0e3, roughness: 0.95, side: THREE.DoubleSide }),
   curtain: new THREE.MeshStandardMaterial({ color: 0xfbf8f1, roughness: 1, transparent: true, opacity: 0.88, side: THREE.DoubleSide }),
-  roof: new THREE.MeshStandardMaterial({ color: 0xa88c5f, roughness: 0.9 }),
+  roof: new THREE.MeshStandardMaterial({ color: 0x3b3f44, roughness: 0.55, metalness: 0.3 }),
+  plastic: new THREE.MeshStandardMaterial({ color: 0xf4f4f2, roughness: 0.35 }),
+  panel: new THREE.MeshStandardMaterial({ color: 0xb98a55, roughness: 0.85 }),
   trunk: new THREE.MeshStandardMaterial({ color: 0x5b4a3a, roughness: 1 }),
   poplar: new THREE.MeshStandardMaterial({ color: 0x4f7a3a, roughness: 0.9, flatShading: true }),
   bush: new THREE.MeshStandardMaterial({ color: 0x6b8f45, roughness: 0.9, flatShading: true }),
@@ -131,21 +133,49 @@ for (let z = -84; z <= 92; z += 9) tree(16 + Math.random() * 1.5, z, Math.random
 // a few trees on the west beach edge near VIP
 [[-16, 46], [-17, 60], [-16, 74], [-15, 86]].forEach(([x, z]) => tree(x, z, "poplar", 1));
 
-const cabinWindows = [], steamSpots = [], boats = [], buildingsLit = [];
+const cabinWindows = [], steamSpots = [], boats = [], buildingsLit = [], bulbs = [];
 // ---------- builders ----------
 function lounger(x, z, rot = 0) {
+  // plain white plastic sun lounger, 1.9 x 0.65 m
   const g = new THREE.Group();
-  add(g, box(0.75, 0.12, 2), M.wood, 0, 0.35, 0);
-  add(g, box(0.68, 0.1, 1.3), M.linen, 0, 0.47, 0.3);
-  const b = add(g, box(0.68, 0.1, 0.75), M.linen, 0, 0.66, -0.62); b.rotation.x = -0.9;
-  [[-0.3, -0.85], [0.3, -0.85], [-0.3, 0.85], [0.3, 0.85]].forEach(([a, c]) => add(g, box(0.08, 0.3, 0.08), M.wood, a, 0.15, c));
+  add(g, box(0.65, 0.07, 1.25), M.plastic, 0, 0.36, 0.3);
+  const b = add(g, box(0.65, 0.07, 0.75), M.plastic, 0, 0.55, -0.6); b.rotation.x = -0.75;
+  [[-0.28, -0.75], [0.28, -0.75], [-0.28, 0.85], [0.28, 0.85]].forEach(([a, c]) => add(g, box(0.06, 0.34, 0.06), M.plastic, a, 0.17, c));
   g.position.set(x, top, z); g.rotation.y = rot; scene.add(g);
+}
+// closed beach gazebo 6 x 4 m: timber frame with diagonal braces, 0.9 m half-walls on three sides, gable roof of profiled sheet
+function beachGazebo(x, z, rot = 0) {
+  const g = new THREE.Group(); const W = 6, D = 4, H = 2.3, R = 1.1;
+  add(g, box(W + 0.2, 0.12, D + 0.2), M.deck, 0, 0.06, 0);
+  const posts = [];
+  for (const px of [-W / 2, 0, W / 2]) for (const pz of [-D / 2, D / 2]) posts.push([px, pz]);
+  posts.forEach(([px, pz]) => add(g, box(0.15, H, 0.15), M.wood, px, H / 2 + 0.1, pz));
+  // top plates
+  add(g, box(W + 0.3, 0.15, 0.15), M.wood, 0, H + 0.1, -D / 2); add(g, box(W + 0.3, 0.15, 0.15), M.wood, 0, H + 0.1, D / 2);
+  add(g, box(0.15, 0.15, D + 0.3), M.wood, -W / 2, H + 0.1, 0); add(g, box(0.15, 0.15, D + 0.3), M.wood, W / 2, H + 0.1, 0);
+  // diagonal knee braces at every post
+  posts.forEach(([px, pz]) => [-1, 1].forEach(sx => { if (Math.abs(px + sx * 0.6) > W / 2 + 0.01) return;
+    const br = add(g, box(0.85, 0.1, 0.1), M.wood, px + sx * 0.3, H - 0.25, pz); br.rotation.z = sx * 0.78; }));
+  // half walls: back and two ends, front (towards water) open
+  add(g, box(W, 0.9, 0.06), M.panel, 0, 0.55, -D / 2 + 0.05);
+  add(g, box(0.06, 0.9, D), M.panel, -W / 2 + 0.05, 0.55, 0);
+  add(g, box(0.06, 0.9, D), M.panel, W / 2 - 0.05, 0.55, 0);
+  add(g, box(W, 0.08, 0.14), M.wood, 0, 1.03, -D / 2 + 0.05);
+  // gable roof of profiled sheet
+  const slope = Math.atan2(R, D / 2), len = Math.hypot(R, D / 2) + 0.35;
+  [-1, 1].forEach(s => { const r = add(g, box(W + 0.7, 0.05, len), M.roof, 0, H + 0.2 + R / 2, s * D / 4); r.rotation.x = s * slope; });
+  add(g, box(0.15, R, 0.15), M.wood, -W / 2, H + 0.15 + R / 2, 0); add(g, box(0.15, R, 0.15), M.wood, W / 2, H + 0.15 + R / 2, 0);
+  add(g, box(W + 0.3, 0.15, 0.15), M.wood, 0, H + 0.15 + R, 0);
+  // table and benches
+  add(g, box(2.4, 0.06, 0.9), M.wood, 0, 0.85, -0.2); add(g, box(0.1, 0.75, 0.1), M.char, 0, 0.45, -0.2);
+  [-0.95, 0.55].forEach(bz => add(g, box(2.4, 0.06, 0.35), M.wood, 0, 0.5, bz));
+  g.position.set(x, top, z); g.rotation.y = rot; scene.add(g);
+  for (let i = 0; i <= 8; i++) { const t = i / 8; const p = new THREE.Vector3(-W / 2 + t * W, H + 0.05 - Math.sin(t * Math.PI) * 0.25, D / 2).applyAxisAngle(new THREE.Vector3(0, 1, 0), rot).add(g.position); bulbs.push(p); }
 }
 function umbrella(x, z) {
   add(scene, new THREE.CylinderGeometry(0.05, 0.05, 2.6, 6), M.wood, x, top + 1.3, z);
   add(scene, new THREE.ConeGeometry(1.5, 0.5, 12, 1, true), M.linen, x, top + 2.55, z);
 }
-const bulbs = [];
 function stringLights(pts, n = 20) {
   const curve = new THREE.CatmullRomCurve3(pts.map(p => new THREE.Vector3(...p)));
   for (let i = 0; i <= n; i++) { const p = curve.getPoint(i / n); bulbs.push(p); }
@@ -253,16 +283,27 @@ add(scene, box(9, 0.12, 1.4), M.deck, -6, top + 0.06, 65, false);
   });
   stringLights([[5.5, top + 3.6, 19.5], [11, top + 2.9, 20.5], [16.5, top + 3.6, 19.5]], 14);
 })();
+// Hookah kiosk attached to the bar: 2.5 x 2 m timber booth with counter and sign
+(() => {
+  const g = new THREE.Group();
+  add(g, box(2.6, 2.4, 2.0), M.wood, 0, 1.2, 0);
+  add(g, box(2.9, 0.12, 2.3), M.roof, 0, 2.48, 0);
+  add(g, box(2.2, 0.5, 0.08), M.char, 0, 2.15, 1.02);
+  add(g, box(2.3, 0.08, 0.5), M.wood, 0, 1.1, 1.2);
+  add(g, box(0.6, 0.8, 0.06), M.char, 0.7, 0.5, 1.05);
+  g.position.set(9, top, 1.5); g.rotation.y = -Math.PI / 2 + Math.PI; scene.add(g);
+  stringLights([[5.5, top + 3.4, 1.5], [9, top + 2.9, 3.5], [12.5, top + 3.4, 1.5]], 8);
+})();
 // Two cabins with hot tubs in the woods (east, upper)
 cabin(11, -18, -Math.PI / 2 + 0.05);
 cabin(11, -36, -Math.PI / 2 - 0.05);
 // Main beach (west): loungers, umbrellas, open gazebos
 for (let z = -42; z <= 40; z += 4.2) {
-  lounger(-9.5, z, Math.PI / 2 - 0.04); lounger(-13.2, z + 1.2, Math.PI / 2 + 0.04);
-  if (Math.round(z) % 3 === 0) umbrella(-11.3, z + 0.6);
+  lounger(-13.4, z, Math.PI / 2 - 0.04); lounger(-16.4, z + 1.2, Math.PI / 2 + 0.04);
+  if (Math.round(z) % 3 === 0) umbrella(-14.9, z + 0.6);
 }
 // 10 open gazebos along the main beach
-for (let i = 0; i < 10; i++) gazebo(-6.2, -50 + i * 8.6, { size: 3.4, rot: Math.PI / 2 });
+for (let i = 0; i < 10; i++) beachGazebo(-8.8, -52 + i * 9, Math.PI / 2);
 // North beach loungers both sides
 for (let z = -76; z <= -54; z += 4) { lounger(-11, z, Math.PI / 2); lounger(9, z, -Math.PI / 2); }
 // SUP / kayak rental + pier (west, upper)
@@ -348,9 +389,9 @@ const ZONES = [
   { id: "vhid", name: "Вхід", p: [1, 6, 100], cam: [30, 26, 140], img: "foto/vhid.jpg", txt: "Арка, рецепція, 6 кабінок, 4 душі, 2 туалети. Кадки з травами замість паркана." },
   { id: "vip", name: "VIP-альтанки", p: [-12, 5, 65], cam: [-48, 22, 92], img: "foto/after-vip.jpg", txt: "4 альтанки зі шторами з льону, м'які дивани, гірлянди. Поруч кальянна." },
   { id: "volley", name: "Волейбол і діти", p: [11, 4, 45], cam: [40, 20, 72], img: "foto/after-voleybol.jpg", txt: "Майданчик на існуючих стовпах, лавки для глядачів, дитячий куточок під тентом." },
-  { id: "bar", name: "Бар", p: [10.5, 6, 11], cam: [42, 18, 30], img: "foto/after-bar.jpg", txt: "Стійка з обпаленого дерева, кухня і гриль, тераса зі столиками." },
+  { id: "bar", name: "Бар", p: [10.5, 6, 11], cam: [42, 18, 30], img: "foto/after-bar.jpg", txt: "Бар з навісом, кухня і гриль, поруч кіоск кальянної (є «кальян на винос»), тераса з простими дерев\u0027яними столами." },
   { id: "cabins", name: "Будиночки з чанами", p: [11, 7, -27], cam: [50, 22, -10], img: "foto/after-domyky.jpg", txt: "Два будиночки на палях у ліску, на терасі в кожного свій чан." },
-  { id: "beach", name: "Пляж", p: [-11, 4, -5], cam: [-55, 26, 20], img: "foto/after-plyazh.jpg", txt: "Ряди лежаків з льоном, парасолі, 10 відкритих альтанок, настили до води." },
+  { id: "beach", name: "Пляж", p: [-11, 4, -5], cam: [-55, 26, 20], img: "foto/after-plyazh.jpg", txt: "Білі пластикові лежаки, парасолі, 10 беседок 6×4 м під профнастилом, настили до води." },
   { id: "sup", name: "Сапи і пірс", p: [-21, 3, -62], cam: [-55, 18, -40], img: "foto/after-plyazh.jpg", txt: "Прокат сапів і каяків, дерев'яний пірс." },
   { id: "mys", name: "Мис", p: [3, 7, -96], cam: [-30, 24, -130], img: "foto/after-mys.jpg", txt: "Гойдалка над водою, лежаки, понтон із катамаранами." },
 ];
@@ -486,12 +527,12 @@ renderer.setAnimationLoop(() => {
 });
 // style chips on the page recolour the model
 const STYLE_MAT = {
-  light: { wood: 0xd8b98a, deck: 0xc7a06b, roof: 0xa88c5f, char: 0x2b2622, linen: 0xf6f0e3 },
-  dark: { wood: 0x5a3e2b, deck: 0x3b2a1f, roof: 0x2a2a30, char: 0x1c1c1e, linen: 0xd9d4cc },
-  red: { wood: 0xc9a373, deck: 0xa9784a, roof: 0x9c3b2b, char: 0x5b4a3a, linen: 0xefe6d6 },
-  log: { wood: 0xe4c79a, deck: 0xc99e64, roof: 0x6b4e2e, char: 0xa9784a, linen: 0xf3ead9 },
-  white: { wood: 0xf4f4f2, deck: 0xe8e2d6, roof: 0xffffff, char: 0x2f6f86, linen: 0xffffff },
-  boho: { wood: 0xd9b98e, deck: 0xb5855a, roof: 0xc9a46a, char: 0x7a5a3a, linen: 0xf2e6d0 },
+  light: { wood: 0xa8743f, deck: 0xc7a06b, roof: 0x3b3f44, char: 0x2b2622, linen: 0xf6f0e3, panel: 0xb98a55 },
+  dark: { wood: 0x5a3e2b, deck: 0x3b2a1f, roof: 0x2a2a30, char: 0x1c1c1e, linen: 0xd9d4cc, panel: 0x26221f },
+  red: { wood: 0x8a4f2a, deck: 0xa9784a, roof: 0x8e2a22, char: 0x5b4a3a, linen: 0xefe6d6, panel: 0x2b2b2b },
+  log: { wood: 0xe4c79a, deck: 0xc99e64, roof: 0x6b4e2e, char: 0xa9784a, linen: 0xf3ead9, panel: 0xd6b07c },
+  white: { wood: 0xf4f4f2, deck: 0xe8e2d6, roof: 0xdfe5e8, char: 0x2f6f86, linen: 0xffffff, panel: 0xffffff },
+  boho: { wood: 0xd9b98e, deck: 0xb5855a, roof: 0xc9a46a, char: 0x7a5a3a, linen: 0xf2e6d0, panel: 0xc8a273 },
 };
 addEventListener("beachstyle", e => { const p = STYLE_MAT[e.detail.style]; if (!p) return; for (const k in p) M[k].color.setHex(p[k]); });
 host.classList.add("ready");
