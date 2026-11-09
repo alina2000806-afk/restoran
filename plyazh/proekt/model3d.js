@@ -145,7 +145,7 @@ for (let z = -84; z <= 92; z += 9) tree(16 + Math.random() * 1.5, z, Math.random
 // a few trees on the west beach edge near VIP
 [[-16, 46], [-17, 60], [-16, 74], [-15, 86]].forEach(([x, z]) => tree(x, z, "poplar", 1));
 
-const cabinWindows = [], steamSpots = [], boats = [], buildingsLit = [], bulbs = [];
+const cabinWindows = [], steamSpots = [], boats = [], buildingsLit = [], bulbs = [], summerOnly = [];
 // ---------- people & small props (budget beach life, as on the photo renders) ----------
 const SKIN = [0xe0b08a, 0xd29c74, 0xc58b62].map(c => new THREE.MeshStandardMaterial({ color: c, roughness: 0.8 }));
 const CLOTH = [0xffffff, 0x2f4f6f, 0xd9534f, 0x3a7d44, 0xf2c14e, 0x222222, 0x8e7cc3, 0x5bc0de, 0xe8dcc4].map(c => new THREE.MeshStandardMaterial({ color: c, roughness: 0.9 }));
@@ -163,7 +163,9 @@ function person(parent, x, y, z, { pose = "stand", rot = 0, s = 1 } = {}) {
   } else if (pose === "lie") {
     add(g, box(0.38, 0.16, 0.7), sh, 0, 0.08, -0.25); add(g, box(0.34, 0.14, 0.85), sk, 0, 0.07, 0.5); add(g, headGeo, sk, 0, 0.12, -0.72);
   } else if (pose === "swim") { add(g, headGeo, sk, 0, 0.05, 0); }
-  g.position.set(x, y, z); g.rotation.y = rot; g.scale.setScalar(s); parent.add(g); return g;
+  g.position.set(x, y, z); g.rotation.y = rot; g.scale.setScalar(s); parent.add(g);
+  if (parent === scene && (pose === "lie" || pose === "swim" || y < 0.5)) summerOnly.push(g);
+  return g;
 }
 const TOWEL = [0x5bc0de, 0xd9534f, 0xf2c14e, 0x8e7cc3, 0x3a7d44].map(c => new THREE.MeshStandardMaterial({ color: c, roughness: 1 }));
 // ---------- builders ----------
@@ -173,7 +175,7 @@ function lounger(x, z, rot = 0) {
   add(g, box(0.65, 0.07, 1.25), M.plastic, 0, 0.36, 0.3);
   const b = add(g, box(0.65, 0.07, 0.75), M.plastic, 0, 0.55, -0.6); b.rotation.x = -0.75;
   [[-0.28, -0.75], [0.28, -0.75], [-0.28, 0.85], [0.28, 0.85]].forEach(([a, c]) => add(g, box(0.06, 0.34, 0.06), M.plastic, a, 0.17, c));
-  g.position.set(x, top, z); g.rotation.y = rot; scene.add(g);
+  g.position.set(x, top, z); g.rotation.y = rot; scene.add(g); summerOnly.push(g);
 }
 // closed beach gazebo 6 x 4 m, as on the client's photo: timber posts in 3 bays, diagonal braces,
 // 0.9 m half-walls with a top rail on three sides, open gable trusses, gable roof of profiled sheet
@@ -215,8 +217,8 @@ function beachGazebo(x, z, rot = 0, busy = false) {
   for (let k = 0; k <= 8; k++) { const t = k / 8; const p = new THREE.Vector3(-W / 2 + t * W, H - Math.sin(t * Math.PI) * 0.25, D / 2).applyAxisAngle(new THREE.Vector3(0, 1, 0), rot).add(g.position); bulbs.push(p); }
 }
 function umbrella(x, z) {
-  add(scene, new THREE.CylinderGeometry(0.05, 0.05, 2.6, 6), M.wood, x, top + 1.3, z);
-  const u = add(scene, new THREE.ConeGeometry(1.6, 0.45, 4, 1, true), M.linen, x, top + 2.55, z); u.rotation.y = Math.PI / 4;
+  summerOnly.push(add(scene, new THREE.CylinderGeometry(0.05, 0.05, 2.6, 6), M.wood, x, top + 1.3, z));
+  const u = add(scene, new THREE.ConeGeometry(1.6, 0.45, 4, 1, true), M.linen, x, top + 2.55, z); u.rotation.y = Math.PI / 4; summerOnly.push(u);
 }
 function stringLights(pts, n = 20) {
   const curve = new THREE.CatmullRomCurve3(pts.map(p => new THREE.Vector3(...p)));
@@ -529,10 +531,13 @@ const ROUTE = [
 let mode = "orbit";
 const walkUI = host.querySelector(".m3d-walk");
 function setMode(m) {
-  mode = m; host.classList.toggle("walking", m === "walk");
+  mode = m; host.classList.toggle("walking", m === "walk"); host.classList.toggle("droning", m === "drone");
+  const dUI = host.querySelector(".m3d-drone"); if (dUI) dUI.hidden = m !== "drone";
+  host.querySelectorAll("[data-act=drone]").forEach(b => b.classList.toggle("on", m === "drone"));
   controls.enabled = m === "orbit"; walkUI.hidden = m !== "walk";
   host.querySelectorAll("[data-act=walk]").forEach(b => b.classList.toggle("on", m === "walk"));
   if (m === "walk") { flight = null; controls.autoRotate = false; camera.fov = 62; }
+  else if (m === "drone") { flight = null; controls.autoRotate = false; camera.fov = 68; }
   else { camera.fov = 38; walk.auto = false; host.querySelector("[data-act=auto]").classList.remove("on"); }
   camera.updateProjectionMatrix();
 }
@@ -618,6 +623,7 @@ function cineFrame(t) {
 function endCine() {
   if (!cine) return; cine = null; buildables.forEach(o => { o.scale.copy(o.userData.s0); o.visible = true; });
   night = 0; setHour(hourNow); camera.position.set(-150, 120, 150); controls.target.set(0, 0, 0); controls.autoRotate = true;
+  if (season !== "summer") setSeason(season);
   dispatchEvent(new Event("beachcine:end"));
 }
 addEventListener("beachcine", e => { setMode("orbit"); card.hidden = true; flight = null; controls.autoRotate = false; cine = { t0: clock.getElapsedTime(), dur: (e.detail && e.detail.dur) || 11 }; buildables.forEach(o => { o.scale.setScalar(0.0001); o.visible = false; }); });
@@ -650,6 +656,63 @@ addEventListener("beachexportglb", async () => {
   new GLTFExporter().parse(root, buf => { const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([buf], { type: "model/gltf-binary" })); a.download = "plyazh-maket.glb"; document.body.appendChild(a); a.click(); }, err => console.error(err), { binary: true, onlyVisible: true });
 });
 
+
+// ---------- seasons: summer / autumn / winter (the beach works all year) ----------
+scene.children.forEach(o => { if (o.isMesh && (TOWEL.includes(o.material) || (o.material === M.sup && o.position.y < 0.4))) summerOnly.push(o); });
+const SUMMER = { day: { ...DAY }, col: {} };
+["sand", "wetSand", "grass", "roof", "deck", "poplar", "bush", "path"].forEach(k => SUMMER.col[k] = M[k].color.getHex());
+const AUT = [0xd9a43a, 0xc9772e, 0xe2c25a, 0x9aa33f, 0xb8572a].map(c => new THREE.MeshStandardMaterial({ color: c, roughness: 0.9, flatShading: true }));
+const SNOWC = new THREE.MeshStandardMaterial({ color: 0xe9eef2, roughness: 1, flatShading: true });
+trees.forEach(c => { c.userData.m0 = c.material; c.userData.s0 = c.scale.clone(); });
+const snowN = 2600, snowGeo = new THREE.BufferGeometry(), snowArr = new Float32Array(snowN * 3);
+for (let i = 0; i < snowN; i++) { snowArr[i * 3] = (Math.random() - 0.5) * 140; snowArr[i * 3 + 1] = Math.random() * 60; snowArr[i * 3 + 2] = (Math.random() - 0.5) * 260; }
+snowGeo.setAttribute("position", new THREE.BufferAttribute(snowArr, 3));
+const snow = new THREE.Points(snowGeo, new THREE.PointsMaterial({ color: 0xffffff, size: 0.35, transparent: true, opacity: 0.9, depthWrite: false })); snow.visible = false; scene.add(snow);
+let season = "summer";
+function setSeason(s) {
+  season = s; const col = SUMMER.col;
+  // restore summer first
+  Object.assign(DAY, SUMMER.day); for (const k in col) M[k].color.setHex(col[k]);
+  trees.forEach(c => { c.material = c.userData.m0; c.scale.copy(c.userData.s0); });
+  summerOnly.forEach(o => o.visible = true); snow.visible = false;
+  if (s === "autumn") {
+    trees.forEach((c, i) => c.material = AUT[(i * 7) % AUT.length]); M.grass.color.setHex(0xa59a55);
+    summerOnly.forEach(o => o.visible = false); Object.assign(DAY, { top: "#7ea2c4", hor: "#efe2cc", water: 0x35606e, fog: 0xefe2cc, sun: 2.1 });
+  } else if (s === "winter") {
+    trees.forEach(c => { c.material = SNOWC; c.scale.multiplyScalar(0.62); });
+    M.sand.color.setHex(0xf1f4f7); M.wetSand.color.setHex(0xd3dce2); M.grass.color.setHex(0xe9eef2); M.roof.color.setHex(0xe8edf1); M.path.color.setHex(0xdfe5ea); M.deck.color.setHex(0xe6eaed);
+    summerOnly.forEach(o => o.visible = false); snow.visible = true;
+    Object.assign(DAY, { top: "#9fb6cb", hor: "#eef3f7", water: 0x5f7c8a, fog: 0xe6edf2, sun: 1.9, sunC: 0xf3f6ff });
+  }
+  host.querySelectorAll("[data-season]").forEach(b => b.classList.toggle("on", b.dataset.season === s));
+  scene.fog.color.set(DAY.fog);
+}
+host.querySelectorAll("[data-season]").forEach(b => b.addEventListener("click", () => { setSeason(b.dataset.season); controls.autoRotate = false; }));
+addEventListener("beachstyle", () => { ["roof", "deck"].forEach(k => SUMMER.col[k] = M[k].color.getHex()); if (season !== "summer") setSeason(season); });
+
+// ---------- drone: tilt the phone (or steer with the mouse) to fly over the beach ----------
+const drone = { x: -30, y: 28, z: 120, yaw: Math.PI, roll: 0, boost: false, nx: 0, ny: 0, g0: null };
+const droneUI = host.querySelector(".m3d-drone");
+async function startDrone() {
+  if (typeof DeviceOrientationEvent !== "undefined" && DeviceOrientationEvent.requestPermission) { try { await DeviceOrientationEvent.requestPermission(); } catch (e) {} }
+  Object.assign(drone, { x: -26, y: 30, z: 135, yaw: -0.18, roll: 0, nx: 0, ny: 0, g0: null, tilt: false }); card.hidden = true; setMode("drone");
+}
+addEventListener("deviceorientation", e => { if (mode !== "drone" || e.gamma == null) return; if (!drone.g0) drone.g0 = { b: e.beta };
+  drone.nx = Math.max(-1, Math.min(1, e.gamma / 28)); drone.ny = Math.max(-1, Math.min(1, (e.beta - drone.g0.b) / 25)); drone.tilt = true; });
+canvas.addEventListener("pointermove", e => { if (mode !== "drone" || drone.tilt) return; const r = canvas.getBoundingClientRect(); drone.nx = ((e.clientX - r.left) / r.width - 0.5) * 2; drone.ny = ((e.clientY - r.top) / r.height - 0.5) * 2; });
+canvas.addEventListener("pointerdown", () => { if (mode === "drone") drone.boost = true; });
+addEventListener("pointerup", () => { drone.boost = false; });
+function stepDrone(dt) {
+  const dz = v => Math.abs(v) < 0.18 ? 0 : (v - Math.sign(v) * 0.18) / 0.82; const nx = dz(drone.nx), ny = dz(drone.ny);
+  drone.yaw += -nx * 0.6 * dt; drone.roll += (nx * 0.28 - drone.roll) * Math.min(1, dt * 2.5);
+  const sp = (drone.boost ? 26 : 11); drone.x += -Math.sin(drone.yaw) * sp * dt; drone.z += -Math.cos(drone.yaw) * sp * dt;
+  drone.y = Math.max(4, Math.min(90, drone.y - ny * 12 * dt));
+  const d = Math.hypot(drone.x, drone.z * 0.6); if (d > 150) { const want = Math.atan2(drone.x, drone.z); let df = want - drone.yaw; df = Math.atan2(Math.sin(df), Math.cos(df)); drone.yaw += df * dt * 1.5; }
+  camera.position.set(drone.x, drone.y, drone.z); camera.rotation.set(-0.3 - ny * 0.22, drone.yaw, -drone.roll, "YXZ");
+}
+host.querySelectorAll("[data-act=drone]").forEach(b => b.addEventListener("click", () => { if (mode === "drone") { setMode("orbit"); fly({ cam: [-150, 120, 150], p: [0, 0, 0] }); } else startDrone(); }));
+if (droneUI) droneUI.querySelector(".x").addEventListener("click", () => { setMode("orbit"); fly({ cam: [-150, 120, 150], p: [0, 0, 0] }); });
+
 // ---------- loop ----------
 function resize() { const r = host.getBoundingClientRect(); renderer.setSize(r.width, r.height, false); camera.aspect = r.width / r.height; camera.updateProjectionMatrix(); }
 new ResizeObserver(resize).observe(host); resize();
@@ -661,6 +724,7 @@ renderer.setAnimationLoop(() => {
   const t = clock.getElapsedTime(), dt = Math.min(t - last, 0.05); last = t;
   if (cine) cineFrame(t);
   else if (mode === "walk") stepWalk(dt);
+  else if (mode === "drone") stepDrone(dt);
   else {
     if (flight) {
       flight.t = Math.min(1, flight.t + dt * 0.9); const k = 1 - Math.pow(1 - flight.t, 3);
@@ -674,6 +738,7 @@ renderer.setAnimationLoop(() => {
   wPos.needsUpdate = true;
   boats.forEach((b, i) => { b.rotation.z = Math.sin(t * 0.9 + i) * 0.03; b.position.y = Math.sin(t * 1.2 + i) * 0.08; });
   steam.material.opacity = 0.18 + Math.sin(t * 1.5) * 0.08;
+  if (snow.visible) { const a = snowGeo.attributes.position.array; for (let i = 0; i < snowN; i++) { a[i * 3 + 1] -= dt * (2.5 + (i % 5) * 0.4); a[i * 3] += Math.sin(t + i) * dt * 0.4; if (a[i * 3 + 1] < 0) a[i * 3 + 1] = 60; } snowGeo.attributes.position.needsUpdate = true; }
   renderer.render(scene, camera);
   const r = canvas.getBoundingClientRect();
   ZONES.forEach(z => {
