@@ -208,6 +208,26 @@ html{scroll-padding-top:64px}
 .veil{transition:background .4s}
 .veil.deep{background:rgba(11,21,34,.74)}
 .leg span{font-size:15px}
+
+/* ---- visual extras ---- */
+.pill b.cnt{font-weight:800;color:var(--accent-2)}
+.hero h1 span{background-size:220% 100%;background-image:linear-gradient(90deg,var(--accent-2),var(--accent) 40%,#ffd9a0 50%,var(--accent) 60%,var(--accent-2));animation:shine 7s linear infinite}
+@keyframes shine{to{background-position:-220% 0}}
+.js .rv{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
+.js .rv.in{opacity:1;transform:none}
+.stick::after{content:"";position:absolute;left:0;bottom:-1px;height:2px;width:var(--read,0%);background:linear-gradient(90deg,var(--accent-2),var(--accent))}
+.step a,.gal figure{display:block}
+.step img,.gal figure img,.photos figure img{transition:transform .35s ease,box-shadow .35s ease}
+@media (hover:hover){.step a:hover img,.gal figure:hover img,.photos figure:hover img{transform:translateY(-5px);box-shadow:0 22px 40px -18px rgba(0,0,0,.8)}}
+.story::after{content:"";position:absolute;left:8px;top:6px;width:2px;height:var(--fill,0%);background:#ffd27a;box-shadow:0 0 12px #ffb36b;transition:height .2s}
+.daywidget{position:fixed;left:16px;bottom:16px;z-index:49;display:flex;align-items:center;gap:10px;padding:8px 14px 8px 8px;border-radius:99px;background:rgba(11,21,34,.88);border:1px solid var(--stroke);backdrop-filter:blur(12px);opacity:0;transform:translateY(20px);transition:opacity .3s,transform .3s;pointer-events:none}
+.daywidget.show{opacity:1;transform:none}
+.daywidget .sky{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-size:22px;transition:background 1s}
+.daywidget b{font-family:var(--display);font-size:18px;display:block;line-height:1}
+.daywidget small{font-size:12.5px;color:var(--muted)}
+.gal figure.pop{animation:pop .45s ease both}
+@keyframes pop{from{opacity:0;transform:scale(.96)}}
+@media (prefers-reduced-motion:reduce){.hero h1 span{animation:none}.js .rv{opacity:1;transform:none;transition:none}.gal figure.pop{animation:none}}
 </style>
 </head>
 <body>
@@ -215,7 +235,8 @@ html{scroll-padding-top:64px}
 <div class="veil"></div>
 
 <div class="ui">
-  <nav class="stick" aria-label="Розділи"><div class="in"><a href="#dilyanka">Ділянка</a><a href="#genplan">Генплан</a><a href="#obiekty">Об'єкти</a><a href="#styl">Стиль</a><a href="#model">3D</a><a href="#viz">День на пляжі</a><a href="#galereya">Галерея</a><a href="#bulo">Було / буде</a><a class="call" href="tel:+380966958712">📞 Зв'язатися</a></div></nav>
+  <div class="daywidget" aria-hidden="true"><span class="sky">☀️</span><span><b class="dw-t">10:00</b><small class="dw-n">Вхід</small></span></div>
+<nav class="stick" aria-label="Розділи"><div class="in"><a href="#dilyanka">Ділянка</a><a href="#genplan">Генплан</a><a href="#obiekty">Об'єкти</a><a href="#styl">Стиль</a><a href="#model">3D</a><a href="#viz">День на пляжі</a><a href="#galereya">Галерея</a><a href="#bulo">Було / буде</a><a class="call" href="tel:+380966958712">📞 Зв'язатися</a></div></nav>
 <button type="button" class="totop" aria-label="Нагору">↑</button>
 <header class="top col">
     <div class="brand">Пляж Основа<small>Харків · річка Харків · концепція</small></div>
@@ -227,7 +248,7 @@ html{scroll-padding-top:64px}
       <div class="kicker">Пляж Основа</div>
       <h1>Пляж, який <span>хочеться показувати</span></h1>
       <p>Концепція благоустрою ділянки від кафе «Червона мавпа» до точки «Пляж Основа». Генплан за вашим ескізом, перелік об'єктів, стиль, 3D-модель, яку можна обійти, і 32 фотореалістичні види всіх зон. Усе зібрано з анкети і фотофіксації 30 жовтня.</p>
-      <div class="pills"><span class="pill">≈ 200 м берега</span><span class="pill">вода з двох боків</span><span class="pill">до 500 гостей</span><span class="pill">30–70 тис. $</span><span class="pill">цілий рік</span></div>
+      <div class="pills"><span class="pill">≈ <b class="cnt" data-to="200">200</b> м берега</span><span class="pill">вода з двох боків</span><span class="pill">до <b class="cnt" data-to="500">500</b> гостей</span><span class="pill">30–70 тис. $</span><span class="pill">цілий рік</span></div>
       <nav class="toc"><a href="#dilyanka">Ділянка</a><a href="#genplan">Генплан</a><a href="#obiekty">Об'єкти</a><a href="#styl">Стиль</a><a href="#model">3D-прогулянка</a><a href="#viz">Візуалізації</a><a href="#galereya">Галерея</a><a href="#bulo">Було / буде</a></nav>
     </section>
 
@@ -659,6 +680,44 @@ show('light');
 <script>
 addEventListener('load', () => { if (location.hash.length > 1) { const t = document.querySelector(location.hash); if (t) t.scrollIntoView({ behavior: 'instant' }); } });
 document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', e => { const t = document.querySelector(a.getAttribute('href')); if (!t) return; e.preventDefault(); history.replaceState(null, '', a.getAttribute('href')); t.scrollIntoView({ behavior: 'smooth' }); setTimeout(() => t.scrollIntoView({ behavior: 'instant' }), 900); }));
+</script>
+<script>
+(() => {
+  document.documentElement.classList.add('js');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // reveal on scroll
+  const items = document.querySelectorAll('.part h2, .part .hint, .part .glass, .step, .gal figure, .bagrid figure, .photos figure, .cards .card, .palette');
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px' });
+  items.forEach((el, i) => { el.classList.add('rv'); el.style.transitionDelay = (i % 3) * 70 + 'ms'; io.observe(el); });
+  // count-up in the hero
+  document.querySelectorAll('.cnt').forEach(el => { const to = +el.dataset.to; if (reduce) return; const t0 = performance.now(); const tick = t => { const k = Math.min(1, (t - t0) / 1400); el.textContent = Math.round(to * (1 - Math.pow(1 - k, 3))); if (k < 1) requestAnimationFrame(tick); }; requestAnimationFrame(tick); });
+  // reading progress + day clock along the story
+  const stick = document.querySelector('.stick'), story = document.querySelector('.story'), viz = document.getElementById('viz');
+  const dw = document.querySelector('.daywidget'), sky = dw.querySelector('.sky'), dt = dw.querySelector('.dw-t'), dn = dw.querySelector('.dw-n');
+  const steps = [...document.querySelectorAll('.step')];
+  const look = tm => { const h = parseInt(tm); return h < 12 ? ['🌤️', 'linear-gradient(135deg,#7cc6f2,#cfeaff)'] : h < 17 ? ['☀️', 'linear-gradient(135deg,#ffd36b,#ff9f43)'] : h < 20 ? ['🌇', 'linear-gradient(135deg,#ff9a76,#b84b7a)'] : h < 21 ? ['🌅', 'linear-gradient(135deg,#ff7a59,#5a3a7a)'] : ['🌙', 'linear-gradient(135deg,#283a6b,#0b1522)']; };
+  const onScroll = () => {
+    const H = document.documentElement.scrollHeight - innerHeight; stick.style.setProperty('--read', (scrollY / H * 100).toFixed(1) + '%');
+    const r = story.getBoundingClientRect(); const fill = Math.max(0, Math.min(1, (innerHeight * 0.6 - r.top) / r.height));
+    story.style.setProperty('--fill', (fill * 100).toFixed(1) + '%');
+    const vr = viz.getBoundingClientRect(); const inside = r.top < innerHeight * 0.6 && r.bottom > innerHeight * 0.4;
+    dw.classList.toggle('show', inside);
+    if (inside) { let cur = steps[0]; steps.forEach(s => { if (s.getBoundingClientRect().top < innerHeight * 0.55) cur = s; });
+      const tm = cur.querySelector('.tm').textContent, name = cur.querySelector('b').textContent.replace(/^\d+ · /, '');
+      if (dt.textContent !== tm) { dt.textContent = tm; dn.textContent = name; const [ic, bg] = look(tm); sky.textContent = ic; sky.style.background = bg; } }
+  };
+  addEventListener('scroll', onScroll, { passive: true }); onScroll();
+  // before/after: one gentle hint swing when a slider first appears
+  if (!reduce) { const bio = new IntersectionObserver(es => es.forEach(e => { if (!e.isIntersecting) return; bio.unobserve(e.target); const el = e.target; let touched = false;
+    el.addEventListener('pointerdown', () => touched = true, { once: true });
+    const keys = [[0, 50], [600, 28], [1300, 72], [1900, 50]], t0 = performance.now();
+    const run = t => { if (touched) return; const d = t - t0; let i = 0; while (i < keys.length - 2 && d > keys[i + 1][0]) i++; const [ta, a] = keys[i], [tb, b] = keys[i + 1]; const k = Math.min(1, (d - ta) / (tb - ta)); const e2 = k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+      el.style.setProperty('--pos', (a + (b - a) * e2) + '%'); if (d < keys[keys.length - 1][0]) requestAnimationFrame(run); };
+    setTimeout(() => requestAnimationFrame(run), 300); }), { threshold: 0.6 });
+    document.querySelectorAll('.ba').forEach(b => bio.observe(b)); }
+  // gallery filter: little pop
+  document.querySelectorAll('.gal-chips .chip').forEach(c => c.addEventListener('click', () => document.querySelectorAll('.gal figure:not([hidden])').forEach((f, i) => { f.classList.remove('pop'); void f.offsetWidth; f.style.animationDelay = i * 40 + 'ms'; f.classList.add('pop'); f.classList.add('in'); })));
+})();
 </script>
 </body>
 </html>
