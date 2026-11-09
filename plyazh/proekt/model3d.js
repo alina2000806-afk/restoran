@@ -146,6 +146,26 @@ for (let z = -84; z <= 92; z += 9) tree(16 + Math.random() * 1.5, z, Math.random
 [[-16, 46], [-17, 60], [-16, 74], [-15, 86]].forEach(([x, z]) => tree(x, z, "poplar", 1));
 
 const cabinWindows = [], steamSpots = [], boats = [], buildingsLit = [], bulbs = [];
+// ---------- people & small props (budget beach life, as on the photo renders) ----------
+const SKIN = [0xe0b08a, 0xd29c74, 0xc58b62].map(c => new THREE.MeshStandardMaterial({ color: c, roughness: 0.8 }));
+const CLOTH = [0xffffff, 0x2f4f6f, 0xd9534f, 0x3a7d44, 0xf2c14e, 0x222222, 0x8e7cc3, 0x5bc0de, 0xe8dcc4].map(c => new THREE.MeshStandardMaterial({ color: c, roughness: 0.9 }));
+const SHORTS = [0x1f3550, 0x333333, 0x6b8fb3, 0x7a5c3a].map(c => new THREE.MeshStandardMaterial({ color: c, roughness: 0.9 }));
+const pick = a => a[Math.floor(Math.random() * a.length)];
+const headGeo = new THREE.SphereGeometry(0.12, 10, 8);
+function person(parent, x, y, z, { pose = "stand", rot = 0, s = 1 } = {}) {
+  const g = new THREE.Group(), sk = pick(SKIN), sh = pick(CLOTH), pa = pick(SHORTS);
+  if (pose === "stand") {
+    add(g, box(0.3, 0.82, 0.18), pa, 0, 0.41, 0); add(g, box(0.4, 0.6, 0.22), sh, 0, 1.12, 0);
+    [-0.25, 0.25].forEach(a => add(g, box(0.09, 0.55, 0.09), sk, a, 1.1, 0)); add(g, headGeo, sk, 0, 1.6, 0);
+  } else if (pose === "sit") {
+    add(g, box(0.32, 0.16, 0.42), pa, 0, 0.08, 0.18); add(g, box(0.28, 0.45, 0.14), sk, 0, -0.2, 0.4);
+    add(g, box(0.4, 0.55, 0.22), sh, 0, 0.45, 0); add(g, headGeo, sk, 0, 0.88, 0);
+  } else if (pose === "lie") {
+    add(g, box(0.38, 0.16, 0.7), sh, 0, 0.08, -0.25); add(g, box(0.34, 0.14, 0.85), sk, 0, 0.07, 0.5); add(g, headGeo, sk, 0, 0.12, -0.72);
+  } else if (pose === "swim") { add(g, headGeo, sk, 0, 0.05, 0); }
+  g.position.set(x, y, z); g.rotation.y = rot; g.scale.setScalar(s); parent.add(g); return g;
+}
+const TOWEL = [0x5bc0de, 0xd9534f, 0xf2c14e, 0x8e7cc3, 0x3a7d44].map(c => new THREE.MeshStandardMaterial({ color: c, roughness: 1 }));
 // ---------- builders ----------
 function lounger(x, z, rot = 0) {
   // plain white plastic sun lounger, 1.9 x 0.65 m
@@ -157,7 +177,7 @@ function lounger(x, z, rot = 0) {
 }
 // closed beach gazebo 6 x 4 m, as on the client's photo: timber posts in 3 bays, diagonal braces,
 // 0.9 m half-walls with a top rail on three sides, open gable trusses, gable roof of profiled sheet
-function beachGazebo(x, z, rot = 0) {
+function beachGazebo(x, z, rot = 0, busy = false) {
   const g = new THREE.Group(); const W = 6, D = 4, H = 2.2, R = 1.0, P = 0.14;
   add(g, box(W + 0.2, 0.12, D + 0.2), M.deck, 0, 0.06, 0);
   const xs = [-3, -1, 1, 3];
@@ -189,6 +209,8 @@ function beachGazebo(x, z, rot = 0) {
   // table and benches
   add(g, box(2.4, 0.06, 0.9), M.wood, 0, 0.85, -0.2); add(g, box(0.1, 0.75, 0.1), M.char, 0, 0.45, -0.2);
   [-0.95, 0.55].forEach(bz => add(g, box(2.4, 0.06, 0.35), M.wood, 0, 0.5, bz));
+  if (busy) { [-0.8, 0, 0.8].forEach(px => { person(g, px, 0.55, -1.0, { pose: "sit" }); if (px) person(g, px, 0.55, 0.6, { pose: "sit", rot: Math.PI }); });
+    [-0.6, 0.3, 0.9].forEach(px => add(g, new THREE.CylinderGeometry(0.11, 0.11, 0.03, 10), M.plastic, px, 0.9, -0.2)); }
   g.position.set(x, top, z); g.rotation.y = rot; scene.add(g); g.updateMatrixWorld(true);
   for (let k = 0; k <= 8; k++) { const t = k / 8; const p = new THREE.Vector3(-W / 2 + t * W, H - Math.sin(t * Math.PI) * 0.25, D / 2).applyAxisAngle(new THREE.Vector3(0, 1, 0), rot).add(g.position); bulbs.push(p); }
 }
@@ -212,6 +234,7 @@ function gazebo(x, z, { vip = false, rot = 0, size = 4 } = {}) {
   add(g, box(0.9, 0.45, size - 1.6), M.linen, -s + 0.6, 0.45, 0.2);
   add(g, box(1.2, 0.4, 0.8), M.wood, 0.4, 0.45, 0.4);
   if (vip) {
+    [-0.7, 0.5].forEach(px => person(g, px, 0.68, -s + 0.6, { pose: "sit" })); person(g, -s + 0.6, 0.68, 0.6, { pose: "sit", rot: Math.PI / 2 });
     [[-s, 0, 0], [s, 0, 0], [0, -s, Math.PI / 2]].forEach(([a, c, ry]) => {
       const cur = add(g, new THREE.PlaneGeometry(size, 2.6, 8, 1), M.curtain, a, 1.5, c, false);
       cur.rotation.y = ry + Math.PI / 2; const p = cur.geometry.attributes.position;
@@ -240,6 +263,10 @@ function cabin(x, z, rot = 0) {
   const tub = add(g, new THREE.CylinderGeometry(1.15, 1.15, 0.9, 20), M.tub, 4, 1.8, 1.6);
   add(g, new THREE.CylinderGeometry(1.0, 1.0, 0.05, 20), M.tubWater, 4, 2.2, 1.6, false);
   add(g, new THREE.CylinderGeometry(0.12, 0.12, 1.6, 8), M.char, 4.9, 2.4, 0.4);
+  [[3.6, 1.4], [4.4, 1.9]].forEach(([a, c]) => person(g, a, 2.1, c, { pose: "swim" }));
+  person(g, 1.2, 1.38, 2.4, { pose: "stand", rot: -Math.PI / 2 });
+  for (let k = 0; k < 3; k++) add(g, new THREE.CylinderGeometry(0.12, 0.12, 1.4, 6), M.wood, -4.6, 0.25 + k * 0.22, 3.2).rotation.x = Math.PI / 2;
+  [[0.2, 3.2], [-0.8, 3.2]].forEach(([a, c]) => { add(g, box(0.55, 0.08, 0.55), M.wood, a, 1.75, c); add(g, box(0.55, 0.5, 0.06), M.wood, a, 2.0, c + 0.26); });
   // stairs to the path side
   for (let k = 0; k < 4; k++) add(g, box(1.4, 0.18, 0.5), M.deck, 4.6, 1.1 - k * 0.27, -3.0 - k * 0.5);
   g.position.set(x, top, z); g.rotation.y = rot; scene.add(g);
@@ -276,7 +303,7 @@ add(scene, box(9, 0.12, 1.4), M.deck, -6, top + 0.06, 65, false);
   add(scene, box(9, 0.06, 17), new THREE.MeshStandardMaterial({ color: 0xead7ab, roughness: 1 }), 11, top + 0.03, 52, false);
   [[6.6, 43.6, 9, 0.08], [6.6, 60.4, 9, 0.08]].forEach(([x, z, w, d]) => add(scene, box(w, 0.07, d), M.rope, x + 4.4, top + 0.06, z, false));
   [[6.6, 52], [15.4, 52]].forEach(([x, z]) => add(scene, box(0.08, 0.07, 17), M.rope, x, top + 0.06, z, false));
-  [[6.4, 52], [15.6, 52]].forEach(([x, z]) => add(scene, new THREE.CylinderGeometry(0.08, 0.08, 2.6, 8), M.wood, x, top + 1.3, z));
+  const yellow = new THREE.MeshStandardMaterial({ color: 0xf2c200, roughness: 0.5 }); [[6.4, 52], [15.6, 52]].forEach(([x, z]) => add(scene, new THREE.CylinderGeometry(0.08, 0.08, 2.6, 8), yellow, x, top + 1.3, z));
   add(scene, new THREE.PlaneGeometry(9.2, 0.9), M.net, 11, top + 2.1, 52, false);
   add(scene, box(0.5, 0.45, 5), M.wood, 5.8, top + 0.22, 45);
 })();
@@ -327,7 +354,7 @@ for (let z = -42; z <= 40; z += 4.2) {
   if (Math.round(z) % 3 === 0) umbrella(-14.9, z + 0.6);
 }
 // 10 open gazebos along the main beach
-for (let i = 0; i < 10; i++) beachGazebo(-8.8, -52 + i * 9, Math.PI / 2);
+for (let i = 0; i < 10; i++) beachGazebo(-8.8, -52 + i * 9, Math.PI / 2, i % 3 !== 1);
 // North beach loungers both sides
 for (let z = -76; z <= -54; z += 4) { lounger(-11, z, Math.PI / 2); lounger(9, z, -Math.PI / 2); }
 // SUP / kayak rental + pier (west, upper)
@@ -368,6 +395,43 @@ for (let z = -76; z <= -54; z += 4) { lounger(-11, z, Math.PI / 2); lounger(9, z
   [[-0.95, -0.95], [0.95, -0.95], [-0.95, 0.95], [0.95, 0.95]].forEach(([a, c]) => add(g, box(0.08, 1.5, 0.08), M.wood, a, 3.8, c));
   g.position.set(-16, top, -47); scene.add(g); })();
 [[-1.8, 96], [3.8, 96], [-1.8, 84], [3.8, 74], [-1.8, 58], [3.8, 24], [-1.8, -8], [3.8, -48]].forEach(([x, z]) => planter(x, z));
+// ---------- life ----------
+(() => {
+  // sunbathers, towels, bags on the main beach
+  let k = 0;
+  for (let z = -42; z <= 40; z += 4.2) { [[-13.4, z], [-16.4, z + 1.2]].forEach(([x, zz]) => { k++;
+    if (k % 3 === 0) person(scene, x, top + 0.42, zz, { pose: "lie", rot: Math.PI / 2 });
+    else if (k % 3 === 1) add(scene, box(1.2, 0.03, 0.6), pick(TOWEL), x, top + 0.42, zz, false); }); }
+  // people on the sand and in the water
+  for (let i = 0; i < 14; i++) person(scene, -18 + Math.random() * 3, top, -40 + i * 6 + Math.random() * 2, { pose: "stand", rot: Math.random() * 6 });
+  for (let i = 0; i < 18; i++) person(scene, -23 - Math.random() * 6, -0.05, -40 + i * 5 + Math.random() * 3, { pose: "swim" });
+  // bar: bartenders, guests on stools, guests at tables, walnut tables with benches like on the photo
+  [9, 12].forEach(x => person(scene, x, top + 0.25, 9.6, { pose: "stand" }));
+  [0, 1, 3, 4].forEach(i => person(scene, 7 + i * 1.4, top + 1.0, 12.9, { pose: "sit", rot: Math.PI }));
+  [[8, 17], [12, 17], [16, 17]].forEach(([x, z]) => [-1, 1].forEach(sd => person(scene, x + sd * 1.1, top + 0.72, z, { pose: "sit", rot: sd * Math.PI / 2 })));
+  [[7, 22.5], [12, 22.5]].forEach(([x, z]) => { add(scene, box(2.2, 0.08, 0.9), M.wood, x, top + 0.78, z); [-0.75, 0.75].forEach(dz => add(scene, box(2.2, 0.06, 0.32), M.wood, x, top + 0.45, z + dz));
+    [-0.6, 0.6].forEach(dx => { person(scene, x + dx, top + 0.5, z - 0.8, { pose: "sit" }); person(scene, x + dx, top + 0.5, z + 0.8, { pose: "sit", rot: Math.PI }); }); });
+  // hookah kiosk: master inside, glass hookahs on the counter, a waiter carrying one away
+  person(scene, 9.2, top, 1.5, { pose: "stand", rot: Math.PI / 2 });
+  const glassM = new THREE.MeshStandardMaterial({ color: 0x9fd3e6, roughness: 0.1, transparent: true, opacity: 0.75 });
+  [1.0, 2.0].forEach(z => { add(scene, new THREE.SphereGeometry(0.16, 10, 8), glassM, 10.3, top + 1.3, z); add(scene, new THREE.CylinderGeometry(0.03, 0.03, 0.5, 6), M.char, 10.3, top + 1.6, z); });
+  person(scene, 13, top, 4.5, { pose: "stand", rot: -0.6 });
+  // volleyball players, spectators on the bench, kids in the corner
+  [[8.5, 47], [12, 46], [14, 49], [9, 56], [12.5, 57.5], [14.5, 55]].forEach(([x, z], i) => person(scene, x, top, z, { pose: "stand", rot: i < 3 ? 0 : Math.PI }));
+  [43.5, 45, 46.5].forEach(z => person(scene, 5.8, top + 0.47, z, { pose: "sit", rot: -Math.PI / 2 }));
+  [[9.5, 32], [11.8, 35], [12.6, 31.5]].forEach(([x, z]) => person(scene, x, top, z, { pose: "stand", s: 0.6, rot: Math.random() * 6 }));
+  person(scene, 14.5, top, 34, { pose: "stand", rot: Math.PI / 2 });
+  // entrance: arriving guests; walkers along the path
+  [[0.4, 104], [1.6, 103], [1, 97]].forEach(([x, z]) => person(scene, x, top, z, { pose: "stand", rot: Math.PI }));
+  for (let z = -70; z <= 80; z += 19) person(scene, 0.4 + Math.random() * 1.6, top + 0.12, z, { pose: "stand", rot: Math.random() > 0.5 ? 0 : Math.PI });
+  // SUP riders and a kayak near the pier
+  [[-27, -58], [-30, -66], [-26, -72]].forEach(([x, z]) => { add(scene, box(0.75, 0.12, 3.2), M.sup, x, 0.05, z); person(scene, x, 0.1, z, { pose: "stand", rot: 0.3 }); });
+  // cape: sunset watchers, a wooden photo frame
+  [[-8, -100], [-6.5, -101], [10, -104], [11, -104.5]].forEach(([x, z]) => person(scene, x, top, z, { pose: "stand", rot: Math.PI * 0.85 }));
+  const fr = new THREE.Group(); [[-1.3, 0], [1.3, 0]].forEach(([a]) => add(fr, box(0.18, 2.8, 0.18), M.wood, a, 1.4, 0)); [0.1, 2.75].forEach(y => add(fr, box(2.8, 0.18, 0.18), M.wood, 0, y, 0)); fr.position.set(-8, top, -108); fr.rotation.y = 0.5; scene.add(fr);
+  // black bins and planters along the path
+  [-60, -20, 18, 50, 86].forEach(z => add(scene, new THREE.CylinderGeometry(0.28, 0.25, 0.9, 10), M.char, 3.6, top + 0.45, z));
+})();
 // lanterns along the main path
 const lanterns = [];
 for (let z = -80; z <= 92; z += 8) [[-1.4, z], [3.4, z + 4]].forEach(([x, zz]) => {

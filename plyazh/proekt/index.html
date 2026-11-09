@@ -535,7 +535,7 @@ try{
 const onScroll=()=>{const max=document.documentElement.scrollHeight-innerHeight;setProgress(max>0?scrollY/max:0)};
 addEventListener("scroll",onScroll,{passive:true});onScroll();
 </script>
-<script type="module" src="model3d.js?v=1794190000"></script>
+<script type="module" src="model3d.js?v=1794200000"></script>
 <script>
 document.querySelectorAll(".ba").forEach(el=>{
   const set=x=>{const r=el.getBoundingClientRect();el.style.setProperty("--pos",Math.max(0,Math.min(100,(x-r.left)/r.width*100))+"%")};
