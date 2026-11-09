@@ -256,14 +256,6 @@ body.cine-on #model,body.cine-on main,body.cine-on .wrap{transform:none !importa
 .cine-ui.open .load{opacity:0}
 .replay{width:max-content;max-width:100%;display:inline-flex;align-items:center;gap:8px;margin-top:18px;min-height:46px;padding:0 18px;border-radius:99px;border:1px solid var(--stroke);background:var(--glass);color:var(--fg);font:800 15px/1 var(--body);cursor:pointer;backdrop-filter:blur(10px)}
 .replay:hover{background:var(--glass-2)}
-/* ---- sound ---- */
-.sndbtn{position:fixed;right:16px;bottom:78px;z-index:50;min-height:46px;padding:0 16px;border-radius:99px;border:1px solid var(--stroke);background:rgba(11,21,34,.85);color:#fff;font:800 14px/1 var(--body);cursor:pointer;backdrop-filter:blur(12px);display:flex;align-items:center;gap:8px}
-.sndbtn .eq{display:inline-flex;gap:2px;align-items:flex-end;height:14px}
-.sndbtn .eq i{width:3px;background:var(--accent-2);height:4px;border-radius:2px}
-.sndbtn.on .eq i{animation:eq .9s ease-in-out infinite}
-.sndbtn.on .eq i:nth-child(2){animation-delay:.2s}.sndbtn.on .eq i:nth-child(3){animation-delay:.4s}
-@keyframes eq{50%{height:14px}}
-@media (max-width:560px){.sndbtn{right:12px;bottom:68px;padding:0 13px}.sndbtn .lbl{display:none}}
 /* ---- author ---- */
 .ap{display:grid;grid-template-columns:1.5fr 1fr;gap:22px;align-items:center;padding:26px !important;position:relative;overflow:hidden}
 .ap::before{content:"";position:absolute;inset:-40%;background:conic-gradient(from 0deg,transparent,rgba(255,122,89,.18),transparent 30%);animation:spin 14s linear infinite;pointer-events:none}
@@ -279,6 +271,8 @@ body.cine-on #model,body.cine-on main,body.cine-on .wrap{transform:none !importa
 .ap .act .ph{border:1px solid var(--stroke);color:var(--fg);background:var(--glass)}
 @media (max-width:760px){.ap{grid-template-columns:1fr}}
 @media (prefers-reduced-motion:reduce){.ap::before{animation:none}}
+
+.stick .mute{flex:none;min-width:40px;min-height:40px;border-radius:10px;border:1px solid var(--stroke);background:transparent;color:var(--fg);font-size:16px;cursor:pointer}
 </style>
 </head>
 <body>
@@ -290,11 +284,10 @@ body.cine-on #model,body.cine-on main,body.cine-on .wrap{transform:none !importa
   <div class="black"></div><div class="load">Пляж Основа · завантаження</div>
   <div class="bar t"></div><div class="bar b"></div><div class="prog"></div>
   <div class="ttl"><small>Харків · річка Харків</small><h1></h1><p>Концепція пляжу, яку можна обійти ще до будівництва</p></div>
-  <div class="ctl"><button type="button" class="c-snd">🔈 Зі звуком</button><button type="button" class="c-skip">Пропустити ✕</button></div>
+  <div class="ctl"><button type="button" class="c-skip">Пропустити ✕</button></div>
 </div>
-<button type="button" class="sndbtn" aria-pressed="false"><span class="eq"><i></i><i></i><i></i></span><span class="lbl">Звук пляжу</span></button>
 <div class="daywidget" aria-hidden="true"><span class="sky">☀️</span><span><b class="dw-t">10:00</b><small class="dw-n">Вхід</small></span></div>
-<nav class="stick" aria-label="Розділи"><div class="in"><a href="#dilyanka">Ділянка</a><a href="#genplan">Генплан</a><a href="#obiekty">Об'єкти</a><a href="#styl">Стиль</a><a href="#model">3D</a><a href="#viz">День на пляжі</a><a href="#galereya">Галерея</a><a href="#bulo">Було / буде</a><a class="call" href="tel:+380966958712">📞 Зв'язатися</a></div></nav>
+<nav class="stick" aria-label="Розділи"><div class="in"><a href="#dilyanka">Ділянка</a><a href="#genplan">Генплан</a><a href="#obiekty">Об'єкти</a><a href="#styl">Стиль</a><a href="#model">3D</a><a href="#viz">День на пляжі</a><a href="#galereya">Галерея</a><a href="#bulo">Було / буде</a><button type="button" class="mute" aria-label="Звук кліків" title="Звук кліків">🔈</button><a class="call" href="tel:+380966958712">📞 Зв'язатися</a></div></nav>
 <button type="button" class="totop" aria-label="Нагору">↑</button>
 <header class="top col">
     <div class="brand">Пляж Основа<small>Харків · річка Харків · концепція</small></div>
@@ -787,40 +780,6 @@ document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click
 })();
 </script>
 <script>
-// ===== beach soundscape: generated live with Web Audio (no audio files, no licences) =====
-const Snd = (() => {
-  let ctx, master, waveG, cricketG, musicG, birdsT, on = false, hour = 10;
-  const btn = document.querySelector('.sndbtn');
-  const noise = () => { const b = ctx.createBuffer(1, ctx.sampleRate * 3, ctx.sampleRate), d = b.getChannelData(0); let last = 0; for (let i = 0; i < d.length; i++) { last = (last + 0.02 * (Math.random() * 2 - 1)) / 1.02; d[i] = last * 3.5; } return b; };
-  function init() {
-    ctx = new (window.AudioContext || window.webkitAudioContext)(); master = ctx.createGain(); master.gain.value = 0; master.connect(ctx.destination);
-    // waves: brown noise, low-pass, slow swell
-    const src = ctx.createBufferSource(); src.buffer = noise(); src.loop = true; const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 700;
-    waveG = ctx.createGain(); waveG.gain.value = 0.5; const lfo = ctx.createOscillator(), lfoG = ctx.createGain(); lfo.frequency.value = 0.11; lfoG.gain.value = 0.28; lfo.connect(lfoG).connect(waveG.gain); src.connect(lp).connect(waveG).connect(master); src.start(); lfo.start();
-    // crickets: high tone chopped by a fast pulse
-    const cr = ctx.createOscillator(); cr.type = 'sine'; cr.frequency.value = 4300; const chop = ctx.createGain(); chop.gain.value = 0; const pul = ctx.createOscillator(); pul.type = 'square'; pul.frequency.value = 24; const pulG = ctx.createGain(); pulG.gain.value = 0.5; pul.connect(pulG).connect(chop.gain);
-    cricketG = ctx.createGain(); cricketG.gain.value = 0; cr.connect(chop).connect(cricketG).connect(master); cr.start(); pul.start();
-    // bar music: soft warm pad, chords change every 4 s
-    musicG = ctx.createGain(); musicG.gain.value = 0; const mlp = ctx.createBiquadFilter(); mlp.type = 'lowpass'; mlp.frequency.value = 1100; musicG.connect(mlp).connect(master);
-    const chords = [[220, 261.6, 329.6, 392], [174.6, 220, 261.6, 329.6], [261.6, 329.6, 392, 493.9], [196, 246.9, 293.7, 392]]; const voices = chords[0].map(f => { const o = ctx.createOscillator(); o.type = 'triangle'; o.frequency.value = f; const g = ctx.createGain(); g.gain.value = 0.18; o.connect(g).connect(musicG); o.start(); return o; });
-    let ci = 0; setInterval(() => { ci = (ci + 1) % chords.length; voices.forEach((o, i) => o.frequency.setTargetAtTime(chords[ci][i], ctx.currentTime, 0.6)); }, 4000);
-    // birds: random short chirps in daytime
-    const chirp = () => { if (!on || hour >= 19.5) return; const t = ctx.currentTime, n = 2 + Math.floor(Math.random() * 3), base = 2600 + Math.random() * 1400, pan = ctx.createStereoPanner ? ctx.createStereoPanner() : null; if (pan) pan.pan.value = Math.random() * 1.6 - 0.8;
-      for (let i = 0; i < n; i++) { const o = ctx.createOscillator(), g = ctx.createGain(), s = t + i * 0.13; o.frequency.setValueAtTime(base, s); o.frequency.exponentialRampToValueAtTime(base * 1.45, s + 0.05); o.frequency.exponentialRampToValueAtTime(base * 0.9, s + 0.1); g.gain.setValueAtTime(0, s); g.gain.linearRampToValueAtTime(0.05, s + 0.015); g.gain.exponentialRampToValueAtTime(0.0001, s + 0.11); o.connect(g); (pan ? g.connect(pan) && pan : g).connect(master); o.start(s); o.stop(s + 0.12); } };
-    birdsT = setInterval(() => { if (Math.random() < 0.55) chirp(); }, 1700);
-  }
-  function mix() { if (!ctx) return; const t = ctx.currentTime, eve = Math.max(0, Math.min(1, (hour - 17.5) / 2.5)), nightK = Math.max(0, Math.min(1, (hour - 19.5) / 1.5));
-    waveG.gain.setTargetAtTime(0.5 - nightK * 0.15, t, 1); cricketG.gain.setTargetAtTime(nightK * 0.022, t, 1.2); musicG.gain.setTargetAtTime(eve * 0.05, t, 1.5); }
-  function setHour(hh) { hour = hh; mix(); }
-  function toggle(force) { on = force ?? !on; if (on && !ctx) init(); if (ctx && ctx.state === 'suspended') ctx.resume(); if (ctx) master.gain.setTargetAtTime(on ? 0.9 : 0, ctx.currentTime, 0.4); mix();
-    btn.classList.toggle('on', on); btn.setAttribute('aria-pressed', on); btn.querySelector('.lbl').textContent = on ? 'Звук увімкнено' : 'Звук пляжу'; document.querySelectorAll('.c-snd').forEach(b => b.textContent = on ? '🔊 Звук увімкнено' : '🔈 Зі звуком'); try { localStorage.setItem('beachSnd', on ? '1' : '0'); } catch (e) {} }
-  function tick() { if (!on || !ctx) return; const t = ctx.currentTime, o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.value = 1500; g.gain.setValueAtTime(0.035, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.05); o.connect(g).connect(master); o.start(t); o.stop(t + 0.06); }
-  btn.addEventListener('click', () => toggle());
-  document.addEventListener('click', e => { if (e.target.closest('button,a,.lb') && !e.target.closest('.sndbtn,.c-snd')) tick(); });
-  addEventListener('scroll', () => { const dw = document.querySelector('.daywidget'); let hh; if (dw && dw.classList.contains('show')) { const [a, b] = document.querySelector('.dw-t').textContent.split(':'); hh = +a + b / 60; } else { const f = scrollY / Math.max(1, document.documentElement.scrollHeight - innerHeight); hh = 10 + f * 12; } setHour(hh); }, { passive: true });
-  return { toggle, setHour, get on() { return on; } };
-})();
-
 // ===== cinematic intro =====
 (() => {
   const ui = document.querySelector('.cine-ui'), host = document.getElementById('m3d'), h1 = ui.querySelector('h1');
@@ -833,14 +792,35 @@ const Snd = (() => {
     const go = () => { if (!ready) return setTimeout(go, 150); setTimeout(() => { ui.classList.add('open'); dispatchEvent(new CustomEvent('beachcine', { detail: { dur: 11 } })); setTimeout(() => ui.classList.add('title'), 3600); }, 250); };
     go(); endT = setTimeout(() => dispatchEvent(new Event('beachcine:skip')), 30000);
   }
-  addEventListener('beachcine:progress', e => { ui.style.setProperty('--p', (e.detail * 100).toFixed(1) + '%'); ui.querySelector('.prog').style.width = (e.detail * 100) + '%'; if (Snd.on) Snd.setHour(5 + e.detail * 7); });
+  addEventListener('beachcine:progress', e => { ui.querySelector('.prog').style.width = (e.detail * 100) + '%'; });
   addEventListener('beachcine:end', () => setTimeout(finish, 900));
   ui.querySelector('.c-skip').onclick = () => { dispatchEvent(new Event('beachcine:skip')); finish(); };
-  ui.querySelector('.c-snd').onclick = () => Snd.toggle();
   document.querySelector('.replay').onclick = () => play();
   addEventListener('keydown', e => { if (playing && e.key === 'Escape') ui.querySelector('.c-skip').click(); });
   let seen = false; try { seen = sessionStorage.getItem('beachCine') === '1'; sessionStorage.setItem('beachCine', '1'); } catch (e) {}
   if (!seen && !location.hash && !matchMedia('(prefers-reduced-motion: reduce)').matches) play();
+})();
+</script>
+<script>
+// ===== UI sounds: a soft knock on walnut wood for taps, a quiet swish for swiping photos =====
+(() => {
+  let ctx, out, on = true; try { on = localStorage.getItem('beachTap') !== '0'; } catch (e) {}
+  const btn = document.querySelector('.stick .mute'); const paint = () => { btn.textContent = on ? '🔈' : '🔇'; btn.setAttribute('aria-pressed', on); }; paint();
+  const init = () => { if (ctx) return; ctx = new (window.AudioContext || window.webkitAudioContext)(); out = ctx.createGain(); out.gain.value = 0.55; const comp = ctx.createDynamicsCompressor(); out.connect(comp).connect(ctx.destination); };
+  const burst = (dur) => { const b = ctx.createBuffer(1, Math.ceil(ctx.sampleRate * dur), ctx.sampleRate), d = b.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / d.length, 2); const s = ctx.createBufferSource(); s.buffer = b; return s; };
+  function tap(strength = 1) { if (!on) return; init(); if (ctx.state === 'suspended') ctx.resume(); const t = ctx.currentTime, f = 1 + (Math.random() - 0.5) * 0.12;
+    // body of the wood: two short resonances + a little click of the surface
+    [[620 * f, 9, 0.9, 0.07], [1650 * f, 7, 0.45, 0.04], [3400 * f, 2, 0.18, 0.012]].forEach(([fr, q, g, dec]) => { const n = burst(0.03), bp = ctx.createBiquadFilter(), gg = ctx.createGain(); bp.type = 'bandpass'; bp.frequency.value = fr; bp.Q.value = q;
+      gg.gain.setValueAtTime(g * strength, t); gg.gain.exponentialRampToValueAtTime(0.0001, t + dec); n.connect(bp).connect(gg).connect(out); n.start(t); n.stop(t + dec + 0.02); }); }
+  function swish(dir = 1) { if (!on) return; init(); if (ctx.state === 'suspended') ctx.resume(); const t = ctx.currentTime, n = burst(0.26), bp = ctx.createBiquadFilter(), g = ctx.createGain(); bp.type = 'bandpass'; bp.Q.value = 1.2;
+    bp.frequency.setValueAtTime(dir > 0 ? 700 : 2600, t); bp.frequency.exponentialRampToValueAtTime(dir > 0 ? 2600 : 700, t + 0.22); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.35, t + 0.06); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.25);
+    n.connect(bp).connect(g).connect(out); n.start(t); n.stop(t + 0.27); }
+  btn.addEventListener('click', e => { e.stopPropagation(); on = !on; try { localStorage.setItem('beachTap', on ? '1' : '0'); } catch (er) {} paint(); if (on) tap(); });
+  document.addEventListener('click', e => { const el = e.target.closest('.lb-p,.lb-nx'); if (el) return swish(el.classList.contains('lb-nx') ? 1 : -1); if (e.target.closest('.mute')) return;
+    if (e.target.closest('button,a,.chip,.m3d-tag,.step img,.gal img,.photos img')) tap(e.target.closest('.chip,.m3d-tag') ? 0.7 : 1); }, true);
+  addEventListener('keydown', e => { const lb = document.querySelector('.lb'); if (lb && !lb.hidden && (e.key === 'ArrowRight' || e.key === 'ArrowLeft')) swish(e.key === 'ArrowRight' ? 1 : -1); });
+  let sx = null; const lb = document.querySelector('.lb'); if (lb) { lb.addEventListener('touchstart', e => sx = e.touches[0].clientX, { passive: true }); lb.addEventListener('touchend', e => { if (sx === null) return; const dx = e.changedTouches[0].clientX - sx; sx = null; if (Math.abs(dx) > 40) swish(dx < 0 ? 1 : -1); }, { passive: true }); }
+  document.querySelectorAll('.ba').forEach(b => b.addEventListener('pointerdown', () => tap(0.6)));
 })();
 </script>
 </body>
