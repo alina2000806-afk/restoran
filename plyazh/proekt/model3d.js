@@ -587,7 +587,7 @@ function stepWalk(dt) {
 // ---------- buttons: overview, night, fullscreen ----------
 host.querySelector("[data-act=all]").onclick = () => { card.hidden = true; fly({ cam: [-150, 120, 150], p: [0, 0, 0] }); card.hidden = true; setTimeout(() => controls.autoRotate = true, 1800); };
 const nightBtn = host.querySelector("[data-act=night]");
-nightBtn.onclick = () => { nightTarget = nightTarget ? 0 : 1; nightBtn.textContent = nightTarget ? "☀︎ День" : "☾ Ніч"; };
+nightBtn.onclick = () => { const h = nightTarget > 0.5 ? 13 : 22; const tdi = host.querySelector(".m3d-time input"); if (tdi) { tdi.value = h; tdi.dispatchEvent(new Event("input")); } else { nightTarget = nightTarget ? 0 : 1; nightBtn.textContent = nightTarget ? "☀︎ День" : "☾ Ніч"; } };
 const fsBtn = host.querySelector("[data-act=full]");
 fsBtn.onclick = async () => {
   const full = host.classList.contains("full") || document.fullscreenElement === host;
@@ -617,11 +617,38 @@ function cineFrame(t) {
 }
 function endCine() {
   if (!cine) return; cine = null; buildables.forEach(o => { o.scale.copy(o.userData.s0); o.visible = true; });
-  night = nightTarget = 0; nightBtn.textContent = "☾ Ніч"; camera.position.set(-150, 120, 150); controls.target.set(0, 0, 0); controls.autoRotate = true;
+  night = 0; setHour(hourNow); camera.position.set(-150, 120, 150); controls.target.set(0, 0, 0); controls.autoRotate = true;
   dispatchEvent(new Event("beachcine:end"));
 }
 addEventListener("beachcine", e => { setMode("orbit"); card.hidden = true; flight = null; controls.autoRotate = false; cine = { t0: clock.getElapsedTime(), dur: (e.detail && e.detail.dur) || 11 }; buildables.forEach(o => { o.scale.setScalar(0.0001); o.visible = false; }); });
 addEventListener("beachcine:skip", endCine);
+
+
+// ---------- time of day slider: the sun walks east → south → west, shadows turn, lights come on in the evening ----------
+const tod = host.querySelector(".m3d-time input"), todOut = host.querySelector(".m3d-time output");
+let hourNow = 15, sunWarm = 0;
+function setHour(hh) {
+  hourNow = hh; const day = Math.max(0, Math.min(1, (hh - 5.5) / 15)); // 5:30 → 20:30
+  const az = Math.PI * day, el = Math.sin(Math.PI * day);
+  sun.position.set(Math.cos(az) * 150, 8 + el * 150, 60 + el * 40);           // east (+x) in the morning, high in the south at noon, west (−x) in the evening
+  nightTarget = hh < 6.5 ? Math.min(1, (6.5 - hh) / 1.5) : hh > 19.6 ? Math.min(1, (hh - 19.6) / 1.4) : 0;
+  sunWarm = Math.max(0, 1 - el / 0.45);
+  if (todOut) todOut.textContent = String(Math.floor(hh)).padStart(2, "0") + ":" + String(Math.round((hh % 1) * 60)).padStart(2, "0");
+  if (nightBtn) nightBtn.textContent = nightTarget > 0.5 ? "☀︎ День" : "☾ Ніч";
+}
+if (tod) { tod.addEventListener("input", () => { setHour(+tod.value); controls.autoRotate = false; }); setHour(+tod.value); }
+
+
+// ---------- export a table-top model (1:400) for AR — used once to build models/plyazh-maket.glb ----------
+addEventListener("beachexportglb", async () => {
+  const { GLTFExporter } = await import("three/addons/exporters/GLTFExporter.js");
+  const root = new THREE.Group(); root.name = "PlyazhOsnova";
+  const base = new THREE.Mesh(new THREE.PlaneGeometry(110, 290).rotateX(-Math.PI / 2), new THREE.MeshStandardMaterial({ color: 0x2f6f86, roughness: 0.3 })); base.position.set(4, -0.2, -2); root.add(base);
+  [land, wet].forEach(o => root.add(o.clone()));
+  buildables.forEach(o => { if (o.isMesh || o.isGroup) root.add(o.clone(true)); });
+  root.scale.setScalar(1 / 400); root.updateMatrixWorld(true);
+  new GLTFExporter().parse(root, buf => { const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([buf], { type: "model/gltf-binary" })); a.download = "plyazh-maket.glb"; document.body.appendChild(a); a.click(); }, err => console.error(err), { binary: true, onlyVisible: true });
+});
 
 // ---------- loop ----------
 function resize() { const r = host.getBoundingClientRect(); renderer.setSize(r.width, r.height, false); camera.aspect = r.width / r.height; camera.updateProjectionMatrix(); }
@@ -642,7 +669,7 @@ renderer.setAnimationLoop(() => {
     }
     controls.update();
   }
-  night += (nightTarget - night) * Math.min(1, dt * 3); applyMood(night);
+  night += (nightTarget - night) * Math.min(1, dt * 3); applyMood(night); if (!cine && sunWarm > 0) { sun.color.lerp(new THREE.Color(0xff9a55), sunWarm * 0.8 * (1 - night)); skyMat.uniforms.hor.value.lerp(new THREE.Color("#ffb27a"), sunWarm * 0.6 * (1 - night)); }
   for (let i = 0; i < wPos.count; i += 1) { const x = wBase[i * 3], z = wBase[i * 3 + 2]; wPos.array[i * 3 + 1] = Math.sin(x * 0.05 + t * 0.9) * 0.12 + Math.sin(z * 0.07 + t * 0.6) * 0.1; }
   wPos.needsUpdate = true;
   boats.forEach((b, i) => { b.rotation.z = Math.sin(t * 0.9 + i) * 0.03; b.position.y = Math.sin(t * 1.2 + i) * 0.08; });
