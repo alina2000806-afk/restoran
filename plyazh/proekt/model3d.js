@@ -54,20 +54,20 @@ scene.fog = new THREE.Fog(0xe6f1f7, 350, 900);
 const M = {
   sand: new THREE.MeshStandardMaterial({ color: 0xe3cfa2, roughness: 1 }),
   wetSand: new THREE.MeshStandardMaterial({ color: 0xc9b07f, roughness: 1 }),
-  grass: new THREE.MeshStandardMaterial({ color: 0x7f9a5a, roughness: 1 }),
-  path: new THREE.MeshStandardMaterial({ color: 0xc4bfb4, roughness: 0.95 }),
-  wood: new THREE.MeshStandardMaterial({ color: 0xa8743f, roughness: 0.7 }),
-  deck: new THREE.MeshStandardMaterial({ color: 0xc7a06b, roughness: 0.8 }),
-  char: new THREE.MeshStandardMaterial({ color: 0x2b2622, roughness: 0.85 }),
-  linen: new THREE.MeshStandardMaterial({ color: 0xf6f0e3, roughness: 0.95, side: THREE.DoubleSide }),
-  curtain: new THREE.MeshStandardMaterial({ color: 0xfbf8f1, roughness: 1, transparent: true, opacity: 0.88, side: THREE.DoubleSide }),
-  roof: new THREE.MeshStandardMaterial({ color: 0x3b3f44, roughness: 0.55, metalness: 0.3 }),
+  grass: new THREE.MeshStandardMaterial({ color: 0x7fa356, roughness: 1 }),
+  path: new THREE.MeshStandardMaterial({ color: 0xd8c9a6, roughness: 0.95 }),
+  wood: new THREE.MeshStandardMaterial({ color: 0x9a6236, roughness: 0.75 }),
+  deck: new THREE.MeshStandardMaterial({ color: 0xc9a77c, roughness: 0.8 }),
+  char: new THREE.MeshStandardMaterial({ color: 0x1d1d1f, roughness: 0.85 }),
+  linen: new THREE.MeshStandardMaterial({ color: 0xe6d9bf, roughness: 0.95, side: THREE.DoubleSide }),
+  curtain: new THREE.MeshStandardMaterial({ color: 0xeee3cf, roughness: 1, transparent: true, opacity: 0.88, side: THREE.DoubleSide }),
+  roof: new THREE.MeshStandardMaterial({ color: 0x5a5e64, roughness: 0.6, metalness: 0.25 }),
   plastic: new THREE.MeshStandardMaterial({ color: 0xf4f4f2, roughness: 0.35 }),
-  panel: new THREE.MeshStandardMaterial({ color: 0xb98a55, roughness: 0.85 }),
-  rail: new THREE.MeshStandardMaterial({ color: 0xd9a066, roughness: 0.6 }),
+  panel: new THREE.MeshStandardMaterial({ color: 0x8e5a33, roughness: 0.85 }),
+  rail: new THREE.MeshStandardMaterial({ color: 0xa06a3c, roughness: 0.6 }),
   trunk: new THREE.MeshStandardMaterial({ color: 0x5b4a3a, roughness: 1 }),
-  poplar: new THREE.MeshStandardMaterial({ color: 0x4f7a3a, roughness: 0.9, flatShading: true }),
-  bush: new THREE.MeshStandardMaterial({ color: 0x6b8f45, roughness: 0.9, flatShading: true }),
+  poplar: new THREE.MeshStandardMaterial({ color: 0x62a043, roughness: 0.9, flatShading: true }),
+  bush: new THREE.MeshStandardMaterial({ color: 0x5f9a3e, roughness: 0.9, flatShading: true }),
   tub: new THREE.MeshStandardMaterial({ color: 0x9a7448, roughness: 0.7 }),
   tubWater: new THREE.MeshStandardMaterial({ color: 0x7fc7d6, roughness: 0.1, metalness: 0.2, emissive: 0x000000 }),
   glass: new THREE.MeshStandardMaterial({ color: 0x2c3e48, roughness: 0.05, metalness: 0.6, emissive: 0x000000 }),
@@ -85,6 +85,16 @@ const box = (w, h, d) => new THREE.BoxGeometry(w, h, d);
 const add = (parent, geo, mat, x = 0, y = 0, z = 0, cast = true) => {
   const m = new THREE.Mesh(geo, mat); m.position.set(x, y, z); m.castShadow = cast; m.receiveShadow = true; parent.add(m); return m;
 };
+
+// black sign with white letters, as on the photo renders
+function sign(parent, text, w, h, x, y, z, ry = 0) {
+  const c = document.createElement("canvas"); c.width = 512; c.height = Math.round(512 * h / w); const g = c.getContext("2d");
+  g.fillStyle = "#151515"; g.fillRect(0, 0, c.width, c.height); g.fillStyle = "#fff"; g.textAlign = "center"; g.textBaseline = "middle";
+  g.font = `700 ${Math.round(c.height * 0.62)}px system-ui, Arial`; g.fillText(text, c.width / 2, c.height / 2 + 2);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4;
+  const s = add(parent, new THREE.PlaneGeometry(w, h), new THREE.MeshStandardMaterial({ map: t, roughness: 0.8 }), x, y, z, false); s.rotation.y = ry; return s;
+}
+function planter(x, z) { add(scene, box(1, 0.6, 0.5), M.char, x, top + 0.3, z); add(scene, new THREE.ConeGeometry(0.45, 0.9, 6), M.bush, x, top + 1.0, z, false); }
 
 // ---------- water ----------
 const waterGeo = new THREE.PlaneGeometry(1600, 1600, 160, 160); waterGeo.rotateX(-Math.PI / 2);
@@ -183,7 +193,7 @@ function beachGazebo(x, z, rot = 0) {
 }
 function umbrella(x, z) {
   add(scene, new THREE.CylinderGeometry(0.05, 0.05, 2.6, 6), M.wood, x, top + 1.3, z);
-  add(scene, new THREE.ConeGeometry(1.5, 0.5, 12, 1, true), M.linen, x, top + 2.55, z);
+  const u = add(scene, new THREE.ConeGeometry(1.6, 0.45, 4, 1, true), M.linen, x, top + 2.55, z); u.rotation.y = Math.PI / 4;
 }
 function stringLights(pts, n = 20) {
   const curve = new THREE.CatmullRomCurve3(pts.map(p => new THREE.Vector3(...p)));
@@ -194,8 +204,8 @@ function gazebo(x, z, { vip = false, rot = 0, size = 4 } = {}) {
   add(g, box(size + 0.8, 0.25, size + 0.8), M.deck, 0, 0.12, 0);
   [[-s, -s], [s, -s], [-s, s], [s, s]].forEach(([a, c]) => add(g, box(0.2, 2.8, 0.2), M.wood, a, 1.5, c));
   add(g, box(size + 0.6, 0.18, size + 0.6), M.wood, 0, 2.95, 0);
-  const roofM = vip ? M.linen : M.roof;
-  const r = add(g, new THREE.ConeGeometry(s * 1.6, 1.1, 4), roofM, 0, 3.6, 0); r.rotation.y = Math.PI / 4;
+  if (vip) add(g, box(size + 0.5, 0.08, size + 0.5), M.linen, 0, 3.08, 0);
+  else { const r = add(g, new THREE.ConeGeometry(s * 1.6, 1.1, 4), M.roof, 0, 3.6, 0); r.rotation.y = Math.PI / 4; }
   // sofa + table
   add(g, box(size - 0.8, 0.45, 0.9), M.linen, 0, 0.45, -s + 0.6);
   add(g, box(0.9, 0.45, size - 1.6), M.linen, -s + 0.6, 0.45, 0.2);
@@ -217,17 +227,20 @@ function gazebo(x, z, { vip = false, rot = 0, size = 4 } = {}) {
 }
 function cabin(x, z, rot = 0) {
   const g = new THREE.Group();
-  for (let i = -1; i <= 1; i += 2) for (let j = -1; j <= 1; j += 2) add(g, new THREE.CylinderGeometry(0.15, 0.15, 1.2, 6), M.char, i * 3, 0.6, j * 2.5);
-  add(g, box(9, 0.25, 6.5), M.deck, 0.9, 1.25, 0.6);
-  add(g, box(6, 3.2, 5), M.wood, -0.6, 2.95, 0);
-  add(g, box(6.6, 0.35, 5.6), M.char, -0.6, 4.7, 0);
+  [-5, -1.5, 2, 5].forEach(px => [-2.5, 2.5].forEach(pz => add(g, new THREE.CylinderGeometry(0.15, 0.15, 1.2, 6), M.char, px, 0.6, pz)));
+  add(g, box(11, 0.25, 6.5), M.deck, -0.1, 1.25, 0.6);
+  add(g, box(8, 2.9, 5), M.wood, -1.6, 2.8, 0);
+  const gable = new THREE.Shape(); gable.moveTo(-2.5, 0); gable.lineTo(2.5, 0); gable.lineTo(0, 1.6); gable.closePath();
+  const gg = new THREE.ExtrudeGeometry(gable, { depth: 8, bevelEnabled: false }); gg.rotateY(Math.PI / 2); add(g, gg, M.wood, -5.6, 4.25, 0);
+  const pitch = Math.atan2(1.6, 2.5), rl = Math.hypot(1.6, 2.5) + 0.35;
+  [-1, 1].forEach(sd => { const r = add(g, box(8.6, 0.08, rl), M.roof, -1.6, 4.25 + 0.8 + 0.06, sd * 1.3); r.rotation.x = sd * pitch; });
   const win = add(g, box(0.1, 2.2, 3.4), M.glass, 2.42, 2.6, 0); cabinWindows.push(win);
   // hot tub on terrace
   const tub = add(g, new THREE.CylinderGeometry(1.15, 1.15, 0.9, 20), M.tub, 4, 1.8, 1.6);
   add(g, new THREE.CylinderGeometry(1.0, 1.0, 0.05, 20), M.tubWater, 4, 2.2, 1.6, false);
   add(g, new THREE.CylinderGeometry(0.12, 0.12, 1.6, 8), M.char, 4.9, 2.4, 0.4);
   // stairs to the path side
-  for (let k = 0; k < 4; k++) add(g, box(1.4, 0.18, 0.5), M.deck, -3.4 - k * 0.5, 1.1 - k * 0.27, -2.5);
+  for (let k = 0; k < 4; k++) add(g, box(1.4, 0.18, 0.5), M.deck, 4.6, 1.1 - k * 0.27, -3.0 - k * 0.5);
   g.position.set(x, top, z); g.rotation.y = rot; scene.add(g);
   steamSpots.push(new THREE.Vector3(4, 2.4, 1.6).applyAxisAngle(new THREE.Vector3(0, 1, 0), rot).add(g.position));
 }
@@ -238,7 +251,7 @@ function cabin(x, z, rot = 0) {
   const g = new THREE.Group();
   add(g, box(0.4, 4.2, 0.4), M.wood, -2.6, 2.1, 0); add(g, box(0.4, 4.2, 0.4), M.wood, 4.6, 2.1, 0);
   add(g, box(8.2, 0.45, 0.6), M.wood, 1, 4.2, 0);
-  add(g, box(3.6, 0.8, 0.12), M.char, 1, 3.5, 0.3);
+  add(g, box(3.6, 0.8, 0.12), M.char, 1, 3.5, 0.3); sign(g, "ПЛЯЖ", 3.4, 0.7, 1, 3.5, 0.37);
   g.position.set(0, top, 100); scene.add(g);
   // pergola
   for (let i = 0; i < 6; i++) add(scene, box(7, 0.15, 0.2), M.wood, 1, top + 3.2, 94 + i * 1.1);
@@ -283,6 +296,7 @@ add(scene, box(9, 0.12, 1.4), M.deck, -6, top + 0.06, 65, false);
   add(scene, box(9, 2.8, 1), M.char, 10.5, top + 1.65, 8.2);
   [[6, 7.6], [15, 7.6], [6, 13], [15, 13]].forEach(([x, z]) => add(scene, box(0.25, 3.4, 0.25), M.wood, x, top + 1.7, z));
   add(scene, box(10.6, 0.25, 6.4), M.roof, 10.5, top + 3.5, 10.3);
+  add(scene, box(9.2, 0.3, 0.2), M.wood, 10.5, top + 3.2, 13.1); sign(scene, "BAR", 2.4, 0.8, 10.5, top + 2.75, 13.22);
   add(scene, box(4, 2.8, 4), M.wood, 15, top + 1.4, 4.5);
   for (let i = 0; i < 6; i++) add(scene, new THREE.CylinderGeometry(0.22, 0.22, 0.75, 10), M.wood, 7 + i * 1.4, top + 0.6, 12.6);
   [[8, 17], [12, 17], [16, 17]].forEach(([x, z]) => {
@@ -292,12 +306,12 @@ add(scene, box(9, 0.12, 1.4), M.deck, -6, top + 0.06, 65, false);
   });
   stringLights([[5.5, top + 3.6, 19.5], [11, top + 2.9, 20.5], [16.5, top + 3.6, 19.5]], 14);
 })();
-// Hookah kiosk attached to the bar: 2.5 x 2 m timber booth with counter and sign
+// Hookah kiosk: separate 2.5 x 2 m booth a few metres from the bar (sand between), sign HOOKAH
 (() => {
   const g = new THREE.Group();
   add(g, box(2.6, 2.4, 2.0), M.wood, 0, 1.2, 0);
   add(g, box(2.9, 0.12, 2.3), M.roof, 0, 2.48, 0);
-  add(g, box(2.2, 0.5, 0.08), M.char, 0, 2.15, 1.02);
+  sign(g, "HOOKAH", 2.0, 0.45, 0, 2.15, 1.03);
   add(g, box(2.3, 0.08, 0.5), M.wood, 0, 1.1, 1.2);
   add(g, box(0.6, 0.8, 0.06), M.char, 0.7, 0.5, 1.05);
   g.position.set(9, top, 1.5); g.rotation.y = -Math.PI / 2 + Math.PI; scene.add(g);
@@ -317,7 +331,7 @@ for (let i = 0; i < 10; i++) beachGazebo(-8.8, -52 + i * 9, Math.PI / 2);
 for (let z = -76; z <= -54; z += 4) { lounger(-11, z, Math.PI / 2); lounger(9, z, -Math.PI / 2); }
 // SUP / kayak rental + pier (west, upper)
 (() => {
-  add(scene, box(3, 2.2, 2.2), M.char, -14.5, top + 1.1, -60);
+  add(scene, box(3, 2.2, 2.2), M.wood, -14.5, top + 1.1, -60); add(scene, box(3.4, 0.12, 2.6), M.roof, -14.5, top + 2.3, -60); sign(scene, "SUP", 1.4, 0.5, -12.98, top + 1.7, -60, Math.PI / 2);
   add(scene, box(2, 0.25, 14), M.deck, -21, 0.35, -62, false);
   for (let i = 0; i < 4; i++) add(scene, new THREE.CylinderGeometry(0.12, 0.12, 2, 6), M.char, -21 + (i % 2 ? 0.9 : -0.9), -0.4, -56 - Math.floor(i / 2) * 10, false);
   for (let i = 0; i < 5; i++) { const b = add(scene, box(0.75, 0.12, 3.2), i % 2 ? M.sup : M.hull, -23.3 + 0, 0.05, -58 - i * 2); b.rotation.y = 0.05; }
@@ -343,6 +357,12 @@ for (let z = -76; z <= -54; z += 4) { lounger(-11, z, Math.PI / 2); lounger(9, z
   });
   stringLights([[-6, top + 4.5, -82], [0, top + 3.8, -84], [6, top + 4.5, -82]], 10);
 })();
+// lifeguard tower on the main beach
+(() => { const g = new THREE.Group(); [[-0.8, -0.8], [0.8, -0.8], [-0.8, 0.8], [0.8, 0.8]].forEach(([a, c]) => add(g, box(0.15, 3, 0.15), M.wood, a, 1.5, c));
+  add(g, box(2, 0.15, 2), M.deck, 0, 3, 0); add(g, box(2, 0.5, 0.06), M.wood, 0, 3.3, 0.97); add(g, box(2.4, 0.08, 2.4), M.roof, 0, 4.6, 0);
+  [[-0.95, -0.95], [0.95, -0.95], [-0.95, 0.95], [0.95, 0.95]].forEach(([a, c]) => add(g, box(0.08, 1.5, 0.08), M.wood, a, 3.8, c));
+  g.position.set(-16, top, -47); scene.add(g); })();
+[[-1.8, 96], [3.8, 96], [-1.8, 84], [3.8, 74], [-1.8, 58], [3.8, 24], [-1.8, -8], [3.8, -48]].forEach(([x, z]) => planter(x, z));
 // lanterns along the main path
 const lanterns = [];
 for (let z = -80; z <= 92; z += 8) [[-1.4, z], [3.4, z + 4]].forEach(([x, zz]) => {
@@ -536,7 +556,7 @@ renderer.setAnimationLoop(() => {
 });
 // style chips on the page recolour the model
 const STYLE_MAT = {
-  light: { wood: 0xa8743f, deck: 0xc7a06b, roof: 0x3b3f44, char: 0x2b2622, linen: 0xf6f0e3, panel: 0xb98a55 },
+  light: { wood: 0x9a6236, deck: 0xc9a77c, roof: 0x5a5e64, char: 0x1d1d1f, linen: 0xe6d9bf, panel: 0x8e5a33 },
   dark: { wood: 0x5a3e2b, deck: 0x3b2a1f, roof: 0x2a2a30, char: 0x1c1c1e, linen: 0xd9d4cc, panel: 0x26221f },
   red: { wood: 0x8a4f2a, deck: 0xa9784a, roof: 0x8e2a22, char: 0x5b4a3a, linen: 0xefe6d6, panel: 0x2b2b2b },
   log: { wood: 0xe4c79a, deck: 0xc99e64, roof: 0x6b4e2e, char: 0xa9784a, linen: 0xf3ead9, panel: 0xd6b07c },
