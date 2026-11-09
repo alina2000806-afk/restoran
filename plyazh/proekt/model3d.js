@@ -597,6 +597,32 @@ fsBtn.onclick = async () => {
 };
 document.addEventListener("fullscreenchange", () => { if (!document.fullscreenElement && host.classList.contains("full")) { host.classList.remove("full"); document.body.classList.remove("noscroll"); fsBtn.textContent = "⤢ На весь екран"; setTimeout(resize, 60); } });
 
+
+// ---------- cinematic intro: camera flies along the spit, the beach "grows" south → north, night turns into morning ----------
+const buildables = scene.children.filter(o => o !== water && !o.isLight && !o.isPoints && !(o.geometry && (o.geometry.type === "ExtrudeGeometry" || (o.geometry.type === "SphereGeometry" && o.geometry.parameters.radius > 500))) && Math.abs(o.position.x) < 45 && o.position.z > -135 && o.position.z < 125);
+buildables.forEach(o => o.userData.s0 = o.scale.clone());
+const camPath = new THREE.CatmullRomCurve3([[-30, 170, 330], [-75, 60, 170], [-58, 28, 60], [-52, 24, -20], [-40, 34, -95], [-110, 90, 40], [-150, 120, 150]].map(p => new THREE.Vector3(...p)));
+const tgtPath = new THREE.CatmullRomCurve3([[0, 0, 60], [0, 2, 90], [0, 2, 30], [0, 2, -30], [4, 2, -100], [0, 0, -10], [0, 0, 0]].map(p => new THREE.Vector3(...p)));
+let cine = null;
+const easeIO = k => k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+const backOut = k => { const c = 1.6; return 1 + (c + 1) * Math.pow(k - 1, 3) + c * Math.pow(k - 1, 2); };
+function cineFrame(t) {
+  const u = Math.min(1, (t - cine.t0) / cine.dur), e = easeIO(u);
+  camera.position.copy(camPath.getPoint(e)); const tg = tgtPath.getPoint(e); controls.target.copy(tg); camera.lookAt(tg);
+  const front = 125 - 290 * Math.min(1, u / 0.72);
+  buildables.forEach(o => { const k = Math.max(0, Math.min(1, (o.position.z - front) / 22)); const s = k <= 0 ? 0.0001 : backOut(k); o.scale.set(o.userData.s0.x * s, o.userData.s0.y * s, o.userData.s0.z * s); o.visible = k > 0; });
+  night = nightTarget = Math.max(0, 0.9 - u * 1.6);
+  dispatchEvent(new CustomEvent("beachcine:progress", { detail: u }));
+  if (u >= 1) endCine();
+}
+function endCine() {
+  if (!cine) return; cine = null; buildables.forEach(o => { o.scale.copy(o.userData.s0); o.visible = true; });
+  night = nightTarget = 0; nightBtn.textContent = "☾ Ніч"; camera.position.set(-150, 120, 150); controls.target.set(0, 0, 0); controls.autoRotate = true;
+  dispatchEvent(new Event("beachcine:end"));
+}
+addEventListener("beachcine", e => { setMode("orbit"); card.hidden = true; flight = null; controls.autoRotate = false; cine = { t0: clock.getElapsedTime(), dur: (e.detail && e.detail.dur) || 11 }; buildables.forEach(o => { o.scale.setScalar(0.0001); o.visible = false; }); });
+addEventListener("beachcine:skip", endCine);
+
 // ---------- loop ----------
 function resize() { const r = host.getBoundingClientRect(); renderer.setSize(r.width, r.height, false); camera.aspect = r.width / r.height; camera.updateProjectionMatrix(); }
 new ResizeObserver(resize).observe(host); resize();
@@ -606,7 +632,8 @@ const clock = new THREE.Clock(); const v = new THREE.Vector3(); let last = 0;
 renderer.setAnimationLoop(() => {
   if (!visible) return;
   const t = clock.getElapsedTime(), dt = Math.min(t - last, 0.05); last = t;
-  if (mode === "walk") stepWalk(dt);
+  if (cine) cineFrame(t);
+  else if (mode === "walk") stepWalk(dt);
   else {
     if (flight) {
       flight.t = Math.min(1, flight.t + dt * 0.9); const k = 1 - Math.pow(1 - flight.t, 3);
@@ -640,4 +667,4 @@ const STYLE_MAT = {
   boho: { wood: 0xd9b98e, deck: 0xb5855a, roof: 0xc9a46a, char: 0x7a5a3a, linen: 0xf2e6d0, panel: 0xc8a273 },
 };
 addEventListener("beachstyle", e => { const p = STYLE_MAT[e.detail.style]; if (!p) return; for (const k in p) M[k].color.setHex(p[k]); });
-host.classList.add("ready");
+host.classList.add("ready"); dispatchEvent(new Event("beach3dready"));

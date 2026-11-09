@@ -228,6 +228,57 @@ html{scroll-padding-top:64px}
 .gal figure.pop{animation:pop .45s ease both}
 @keyframes pop{from{opacity:0;transform:scale(.96)}}
 @media (prefers-reduced-motion:reduce){.hero h1 span{animation:none}.js .rv{opacity:1;transform:none;transition:none}.gal figure.pop{animation:none}}
+
+/* ---- cinematic intro ---- */
+#m3d.cine{position:fixed !important;inset:0 !important;width:100vw !important;height:100vh !important;max-width:none !important;margin:0 !important;border-radius:0 !important;z-index:150}
+#m3d.cine .m3d-bar,#m3d.cine .m3d-labels,#m3d.cine .m3d-card,#m3d.cine .m3d-hint,#m3d.cine .m3d-walk,#m3d.cine .m3d-load{display:none !important}
+body.cine-on{overflow:hidden}
+body.cine-on #model,body.cine-on main,body.cine-on .wrap{transform:none !important;animation:none !important;filter:none !important;contain:none !important}
+.cine-ui{position:fixed;inset:0;z-index:160;pointer-events:none;color:#fff;transition:opacity .8s}
+.cine-ui.out{opacity:0}
+.cine-ui .bar{position:absolute;left:0;right:0;height:11vh;background:#05080d;transition:height 1.2s cubic-bezier(.7,0,.2,1)}
+.cine-ui .bar.t{top:0}.cine-ui .bar.b{bottom:0}
+.cine-ui.open .bar{height:9vh}
+.cine-ui .black{position:absolute;inset:0;background:#05080d;transition:opacity 1.4s}
+.cine-ui.open .black{opacity:0}
+.cine-ui .ttl{position:absolute;left:0;right:0;bottom:15vh;text-align:center;padding:0 16px}
+.cine-ui .ttl small{display:block;font:600 13px/1 var(--display);letter-spacing:.35em;text-transform:uppercase;color:#ffd9a0;opacity:0;transform:translateY(10px);transition:all 1s .2s}
+.cine-ui .ttl h1{margin:12px 0 0;font:800 clamp(40px,9vw,110px)/.95 var(--display);letter-spacing:-.01em;text-shadow:0 10px 40px rgba(0,0,0,.6)}
+.cine-ui .ttl h1 span{display:inline-block;opacity:0;transform:translateY(40px) rotateX(70deg);filter:blur(8px);transition:all .9s cubic-bezier(.2,.8,.2,1)}
+.cine-ui.title .ttl h1 span{opacity:1;transform:none;filter:none}
+.cine-ui.title .ttl small{opacity:1;transform:none}
+.cine-ui .ttl p{margin:14px 0 0;font-size:clamp(15px,2vw,19px);color:rgba(255,255,255,.85);opacity:0;transition:opacity 1s 1.2s}
+.cine-ui.title .ttl p{opacity:1}
+.cine-ui .ctl{position:absolute;right:16px;bottom:calc(9vh + 12px);display:flex;gap:8px;pointer-events:auto}
+.cine-ui .ctl button{min-height:44px;padding:0 16px;border-radius:99px;border:1px solid rgba(255,255,255,.3);background:rgba(5,8,13,.55);color:#fff;font:700 14px/1 var(--body);cursor:pointer;backdrop-filter:blur(8px)}
+.cine-ui .prog{position:absolute;left:0;bottom:9vh;height:2px;width:var(--p,0%);background:linear-gradient(90deg,#ffd27a,#ff7a59);transition:width .2s linear}
+.cine-ui .load{position:absolute;left:0;right:0;top:46%;text-align:center;font:600 13px/1 var(--display);letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.6);transition:opacity .6s}
+.cine-ui.open .load{opacity:0}
+.replay{width:max-content;max-width:100%;display:inline-flex;align-items:center;gap:8px;margin-top:18px;min-height:46px;padding:0 18px;border-radius:99px;border:1px solid var(--stroke);background:var(--glass);color:var(--fg);font:800 15px/1 var(--body);cursor:pointer;backdrop-filter:blur(10px)}
+.replay:hover{background:var(--glass-2)}
+/* ---- sound ---- */
+.sndbtn{position:fixed;right:16px;bottom:78px;z-index:50;min-height:46px;padding:0 16px;border-radius:99px;border:1px solid var(--stroke);background:rgba(11,21,34,.85);color:#fff;font:800 14px/1 var(--body);cursor:pointer;backdrop-filter:blur(12px);display:flex;align-items:center;gap:8px}
+.sndbtn .eq{display:inline-flex;gap:2px;align-items:flex-end;height:14px}
+.sndbtn .eq i{width:3px;background:var(--accent-2);height:4px;border-radius:2px}
+.sndbtn.on .eq i{animation:eq .9s ease-in-out infinite}
+.sndbtn.on .eq i:nth-child(2){animation-delay:.2s}.sndbtn.on .eq i:nth-child(3){animation-delay:.4s}
+@keyframes eq{50%{height:14px}}
+@media (max-width:560px){.sndbtn{right:12px;bottom:68px;padding:0 13px}.sndbtn .lbl{display:none}}
+/* ---- author ---- */
+.ap{display:grid;grid-template-columns:1.5fr 1fr;gap:22px;align-items:center;padding:26px !important;position:relative;overflow:hidden}
+.ap::before{content:"";position:absolute;inset:-40%;background:conic-gradient(from 0deg,transparent,rgba(255,122,89,.18),transparent 30%);animation:spin 14s linear infinite;pointer-events:none}
+@keyframes spin{to{transform:rotate(1turn)}}
+.ap > *{position:relative}
+.ap h3{font:800 clamp(24px,4vw,34px)/1.1 var(--display);margin:8px 0 10px}
+.ap p{margin:0;color:rgba(244,241,234,.82)}
+.ap ul{list-style:none;padding:0;margin:14px 0 0;display:flex;flex-wrap:wrap;gap:8px}
+.ap li{font-size:14px;font-weight:700;padding:8px 12px;border-radius:99px;background:var(--glass-2);border:1px solid var(--stroke)}
+.ap .act{display:flex;flex-direction:column;gap:10px}
+.ap .act a{min-height:52px;display:flex;align-items:center;justify-content:center;border-radius:16px;font:800 16px/1 var(--body);text-decoration:none}
+.ap .act .go{background:linear-gradient(135deg,var(--accent),#ff9a76);color:#1a0d08;box-shadow:0 18px 40px -16px rgba(255,122,89,.8)}
+.ap .act .ph{border:1px solid var(--stroke);color:var(--fg);background:var(--glass)}
+@media (max-width:760px){.ap{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){.ap::before{animation:none}}
 </style>
 </head>
 <body>
@@ -235,7 +286,14 @@ html{scroll-padding-top:64px}
 <div class="veil"></div>
 
 <div class="ui">
-  <div class="daywidget" aria-hidden="true"><span class="sky">☀️</span><span><b class="dw-t">10:00</b><small class="dw-n">Вхід</small></span></div>
+  <div class="cine-ui" hidden aria-hidden="true">
+  <div class="black"></div><div class="load">Пляж Основа · завантаження</div>
+  <div class="bar t"></div><div class="bar b"></div><div class="prog"></div>
+  <div class="ttl"><small>Харків · річка Харків</small><h1></h1><p>Концепція пляжу, яку можна обійти ще до будівництва</p></div>
+  <div class="ctl"><button type="button" class="c-snd">🔈 Зі звуком</button><button type="button" class="c-skip">Пропустити ✕</button></div>
+</div>
+<button type="button" class="sndbtn" aria-pressed="false"><span class="eq"><i></i><i></i><i></i></span><span class="lbl">Звук пляжу</span></button>
+<div class="daywidget" aria-hidden="true"><span class="sky">☀️</span><span><b class="dw-t">10:00</b><small class="dw-n">Вхід</small></span></div>
 <nav class="stick" aria-label="Розділи"><div class="in"><a href="#dilyanka">Ділянка</a><a href="#genplan">Генплан</a><a href="#obiekty">Об'єкти</a><a href="#styl">Стиль</a><a href="#model">3D</a><a href="#viz">День на пляжі</a><a href="#galereya">Галерея</a><a href="#bulo">Було / буде</a><a class="call" href="tel:+380966958712">📞 Зв'язатися</a></div></nav>
 <button type="button" class="totop" aria-label="Нагору">↑</button>
 <header class="top col">
@@ -249,6 +307,7 @@ html{scroll-padding-top:64px}
       <h1>Пляж, який <span>хочеться показувати</span></h1>
       <p>Концепція благоустрою ділянки від кафе «Червона мавпа» до точки «Пляж Основа». Генплан за вашим ескізом, перелік об'єктів, стиль, 3D-модель, яку можна обійти, і 32 фотореалістичні види всіх зон. Усе зібрано з анкети і фотофіксації 30 жовтня.</p>
       <div class="pills"><span class="pill">≈ <b class="cnt" data-to="200">200</b> м берега</span><span class="pill">вода з двох боків</span><span class="pill">до <b class="cnt" data-to="500">500</b> гостей</span><span class="pill">30–70 тис. $</span><span class="pill">цілий рік</span></div>
+      <button type="button" class="replay">▶ Подивитись інтро · 10 с</button>
       <nav class="toc"><a href="#dilyanka">Ділянка</a><a href="#genplan">Генплан</a><a href="#obiekty">Об'єкти</a><a href="#styl">Стиль</a><a href="#model">3D-прогулянка</a><a href="#viz">Візуалізації</a><a href="#galereya">Галерея</a><a href="#bulo">Було / буде</a></nav>
     </section>
 
@@ -512,9 +571,17 @@ html{scroll-padding-top:64px}
     </section>
 
     <footer class="foot">
-      <div class="glass pad author">
-        <div class="who">Аліна<small>Автор концепції і сайту</small></div>
-        <div class="links"><a href="tel:+380966958712">📞 096 695 87 12</a><a class="tg" href="https://t.me/+380966958712" target="_blank" rel="noopener">Telegram</a></div>
+      <div class="glass ap">
+        <div>
+          <div class="kicker">Хто це зробив</div>
+          <h3>Аліна — концепції, 3D і сайти для бізнесу</h3>
+          <p>Цей проєкт за кілька днів: генплан за вашим ескізом, 3D-модель, по якій можна пройтися, 32 фотореалістичні види з фото ділянки і сайт, що відкривається на будь-якому телефоні. Так само роблю для баз відпочинку, кафе, ресторанів і ділянок під забудову.</p>
+          <ul><li>Концепція і генплан</li><li>3D-модель і прогулянка</li><li>Візуалізації з фото</li><li>Сайт-презентація для інвестора</li></ul>
+        </div>
+        <div class="act">
+          <a class="go" href="https://t.me/+380966958712" target="_blank" rel="noopener">Хочу такий проєкт →</a>
+          <a class="ph" href="tel:+380966958712">📞 096 695 87 12</a>
+        </div>
       </div>
       <p style="margin-top:18px">Фото ділянки і ескізи: замовник, 30.10.2026. Генплан орієнтовний.</p>
     </footer>
@@ -612,7 +679,7 @@ try{
 const onScroll=()=>{const max=document.documentElement.scrollHeight-innerHeight;setProgress(max>0?scrollY/max:0)};
 addEventListener("scroll",onScroll,{passive:true});onScroll();
 </script>
-<script type="module" src="model3d.js?v=1794200000"></script>
+<script type="module" src="model3d.js?v=1794210000"></script>
 <script>
 document.querySelectorAll(".ba").forEach(el=>{
   const set=x=>{const r=el.getBoundingClientRect();el.style.setProperty("--pos",Math.max(0,Math.min(100,(x-r.left)/r.width*100))+"%")};
@@ -717,6 +784,63 @@ document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click
     document.querySelectorAll('.ba').forEach(b => bio.observe(b)); }
   // gallery filter: little pop
   document.querySelectorAll('.gal-chips .chip').forEach(c => c.addEventListener('click', () => document.querySelectorAll('.gal figure:not([hidden])').forEach((f, i) => { f.classList.remove('pop'); void f.offsetWidth; f.style.animationDelay = i * 40 + 'ms'; f.classList.add('pop'); f.classList.add('in'); })));
+})();
+</script>
+<script>
+// ===== beach soundscape: generated live with Web Audio (no audio files, no licences) =====
+const Snd = (() => {
+  let ctx, master, waveG, cricketG, musicG, birdsT, on = false, hour = 10;
+  const btn = document.querySelector('.sndbtn');
+  const noise = () => { const b = ctx.createBuffer(1, ctx.sampleRate * 3, ctx.sampleRate), d = b.getChannelData(0); let last = 0; for (let i = 0; i < d.length; i++) { last = (last + 0.02 * (Math.random() * 2 - 1)) / 1.02; d[i] = last * 3.5; } return b; };
+  function init() {
+    ctx = new (window.AudioContext || window.webkitAudioContext)(); master = ctx.createGain(); master.gain.value = 0; master.connect(ctx.destination);
+    // waves: brown noise, low-pass, slow swell
+    const src = ctx.createBufferSource(); src.buffer = noise(); src.loop = true; const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 700;
+    waveG = ctx.createGain(); waveG.gain.value = 0.5; const lfo = ctx.createOscillator(), lfoG = ctx.createGain(); lfo.frequency.value = 0.11; lfoG.gain.value = 0.28; lfo.connect(lfoG).connect(waveG.gain); src.connect(lp).connect(waveG).connect(master); src.start(); lfo.start();
+    // crickets: high tone chopped by a fast pulse
+    const cr = ctx.createOscillator(); cr.type = 'sine'; cr.frequency.value = 4300; const chop = ctx.createGain(); chop.gain.value = 0; const pul = ctx.createOscillator(); pul.type = 'square'; pul.frequency.value = 24; const pulG = ctx.createGain(); pulG.gain.value = 0.5; pul.connect(pulG).connect(chop.gain);
+    cricketG = ctx.createGain(); cricketG.gain.value = 0; cr.connect(chop).connect(cricketG).connect(master); cr.start(); pul.start();
+    // bar music: soft warm pad, chords change every 4 s
+    musicG = ctx.createGain(); musicG.gain.value = 0; const mlp = ctx.createBiquadFilter(); mlp.type = 'lowpass'; mlp.frequency.value = 1100; musicG.connect(mlp).connect(master);
+    const chords = [[220, 261.6, 329.6, 392], [174.6, 220, 261.6, 329.6], [261.6, 329.6, 392, 493.9], [196, 246.9, 293.7, 392]]; const voices = chords[0].map(f => { const o = ctx.createOscillator(); o.type = 'triangle'; o.frequency.value = f; const g = ctx.createGain(); g.gain.value = 0.18; o.connect(g).connect(musicG); o.start(); return o; });
+    let ci = 0; setInterval(() => { ci = (ci + 1) % chords.length; voices.forEach((o, i) => o.frequency.setTargetAtTime(chords[ci][i], ctx.currentTime, 0.6)); }, 4000);
+    // birds: random short chirps in daytime
+    const chirp = () => { if (!on || hour >= 19.5) return; const t = ctx.currentTime, n = 2 + Math.floor(Math.random() * 3), base = 2600 + Math.random() * 1400, pan = ctx.createStereoPanner ? ctx.createStereoPanner() : null; if (pan) pan.pan.value = Math.random() * 1.6 - 0.8;
+      for (let i = 0; i < n; i++) { const o = ctx.createOscillator(), g = ctx.createGain(), s = t + i * 0.13; o.frequency.setValueAtTime(base, s); o.frequency.exponentialRampToValueAtTime(base * 1.45, s + 0.05); o.frequency.exponentialRampToValueAtTime(base * 0.9, s + 0.1); g.gain.setValueAtTime(0, s); g.gain.linearRampToValueAtTime(0.05, s + 0.015); g.gain.exponentialRampToValueAtTime(0.0001, s + 0.11); o.connect(g); (pan ? g.connect(pan) && pan : g).connect(master); o.start(s); o.stop(s + 0.12); } };
+    birdsT = setInterval(() => { if (Math.random() < 0.55) chirp(); }, 1700);
+  }
+  function mix() { if (!ctx) return; const t = ctx.currentTime, eve = Math.max(0, Math.min(1, (hour - 17.5) / 2.5)), nightK = Math.max(0, Math.min(1, (hour - 19.5) / 1.5));
+    waveG.gain.setTargetAtTime(0.5 - nightK * 0.15, t, 1); cricketG.gain.setTargetAtTime(nightK * 0.022, t, 1.2); musicG.gain.setTargetAtTime(eve * 0.05, t, 1.5); }
+  function setHour(hh) { hour = hh; mix(); }
+  function toggle(force) { on = force ?? !on; if (on && !ctx) init(); if (ctx && ctx.state === 'suspended') ctx.resume(); if (ctx) master.gain.setTargetAtTime(on ? 0.9 : 0, ctx.currentTime, 0.4); mix();
+    btn.classList.toggle('on', on); btn.setAttribute('aria-pressed', on); btn.querySelector('.lbl').textContent = on ? 'Звук увімкнено' : 'Звук пляжу'; document.querySelectorAll('.c-snd').forEach(b => b.textContent = on ? '🔊 Звук увімкнено' : '🔈 Зі звуком'); try { localStorage.setItem('beachSnd', on ? '1' : '0'); } catch (e) {} }
+  function tick() { if (!on || !ctx) return; const t = ctx.currentTime, o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.value = 1500; g.gain.setValueAtTime(0.035, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.05); o.connect(g).connect(master); o.start(t); o.stop(t + 0.06); }
+  btn.addEventListener('click', () => toggle());
+  document.addEventListener('click', e => { if (e.target.closest('button,a,.lb') && !e.target.closest('.sndbtn,.c-snd')) tick(); });
+  addEventListener('scroll', () => { const dw = document.querySelector('.daywidget'); let hh; if (dw && dw.classList.contains('show')) { const [a, b] = document.querySelector('.dw-t').textContent.split(':'); hh = +a + b / 60; } else { const f = scrollY / Math.max(1, document.documentElement.scrollHeight - innerHeight); hh = 10 + f * 12; } setHour(hh); }, { passive: true });
+  return { toggle, setHour, get on() { return on; } };
+})();
+
+// ===== cinematic intro =====
+(() => {
+  const ui = document.querySelector('.cine-ui'), host = document.getElementById('m3d'), h1 = ui.querySelector('h1');
+  h1.innerHTML = [...'Пляж Основа'].map((c, i) => `<span style="transition-delay:${i * 55}ms">${c === ' ' ? '&nbsp;' : c}</span>`).join('');
+  let ready = document.getElementById('m3d').classList.contains('ready'), playing = false, endT;
+  addEventListener('beach3dready', () => { ready = true; });
+  function finish() { if (!playing) return; playing = false; clearTimeout(endT); ui.classList.add('out'); setTimeout(() => { host.classList.remove('cine'); document.body.classList.remove('cine-on'); ui.hidden = true; ui.className = 'cine-ui'; dispatchEvent(new Event('resize')); }, 800); }
+  function play() {
+    if (playing) return; playing = true; scrollTo(0, 0); ui.hidden = false; ui.className = 'cine-ui'; document.body.classList.add('cine-on'); host.classList.add('cine'); dispatchEvent(new Event('resize'));
+    const go = () => { if (!ready) return setTimeout(go, 150); setTimeout(() => { ui.classList.add('open'); dispatchEvent(new CustomEvent('beachcine', { detail: { dur: 11 } })); setTimeout(() => ui.classList.add('title'), 3600); }, 250); };
+    go(); endT = setTimeout(() => dispatchEvent(new Event('beachcine:skip')), 30000);
+  }
+  addEventListener('beachcine:progress', e => { ui.style.setProperty('--p', (e.detail * 100).toFixed(1) + '%'); ui.querySelector('.prog').style.width = (e.detail * 100) + '%'; if (Snd.on) Snd.setHour(5 + e.detail * 7); });
+  addEventListener('beachcine:end', () => setTimeout(finish, 900));
+  ui.querySelector('.c-skip').onclick = () => { dispatchEvent(new Event('beachcine:skip')); finish(); };
+  ui.querySelector('.c-snd').onclick = () => Snd.toggle();
+  document.querySelector('.replay').onclick = () => play();
+  addEventListener('keydown', e => { if (playing && e.key === 'Escape') ui.querySelector('.c-skip').click(); });
+  let seen = false; try { seen = sessionStorage.getItem('beachCine') === '1'; sessionStorage.setItem('beachCine', '1'); } catch (e) {}
+  if (!seen && !location.hash && !matchMedia('(prefers-reduced-motion: reduce)').matches) play();
 })();
 </script>
 </body>
