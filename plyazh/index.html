@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Пляж на Журавлівці</title>
+<title>Пляж Основа</title>
 <meta name="theme-color" content="#0b1522">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&family=Manrope:wght@500;600;800&display=swap">
@@ -113,7 +113,7 @@ canvas.confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:non
 
 <div class="ui">
   <header class="top col">
-    <div class="brand">Журавлівка<small>Харків · річка Харків</small></div>
+    <div class="brand">Пляж Основа<small>Харків · річка Харків</small></div>
     <div class="ring" id="ring"><i id="ringText">0%</i></div>
   </header>
   <div class="spacer"></div>
@@ -284,7 +284,7 @@ const CONFIG={
 /* ---------- Questionnaire ---------- */
 const S = [
  {t:"Ділянка і межі", h:"Посилання на карту важливіше за все інше: розміри ми знімемо з супутника.", q:[
-  {k:"map", t:"Де це на карті", w:"Якщо зручно, посилання з Google Maps. Якщо ні, просто опишіть: «Журавлівка, за мостом, біля бази …». Знайдемо самі.", type:"text"},
+  {k:"map", t:"Де це на карті", w:"Якщо зручно, посилання з Google Maps. Якщо ні, просто опишіть: «Пляж Основа, за мостом, біля бази …». Знайдемо самі.", type:"text"},
   {k:"bounds", t:"Де починається і де закінчується ваша зона", r:1, w:"Своїми словами: «від червоної альтанки до повороту доріжки», або через орієнтири на фото.", type:"area"},
   {k:"sides", t:"Що межує з ділянкою з боків", type:"chips", multi:true, o:["Чужий пляж","Паркан або межа бази","Дорога чи проїзд","Ліс, зарості","Житлові будинки","Нічого, вільний берег"]},
   {k:"promenade", t:"Плиткова доріжка вздовж берега", r:1, w:"На фото це міська набережна. Чи можна її перекривати, чи люди гуляють нею вільно?", type:"chips", o:["Публічна, перекривати не можна","Можна зробити частину нашої території","Належить нам повністю","Не знаю"]},
@@ -461,7 +461,7 @@ document.getElementById("btnBack").addEventListener("click",()=>{if(cur==="done"
 
 /* ---------- Build text ---------- */
 function build(){
-  const d=new Date().toLocaleString("uk-UA"); let out=`🏖 АНКЕТА: ПЛЯЖ НА ЖУРАВЛІВЦІ\n${d}\n`;
+  const d=new Date().toLocaleString("uk-UA"); let out=`🏖 АНКЕТА: ПЛЯЖ ОСНОВА\n${d}\n`;
   S.forEach((s,si)=>{out+=`\n━━ ${si+1}. ${s.t} ━━\n`;
     s.q.forEach(q=>{const v=A[q.k];
       if(q.type==="files"){out+=`${q.t}: ${FILES[q.k].length} файл(ів)\n`;return}

@@ -103,8 +103,8 @@ const water = new THREE.Mesh(waterGeo, waterMat); water.position.y = -0.15; wate
 const wPos = waterGeo.attributes.position, wBase = wPos.array.slice();
 
 // ---------- the spit ----------
-const west = [[-1, -108], [-6, -104], [-12, -96], [-15, -86], [-17, -74], [-18, -60], [-18.5, -40], [-19, -10], [-19.5, 20], [-19.5, 50], [-19, 75], [-17, 92], [-13, 103], [-7, 110], [0, 112]];
-const east = [[0, 112], [7, 110], [13, 103], [17, 92], [19, 75], [19.5, 50], [19.5, 20], [19, -10], [18.5, -40], [18, -60], [17, -74], [15, -86], [12, -96], [6, -104], [1, -108]];
+const west = [[6, -122], [-4, -120], [-14, -115], [-22, -106], [-26, -95], [-26, -84], [-23, -73], [-20.5, -62], [-19.5, -45], [-19.5, -10], [-20, 20], [-19.5, 50], [-18.5, 75], [-16, 92], [-12, 103], [-6, 110], [0, 112]];
+const east = [[0, 112], [7, 110], [13, 103], [17, 92], [19, 75], [19.5, 50], [19.5, 20], [19, -10], [19, -40], [21, -55], [25, -66], [29, -78], [31, -90], [30, -102], [25, -112], [16, -119]];
 const outline = [...west, ...east];
 const mkShape = (pts, grow = 0) => { const s = new THREE.Shape(); pts.forEach(([x, z], i) => { const k = 1 + grow / 20; const X = x * k, Z = z * (1 + grow / 110); i ? s.lineTo(X, -Z) : s.moveTo(X, -Z); }); return s; };
 const landGeo = (grow, depth) => { const g = new THREE.ExtrudeGeometry(mkShape(outline, grow), { depth, bevelEnabled: true, bevelThickness: 0.6, bevelSize: 1.2, bevelSegments: 3, curveSegments: 24 }); g.rotateX(-Math.PI / 2); return g; };
@@ -114,6 +114,7 @@ const top = 0.8;
 
 // central path (straight like on the render)
 add(scene, box(3.6, 0.12, 196), M.path, 1, top + 0.06, 6, false);
+{ const ext = add(scene, box(3.6, 0.12, 24), M.path, 3.2, top + 0.06, -101, false); ext.rotation.y = -0.2; }
 // kerbs
 add(scene, box(0.25, 0.25, 196), M.wood, -0.95, top + 0.12, 6, false);
 add(scene, box(0.25, 0.25, 196), M.wood, 2.95, top + 0.12, 6, false);
@@ -343,11 +344,14 @@ for (let z = -76; z <= -54; z += 4) { lounger(-11, z, Math.PI / 2); lounger(9, z
   add(g, box(4.4, 0.3, 0.3), M.wood, 0, 4.4, 0);
   add(g, box(1.6, 0.12, 0.5), M.wood, 0, 1, 0);
   [-0.7, 0.7].forEach(x => add(g, new THREE.CylinderGeometry(0.02, 0.02, 3.3, 4), M.rope, x, 2.7, 0, false));
-  g.position.set(1, top, -96); scene.add(g);
+  g.position.set(6, top, -114); scene.add(g);
   [[-4, -88], [-6.5, -86], [5, -88]].forEach(([x, z], i) => lounger(x, z, i === 2 ? -0.3 : 0.3));
-  add(scene, box(8, 0.3, 3), M.deck, 14, 0.3, -98, false);
-  add(scene, box(1.6, 0.3, 8), M.deck, 9, 0.3, -96, false);
-  [[13, -103.2], [16.5, -103.2]].forEach(([x, z]) => {
+  for (let r = 0; r < 3; r++) for (let k = 0; k < 6; k++) lounger(-18 + k * 3.2, -96 - r * 4.5, 0.4);
+  for (let k = 0; k < 4; k++) { lounger(14 + k * 3, -86, -0.5); lounger(15 + k * 3, -95, -0.5); }
+  [[-12, -97], [-2, -101], [19, -90]].forEach(([x, z]) => umbrella(x, z));
+  add(scene, box(8, 0.3, 3), M.deck, 38, 0.3, -92, false);
+  add(scene, box(6, 0.3, 1.6), M.deck, 32.5, 0.3, -92, false);
+  [[37, -97.2], [40.5, -97.2]].forEach(([x, z]) => {
     const c = new THREE.Group();
     [-0.9, 0.9].forEach(dx => { const h = add(c, new THREE.CapsuleGeometry(0.35, 4, 4, 8), M.hull, dx, 0.25, 0); h.rotation.x = Math.PI / 2; });
     add(c, box(2.2, 0.08, 3), M.linen, 0, 0.6, 0);
@@ -356,6 +360,7 @@ for (let z = -76; z <= -54; z += 4) { lounger(-11, z, Math.PI / 2); lounger(9, z
     c.position.set(x, 0, z); scene.add(c); boats.push(c);
   });
   stringLights([[-6, top + 4.5, -82], [0, top + 3.8, -84], [6, top + 4.5, -82]], 10);
+  stringLights([[-16, top + 4, -92], [-2, top + 3.4, -94], [14, top + 4, -90]], 14);
 })();
 // lifeguard tower on the main beach
 (() => { const g = new THREE.Group(); [[-0.8, -0.8], [0.8, -0.8], [-0.8, 0.8], [0.8, 0.8]].forEach(([a, c]) => add(g, box(0.15, 3, 0.15), M.wood, a, 1.5, c));
@@ -370,6 +375,14 @@ for (let z = -80; z <= 92; z += 8) [[-1.4, z], [3.4, z + 4]].forEach(([x, zz]) =
 });
 // garlands crossing the path between the poplars
 for (let z = -84; z <= 90; z += 14) stringLights([[-3.2, top + 5.4, z], [1, top + 4.6, z + 1], [5.2, top + 5.4, z]], 9);
+
+// ---------- east islet across the quiet lagoon ----------
+(() => {
+  const s = new THREE.Shape(); [[52, -95], [60, -80], [62, -55], [58, -35], [50, -30], [47, -50], [48, -75]].forEach(([x, z], i) => i ? s.lineTo(x, -z) : s.moveTo(x, -z));
+  const g = new THREE.ExtrudeGeometry(s, { depth: 0.8, bevelEnabled: true, bevelThickness: 0.4, bevelSize: 1, bevelSegments: 2 }); g.rotateX(-Math.PI / 2);
+  const isl = new THREE.Mesh(g, M.grass); isl.position.y = -0.7; isl.receiveShadow = true; scene.add(isl);
+  for (let z = -90; z <= -36; z += 5) { tree(52 + Math.random() * 6, z, Math.random() > 0.5 ? "round" : "poplar", 0.9 + Math.random() * 0.4); }
+})();
 
 // ---------- far shores ----------
 (() => {
@@ -390,7 +403,7 @@ const lanternPts = mkPoints(lanterns, 2.6); scene.add(lanternPts);
 const steam = mkPoints(steamSpots.flatMap(p => [0, 1, 2].map(i => p.clone().add(new THREE.Vector3(0, 0.6 + i * 0.7, 0)))), 2.4);
 steam.material.color.set(0xffffff); steam.material.blending = THREE.NormalBlending; steam.material.opacity = 0.35; scene.add(steam);
 // a handful of real lights for warm pools at night
-const warm = [[10.5, 3, 12], [-12, 3, 65], [11, 3, -18], [11, 3, -36], [1, 3, -94], [1, 3, 98]].map(([x, y, z]) => { const l = new THREE.PointLight(0xffa860, 0, 26, 1.6); l.position.set(x, top + y, z); scene.add(l); return l; });
+const warm = [[10.5, 3, 12], [-12, 3, 65], [11, 3, -18], [11, 3, -36], [6, 3, -112], [1, 3, 98]].map(([x, y, z]) => { const l = new THREE.PointLight(0xffa860, 0, 26, 1.6); l.position.set(x, top + y, z); scene.add(l); return l; });
 
 // ---------- day / night ----------
 const DAY = { top: "#5aa0e0", hor: "#e6f1f7", fog: 0xe6f1f7, sun: 2.6, sunC: 0xfff1d6, hemi: 1.1, water: 0x2f6f86, exp: 1.0 };
@@ -421,8 +434,8 @@ const ZONES = [
   { id: "bar", name: "Бар", p: [10.5, 6, 11], cam: [42, 18, 30], img: "foto/story-07.jpg", txt: "Бар з навісом, кухня і гриль, поруч кіоск кальянної (є «кальян на винос»), тераса з простими дерев\u0027яними столами.", specs: [["Павільйон", "орієнтовно 9×4 м, висота 3,3 м"], ["Матеріали", "брус під горіх, графітовий профнастил, стійка з темної дошки"], ["Стійка", "висота 1,1 м, барні стільці"], ["Їжа", "кухня, гриль, снеки, місце для фудтраків"], ["Напої", "бар з алкоголем"], ["Кальянна", "окремий кіоск 2,5×2 м «HOOKAH» поруч: кальяни розносять по всій території"], ["Тиша", "після 22:00"]] },
   { id: "cabins", name: "Будиночки з чанами", p: [11, 7, -27], cam: [50, 22, -10], img: "foto/story-09.jpg", txt: "Два будиночки на палях у ліску, на терасі в кожного свій чан.", specs: [["Кількість", "2 будиночки в ліску"], ["Розмір", "8×5 м, висота 4,5 м"], ["Основа", "на палях 0,8 м"], ["Фасад", "світле дерево, графітові акценти, панорамні вікна, двері 2,1 м"], ["Тераса", "зі сходами, вихід до тихої води"], ["Чан", "дерев'яний, Ø 2 м, на дровах"], ["Сезон", "ночівля цілий рік"]] },
   { id: "beach", name: "Пляж", p: [-11, 4, -5], cam: [-55, 26, 20], img: "foto/story-03.jpg", txt: "Білі пластикові лежаки, парасолі, 10 беседок 6×4 м під профнастилом, настили до води.", specs: [["Беседки", "10 шт. уздовж пляжу"], ["Розмір беседки", "6×4 м, висота 3,5 м"], ["Каркас", "брус 15×15 см під горіх, діагональні розкоси"], ["Борти", "0,9 м з горизонтальної дошки, поручень з трьох боків, фронт відкритий"], ["Дах", "двосхилий, матовий графітовий профнастил"], ["Всередині", "довгий стіл і лави на 8–10 людей, гірлянда"], ["Лежаки", "білі пластикові, платні; бежеві парасолі"], ["Пісок", "природний"]] },
-  { id: "sup", name: "Сапи і пірс", p: [-21, 3, -62], cam: [-55, 18, -40], img: "foto/story-10.jpg", txt: "Прокат сапів і каяків, дерев'яний пірс.", specs: [["Пірс", "дерев'яний понтон на палях"], ["Прокат", "сапи, каяки, човни/катамарани"], ["Купання", "так, очерет частково вичищено"]] },
-  { id: "mys", name: "Мис", p: [3, 7, -96], cam: [-30, 24, -130], img: "foto/story-11.jpg", txt: "Гойдалка над водою, лежаки, понтон із катамаранами.", specs: [["Де", "північний мис біля «Парк Основа»"], ["Фотозони", "2: гойдалка над водою і рамка на заході сонця"], ["Відпочинок", "білі пластикові лежаки, гірлянди, ліхтарі на піску"], ["Найкраще", "захід сонця над великою водою"]] },
+  { id: "sup", name: "Сапи і пірс", p: [-21, 3, -62], cam: [-60, 20, -40], img: "foto/story-10.jpg", txt: "Прокат сапів і каяків, дерев'яний пірс.", specs: [["Пірс", "дерев'яний понтон на палях"], ["Прокат", "сапи, каяки, човни/катамарани"], ["Купання", "так, очерет частково вичищено"]] },
+  { id: "mys", name: "Мис", p: [4, 7, -108], cam: [-40, 34, -150], img: "foto/story-11.jpg", txt: "Гойдалка над водою, лежаки, понтон із катамаранами.", specs: [["Де", "північний мис біля «Парк Основа»"], ["Фотозони", "2: гойдалка над водою і рамка на заході сонця"], ["Відпочинок", "білі пластикові лежаки, гірлянди, ліхтарі на піску"], ["Найкраще", "захід сонця над великою водою"]] },
 ];
 const card = host.querySelector(".m3d-card");
 function showCard(z) {
@@ -447,7 +460,7 @@ const ROUTE = [
   { p: [1, 104], look: [1, 90] }, { p: [1, 84], look: [9, 80] }, { p: [0, 70], look: [-12, 68] },
   { p: [1, 52], look: [11, 52] }, { p: [1, 34], look: [11, 33] }, { p: [1, 16], look: [10, 11] },
   { p: [-1, 0], look: [-11, -4] }, { p: [1, -22], look: [11, -20] }, { p: [1, -38], look: [11, -36] },
-  { p: [-1, -56], look: [-20, -60] }, { p: [1, -76], look: [-8, -86] }, { p: [1, -90], look: [1, -100] },
+  { p: [-1, -56], look: [-20, -60] }, { p: [1, -76], look: [-8, -86] }, { p: [2, -92], look: [-10, -98] }, { p: [5, -108], look: [6, -116] },
 ];
 let mode = "orbit";
 const walkUI = host.querySelector(".m3d-walk");
@@ -475,10 +488,9 @@ walkUI.querySelectorAll("[data-mv]").forEach(b => {
   const off = () => { walk.keys[b.dataset.mv] = false; };
   b.addEventListener("pointerdown", on); b.addEventListener("pointerup", off); b.addEventListener("pointerleave", off); b.addEventListener("pointercancel", off);
 });
-const inside = (x, z) => { // stay on land
-  if (z < -104 || z > 110) return false;
-  const half = z < -90 ? 6 + (z + 104) * 0.6 : z > 100 ? 13 - (z - 100) * 0.9 : 17;
-  return Math.abs(x) < half;
+const inside = (x, z) => { // stay on land: point in the spit outline, 2 m from the edge
+  let c = false; for (let i = 0, j = outline.length - 1; i < outline.length; j = i++) { const [xi, zi] = outline[i], [xj, zj] = outline[j]; if ((zi > z) !== (zj > z) && x < (xj - xi) * (z - zi) / (zj - zi) + xi) c = !c; }
+  if (!c) return false; return outline.every(([px, pz]) => Math.hypot(px - x, pz - z) > 1.5);
 };
 function stepWalk(dt) {
   if (walk.auto) {
