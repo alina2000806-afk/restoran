@@ -317,6 +317,24 @@ body.cine-on #model,body.cine-on main,body.cine-on .wrap{transform:none !importa
 @keyframes wipe{0%,100%{transform:translateX(-10px) rotate(-12deg)}50%{transform:translateX(10px) rotate(12deg)}}
 .scr-again{position:absolute;right:14px;bottom:14px;min-height:46px;padding:0 18px;border-radius:99px;border:1px solid var(--stroke);background:rgba(11,21,34,.82);color:#fff;font:800 15px/1 var(--body);cursor:pointer}
 @media (max-width:560px){.scr-hint{font-size:13px;padding:10px 14px}}
+
+#m3d.cine .m3d-season,#m3d.cine .m3d-time,#m3d.cine .m3d-drone{display:none !important}
+.cine-ui .cine-tools{position:absolute;left:50%;bottom:calc(9vh + 12px);transform:translateX(-50%);display:flex;align-items:center;gap:8px;pointer-events:auto;flex-wrap:wrap;justify-content:center;max-width:calc(100% - 200px);opacity:0;transition:opacity .8s 1s}
+.cine-ui.open .cine-tools{opacity:1}
+.cine-ui .cine-tools > *{min-height:44px;border-radius:99px;border:1px solid rgba(255,255,255,.3);background:rgba(5,8,13,.6);backdrop-filter:blur(8px);color:#fff}
+.cine-ui .c-pause{padding:0 16px;font:800 14px/1 var(--body);cursor:pointer}
+.cine-ui .c-pause.on{background:linear-gradient(135deg,var(--accent),#ff9a76);color:#1a0d08;border-color:transparent}
+.cine-ui .c-seas{display:flex;padding:3px;gap:2px}
+.cine-ui .c-seas button{min-height:38px;padding:0 13px;border:0;border-radius:99px;background:transparent;color:#fff;font:800 14px/1 var(--body);cursor:pointer}
+.cine-ui .c-seas button.on{background:#fff;color:#0b1522}
+.cine-ui .c-time{display:flex;align-items:center;gap:8px;padding:0 14px;width:260px;box-sizing:border-box}
+.cine-ui .c-time input{flex:1;accent-color:#ffb36b}
+.cine-ui .c-time output{font:800 13px/1 var(--display);min-width:44px;text-align:right;color:#ffd9a0}
+.cine-ui .c-time .ic{color:#ffd9a0}
+.cine-ui.title .ttl{bottom:calc(15vh + 50px)}
+.cine-ui .ttl{transition:opacity .5s}
+.cine-ui.paused .ttl{opacity:0}
+@media (max-width:760px){.cine-ui .cine-tools{max-width:calc(100% - 24px);bottom:calc(9vh + 64px)}.cine-ui .c-time{width:100%}.cine-ui .ttl{bottom:calc(15vh + 150px)}.cine-ui.title .ttl{bottom:calc(15vh + 150px)}}
 </style>
 </head>
 <body>
@@ -328,6 +346,11 @@ body.cine-on #model,body.cine-on main,body.cine-on .wrap{transform:none !importa
   <div class="black"></div><div class="load">Пляж Основа · завантаження</div>
   <div class="bar t"></div><div class="bar b"></div><div class="prog"></div>
   <div class="ttl"><small>Харків · річка Харків</small><h1></h1><p>Концепція пляжу, яку можна обійти ще до будівництва</p></div>
+  <div class="cine-tools">
+    <button type="button" class="c-pause" aria-pressed="false">❚❚ Пауза</button>
+    <div class="c-seas" role="group" aria-label="Пора року"><button type="button" data-cs="summer" class="on">Літо</button><button type="button" data-cs="autumn">Осінь</button><button type="button" data-cs="winter">Зима</button></div>
+    <label class="c-time"><span class="ic">☀</span><input type="range" min="5.5" max="23" step="0.25" value="15" aria-label="Час доби в інтро"><span class="ic">☾</span><output>ранок</output></label>
+  </div>
   <div class="ctl"><button type="button" class="c-skip">Пропустити ✕</button></div>
 </div>
 <div class="arbox" hidden role="dialog" aria-modal="true" aria-label="Макет у доповненій реальності">
@@ -739,7 +762,7 @@ try{
 const onScroll=()=>{const max=document.documentElement.scrollHeight-innerHeight;setProgress(max>0?scrollY/max:0)};
 addEventListener("scroll",onScroll,{passive:true});onScroll();
 </script>
-<script type="module" src="model3d.js?v=1794240000"></script>
+<script type="module" src="model3d.js?v=1794250000"></script>
 <script>
 document.querySelectorAll(".ba").forEach(el=>{
   const set=x=>{const r=el.getBoundingClientRect();el.style.setProperty("--pos",Math.max(0,Math.min(100,(x-r.left)/r.width*100))+"%")};
@@ -857,7 +880,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click
   function play() {
     if (playing) return; playing = true; scrollTo(0, 0); ui.hidden = false; ui.className = 'cine-ui'; document.body.classList.add('cine-on'); host.classList.add('cine'); dispatchEvent(new Event('resize'));
     const go = () => { if (!ready) return setTimeout(go, 150); setTimeout(() => { ui.classList.add('open'); dispatchEvent(new CustomEvent('beachcine', { detail: { dur: 11 } })); setTimeout(() => ui.classList.add('title'), 3600); }, 250); };
-    go(); endT = setTimeout(() => dispatchEvent(new Event('beachcine:skip')), 30000);
+    go(); endT = setTimeout(() => { if (!document.querySelector('.c-pause.on')) dispatchEvent(new Event('beachcine:skip')); }, 90000);
   }
   addEventListener('beachcine:progress', e => { ui.querySelector('.prog').style.width = (e.detail * 100) + '%'; });
   addEventListener('beachcine:end', () => setTimeout(finish, 900));
@@ -938,6 +961,21 @@ document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click
   addEventListener('pointerup', () => { down = false; last = null; });
   cv.addEventListener('pointerleave', () => { last = null; });
   again.addEventListener('click', () => { moves = 0; paint(); });
+})();
+</script>
+<script>
+// ===== intro controls: pause, season, time =====
+(() => {
+  const ui = document.querySelector('.cine-ui'); if (!ui) return;
+  const pb = ui.querySelector('.c-pause'), tr = ui.querySelector('.c-time input'), out = ui.querySelector('.c-time output');
+  let paused = false;
+  const fmt = v => String(Math.floor(v)).padStart(2, '0') + ':' + String(Math.round((v % 1) * 60)).padStart(2, '0');
+  const setPause = p => { paused = p; pb.classList.toggle('on', p); pb.setAttribute('aria-pressed', p); pb.textContent = p ? '▶ Продовжити' : '❚❚ Пауза'; ui.classList.toggle('paused', p); dispatchEvent(new CustomEvent('beachcine:pause', { detail: p })); };
+  pb.addEventListener('click', () => setPause(!paused));
+  ui.querySelectorAll('[data-cs]').forEach(b => b.addEventListener('click', () => { ui.querySelectorAll('[data-cs]').forEach(x => x.classList.toggle('on', x === b)); dispatchEvent(new CustomEvent('beachseason', { detail: b.dataset.cs })); }));
+  tr.addEventListener('input', () => { out.textContent = fmt(+tr.value); dispatchEvent(new CustomEvent('beachhour', { detail: +tr.value })); });
+  addEventListener('beachcine', () => { setPause(false); out.textContent = 'ранок'; const cur = document.querySelector('#m3d [data-season].on'); ui.querySelectorAll('[data-cs]').forEach(x => x.classList.toggle('on', cur && x.dataset.cs === cur.dataset.season)); });
+  addEventListener('keydown', e => { if (!ui.hidden && e.code === 'Space') { e.preventDefault(); setPause(!paused); } });
 })();
 </script>
 </body>

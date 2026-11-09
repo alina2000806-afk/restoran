@@ -612,22 +612,26 @@ let cine = null;
 const easeIO = k => k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
 const backOut = k => { const c = 1.6; return 1 + (c + 1) * Math.pow(k - 1, 3) + c * Math.pow(k - 1, 2); };
 function cineFrame(t) {
-  const u = Math.min(1, (t - cine.t0) / cine.dur), e = easeIO(u);
+  const dtc = t - (cine.last ?? t); cine.last = t; if (!cine.paused) cine.el += dtc;
+  const u = Math.min(1, cine.el / cine.dur), e = easeIO(u);
   camera.position.copy(camPath.getPoint(e)); const tg = tgtPath.getPoint(e); controls.target.copy(tg); camera.lookAt(tg);
   const front = 125 - 290 * Math.min(1, u / 0.72);
-  buildables.forEach(o => { const k = Math.max(0, Math.min(1, (o.position.z - front) / 22)); const s = k <= 0 ? 0.0001 : backOut(k); o.scale.set(o.userData.s0.x * s, o.userData.s0.y * s, o.userData.s0.z * s); o.visible = k > 0; });
-  night = nightTarget = Math.max(0, 0.9 - u * 1.6);
+  buildables.forEach(o => { const k = Math.max(0, Math.min(1, (o.position.z - front) / 22)); const s = k <= 0 ? 0.0001 : backOut(k); o.scale.set(o.userData.s0.x * s, o.userData.s0.y * s, o.userData.s0.z * s); o.visible = k > 0 && !(season !== "summer" && summerSet.has(o)); });
+  if (!cine.userTime) night = nightTarget = Math.max(0, 0.9 - u * 1.6);
   dispatchEvent(new CustomEvent("beachcine:progress", { detail: u }));
   if (u >= 1) endCine();
 }
 function endCine() {
-  if (!cine) return; cine = null; buildables.forEach(o => { o.scale.copy(o.userData.s0); o.visible = true; });
-  night = 0; setHour(hourNow); camera.position.set(-150, 120, 150); controls.target.set(0, 0, 0); controls.autoRotate = true;
+  if (!cine) return; const cine_userTime = cine.userTime; cine = null; buildables.forEach(o => { o.scale.copy(o.userData.s0); o.visible = true; });
+  if (!cine_userTime) night = 0; setHour(hourNow); camera.position.set(-150, 120, 150); controls.target.set(0, 0, 0); controls.autoRotate = true;
   if (season !== "summer") setSeason(season);
   dispatchEvent(new Event("beachcine:end"));
 }
-addEventListener("beachcine", e => { setMode("orbit"); card.hidden = true; flight = null; controls.autoRotate = false; cine = { t0: clock.getElapsedTime(), dur: (e.detail && e.detail.dur) || 11 }; buildables.forEach(o => { o.scale.setScalar(0.0001); o.visible = false; }); });
+addEventListener("beachcine", e => { setMode("orbit"); card.hidden = true; flight = null; controls.autoRotate = false; cine = { el: 0, last: null, paused: false, userTime: false, dur: (e.detail && e.detail.dur) || 11 }; buildables.forEach(o => { o.scale.setScalar(0.0001); o.visible = false; }); });
 addEventListener("beachcine:skip", endCine);
+addEventListener("beachcine:pause", e => { if (cine) cine.paused = e.detail; });
+addEventListener("beachseason", e => setSeason(e.detail));
+addEventListener("beachhour", e => { const tdi = host.querySelector(".m3d-time input"); if (tdi) tdi.value = e.detail; setHour(+e.detail); if (cine) cine.userTime = true; });
 
 
 // ---------- time of day slider: the sun walks east → south → west, shadows turn, lights come on in the evening ----------
@@ -659,6 +663,7 @@ addEventListener("beachexportglb", async () => {
 
 // ---------- seasons: summer / autumn / winter (the beach works all year) ----------
 scene.children.forEach(o => { if (o.isMesh && (TOWEL.includes(o.material) || (o.material === M.sup && o.position.y < 0.4))) summerOnly.push(o); });
+const summerSet = new Set(summerOnly);
 const SUMMER = { day: { ...DAY }, col: {} };
 ["sand", "wetSand", "grass", "roof", "deck", "poplar", "bush", "path"].forEach(k => SUMMER.col[k] = M[k].color.getHex());
 const AUT = [0xd9a43a, 0xc9772e, 0xe2c25a, 0x9aa33f, 0xb8572a].map(c => new THREE.MeshStandardMaterial({ color: c, roughness: 0.9, flatShading: true }));
