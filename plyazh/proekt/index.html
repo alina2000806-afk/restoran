@@ -17,11 +17,11 @@
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.5;overflow-x:hidden}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:17px;line-height:1.55;overflow-x:hidden}
 #gl{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:0;background:radial-gradient(120% 80% at 50% 0%,#1d3a52,#0b1522 70%)}
-.veil{position:fixed;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(11,21,34,0) 0%,rgba(11,21,34,.25) 40%,rgba(11,21,34,.82) 100%)}
+.veil{position:fixed;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(11,21,34,.15) 0%,rgba(11,21,34,.55) 35%,rgba(11,21,34,.88) 100%)}
 .ui{position:relative;z-index:2;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-.col{max-width:720px;margin:0 auto;width:100%}
+.col{max-width:1080px;margin:0 auto;width:100%}
 
 .top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:calc(14px + env(safe-area-inset-top,0px)) 8px}
 .brand{font-family:var(--display);font-weight:800;font-size:13px;letter-spacing:.14em;text-transform:uppercase}
@@ -31,17 +31,17 @@ body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-
 .hero{min-height:calc(100vh - 80px);display:flex;flex-direction:column;justify-content:flex-end;padding-bottom:48px;animation:rise .7s cubic-bezier(.2,.8,.2,1) both}
 .hero h1{font-family:var(--display);font-weight:800;font-size:clamp(34px,8.5vw,64px);line-height:1;margin:0;text-wrap:balance;letter-spacing:-.01em}
 .hero h1 span{background:linear-gradient(90deg,var(--accent-2),var(--accent));-webkit-background-clip:text;background-clip:text;color:transparent}
-.hero p{color:var(--muted);max-width:36em;margin:14px 0 0;font-size:16.5px}
+.hero p{color:rgba(244,241,234,.82);max-width:36em;margin:14px 0 0;font-size:17.5px}
 .pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
 .pill{font-size:12.5px;font-weight:700;padding:8px 12px;border-radius:99px;background:var(--glass);border:1px solid var(--stroke);backdrop-filter:blur(10px)}
 .toc{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
-.toc a{color:var(--fg);text-decoration:none;font-size:13px;font-weight:800;padding:9px 13px;border-radius:12px;background:var(--glass);border:1px solid var(--stroke);backdrop-filter:blur(10px)}
+.toc a{color:var(--fg);text-decoration:none;font-size:14.5px;font-weight:800;padding:12px 15px;min-height:44px;box-sizing:border-box;display:inline-flex;align-items:center;border-radius:12px;background:var(--glass);border:1px solid var(--stroke);backdrop-filter:blur(10px)}
 .toc a:hover{background:var(--glass-2)}
 
 section.part{padding:36px 0 10px;scroll-margin-top:16px}
 .kicker{font-family:var(--display);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent-2);font-weight:600}
 h2{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,40px);line-height:1.05;margin:8px 0 0;text-wrap:balance;letter-spacing:-.01em}
-.hint{color:var(--muted);margin:8px 0 0;font-size:15px}
+.hint{color:rgba(244,241,234,.78);margin:8px 0 0;font-size:16.5px;max-width:46em}
 .glass{margin-top:18px;background:var(--glass);border:1px solid var(--stroke);border-radius:24px;padding:8px 18px 14px;backdrop-filter:blur(18px) saturate(140%);-webkit-backdrop-filter:blur(18px) saturate(140%);box-shadow:0 30px 80px -40px rgba(0,0,0,.8), inset 0 1px 0 rgba(255,255,255,.08)}
 .glass.pad{padding:16px 18px 18px}
 .q{padding-block:14px;border-bottom:1px solid var(--stroke)}
@@ -56,7 +56,7 @@ h2{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,40px);l
 
 figure{margin:0}
 figure img{width:100%;height:auto;display:block;border-radius:18px;border:1px solid var(--stroke)}
-figcaption{font-size:13px;color:var(--muted);margin-top:8px}
+figcaption{font-size:15px;color:rgba(244,241,234,.78);margin-top:8px}
 figcaption a{color:var(--accent-2)}
 .viz img{image-rendering:auto}
 .photos{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
@@ -89,7 +89,7 @@ pre{white-space:pre-wrap;background:rgba(0,0,0,.28);border:1px solid var(--strok
 .btn{font:inherit;font-family:var(--display);font-weight:600;font-size:13px;border:0;border-radius:14px;padding:11px 16px;cursor:pointer;background:linear-gradient(135deg,var(--accent),#ff9a76);color:#1a0d08;margin-top:10px;transition:transform .15s,filter .2s;box-shadow:0 14px 30px -14px rgba(255,122,89,.7)}
 .btn:active{transform:scale(.97)}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
-.chip{font-weight:700;font-size:13.5px;border:1px solid var(--stroke);background:var(--glass);color:var(--fg);border-radius:99px;padding:8px 13px}
+.chip{font-weight:700;font-size:14.5px;border:1px solid var(--stroke);background:var(--glass);color:var(--fg);border-radius:99px;padding:10px 15px;min-height:44px}
 button.chip{cursor:pointer;font-family:inherit;transition:transform .15s}
 button.chip:active{transform:scale(.95)}
 .swatches{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
@@ -114,7 +114,7 @@ button.chip:active{transform:scale(.95)}
 .m3d-tag{position:absolute;left:0;top:0;pointer-events:auto;font:800 12px/1 var(--body);color:#1a0d08;background:rgba(255,255,255,.92);border:0;border-radius:99px;padding:7px 10px;white-space:nowrap;cursor:pointer;box-shadow:0 6px 16px -6px rgba(0,0,0,.5);transition:opacity .25s}
 .m3d-tag::after{content:"";position:absolute;left:50%;bottom:-5px;width:8px;height:8px;background:inherit;transform:translateX(-50%) rotate(45deg);border-radius:2px;z-index:-1}
 .m3d-bar{position:absolute;left:10px;right:10px;top:10px;display:flex;flex-wrap:wrap;gap:6px;z-index:3}
-.m3d-bar button,.m3d-walk button{font:800 12.5px/1 var(--body);color:var(--fg);background:rgba(11,21,34,.62);border:1px solid var(--stroke);border-radius:12px;padding:10px 12px;cursor:pointer;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.m3d-bar button,.m3d-walk button{min-height:44px;font:800 14px/1 var(--body);color:var(--fg);background:rgba(11,21,34,.62);border:1px solid var(--stroke);border-radius:12px;padding:10px 12px;cursor:pointer;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
 .m3d-bar button.on,.m3d-walk button.on{background:linear-gradient(135deg,var(--accent),#ff9a76);color:#1a0d08;border-color:transparent}
 .m3d-bar .sp{flex:1}
 .m3d-hint{position:absolute;left:12px;bottom:12px;font-size:12px;color:rgba(255,255,255,.8);background:rgba(11,21,34,.5);padding:7px 10px;border-radius:10px;z-index:2;pointer-events:none;backdrop-filter:blur(8px)}
@@ -191,6 +191,23 @@ body.noscroll{overflow:hidden}
 @media (max-width:560px){.gal{grid-template-columns:1fr}}
 .gal figure[hidden]{display:none}
 .gal figcaption b{color:var(--accent-2)}
+
+/* sticky nav */
+.stick{position:fixed;left:0;right:0;top:0;z-index:50;background:rgba(11,21,34,.9);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--stroke);transform:translateY(-110%);transition:transform .25s}
+.stick.show{transform:none}
+.stick .in{max-width:1080px;margin:0 auto;display:flex;align-items:center;gap:6px;padding:6px 16px;overflow-x:auto;scrollbar-width:none}
+.stick .in::-webkit-scrollbar{display:none}
+.stick a{flex:none;color:var(--fg);text-decoration:none;font-weight:800;font-size:14px;padding:0 12px;min-height:40px;display:inline-flex;align-items:center;border-radius:10px;white-space:nowrap}
+.stick a.on{background:linear-gradient(135deg,var(--accent),#ff9a76);color:#1a0d08}
+.stick a.call{margin-left:auto;background:var(--glass-2);border:1px solid var(--stroke)}
+.totop{position:fixed;right:16px;bottom:16px;z-index:50;width:52px;height:52px;border-radius:50%;border:1px solid var(--stroke);background:rgba(11,21,34,.85);color:#fff;font-size:22px;cursor:pointer;opacity:0;pointer-events:none;transition:opacity .2s}
+.totop.show{opacity:1;pointer-events:auto}
+html{scroll-padding-top:64px}
+@media (max-width:560px){.totop{width:46px;height:46px;right:12px;bottom:12px}}
+.m3d-tag{min-height:32px;font-size:13px !important}
+.veil{transition:background .4s}
+.veil.deep{background:rgba(11,21,34,.74)}
+.leg span{font-size:15px}
 </style>
 </head>
 <body>
@@ -198,7 +215,9 @@ body.noscroll{overflow:hidden}
 <div class="veil"></div>
 
 <div class="ui">
-  <header class="top col">
+  <nav class="stick" aria-label="Розділи"><div class="in"><a href="#dilyanka">Ділянка</a><a href="#genplan">Генплан</a><a href="#obiekty">Об'єкти</a><a href="#styl">Стиль</a><a href="#model">3D</a><a href="#viz">День на пляжі</a><a href="#galereya">Галерея</a><a href="#bulo">Було / буде</a><a class="call" href="tel:+380966958712">📞 Зв'язатися</a></div></nav>
+<button type="button" class="totop" aria-label="Нагору">↑</button>
+<header class="top col">
     <div class="brand">Пляж Основа<small>Харків · річка Харків · концепція</small></div>
     <div class="date">01.11.2026<br>за анкетою від 30.10</div>
   </header>
@@ -207,7 +226,7 @@ body.noscroll{overflow:hidden}
     <section class="hero">
       <div class="kicker">Пляж Основа</div>
       <h1>Пляж, який <span>хочеться показувати</span></h1>
-      <p>Концепція благоустрою ділянки від кафе «Червона мавпа» до точки «Пляж Основа». Генплан за вашим ескізом, перелік об'єктів, стиль і готові види для візуалізації. Усе зібрано з анкети і фотофіксації 30 жовтня.</p>
+      <p>Концепція благоустрою ділянки від кафе «Червона мавпа» до точки «Пляж Основа». Генплан за вашим ескізом, перелік об'єктів, стиль, 3D-модель, яку можна обійти, і 32 фотореалістичні види всіх зон. Усе зібрано з анкети і фотофіксації 30 жовтня.</p>
       <div class="pills"><span class="pill">≈ 200 м берега</span><span class="pill">вода з двох боків</span><span class="pill">до 500 гостей</span><span class="pill">30–70 тис. $</span><span class="pill">цілий рік</span></div>
       <nav class="toc"><a href="#dilyanka">Ділянка</a><a href="#genplan">Генплан</a><a href="#obiekty">Об'єкти</a><a href="#styl">Стиль</a><a href="#model">3D-прогулянка</a><a href="#viz">Візуалізації</a><a href="#galereya">Галерея</a><a href="#bulo">Було / буде</a></nav>
     </section>
@@ -274,7 +293,7 @@ body.noscroll{overflow:hidden}
             <span class="k" style="background:#3a8a4a">А</span><span>Вхід, адміністрація, каса, прокат лежаків</span>
             <span class="k" style="background:#6b6259">·</span><span>Сервіс біля входу: 6 кабінок, 4 душі, 2 біотуалети в дерев'яних коробах</span>
             <span class="k" style="background:#4fd1a0;color:#1a0d08">Діти</span><span>Невеликий дитячий куточок у тіні, подалі від бару</span>
-            <span class="k" style="background:#ff7a59">VIP</span><span>4 VIP-альтанки зі шторами (червона штриховка на ескізі), поруч кальянна точка</span>
+            <span class="k" style="background:#ff7a59">VIP</span><span>4 VIP-альтанки зі шторами (червона штриховка на ескізі), кальян приносять з кіоску біля бару</span>
             <span class="k" style="background:#2a7f9e">ВП</span><span>Волейбол. Стовпи вже стоять, лишається сітка і лавки</span>
             <span class="k" style="background:#1a0d08">Бар</span><span>Бар, повноцінна кухня, гриль, снеки. Фудтраки по сезону поруч</span>
             <span class="k" style="background:#6b4e2e">Д</span><span>2 будиночки з ночівлею, у кожного власний чан на терасі. На боці ліска, вихід до тихої води</span>
@@ -299,17 +318,17 @@ body.noscroll{overflow:hidden}
       <div class="glass pad">
         <table>
           <tr><th>Об'єкт</th><th>Шт.</th><th>Вигляд</th></tr>
-          <tr><td>VIP-альтанки зі шторами</td><td class="n">4</td><td>Каркас зі світлого дерева, лляні штори, настил, низький стіл, подушки, гірлянда по периметру</td></tr>
+          <tr><td>VIP-альтанки зі шторами</td><td class="n">4</td><td>Каркас з бруса під горіх, верх з бежевого полотна, лляні штори, м'які лави з подушками, низький столик, гірлянда</td></tr>
           <tr><td>Беседки пляжні</td><td class="n">10</td><td>6×4 м, каркас з бруса з розкосами, борти 0,9 м з трьох боків, двосхилий дах з профнастилу, стіл і лавки, гірлянда під дахом</td></tr>
           <tr><td>Будиночки з ночівлею і чаном</td><td class="n">2</td><td>Невеликі, на палях, велике вікно на воду, тераса, дерев'яний чан на дровах</td></tr>
           <tr><td>Бар</td><td class="n">1</td><td>Стійка з обпаленого дерева, терасна дошка, навіс, барні стільці, гірлянди</td></tr>
           <tr><td>Кухня, гриль-зона</td><td class="n">1</td><td>Закритий блок за баром і відкритий гриль, місце для фудтраків</td></tr>
-          <tr><td>Кальянна</td><td class="n">1</td><td>Дерев'яний кіоск 2,5×2 м впритул до бару, вивіска «Кальян», віконце «кальян на винос»</td></tr>
+          <tr><td>Кальянна</td><td class="n">1</td><td>Окремий кіоск 2,5×2 м за кілька метрів від бару, вивіска «HOOKAH»: тут готують кальяни і розносять по всій території</td></tr>
           <tr><td>Волейбол</td><td class="n">1</td><td>Пісок, нова сітка, лавки для глядачів</td></tr>
-          <tr><td>Дитяча зона</td><td class="n">1</td><td>Дерев'яний майданчик, пісочниця, тінь з льону</td></tr>
+          <tr><td>Дитяча зона</td><td class="n">1</td><td>Пісочниця з дерев'яним бортом, гойдалка, будиночок, бежевий тент для тіні</td></tr>
           <tr><td>Прокат сапів</td><td class="n">1</td><td>Стелаж для сапів і каяків, невеликий понтон</td></tr>
-          <tr><td>Фотозони</td><td class="n">2</td><td>Гойдалка над водою на мисі, дерев'яна рама з написом на пляжі</td></tr>
-          <tr><td>Кабінки для перевдягання</td><td class="n">6</td><td>Дерев'яні, обпалене дерево</td></tr>
+          <tr><td>Фотозони</td><td class="n">2</td><td>Гойдалка на мисі і дерев'яна фоторамка на березі</td></tr>
+          <tr><td>Кабінки для перевдягання</td><td class="n">6</td><td>Дошка під горіх, графітовий дах</td></tr>
           <tr><td>Душ</td><td class="n">4</td><td>Вуличні, на дерев'яному настилі</td></tr>
           <tr><td>Туалет</td><td class="n">2</td><td>Біотуалети в дерев'яному коробі</td></tr>
           <tr><td>Лежаки</td><td class="n">—</td><td>Білі пластикові, прості парасолі. Бюджетно, легко мити і зберігати взимку</td></tr>
@@ -627,6 +646,15 @@ show('light');
 <script>
 (() => { const chips = document.querySelectorAll('.gal-chips .chip'), figs = document.querySelectorAll('.gal figure');
   chips.forEach(c => c.addEventListener('click', () => { chips.forEach(x => x.classList.toggle('on', x === c)); figs.forEach(f => f.hidden = c.dataset.z !== 'all' && f.dataset.z !== c.dataset.z); })); })();
+</script>
+<script>
+(() => { const bar = document.querySelector('.stick'), up = document.querySelector('.totop'), hero = document.querySelector('.toc');
+  const links = [...bar.querySelectorAll('a[href^="#"]')], secs = links.map(a => document.querySelector(a.getAttribute('href')));
+  const onScroll = () => { const past = hero.getBoundingClientRect().bottom < 0; bar.classList.toggle('show', past); up.classList.toggle('show', past); document.querySelector('.veil').classList.toggle('deep', past);
+    let cur = -1; secs.forEach((s, i) => { if (s && s.getBoundingClientRect().top < 120) cur = i; });
+    links.forEach((a, i) => a.classList.toggle('on', i === cur)); const on = links[cur]; if (on) { const box = bar.firstElementChild; box.scrollLeft = on.offsetLeft - box.clientWidth / 2 + on.offsetWidth / 2; } };
+  addEventListener('scroll', onScroll, { passive: true }); onScroll();
+  up.onclick = () => scrollTo({ top: 0, behavior: 'smooth' }); })();
 </script>
 </body>
 </html>
