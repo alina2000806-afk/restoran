@@ -183,6 +183,14 @@ body.noscroll{overflow:hidden}
 .lb .lb-p{left:14px;top:50%;transform:translateY(-50%)}
 .lb .lb-nx{right:14px;top:50%;transform:translateY(-50%)}
 @media (max-width:560px){.lb .lb-p,.lb .lb-nx{top:auto;bottom:18px;transform:none}}
+
+/* gallery */
+.gal-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.gal{grid-template-columns:repeat(3,1fr)}
+@media (max-width:900px){.gal{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.gal{grid-template-columns:1fr}}
+.gal figure[hidden]{display:none}
+.gal figcaption b{color:var(--accent-2)}
 </style>
 </head>
 <body>
@@ -201,7 +209,7 @@ body.noscroll{overflow:hidden}
       <h1>Пляж, який <span>хочеться показувати</span></h1>
       <p>Концепція благоустрою ділянки від кафе «Червона мавпа» до точки «Пляж Основа». Генплан за вашим ескізом, перелік об'єктів, стиль і готові види для візуалізації. Усе зібрано з анкети і фотофіксації 30 жовтня.</p>
       <div class="pills"><span class="pill">≈ 200 м берега</span><span class="pill">вода з двох боків</span><span class="pill">до 500 гостей</span><span class="pill">30–70 тис. $</span><span class="pill">цілий рік</span></div>
-      <nav class="toc"><a href="#dilyanka">Ділянка</a><a href="#genplan">Генплан</a><a href="#obiekty">Об'єкти</a><a href="#styl">Стиль</a><a href="#model">3D-прогулянка</a><a href="#viz">Візуалізації</a><a href="#bulo">Було / буде</a></nav>
+      <nav class="toc"><a href="#dilyanka">Ділянка</a><a href="#genplan">Генплан</a><a href="#obiekty">Об'єкти</a><a href="#styl">Стиль</a><a href="#model">3D-прогулянка</a><a href="#viz">Візуалізації</a><a href="#galereya">Галерея</a><a href="#bulo">Було / буде</a></nav>
     </section>
 
     <!-- 1 -->
@@ -418,9 +426,38 @@ body.noscroll{overflow:hidden}
 
 
 
+    <section class="part" id="galereya">
+      <div class="kicker">07 · Галерея</div>
+      <h2>Усі зони зблизька</h2>
+      <p class="hint">Ще 20 кадрів у тому ж стилі: інші ракурси, вечір, інтер'єри. Оберіть зону або гортайте все підряд.</p>
+      <div class="chips gal-chips"><button type="button" class="chip on" data-z="all">Усі зони</button><button type="button" class="chip" data-z="vhid">Вхід</button><button type="button" class="chip" data-z="plyazh">Пляж</button><button type="button" class="chip" data-z="besidky">Беседки</button><button type="button" class="chip" data-z="vip">VIP-альтанки</button><button type="button" class="chip" data-z="sport">Волейбол і діти</button><button type="button" class="chip" data-z="bar">Бар і кальянна</button><button type="button" class="chip" data-z="domyky">Будиночки з чанами</button><button type="button" class="chip" data-z="pirs">Сапи і пірс</button><button type="button" class="chip" data-z="mys">Мис</button></div>
+      <div class="photos gal">
+        <figure data-z="vhid"><img src="foto/gal-01.jpg" alt="Вхід" loading="lazy"><figcaption><b>Вхід.</b> Вхід увечері: арка «ПЛЯЖ», рецепція світиться, гірлянди</figcaption></figure>
+        <figure data-z="vhid"><img src="foto/gal-02.jpg" alt="Вхід" loading="lazy"><figcaption><b>Вхід.</b> Кабінки для перевдягання, душі на настилі, біотуалети в обшивці під горіх</figcaption></figure>
+        <figure data-z="vhid"><img src="foto/gal-19.jpg" alt="Вхід" loading="lazy"><figcaption><b>Вхід.</b> Алея вздовж коси: кашпо зі злаками, лавки, ліхтарі, вказівник</figcaption></figure>
+        <figure data-z="plyazh"><img src="foto/gal-03.jpg" alt="Пляж" loading="lazy"><figcaption><b>Пляж.</b> Пляж з води: лежаки, парасолі, рятувальна вежа, беседки за деревами</figcaption></figure>
+        <figure data-z="plyazh"><img src="foto/gal-04.jpg" alt="Пляж" loading="lazy"><figcaption><b>Пляж.</b> Ряд білих пластикових лежаків, бежеві парасолі, рушники, столик</figcaption></figure>
+        <figure data-z="plyazh"><img src="foto/gal-20.jpg" alt="Пляж" loading="lazy"><figcaption><b>Пляж.</b> Коса з дрона: від входу до широкого мису</figcaption></figure>
+        <figure data-z="besidky"><img src="foto/gal-05.jpg" alt="Беседки" loading="lazy"><figcaption><b>Беседки.</b> 10 беседок уздовж берега з невеликої висоти</figcaption></figure>
+        <figure data-z="besidky"><img src="foto/gal-06.jpg" alt="Беседки" loading="lazy"><figcaption><b>Беседки.</b> Вечеря в беседці: гірлянди під дахом, вид на річку</figcaption></figure>
+        <figure data-z="vip"><img src="foto/gal-07.jpg" alt="VIP-альтанки" loading="lazy"><figcaption><b>VIP-альтанки.</b> VIP-альтанки на заході сонця, штори напівзакриті, свічки</figcaption></figure>
+        <figure data-z="vip"><img src="foto/gal-08.jpg" alt="VIP-альтанки" loading="lazy"><figcaption><b>VIP-альтанки.</b> Усередині VIP-альтанки: м'які подушки, столик, вид на воду</figcaption></figure>
+        <figure data-z="sport"><img src="foto/gal-09.jpg" alt="Волейбол і діти" loading="lazy"><figcaption><b>Волейбол і діти.</b> Дитячий куточок: пісочниця, гойдалка, будиночок, тент</figcaption></figure>
+        <figure data-z="sport"><img src="foto/gal-10.jpg" alt="Волейбол і діти" loading="lazy"><figcaption><b>Волейбол і діти.</b> Гра у волейбол на піщаному майданчику, глядачі на лавках</figcaption></figure>
+        <figure data-z="bar"><img src="foto/gal-11.jpg" alt="Бар і кальянна" loading="lazy"><figcaption><b>Бар і кальянна.</b> Бар і кіоск HOOKAH увечері</figcaption></figure>
+        <figure data-z="bar"><img src="foto/gal-12.jpg" alt="Бар і кальянна" loading="lazy"><figcaption><b>Бар і кальянна.</b> Погляд з-за барної стійки на столи й річку</figcaption></figure>
+        <figure data-z="bar"><img src="foto/gal-13.jpg" alt="Бар і кальянна" loading="lazy"><figcaption><b>Бар і кальянна.</b> Кальянна в сутінках: кальяни розносять по території</figcaption></figure>
+        <figure data-z="domyky"><img src="foto/gal-14.jpg" alt="Будиночки з чанами" loading="lazy"><figcaption><b>Будиночки з чанами.</b> Усередині будиночка: ліжка, кухонька, панорамне вікно на чан</figcaption></figure>
+        <figure data-z="domyky"><img src="foto/gal-15.jpg" alt="Будиночки з чанами" loading="lazy"><figcaption><b>Будиночки з чанами.</b> Чан біля будиночка в блакитну годину</figcaption></figure>
+        <figure data-z="pirs"><img src="foto/gal-16.jpg" alt="Сапи і пірс" loading="lazy"><figcaption><b>Сапи і пірс.</b> З кінця пірсу на берег і пункт прокату</figcaption></figure>
+        <figure data-z="pirs"><img src="foto/gal-17.jpg" alt="Сапи і пірс" loading="lazy"><figcaption><b>Сапи і пірс.</b> Прокат сапів і каяків: інструктор, жилети, дошки</figcaption></figure>
+        <figure data-z="mys"><img src="foto/gal-18.jpg" alt="Мис" loading="lazy"><figcaption><b>Мис.</b> Мис удень: лежаки, гойдалка, фоторамка, купання</figcaption></figure>
+      </div>
+    </section>
+
     <!-- before/after -->
     <section class="part" id="bulo">
-      <div class="kicker">07 · Було / буде</div>
+      <div class="kicker">08 · Було / буде</div>
       <h2>Той самий берег, до і після</h2>
       <p class="hint">Тягніть повзунок: ліворуч фото ділянки 30 жовтня, праворуч те саме місце з того самого ракурсу після благоустрою.</p>
       <div class="bagrid">
@@ -574,7 +611,7 @@ show('light');
   const srcOf = el => el.closest('a[href^="foto/"]')?.getAttribute('href') || el.getAttribute('src');
   const capOf = el => { const f = el.closest('figure,.step,.plan'); const c = f && f.querySelector('figcaption,.cap,.kicker'); return c ? (c.children.length ? [...c.children].map(x => x.textContent.trim()).filter(Boolean).join(' · ') : c.textContent).replace(/\s+/g, ' ').trim() : (el.alt || ''); };
   const show = k => { i = (k + list.length) % list.length; const el = list[i]; im.style.opacity = 0; im.onload = () => im.style.opacity = 1; im.src = srcOf(el); im.alt = el.alt || ''; cap.textContent = capOf(el); num.textContent = (i + 1) + ' / ' + list.length; const n = list[(i + 1) % list.length]; if (n) new Image().src = srcOf(n); };
-  const open = el => { const sec = el.closest('section') || document; list = [...sec.querySelectorAll(SEL)]; show(list.indexOf(el)); lb.hidden = false; document.body.style.overflow = 'hidden'; };
+  const open = el => { const sec = el.closest('section') || document; list = [...sec.querySelectorAll(SEL)].filter(x => !x.closest('[hidden]')); show(list.indexOf(el)); lb.hidden = false; document.body.style.overflow = 'hidden'; };
   const close = () => { lb.hidden = true; document.body.style.overflow = ''; };
   document.addEventListener('click', e => { const el = e.target.closest('img'); if (!el || !el.matches(SEL)) return; e.preventDefault(); open(el); });
   lb.querySelector('.lb-x').onclick = close;
@@ -586,6 +623,10 @@ show('light');
   lb.addEventListener('touchstart', e => { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, { passive: true });
   lb.addEventListener('touchend', e => { if (x0 === null) return; const dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0; x0 = null; if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) show(i + (dx < 0 ? 1 : -1)); else if (dy > 90) close(); }, { passive: true });
 })();
+</script>
+<script>
+(() => { const chips = document.querySelectorAll('.gal-chips .chip'), figs = document.querySelectorAll('.gal figure');
+  chips.forEach(c => c.addEventListener('click', () => { chips.forEach(x => x.classList.toggle('on', x === c)); figs.forEach(f => f.hidden = c.dataset.z !== 'all' && f.dataset.z !== c.dataset.z); })); })();
 </script>
 </body>
 </html>
