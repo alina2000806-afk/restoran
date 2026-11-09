@@ -437,7 +437,7 @@ html{scroll-padding-top:64px}
       </div>
       <div class="glass pad" style="margin-top:18px">
         <div class="plan">
-          <a href="foto/viz-genplan.jpg?v=3" target="_blank" rel="noopener"><img src="foto/viz-genplan.jpg?v=3" alt="Генплан згори" loading="lazy" style="width:100%;border-radius:18px;border:1px solid var(--stroke)"></a>
+          <a href="foto/viz-genplan.jpg?v=3" target="_blank" rel="noopener"><img src="foto/viz-genplan.jpg?v=3" alt="Генплан згори" width="1344" height="1800" loading="lazy" style="width:100%;height:auto;border-radius:18px;border:1px solid var(--stroke)"></a>
           <div><div class="kicker">Генплан згори</div><p style="margin:8px 0 0">Справжня форма коси зі супутникового знімка, звичайний літній вид з дрона. Унизу вхід, VIP-альтанки і волейбол; уздовж західного берега пляж з лежаками і 10 беседок; праворуч бар з терасою, кальянна і два будиночки з чанами в ліску; нагорі широкий піщаний мис з пірсом і гойдалкою. Схема з розмірами — у розділі 02.</p></div>
         </div>
       </div>
@@ -655,6 +655,10 @@ show('light');
     links.forEach((a, i) => a.classList.toggle('on', i === cur)); const on = links[cur]; if (on) { const box = bar.firstElementChild; box.scrollLeft = on.offsetLeft - box.clientWidth / 2 + on.offsetWidth / 2; } };
   addEventListener('scroll', onScroll, { passive: true }); onScroll();
   up.onclick = () => scrollTo({ top: 0, behavior: 'smooth' }); })();
+</script>
+<script>
+addEventListener('load', () => { if (location.hash.length > 1) { const t = document.querySelector(location.hash); if (t) t.scrollIntoView({ behavior: 'instant' }); } });
+document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', e => { const t = document.querySelector(a.getAttribute('href')); if (!t) return; e.preventDefault(); history.replaceState(null, '', a.getAttribute('href')); t.scrollIntoView({ behavior: 'smooth' }); setTimeout(() => t.scrollIntoView({ behavior: 'instant' }), 900); }));
 </script>
 </body>
 </html>
