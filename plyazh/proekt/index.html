@@ -828,7 +828,9 @@ show('light');
   up.onclick = () => scrollTo({ top: 0, behavior: 'smooth' }); })();
 </script>
 <script>
-addEventListener('load', () => { if (location.hash.length > 1) { const t = document.querySelector(location.hash); if (t) t.scrollIntoView({ behavior: 'instant' }); } });
+try { history.scrollRestoration = 'manual'; } catch (e) {}
+if (location.hash && location.hash !== '#ar') history.replaceState(null, '', location.pathname + location.search);
+if (location.hash !== '#ar') { scrollTo(0, 0); addEventListener('load', () => scrollTo(0, 0)); addEventListener('pageshow', e => { if (e.persisted) scrollTo(0, 0); }); }
 document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', e => { const t = document.querySelector(a.getAttribute('href')); if (!t) return; e.preventDefault(); history.replaceState(null, '', a.getAttribute('href')); t.scrollIntoView({ behavior: 'smooth' }); setTimeout(() => t.scrollIntoView({ behavior: 'instant' }), 900); }));
 </script>
 <script>
@@ -887,8 +889,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click
   ui.querySelector('.c-skip').onclick = () => { dispatchEvent(new Event('beachcine:skip')); finish(); };
   document.querySelector('.replay').onclick = () => play();
   addEventListener('keydown', e => { if (playing && e.key === 'Escape') ui.querySelector('.c-skip').click(); });
-  let seen = false; try { seen = sessionStorage.getItem('beachCine') === '1'; sessionStorage.setItem('beachCine', '1'); } catch (e) {}
-  if (!seen && !location.hash && !matchMedia('(prefers-reduced-motion: reduce)').matches) play();
+  if (location.hash !== '#ar') play();
 })();
 </script>
 <script>
@@ -936,7 +937,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click
   box.querySelector('.ar-x').addEventListener('click', close);
   box.addEventListener('click', e => { if (e.target === box) close(); });
   addEventListener('keydown', e => { if (!box.hidden && e.key === 'Escape') close(); });
-  if (location.hash === '#ar') { try { sessionStorage.setItem('beachCine', '1'); } catch (e) {} addEventListener('load', open); }
+  if (location.hash === '#ar') { addEventListener('load', open); }
 })();
 </script>
 <script>
