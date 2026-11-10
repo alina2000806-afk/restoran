@@ -164,7 +164,8 @@ body.noscroll{overflow:hidden}
 .story::before{content:"";position:absolute;left:8px;top:6px;bottom:6px;width:2px;background:linear-gradient(var(--accent-2),var(--accent),#6b4428)}
 .step{position:relative}
 .step::before{content:"";position:absolute;left:-24px;top:14px;width:14px;height:14px;border-radius:50%;background:var(--accent-2);box-shadow:0 0 0 4px var(--bg)}
-.step img{width:100%;aspect-ratio:16/10;object-fit:cover;display:block;border-radius:20px;border:1px solid var(--stroke)}
+.vizstyle{margin:18px 0 22px}.vizstyle #vizStyle{display:block;font-weight:600;margin-bottom:10px}
+.step img{transition:opacity .3s}.step img{width:100%;aspect-ratio:16/10;object-fit:cover;display:block;border-radius:20px;border:1px solid var(--stroke)}
 .step .cap{margin-top:10px}
 .step .tm{display:inline-block;font-family:var(--display);font-weight:800;font-size:12px;letter-spacing:.08em;padding:4px 10px;border-radius:99px;background:var(--glass-2);border:1px solid var(--stroke);color:var(--accent-2);margin-right:8px}
 .step b{font-family:var(--display);font-size:clamp(17px,4.4vw,22px);font-weight:800}
@@ -364,7 +365,7 @@ body.cine-on #model,body.cine-on main,body.cine-on .wrap{transform:none !importa
   </div>
 </div>
 <div class="daywidget" aria-hidden="true"><span class="sky">☀️</span><span><b class="dw-t">10:00</b><small class="dw-n">Вхід</small></span></div>
-<nav class="stick" aria-label="Розділи"><div class="in"><a href="#dilyanka">Ділянка</a><a href="#genplan">Генплан</a><a href="#obiekty">Об'єкти</a><a href="#styl">Стиль</a><a href="#model">3D</a><a href="#viz">День на пляжі</a><a href="#galereya">Галерея</a><a href="#bulo">Було / буде</a><button type="button" class="mute" aria-label="Звук кліків" title="Звук кліків">🔈</button><a class="call" href="tel:+380966958712">📞 Зв'язатися</a></div></nav>
+<nav class="stick" aria-label="Розділи"><div class="in"><a href="#dilyanka">Ділянка</a><a href="#genplan">Генплан</a><a href="#obiekty">Об'єкти</a><a href="#model">3D</a><a href="#styl">Стиль</a><a href="#viz">День на пляжі</a><a href="#galereya">Галерея</a><a href="#bulo">Було / буде</a><button type="button" class="mute" aria-label="Звук кліків" title="Звук кліків">🔈</button><a class="call" href="tel:+380966958712">📞 Зв'язатися</a></div></nav>
 <button type="button" class="totop" aria-label="Нагору">↑</button>
 <header class="top col">
     <div class="brand">Пляж Основа<small>Харків · річка Харків · концепція</small></div>
@@ -378,7 +379,7 @@ body.cine-on #model,body.cine-on main,body.cine-on .wrap{transform:none !importa
       <p>Концепція благоустрою ділянки від кафе «Червона мавпа» до точки «Пляж Основа». Генплан за вашим ескізом, перелік об'єктів, стиль, 3D-модель, яку можна обійти, і 32 фотореалістичні види всіх зон. Усе зібрано з анкети і фотофіксації 30 жовтня.</p>
       <div class="pills"><span class="pill">≈ <b class="cnt" data-to="200">200</b> м берега</span><span class="pill">вода з двох боків</span><span class="pill">до <b class="cnt" data-to="500">500</b> гостей</span><span class="pill">30–70 тис. $</span><span class="pill">цілий рік</span></div>
       <button type="button" class="replay">▶ Подивитись інтро · 25 с</button>
-      <nav class="toc"><a href="#dilyanka">Ділянка</a><a href="#genplan">Генплан</a><a href="#obiekty">Об'єкти</a><a href="#styl">Стиль</a><a href="#model">3D-прогулянка</a><a href="#viz">Візуалізації</a><a href="#galereya">Галерея</a><a href="#bulo">Було / буде</a></nav>
+      <nav class="toc"><a href="#dilyanka">Ділянка</a><a href="#genplan">Генплан</a><a href="#obiekty">Об'єкти</a><a href="#model">3D-прогулянка</a><a href="#styl">Стиль</a><a href="#viz">Візуалізації</a><a href="#galereya">Галерея</a><a href="#bulo">Було / буде</a></nav>
     </section>
 
     <!-- 1 -->
@@ -486,19 +487,9 @@ body.cine-on #model,body.cine-on main,body.cine-on .wrap{transform:none !importa
       </div>
     </section>
 
-    <!-- 4 -->
-    <section class="part" id="styl">
-      <div class="kicker">04 · Стиль</div>
-      <h2 id="styleTitle">Горіх і графіт: виглядає дорожче, ніж коштує</h2>
-      <p class="hint">Один стиль на всю територію, щоб місце читалось як єдине. Бюджет середній: прості матеріали, зібрані в один стиль, щоб виглядало охайно й дорожче, ніж коштує. Наша пропозиція позначена. Натисніть інший стиль: зміниться опис, палітра і 3D-модель нижче.</p>
-      <div class="chips" id="styleChips"><button type="button" class="chip on" data-style="light">Горіх і графіт (пропозиція)</button><button type="button" class="chip" data-style="dark">Темне дерево і метал</button><button type="button" class="chip" data-style="red">Червоні дахи</button><button type="button" class="chip" data-style="log">Світлий зруб</button><button type="button" class="chip" data-style="white">Білий середземноморський</button><button type="button" class="chip" data-style="boho">Бохо</button></div>
-      <div class="swatches" id="styleSw"></div>
-      <div class="grid2" id="styleCards"></div>
-    </section>
-
     <!-- 3d -->
     <section class="part" id="model">
-      <div class="kicker">05 · 3D-модель</div>
+      <div class="kicker">04 · 3D-модель</div>
       <h2>Пройдіться пляжем</h2>
       <p class="hint">Крутіть косу пальцем, наближайте, тисніть на назви зон. Повзунок часу показує, як падає тінь удень і як пляж світиться ввечері, «Літо / Осінь / Зима» — як він працює цілий рік, а «✈ Дрон» дає пролетіти над ним самому. «Прогулянка» ставить вас на доріжку на рівні очей: ідіть кнопками або W A S D, озирайтесь, тягнучи по екрану. «Авто» проведе від входу до мису саме.</p>
       <div id="m3d">
@@ -532,6 +523,16 @@ body.cine-on #model,body.cine-on main,body.cine-on .wrap{transform:none !importa
       </div>
     </section>
 
+    <!-- 4 -->
+    <section class="part" id="styl">
+      <div class="kicker">05 · Стиль</div>
+      <h2 id="styleTitle">Горіх і графіт: виглядає дорожче, ніж коштує</h2>
+      <p class="hint">Один стиль на всю територію, щоб місце читалось як єдине. Бюджет середній: прості матеріали, зібрані в один стиль, щоб виглядало охайно й дорожче, ніж коштує. Наша пропозиція позначена. Натисніть інший стиль: зміниться опис, палітра, 3D-модель вище і всі фото «Один день на пляжі» нижче.</p>
+      <div class="chips" id="styleChips"><button type="button" class="chip on" data-style="light">Горіх і графіт (пропозиція)</button><button type="button" class="chip" data-style="dark">Темне дерево і метал</button><button type="button" class="chip" data-style="red">Червоні дахи</button><button type="button" class="chip" data-style="log">Світлий зруб</button><button type="button" class="chip" data-style="white">Білий середземноморський</button><button type="button" class="chip" data-style="boho">Бохо</button></div>
+      <div class="swatches" id="styleSw"></div>
+      <div class="grid2" id="styleCards"></div>
+    </section>
+
     <!-- viz -->
     <section class="part" id="viz">
       <div class="kicker">06 · Візуалізації</div>
@@ -540,6 +541,7 @@ body.cine-on #model,body.cine-on main,body.cine-on .wrap{transform:none !importa
       <div class="palette">
         <span><i style="background:#6b4428"></i>Горіх</span><span><i style="background:#3a3d42"></i>Графіт</span><span><i style="background:#e9dcc3"></i>Пісок і полотно</span><span><i style="background:#ffffff"></i>Білі лежаки</span><span><i style="background:#111"></i>Чорні таблички</span><span><i style="background:#ffc46b"></i>Теплі гірлянди</span>
       </div>
+      <div class="vizstyle"><span id="vizStyle"></span><div class="chips" id="vizChips"></div></div>
       <div class="story">
         <article class="step">
           <a href="foto/story-01.jpg" target="_blank" rel="noopener"><img src="foto/story-01.jpg" alt="Вхід" loading="lazy"></a>
@@ -634,15 +636,8 @@ body.cine-on #model,body.cine-on main,body.cine-on .wrap{transform:none !importa
       <div class="kicker">08 · Було / буде</div>
       <h2>Той самий берег, до і після</h2>
       <p class="hint">Тягніть повзунок: ліворуч фото ділянки 30 жовтня, праворуч те саме місце з того самого ракурсу після благоустрою.</p>
-      <div class="scr" aria-label="Зітріть старе фото пальцем або мишкою">
-        <img class="scr-after" src="foto/story-11.jpg" alt="Буде: захід сонця на мисі" loading="lazy">
-        <canvas class="scr-cv"></canvas>
-        <span class="tg l scr-now">Зараз</span><span class="tg r scr-will">Буде</span>
-        <div class="scr-hint"><span class="hand">☝</span>Проведіть пальцем або мишкою — зітріть старий берег</div>
-        <button type="button" class="scr-again" hidden>↺ Ще раз</button>
-      </div>
-      <p class="hint" style="margin-top:10px">Мис біля «Парк Основа»: зараз і після благоустрою. Нижче — ще 7 пар з повзунком.</p>
       <div class="bagrid">
+        <figure><div class="ba"><img src="foto/before-mys.jpg" alt="Зараз: Мис на заході сонця" loading="lazy"><img class="after" src="foto/story-11.jpg" alt="Буде: Мис на заході сонця" loading="lazy"><span class="line"></span><span class="knob">⟷</span><span class="tg l">Зараз</span><span class="tg r">Буде</span></div><figcaption>Мис на заході сонця</figcaption></figure>
         <figure><div class="ba"><img src="foto/vhid.jpg" alt="Зараз: Вхід" loading="lazy"><img class="after" src="foto/story-01.jpg" alt="Буде: Вхід" loading="lazy"><span class="line"></span><span class="knob">⟷</span><span class="tg l">Зараз</span><span class="tg r">Буде</span></div><figcaption>Вхід</figcaption></figure>
         <figure><div class="ba"><img src="foto/before-vip.jpg" alt="Зараз: VIP-альтанки" loading="lazy"><img class="after" src="foto/story-05.jpg" alt="Буде: VIP-альтанки" loading="lazy"><span class="line"></span><span class="knob">⟷</span><span class="tg l">Зараз</span><span class="tg r">Буде</span></div><figcaption>VIP-альтанки</figcaption></figure>
         <figure><div class="ba"><img src="foto/before-voleybol.jpg" alt="Зараз: Волейбол і діти" loading="lazy"><img class="after" src="foto/story-06.jpg" alt="Буде: Волейбол і діти" loading="lazy"><span class="line"></span><span class="knob">⟷</span><span class="tg l">Зараз</span><span class="tg r">Буде</span></div><figcaption>Волейбол і діти</figcaption></figure>
@@ -772,6 +767,7 @@ document.querySelectorAll(".ba").forEach(el=>{
   el.addEventListener("pointerup",()=>on=false);el.addEventListener("pointercancel",()=>on=false);
 });
 </script>
+<script>window.STYLE_READY=[];</script>
 <script>
 (function(){
 var S={
@@ -783,11 +779,15 @@ var S={
  boho:{sw:['#d9b98e','#b5855a','#f2e6d0','#7a5a3a','#c97b50'],m:'Ротанг, бамбук, плетені абажури, світле дерево, багато текстур.',t:'Макраме, бахрома, подушки з орнаментом, килимки на піску.',l:'Плетені абажури, гірлянди-кульки, свічки в ліхтарях.',f:'Пампасна трава, кашпо з макраме, канати.'}
 };
 var chips=document.querySelectorAll('#styleChips .chip'),sw=document.getElementById('styleSw'),cards=document.getElementById('styleCards');
-function show(k){var d=S[k];chips.forEach(function(c){c.classList.toggle('on',c.dataset.style===k);if(c.dataset.style===k)document.getElementById('styleTitle').textContent=k==='light'?'Горіх і графіт: виглядає дорожче, ніж коштує':c.textContent;});
+function show(k){var d=S[k];document.querySelectorAll('#styleChips .chip,#vizChips .chip').forEach(function(c){c.classList.toggle('on',c.dataset.style===k);}); var pal=document.querySelector('#viz .palette');if(pal)pal.style.display=k==='light'?'':'none';
+ chips.forEach(function(c){if(c.dataset.style===k)document.getElementById('styleTitle').textContent=k==='light'?'Горіх і графіт: виглядає дорожче, ніж коштує':c.textContent;});
  sw.innerHTML=d.sw.map(function(c){return '<i style="background:'+c+'"></i>'}).join('');
  cards.innerHTML=[['Матеріали',d.m],['Тканини',d.t],['Вечірнє світло',d.l],['Огорожа',d.f]].map(function(x){return '<div class="card"><b>'+x[0]+'</b><p>'+x[1]+'</p></div>'}).join('');
- window.dispatchEvent(new CustomEvent('beachstyle',{detail:{style:k,sw:d.sw}}));}
+ window.dispatchEvent(new CustomEvent('beachstyle',{detail:{style:k,sw:d.sw}}));
+ var READY=window.STYLE_READY||[];document.querySelectorAll('#viz .step').forEach(function(st){var im=st.querySelector('img'),a=st.querySelector('a');if(!im)return;var n=im.dataset.n||(im.dataset.n=(im.getAttribute('src').match(/story-(\d+)/)||[])[1]);if(!n)return;var src=(k==='light'||READY.indexOf(k)<0)?'foto/story-'+n+'.jpg':'foto/'+k+'/story-'+n+'.jpg';if(im.getAttribute('src')!==src){im.style.opacity=.35;im.onload=function(){im.style.opacity=1};im.setAttribute('src',src);if(a)a.setAttribute('href',src);}});
+ var lab=document.getElementById('vizStyle');if(lab){var nm=document.querySelector('#styleChips .chip[data-style="'+k+'"]');lab.textContent='Стиль: '+(nm?nm.textContent:'')+((k!=='light'&&READY.indexOf(k)<0)?' · фото в цьому стилі готуються':'');}}
 chips.forEach(function(c){c.addEventListener('click',function(){show(c.dataset.style)})});
+var vc=document.getElementById('vizChips');if(vc){chips.forEach(function(c){var b=c.cloneNode(true);b.addEventListener('click',function(){show(c.dataset.style)});vc.appendChild(b)});}
 show('light');
 })();
 </script>
@@ -941,28 +941,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click
 })();
 </script>
 <script>
-// ===== scratch the old shore away =====
-(() => {
-  const box = document.querySelector('.scr'); if (!box) return;
-  const cv = box.querySelector('.scr-cv'), g = cv.getContext('2d', { willReadFrequently: true }), hint = box.querySelector('.scr-hint'), again = box.querySelector('.scr-again'), now = box.querySelector('.scr-now'), will = box.querySelector('.scr-will');
-  const before = new Image(); before.src = 'foto/before-mys.jpg';
-  let W = 0, H = 0, down = false, last = null, moves = 0, done = false;
-  function paint() { const r = box.getBoundingClientRect(), dpr = Math.min(2, devicePixelRatio || 1); W = cv.width = Math.round(r.width * dpr); H = cv.height = Math.round(r.height * dpr);
-    g.globalCompositeOperation = 'source-over'; const s = Math.max(W / before.naturalWidth, H / before.naturalHeight), w = before.naturalWidth * s, h = before.naturalHeight * s; g.drawImage(before, (W - w) / 2, (H - h) / 2, w, h);
-    cv.style.opacity = 1; done = false; again.hidden = true; hint.style.opacity = 1; now.style.opacity = 1; will.style.opacity = 0; }
-  before.onload = paint; new ResizeObserver(() => { if (before.complete && !done && moves === 0) paint(); }).observe(box);
-  const pos = e => { const r = cv.getBoundingClientRect(); return [(e.clientX - r.left) / r.width * W, (e.clientY - r.top) / r.height * H]; };
-  function erase(x, y) { const R = W * 0.075; g.globalCompositeOperation = 'destination-out'; const gr = g.createRadialGradient(x, y, 0, x, y, R); gr.addColorStop(0, 'rgba(0,0,0,1)'); gr.addColorStop(.6, 'rgba(0,0,0,.85)'); gr.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = gr; g.beginPath(); g.arc(x, y, R, 0, 7); g.fill(); }
-  function stroke(e) { const [x, y] = pos(e); if (last) { const d = Math.hypot(x - last[0], y - last[1]), n = Math.ceil(d / (W * 0.02)); for (let i = 1; i <= n; i++) erase(last[0] + (x - last[0]) * i / n, last[1] + (y - last[1]) * i / n); } else erase(x, y); last = [x, y];
-    if (++moves % 12 === 0) check(); hint.style.opacity = 0; }
-  function check() { const d = g.getImageData(0, 0, W, H).data; let clear = 0, n = 0; for (let i = 3; i < d.length; i += 4 * 97) { n++; if (d[i] < 40) clear++; } const k = clear / n; now.style.opacity = Math.max(0, 1 - k * 2); will.style.opacity = Math.min(1, k * 2);
-    if (k > 0.55 && !done) { done = true; cv.style.opacity = 0; setTimeout(() => again.hidden = false, 900); } }
-  cv.addEventListener('pointerdown', e => { if (done) return; down = true; last = null; stroke(e); });
-  cv.addEventListener('pointermove', e => { if (done) return; if (down || e.pointerType === 'mouse') stroke(e); });
-  addEventListener('pointerup', () => { down = false; last = null; });
-  cv.addEventListener('pointerleave', () => { last = null; });
-  again.addEventListener('click', () => { moves = 0; paint(); });
-})();
+
 </script>
 <script>
 // ===== intro controls: pause, season, time =====
