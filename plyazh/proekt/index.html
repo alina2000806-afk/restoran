@@ -377,7 +377,7 @@ body.cine-on #model,body.cine-on main,body.cine-on .wrap{transform:none !importa
       <h1>Пляж, який <span>хочеться показувати</span></h1>
       <p>Концепція благоустрою ділянки від кафе «Червона мавпа» до точки «Пляж Основа». Генплан за вашим ескізом, перелік об'єктів, стиль, 3D-модель, яку можна обійти, і 32 фотореалістичні види всіх зон. Усе зібрано з анкети і фотофіксації 30 жовтня.</p>
       <div class="pills"><span class="pill">≈ <b class="cnt" data-to="200">200</b> м берега</span><span class="pill">вода з двох боків</span><span class="pill">до <b class="cnt" data-to="500">500</b> гостей</span><span class="pill">30–70 тис. $</span><span class="pill">цілий рік</span></div>
-      <button type="button" class="replay">▶ Подивитись інтро · 10 с</button>
+      <button type="button" class="replay">▶ Подивитись інтро · 25 с</button>
       <nav class="toc"><a href="#dilyanka">Ділянка</a><a href="#genplan">Генплан</a><a href="#obiekty">Об'єкти</a><a href="#styl">Стиль</a><a href="#model">3D-прогулянка</a><a href="#viz">Візуалізації</a><a href="#galereya">Галерея</a><a href="#bulo">Було / буде</a></nav>
     </section>
 
@@ -762,7 +762,7 @@ try{
 const onScroll=()=>{const max=document.documentElement.scrollHeight-innerHeight;setProgress(max>0?scrollY/max:0)};
 addEventListener("scroll",onScroll,{passive:true});onScroll();
 </script>
-<script type="module" src="model3d.js?v=1794250000"></script>
+<script type="module" src="model3d.js?v=1794347621"></script>
 <script>
 document.querySelectorAll(".ba").forEach(el=>{
   const set=x=>{const r=el.getBoundingClientRect();el.style.setProperty("--pos",Math.max(0,Math.min(100,(x-r.left)/r.width*100))+"%")};
@@ -881,7 +881,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click
   function finish() { if (!playing) return; playing = false; clearTimeout(endT); ui.classList.add('out'); setTimeout(() => { host.classList.remove('cine'); document.body.classList.remove('cine-on'); ui.hidden = true; ui.className = 'cine-ui'; dispatchEvent(new Event('resize')); }, 800); }
   function play() {
     if (playing) return; playing = true; scrollTo(0, 0); ui.hidden = false; ui.className = 'cine-ui'; document.body.classList.add('cine-on'); host.classList.add('cine'); dispatchEvent(new Event('resize'));
-    const go = () => { if (!ready) return setTimeout(go, 150); setTimeout(() => { ui.classList.add('open'); dispatchEvent(new CustomEvent('beachcine', { detail: { dur: 11 } })); setTimeout(() => ui.classList.add('title'), 3600); }, 250); };
+    const go = () => { if (!ready) return setTimeout(go, 150); setTimeout(() => { ui.classList.add('open'); dispatchEvent(new CustomEvent('beachcine', { detail: { dur: 26 } })); setTimeout(() => ui.classList.add('title'), 3600); }, 250); };
     go(); endT = setTimeout(() => { if (!document.querySelector('.c-pause.on')) dispatchEvent(new Event('beachcine:skip')); }, 90000);
   }
   addEventListener('beachcine:progress', e => { ui.querySelector('.prog').style.width = (e.detail * 100) + '%'; });

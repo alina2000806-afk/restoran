@@ -606,18 +606,23 @@ document.addEventListener("fullscreenchange", () => { if (!document.fullscreenEl
 // ---------- cinematic intro: camera flies along the spit, the beach "grows" south → north, night turns into morning ----------
 const buildables = scene.children.filter(o => o !== water && !o.isLight && !o.isPoints && !(o.geometry && (o.geometry.type === "ExtrudeGeometry" || (o.geometry.type === "SphereGeometry" && o.geometry.parameters.radius > 500))) && Math.abs(o.position.x) < 45 && o.position.z > -135 && o.position.z < 125);
 buildables.forEach(o => o.userData.s0 = o.scale.clone());
-const camPath = new THREE.CatmullRomCurve3([[-30, 170, 330], [-75, 60, 170], [-58, 28, 60], [-52, 24, -20], [-40, 34, -95], [-110, 90, 40], [-150, 120, 150]].map(p => new THREE.Vector3(...p)));
-const tgtPath = new THREE.CatmullRomCurve3([[0, 0, 60], [0, 2, 90], [0, 2, 30], [0, 2, -30], [4, 2, -100], [0, 0, -10], [0, 0, 0]].map(p => new THREE.Vector3(...p)));
+const cinePts = (() => { const V = (x, y, z) => new THREE.Vector3(x, y, z), cam = [], tgt = [], RX = 118, RZ = 178, S = V(0, 56, RZ), A = V(-30, 170, 330), E = V(-150, 120, 150);
+  for (let i = 0; i < 4; i++) { const k = i / 4; cam.push(A.clone().lerp(S, k)); tgt.push(V(0, 0, 60).lerp(V(0, 2, 0), k)); }
+  const N = 20; for (let i = 0; i <= N; i++) { const th = -2 * Math.PI * i / N; cam.push(V(RX * Math.sin(th), 56 - 10 * Math.sin(Math.PI * i / N), RZ * Math.cos(th))); tgt.push(V(0, 2, 0)); }
+  for (let i = 1; i <= 3; i++) { const k = i / 3; cam.push(S.clone().lerp(E, k)); tgt.push(V(0, 2, 0).lerp(V(0, 0, 0), k)); }
+  return { cam, tgt }; })();
+const camPath = new THREE.CatmullRomCurve3(cinePts.cam);
+const tgtPath = new THREE.CatmullRomCurve3(cinePts.tgt);
 let cine = null;
-const easeIO = k => k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+const easeIO = k => 0.55 * k + 0.45 * (0.5 - 0.5 * Math.cos(Math.PI * k));
 const backOut = k => { const c = 1.6; return 1 + (c + 1) * Math.pow(k - 1, 3) + c * Math.pow(k - 1, 2); };
 function cineFrame(t) {
   const dtc = t - (cine.last ?? t); cine.last = t; if (!cine.paused) cine.el += dtc;
   const u = Math.min(1, cine.el / cine.dur), e = easeIO(u);
   camera.position.copy(camPath.getPoint(e)); const tg = tgtPath.getPoint(e); controls.target.copy(tg); camera.lookAt(tg);
-  const front = 125 - 290 * Math.min(1, u / 0.72);
+  const front = 125 - 290 * Math.min(1, u / 0.2);
   buildables.forEach(o => { const k = Math.max(0, Math.min(1, (o.position.z - front) / 22)); const s = k <= 0 ? 0.0001 : backOut(k); o.scale.set(o.userData.s0.x * s, o.userData.s0.y * s, o.userData.s0.z * s); o.visible = k > 0 && !(season !== "summer" && summerSet.has(o)); });
-  if (!cine.userTime) night = nightTarget = Math.max(0, 0.9 - u * 1.6);
+  if (!cine.userTime) night = nightTarget = Math.max(0, 0.9 - u * 4.5);
   dispatchEvent(new CustomEvent("beachcine:progress", { detail: u }));
   if (u >= 1) endCine();
 }
@@ -627,7 +632,7 @@ function endCine() {
   if (season !== "summer") setSeason(season);
   dispatchEvent(new Event("beachcine:end"));
 }
-addEventListener("beachcine", e => { setMode("orbit"); card.hidden = true; flight = null; controls.autoRotate = false; cine = { el: 0, last: null, paused: false, userTime: false, dur: (e.detail && e.detail.dur) || 11 }; buildables.forEach(o => { o.scale.setScalar(0.0001); o.visible = false; }); });
+addEventListener("beachcine", e => { setMode("orbit"); card.hidden = true; flight = null; controls.autoRotate = false; cine = { el: 0, last: null, paused: false, userTime: false, dur: (e.detail && e.detail.dur) || 26 }; buildables.forEach(o => { o.scale.setScalar(0.0001); o.visible = false; }); });
 addEventListener("beachcine:skip", endCine);
 addEventListener("beachcine:pause", e => { if (cine) cine.paused = e.detail; });
 addEventListener("beachseason", e => setSeason(e.detail));
