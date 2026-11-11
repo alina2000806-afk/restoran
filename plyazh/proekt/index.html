@@ -335,7 +335,7 @@ body.cine-on #model,body.cine-on main,body.cine-on .wrap{transform:none !importa
 .cine-ui.title .ttl{bottom:calc(15vh + 50px)}
 .cine-ui .ttl{transition:opacity .5s}
 .cine-ui.paused .ttl{opacity:0}
-@media (max-width:760px){.cine-ui .cine-tools{max-width:calc(100% - 24px);bottom:calc(9vh + 64px)}.cine-ui .c-time{width:100%}.cine-ui .ttl{bottom:calc(15vh + 150px)}.cine-ui.title .ttl{bottom:calc(15vh + 150px)}}
+@media (max-width:760px){.cine-ui .cine-tools{max-width:calc(100% - 24px);bottom:calc(9vh + 64px)}.cine-ui .c-time{width:100%}.cine-ui .ttl,.cine-ui.title .ttl{top:calc(9vh + 28px);bottom:auto}}
 </style>
 </head>
 <body>
@@ -644,7 +644,6 @@ body.cine-on #model,body.cine-on main,body.cine-on .wrap{transform:none !importa
         <figure><div class="ba"><img src="foto/before-bar.jpg" alt="Зараз: Бар і кальянна" loading="lazy"><img class="after" src="foto/story-07.jpg" alt="Буде: Бар і кальянна" loading="lazy"><span class="line"></span><span class="knob">⟷</span><span class="tg l">Зараз</span><span class="tg r">Буде</span></div><figcaption>Бар і кальянна</figcaption></figure>
         <figure><div class="ba"><img src="foto/before-domyky.jpg" alt="Зараз: Будиночок з чаном" loading="lazy"><img class="after" src="foto/story-09.jpg" alt="Буде: Будиночок з чаном" loading="lazy"><span class="line"></span><span class="knob">⟷</span><span class="tg l">Зараз</span><span class="tg r">Буде</span></div><figcaption>Будиночок з чаном</figcaption></figure>
         <figure><div class="ba"><img src="foto/mys.jpg" alt="Зараз: Сапи і пірс" loading="lazy"><img class="after" src="foto/story-10.jpg" alt="Буде: Сапи і пірс" loading="lazy"><span class="line"></span><span class="knob">⟷</span><span class="tg l">Зараз</span><span class="tg r">Буде</span></div><figcaption>Сапи і пірс</figcaption></figure>
-        <figure><div class="ba"><img src="foto/before-mys.jpg" alt="Зараз: Захід на мисі" loading="lazy"><img class="after" src="foto/story-11.jpg" alt="Буде: Захід на мисі" loading="lazy"><span class="line"></span><span class="knob">⟷</span><span class="tg l">Зараз</span><span class="tg r">Буде</span></div><figcaption>Захід на мисі</figcaption></figure>
       </div>
     </section>
 
@@ -767,7 +766,7 @@ document.querySelectorAll(".ba").forEach(el=>{
   el.addEventListener("pointerup",()=>on=false);el.addEventListener("pointercancel",()=>on=false);
 });
 </script>
-<script>window.STYLE_READY=['dark','red'];</script>
+<script>window.STYLE_HAS={dark:['story'],red:['story']};</script>
 <script>
 (function(){
 var S={
@@ -784,8 +783,9 @@ function show(k){var d=S[k];document.querySelectorAll('#styleChips .chip,#vizChi
  sw.innerHTML=d.sw.map(function(c){return '<i style="background:'+c+'"></i>'}).join('');
  cards.innerHTML=[['Матеріали',d.m],['Тканини',d.t],['Вечірнє світло',d.l],['Огорожа',d.f]].map(function(x){return '<div class="card"><b>'+x[0]+'</b><p>'+x[1]+'</p></div>'}).join('');
  window.dispatchEvent(new CustomEvent('beachstyle',{detail:{style:k,sw:d.sw}}));
- var READY=window.STYLE_READY||[];document.querySelectorAll('#viz .step').forEach(function(st){var im=st.querySelector('img'),a=st.querySelector('a');if(!im)return;var n=im.dataset.n||(im.dataset.n=(im.getAttribute('src').match(/story-(\d+)/)||[])[1]);if(!n)return;var src=(k==='light'||READY.indexOf(k)<0)?'foto/story-'+n+'.jpg':'foto/'+k+'/story-'+n+'.jpg';if(im.getAttribute('src')!==src){im.style.opacity=.35;im.onload=function(){im.style.opacity=1};im.setAttribute('src',src);if(a)a.setAttribute('href',src);}});
- var lab=document.getElementById('vizStyle');if(lab){var nm=document.querySelector('#styleChips .chip[data-style="'+k+'"]');lab.textContent='Стиль: '+(nm?nm.textContent:'')+((k!=='light'&&READY.indexOf(k)<0)?' · фото в цьому стилі готуються':'');}}
+ var HAS=window.STYLE_HAS||{};function has(k,nm){var l=HAS[k]||[];return l.indexOf(nm)>=0||l.indexOf(nm.split('-')[0])>=0;}
+ var tot=0,ok=0;document.querySelectorAll('#viz .step img, .bagrid img.after, .gal figure img').forEach(function(im){var nm=im.dataset.nm||(im.dataset.nm=((im.getAttribute('src')||'').match(/((?:story|gal)-\d+)\.jpg/)||[])[1]||'');if(!nm)return;tot++;var on=k!=='light'&&has(k,nm);if(on)ok++;var src=on?'foto/'+k+'/'+nm+'.jpg':'foto/'+nm+'.jpg';if(im.getAttribute('src')!==src){im.style.opacity=.35;im.onload=function(){im.style.opacity=1};im.setAttribute('src',src);var a=im.closest('a');if(a)a.setAttribute('href',src);}});
+ var lab=document.getElementById('vizStyle');if(lab){var nm=document.querySelector('#styleChips .chip[data-style="'+k+'"]');lab.textContent='Стиль: '+(nm?nm.textContent:'')+((k!=='light'&&ok<tot)?' · фото в цьому стилі готуються ('+ok+' з '+tot+')':'');}}
 chips.forEach(function(c){c.addEventListener('click',function(){show(c.dataset.style)})});
 var vc=document.getElementById('vizChips');if(vc){chips.forEach(function(c){var b=c.cloneNode(true);b.addEventListener('click',function(){show(c.dataset.style)});vc.appendChild(b)});}
 show('light');
