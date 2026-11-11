@@ -121,6 +121,7 @@ add(scene, box(0.25, 0.25, 196), M.wood, 2.95, top + 0.12, 6, false);
 // grass strips along the east tree line
 [[9, -70, 12, 40], [10, 40, 14, 90]].forEach(([x, z, w, d]) => add(scene, box(w, 0.08, d), M.grass, x, top + 0.04, z, false));
 
+
 // ---------- trees ----------
 const trees = [];
 const poplarGeo = new THREE.SphereGeometry(1, 7, 6); poplarGeo.scale(1.3, 5.2, 1.3);
@@ -492,16 +493,54 @@ function applyMood(t) {
 }
 applyMood(0);
 
+// ---------- mainland: the spit is not an island — it joins the shore park, a driveway leads to вул. Силікатна (Google Maps) ----------
+{
+  const shore = [[-420, 430], [-420, 150], [-170, 140], [-80, 128], [-34, 112], [-20, 98], [19, 98], [32, 110], [70, 124], [160, 132], [420, 140], [420, 430]];
+  const mk = (grow, depth, mat, y) => { const g = new THREE.ExtrudeGeometry(mkShape(shore, 0), { depth, bevelEnabled: true, bevelThickness: 0.6, bevelSize: 1.2 + grow, bevelSegments: 3, curveSegments: 12 }); g.rotateX(-Math.PI / 2); const m = new THREE.Mesh(g, mat); m.position.y = y; m.receiveShadow = true; scene.add(m); return m; };
+  mk(2.5, 0.6, M.wetSand, -1.0); mk(0, 0.9, M.sand, -0.7);
+  // park lawn behind the shore sand
+  const lawn = [[-410, 425], [-410, 165], [-160, 156], [-70, 142], [-26, 128], [26, 128], [70, 140], [160, 148], [410, 156], [410, 425]];
+  { const g = new THREE.ShapeGeometry(mkShape(lawn)); g.rotateX(-Math.PI / 2); const m = new THREE.Mesh(g, M.grass); m.position.y = top + 0.03; m.receiveShadow = true; m.userData.fixed = true; scene.add(m); }
+  const asphalt = new THREE.MeshStandardMaterial({ color: 0x4a4e54, roughness: 0.9 }), mark = new THREE.MeshStandardMaterial({ color: 0xf2f2ee, roughness: 0.8 });
+  // driveway from the entrance to the street
+  add(scene, box(6.5, 0.1, 128), asphalt, 1, top + 0.07, 176, false);
+  for (let z = 118; z < 236; z += 8) add(scene, box(0.18, 0.02, 4), mark, 1, top + 0.13, z, false);
+  // parking by the entrance (both sides of the driveway)
+  add(scene, box(22, 0.08, 30), asphalt, -14, top + 0.06, 150, false); add(scene, box(22, 0.08, 30), asphalt, 16, top + 0.06, 150, false);
+  for (let z = 137; z <= 163; z += 2.8) { add(scene, box(9, 0.02, 0.15), mark, -19, top + 0.11, z, false); add(scene, box(9, 0.02, 0.15), mark, 21, top + 0.11, z, false); }
+  const carCols = [0xd8dde2, 0x2b2f36, 0x9b1c1c, 0x2d4f7c, 0xbfc5ca, 0x51565c, 0xe9e6dc];
+  const car = (x, z, ry, c) => { const g = new THREE.Group(); const body = new THREE.MeshStandardMaterial({ color: c, roughness: 0.45, metalness: 0.3 }); add(g, box(1.8, 0.75, 4.3), body, 0, 0.65, 0); add(g, box(1.6, 0.6, 2.3), body, 0, 1.3, -0.2); add(g, box(1.62, 0.45, 2.0), new THREE.MeshStandardMaterial({ color: 0x1b2430, roughness: 0.2, metalness: 0.6 }), 0, 1.32, -0.2, false); g.position.set(x, top, z); g.rotation.y = ry; scene.add(g); return g; };
+  let ci = 0; for (let z = 138.4; z < 162; z += 2.8) { if ((z * 7) % 3 < 1.6) car(-19, z, Math.PI / 2, carCols[ci++ % 7]); if ((z * 5) % 3 < 1.8) car(21, z, -Math.PI / 2, carCols[ci++ % 7]); }
+  // вул. Силікатна: two-lane street with a centre line and pavements
+  add(scene, box(840, 0.1, 13), asphalt, 0, top + 0.07, 246, false);
+  for (let x = -410; x < 410; x += 9) add(scene, box(4.5, 0.02, 0.2), mark, x, top + 0.13, 246, false);
+  add(scene, box(840, 0.2, 3), M.path, 0, top + 0.1, 238, false); add(scene, box(840, 0.2, 3), M.path, 0, top + 0.1, 254, false);
+  // street trees and low city blocks beyond the street
+  for (let x = -400; x <= 400; x += 22) { if (Math.abs(x - 1) > 8) tree(x + (x % 7), 233, "round", 0.9); }
+  const blockMat = [0xc9c3b8, 0xb9c0c7, 0xd6cfc2, 0xa9b0b6].map(c => new THREE.MeshStandardMaterial({ color: c, roughness: 0.9 }));
+  [[-300, 300, 70, 9, 34], [-190, 296, 50, 15, 28], [-95, 300, 40, 6, 30], [90, 298, 60, 8, 32], [190, 302, 80, 12, 40], [310, 300, 60, 18, 30], [-220, 360, 90, 7, 40], [230, 370, 110, 10, 50]].forEach(([x, z, w, h, d], i) => add(scene, box(w, h, d), blockMat[i % 4], x, top + h / 2, z));
+  // shore park: trees along the bay, a few benches' worth of greenery
+  [[-60, 160], [-90, 170], [-130, 168], [-45, 190], [-110, 205], [60, 165], [95, 172], [140, 175], [50, 195], [120, 210], [-30, 215], [35, 220]].forEach(([x, z], i) => tree(x, z, i % 3 ? "round" : "poplar", 1));
+  // moving cars on the street
+  const mover = [car(-300, 243, Math.PI / 2, 0xe9e6dc), car(120, 249, -Math.PI / 2, 0x2d4f7c), car(-60, 243, Math.PI / 2, 0x9b1c1c)];
+  mover[0].userData.v = 11; mover[1].userData.v = -9; mover[2].userData.v = 13;
+  window.__beachCars = mover;
+  // street sign at the turn
+  { const c = document.createElement("canvas"); c.width = 512; c.height = 128; const x = c.getContext("2d"); x.fillStyle = "#1f5f8b"; x.fillRect(0, 0, 512, 128); x.strokeStyle = "#fff"; x.lineWidth = 6; x.strokeRect(8, 8, 496, 112); x.fillStyle = "#fff"; x.font = "bold 46px sans-serif"; x.textAlign = "center"; x.textBaseline = "middle"; x.fillText("вул. Силікатна", 256, 66);
+    const sg = add(scene, new THREE.PlaneGeometry(6, 1.5), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(c), side: THREE.DoubleSide }), 8, top + 4, 236, false); add(scene, new THREE.CylinderGeometry(0.08, 0.08, 4, 6), M.wood, 8, top + 2, 236.1); }
+}
+
 // ---------- labels, cards & fly-to ----------
 const ZONES = [
-  { id: "vhid", name: "Вхід", p: [1, 6, 100], cam: [30, 26, 140], img: "foto/story-01.jpg", txt: "Арка, рецепція, 6 кабінок, 4 душі, 2 туалети. Кадки з травами замість паркана.", specs: [["Де", "з боку дороги, південь коси"], ["Рецепція", "кіоск 3×2,5 м, графітовий дах"], ["Кабінки", "6 шт., 1,2×1,2 м, висота 2,2 м"], ["Душ", "4 шт. на дерев'яному настилі"], ["Туалети", "2 біотуалети"], ["Огорожа", "умовна: кадки зі злаками, канати"], ["Вхід", "безкоштовний"]] },
+  { id: "road", name: "Заїзд і парковка", p: [1, 5, 165], cam: [70, 60, 260], img: "foto/suputnyk.jpg", txt: "Коса не острів: з берега до входу веде асфальтований заїзд від вул. Силікатна через прибережний парк, біля входу парковка.", specs: [["Звідки", "вул. Силікатна (Основ'янське озеро)"], ["Заїзд", "асфальт, 2 смуги, ~130 м до входу"], ["Парковка", "≈ 20 авто обабіч заїзду"], ["Пішки", "від зупинки на вул. Силікатна, 2–3 хв"]] },
+  { id: "vhid", name: "Вхід", p: [1, 6, 100], cam: [30, 26, 140], img: "foto/story-01.jpg", txt: "Арка, рецепція, 6 кабінок, 4 душі, 2 туалети. Кадки з травами замість паркана.", specs: [["Де", "біля заїзду з вул. Силікатна"], ["Заїзд", "асфальт від вул. Силікатна через прибережний парк, парковка біля входу"], ["Рецепція", "кіоск 3×2,5 м, графітовий дах"], ["Кабінки", "6 шт., 1,2×1,2 м, висота 2,2 м"], ["Душ", "4 шт. на дерев'яному настилі"], ["Туалети", "2 біотуалети"], ["Огорожа", "умовна: кадки зі злаками, канати"], ["Вхід", "безкоштовний"]] },
   { id: "vip", name: "VIP-альтанки", p: [-12, 5, 65], cam: [-48, 22, 92], img: "foto/story-05.jpg", txt: "4 альтанки зі шторами з льону, м'які дивани, гірлянди. Поруч кальянна.", specs: [["Кількість", "4 альтанки"], ["Де", "західний край пляжу біля входу, на піску біля води"], ["Розмір", "орієнтовно 3×3 м, висота 2,7 м"], ["Каркас", "брус під горіх, верх — бежеве полотно"], ["Штори", "льон з трьох боків, на вечір закриваються"], ["Всередині", "м'які лави-дивани, низький столик, гірлянда"], ["Місткість", "орієнтовно 4–6 людей"], ["Поруч", "кальянна — кальян приносять в альтанку"]] },
   { id: "volley", name: "Волейбол і діти", p: [11, 4, 45], cam: [40, 20, 72], img: "foto/story-06.jpg", txt: "Майданчик на існуючих стовпах, лавки для глядачів, дитячий куточок під тентом.", specs: [["Майданчик", "16×8 м, пісок"], ["Сітка", "2,43 м, на існуючих жовтих стовпах"], ["Глядачі", "дерев'яні лавки по краю"], ["Дитяча зона", "куточок під тентом у тіні дерев"]] },
   { id: "bar", name: "Бар", p: [10.5, 6, 11], cam: [42, 18, 30], img: "foto/story-07.jpg", txt: "Бар з навісом, кухня і гриль, поруч кіоск кальянної (є «кальян на винос»), тераса з простими дерев\u0027яними столами.", specs: [["Павільйон", "орієнтовно 9×4 м, висота 3,3 м"], ["Матеріали", "брус під горіх, графітовий профнастил, стійка з темної дошки"], ["Стійка", "висота 1,1 м, барні стільці"], ["Їжа", "кухня, гриль, снеки, місце для фудтраків"], ["Напої", "бар з алкоголем"], ["Кальянна", "окремий кіоск 2,5×2 м «HOOKAH» поруч: кальяни розносять по всій території"], ["Тиша", "після 22:00"]] },
   { id: "cabins", name: "Будиночки з чанами", p: [11, 7, -27], cam: [50, 22, -10], img: "foto/story-09.jpg", txt: "Два будиночки на палях у ліску, на терасі в кожного свій чан.", specs: [["Кількість", "2 будиночки в ліску"], ["Розмір", "8×5 м, висота 4,5 м"], ["Основа", "на палях 0,8 м"], ["Фасад", "світле дерево, графітові акценти, панорамні вікна, двері 2,1 м"], ["Тераса", "зі сходами, вихід до тихої води"], ["Чан", "дерев'яний, Ø 2 м, на дровах"], ["Сезон", "ночівля цілий рік"]] },
   { id: "beach", name: "Пляж", p: [-11, 4, -5], cam: [-55, 26, 20], img: "foto/story-03.jpg", txt: "Білі пластикові лежаки, парасолі, 10 беседок 6×4 м під профнастилом, настили до води.", specs: [["Беседки", "10 шт. уздовж пляжу"], ["Розмір беседки", "6×4 м, висота 3,5 м"], ["Каркас", "брус 15×15 см під горіх, діагональні розкоси"], ["Борти", "0,9 м з горизонтальної дошки, поручень з трьох боків, фронт відкритий"], ["Дах", "двосхилий, матовий графітовий профнастил"], ["Всередині", "довгий стіл і лави на 8–10 людей, гірлянда"], ["Лежаки", "білі пластикові, платні; бежеві парасолі"], ["Пісок", "природний"]] },
   { id: "sup", name: "Сапи і пірс", p: [-21, 3, -62], cam: [-60, 20, -40], img: "foto/story-10.jpg", txt: "Прокат сапів і каяків, дерев'яний пірс.", specs: [["Пірс", "дерев'яний понтон на палях"], ["Прокат", "сапи, каяки, човни/катамарани"], ["Купання", "так, очерет частково вичищено"]] },
-  { id: "mys", name: "Мис", p: [4, 7, -108], cam: [-40, 34, -150], img: "foto/story-11.jpg", txt: "Гойдалка над водою, лежаки, понтон із катамаранами.", specs: [["Де", "північний мис біля «Парк Основа»"], ["Фотозони", "2: гойдалка над водою і рамка на заході сонця"], ["Відпочинок", "білі пластикові лежаки, гірлянди, ліхтарі на піску"], ["Найкраще", "захід сонця над великою водою"]] },
+  { id: "mys", name: "Мис", p: [4, 7, -108], cam: [-40, 34, -150], img: "foto/story-11.jpg", txt: "Гойдалка над водою, лежаки, понтон із катамаранами.", specs: [["Де", "мис біля «Парк Основа»"], ["Фотозони", "2: гойдалка над водою і рамка на заході сонця"], ["Відпочинок", "білі пластикові лежаки, гірлянди, ліхтарі на піску"], ["Найкраще", "захід сонця над великою водою"]] },
 ];
 const card = host.querySelector(".m3d-card");
 function showCard(z) {
@@ -604,7 +643,7 @@ document.addEventListener("fullscreenchange", () => { if (!document.fullscreenEl
 
 
 // ---------- cinematic intro: camera flies along the spit, the beach "grows" south → north, night turns into morning ----------
-const buildables = scene.children.filter(o => o !== water && !o.isLight && !o.isPoints && !(o.geometry && (o.geometry.type === "ExtrudeGeometry" || (o.geometry.type === "SphereGeometry" && o.geometry.parameters.radius > 500))) && Math.abs(o.position.x) < 45 && o.position.z > -135 && o.position.z < 125);
+const buildables = scene.children.filter(o => o !== water && !o.userData.fixed && !o.isLight && !o.isPoints && !(o.geometry && (o.geometry.type === "ExtrudeGeometry" || (o.geometry.type === "SphereGeometry" && o.geometry.parameters.radius > 500))) && Math.abs(o.position.x) < 45 && o.position.z > -135 && o.position.z < 125);
 buildables.forEach(o => o.userData.s0 = o.scale.clone());
 const cinePts = (() => { const V = (x, y, z) => new THREE.Vector3(x, y, z), cam = [], tgt = [], RX = 118, RZ = 178, S = V(0, 56, RZ), A = V(-30, 170, 330), E = V(-150, 120, 150);
   for (let i = 0; i < 4; i++) { const k = i / 4; cam.push(A.clone().lerp(S, k)); tgt.push(V(0, 0, 60).lerp(V(0, 2, 0), k)); }
@@ -747,6 +786,7 @@ renderer.setAnimationLoop(() => {
   for (let i = 0; i < wPos.count; i += 1) { const x = wBase[i * 3], z = wBase[i * 3 + 2]; wPos.array[i * 3 + 1] = Math.sin(x * 0.05 + t * 0.9) * 0.12 + Math.sin(z * 0.07 + t * 0.6) * 0.1; }
   wPos.needsUpdate = true;
   boats.forEach((b, i) => { b.rotation.z = Math.sin(t * 0.9 + i) * 0.03; b.position.y = Math.sin(t * 1.2 + i) * 0.08; });
+  (window.__beachCars || []).forEach(c => { c.position.x += c.userData.v * dt; if (c.position.x > 410) c.position.x = -410; if (c.position.x < -410) c.position.x = 410; });
   steam.material.opacity = 0.18 + Math.sin(t * 1.5) * 0.08;
   if (snow.visible) { const a = snowGeo.attributes.position.array; for (let i = 0; i < snowN; i++) { a[i * 3 + 1] -= dt * (2.5 + (i % 5) * 0.4); a[i * 3] += Math.sin(t + i) * dt * 0.4; if (a[i * 3 + 1] < 0) a[i * 3 + 1] = 60; } snowGeo.attributes.position.needsUpdate = true; }
   renderer.render(scene, camera);
