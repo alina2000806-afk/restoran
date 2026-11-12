@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Пляж Основа — презентація</title>
+<meta name="description" content="Коротка презентація концепції пляжу Основа: ідея, ділянка, генплан, об'єкти, стилі, наступні кроки. З підказками, що говорити.">
+<meta property="og:title" content="Пляж Основа — презентація концепції">
+<meta property="og:image" content="../proekt/foto/story-11.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700;9..144,900&family=Manrope:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--sand:#f3ead9;--paper:#fbf6ec;--ink:#14302e;--teal:#0f5c57;--sun:#e8742f;--muted:#5d6b66;--line:rgba(20,48,46,.14)}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--ink);color:var(--ink);font-family:Manrope,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+body{overflow:hidden}
+.deck{position:fixed;left:0;right:0;top:0;bottom:60px;display:grid;place-items:center}
+.slide{position:absolute;width:min(100vw,calc((100vh - 60px)*16/9));height:min(100vh - 60px,calc(100vw*9/16));background:var(--paper);overflow:hidden;opacity:0;pointer-events:none;transform:translateX(30px);transition:opacity .45s,transform .45s}
+.slide.on{opacity:1;pointer-events:auto;transform:none}
+.slide.prev{transform:translateX(-30px)}
+/* type */
+.k{font:800 clamp(10px,1.15vw,15px)/1 Manrope;letter-spacing:.18em;text-transform:uppercase;color:var(--sun)}
+h1,h2{font-family:Fraunces,serif;font-weight:900;letter-spacing:-.02em;margin:0;line-height:.98}
+h1{font-size:clamp(40px,8.4vw,120px)}
+h2{font-size:clamp(26px,4.3vw,62px)}
+p,li{font-size:clamp(14px,1.55vw,21px);line-height:1.45}
+.pad{position:absolute;inset:0;padding:5.5% 6%}
+.muted{color:var(--muted)}
+/* layouts */
+.full img.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.full .shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(10,30,28,.86) 0%,rgba(10,30,28,.55) 45%,rgba(10,30,28,0) 75%)}
+.full .pad{color:#fbf6ec;display:flex;flex-direction:column;justify-content:flex-end}
+.full .k{color:#ffb37f}
+.split{display:grid;grid-template-columns:1fr 1.15fr;height:100%}
+.split .txt{padding:6% 5% 6% 7%;display:flex;flex-direction:column;justify-content:center;gap:2.2vh}
+.split .pic{position:relative}
+.split .pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tag{position:absolute;left:14px;bottom:14px;background:rgba(10,30,28,.78);color:#fff;font:700 clamp(10px,1vw,14px) Manrope;padding:7px 12px;border-radius:999px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1.6vw;margin-top:3vh}
+.stat{border-top:3px solid var(--sun);padding-top:1.4vh}
+.stat b{display:block;font:900 clamp(26px,4.2vw,60px)/1 Fraunces,serif}
+.stat span{font-size:clamp(11px,1.15vw,16px);color:var(--muted)}
+ul.clean{list-style:none;padding:0;margin:0}
+ul.clean li{padding:.55vh 0 .55vh 1.6em;position:relative}
+ul.clean li::before{content:"";position:absolute;left:0;top:.75em;width:.7em;height:.7em;border-radius:50%;background:var(--sun)}
+.grid6{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:minmax(0,1fr) minmax(0,1fr);gap:8px;height:100%;min-height:0}
+.fill{display:grid;grid-template-rows:auto auto minmax(0,1fr) auto}
+.grid6 figure{margin:0;position:relative;overflow:hidden;border-radius:10px}
+.grid6 img{width:100%;height:100%;object-fit:cover}
+.grid6 figcaption{position:absolute;left:8px;bottom:8px;right:8px;background:rgba(10,30,28,.78);color:#fff;font:700 clamp(10px,1.05vw,14px)/1.25 Manrope;padding:6px 9px;border-radius:8px}
+.objs{display:grid;grid-template-columns:repeat(4,1fr);gap:1.1vw;margin-top:3vh}
+.objpad{display:grid;grid-template-rows:auto auto 1fr auto}
+.objpad .objs{align-self:stretch}
+.obj{background:var(--sand);border-radius:16px;padding:2.4vh 1.3vw;display:flex;flex-direction:column;justify-content:space-between}
+.obj b{display:block;font:900 clamp(30px,5vw,76px)/1 Fraunces,serif;color:var(--teal)}
+.obj span{font-size:clamp(12px,1.45vw,20px);font-weight:700;line-height:1.25}
+.styles{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:minmax(0,1fr) minmax(0,1fr);gap:10px;margin-top:2vh;min-height:0}
+.styles figure{position:relative;border-radius:12px;overflow:hidden;min-height:0}
+.styles figure{margin:0}
+.styles img{width:100%;height:100%;object-fit:cover;display:block}
+.styles figcaption{position:absolute;left:8px;bottom:8px;background:rgba(10,30,28,.8);color:#fff;font:700 clamp(10px,1.1vw,15px)/1.2 Manrope;padding:6px 10px;border-radius:8px}
+.styles .pick{outline:4px solid var(--sun);outline-offset:-4px}
+.styles .pick figcaption{background:var(--sun)}
+.ba{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:2vh;min-height:0}
+.ba .pair{display:grid;grid-template-rows:minmax(0,1fr) minmax(0,1fr);gap:6px;min-height:0}
+.ba .pair div{position:relative;border-radius:10px;overflow:hidden;min-height:0}
+.ba img{width:100%;height:100%;object-fit:cover;display:block}
+.ba em{position:absolute;left:8px;top:8px;font:800 clamp(9px,.95vw,13px) Manrope;font-style:normal;background:#fff;color:var(--ink);padding:4px 9px;border-radius:999px}
+.ba .after em{background:var(--sun);color:#fff}
+.steps{counter-reset:s;display:grid;grid-template-columns:repeat(2,1fr);gap:1.4vh 3vw;margin-top:3vh}
+.steps li{counter-increment:s;list-style:none;position:relative;padding-left:2.6em}
+.steps li::before{content:counter(s);position:absolute;left:0;top:-.1em;width:1.8em;height:1.8em;border-radius:50%;background:var(--teal);color:#fff;font:800 1em/1.8em Manrope;text-align:center}
+.qrbox{background:#fff;padding:12px;border-radius:16px;display:inline-block}
+.btn{display:inline-block;background:var(--sun);color:#fff;text-decoration:none;font:800 clamp(13px,1.4vw,19px) Manrope;padding:1.4vh 1.6vw;border-radius:999px}
+/* chrome */
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;align-items:center;gap:8px;padding:8px 12px calc(8px + env(safe-area-inset-bottom));background:rgba(10,30,28,.92);color:#fbf6ec;font:600 14px Manrope}
+.bar button{min-width:44px;min-height:44px;border:1px solid rgba(255,255,255,.25);background:transparent;color:#fff;border-radius:12px;font:700 15px Manrope;cursor:pointer;padding:0 12px}
+.bar button.on{background:var(--sun);border-color:var(--sun)}
+.bar .sp{flex:1}
+.prog{position:fixed;left:0;top:0;height:4px;background:var(--sun);z-index:21;transition:width .4s}
+.notes{position:fixed;left:12px;right:12px;bottom:68px;z-index:19;max-width:760px;margin:0 auto;background:#fffaf0;color:var(--ink);border-radius:16px;padding:16px 18px;box-shadow:0 20px 60px rgba(0,0,0,.4);font-size:17px;line-height:1.5;display:none;max-height:42vh;overflow:auto}
+.notes.on{display:block}
+.notes b{display:block;font:800 12px Manrope;letter-spacing:.14em;text-transform:uppercase;color:var(--sun);margin-bottom:6px}
+.hint{position:fixed;top:10px;right:12px;z-index:21;color:rgba(255,255,255,.7);font:600 12px Manrope}
+@media (max-width:760px) and (orientation:portrait){
+  body{overflow:auto}
+  .deck{position:static;display:block;padding-bottom:70px}
+  .slide{position:relative;width:100%;height:auto;min-height:0;opacity:1;transform:none;pointer-events:auto;margin-bottom:10px}
+  .slide .pad{position:relative}
+  .full{min-height:78vh}.full .pad{position:absolute}
+  .split{grid-template-columns:1fr}.split .pic{height:42vh}
+  .split .txt{padding:22px 18px}
+  .pad{padding:24px 18px}
+  .grid6{height:auto;grid-template-columns:1fr 1fr;grid-template-rows:none}.grid6 figure{aspect-ratio:4/3}
+  .objs{grid-template-columns:repeat(2,1fr)}
+  .styles{grid-template-columns:repeat(2,1fr);grid-template-rows:none}.styles figure{aspect-ratio:4/3}
+  .ba{grid-template-columns:1fr}.ba .pair div{aspect-ratio:16/9}
+  .steps{grid-template-columns:1fr}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .bar .nav{display:none}
+  .prog,.hint{display:none}
+  .notes{bottom:70px}
+  .notes-on .slide-note{display:block}
+}
+.slide-note{display:none;background:#fffaf0;border-left:4px solid var(--sun);padding:12px 14px;margin:0 0 10px;font-size:15px;line-height:1.45}
+@media print{
+  @page{size:16in 9in;margin:0}
+  html,body{background:#fff;overflow:visible}
+  .deck{position:static;display:block}
+  .slide{position:relative;width:16in;height:9in;opacity:1;transform:none;page-break-after:always}
+  .bar,.prog,.notes,.hint{display:none}
+}
+</style>
+</head>
+<body>
+<div class="prog"></div>
+<div class="hint">← → гортати · N підказки</div>
+<main class="deck">
+
+<!-- 1 -->
+<section class="slide full" data-n="Привітайтесь і одним реченням скажіть, що це: «Це концепція пляжу Основа на Основ'янському озері. Ми зробили її ще до будівництва, щоб усе можна було побачити й обговорити заздалегідь». Не поспішайте, дайте людині роздивитись фото.">
+  <img class="bg" src="../proekt/foto/story-11.jpg" alt="Мис на заході сонця">
+  <div class="shade"></div>
+  <div class="pad">
+    <div class="k">Харків · Основ'янське озеро · концепція</div>
+    <h1>Пляж<br>Основа</h1>
+    <p style="max-width:34em;margin-top:2vh">Пляж, який хочеться показувати. Благоустрій коси від кафе «Червона мавпа» до точки «Пляж Основа».</p>
+  </div>
+</section>
+
+<!-- 2 -->
+<section class="slide" data-n="Головна думка всієї розмови: місце вже гарне від природи, ми не будуємо з нуля, а впорядковуємо його. Назвіть 4 цифри. Бюджет кажіть як діапазон: точна сума залежить від вибраного стилю та комунікацій.">
+  <div class="pad" style="display:flex;flex-direction:column;justify-content:center">
+    <div class="k">Ідея</div>
+    <h2 style="max-width:16em;margin-top:1.5vh">Природний піщаний берег, вода з двох боків. Залишилось зробити з нього місце, куди їдуть цілий рік.</h2>
+    <div class="stats">
+      <div class="stat"><b>≈200 м</b><span>берега</span></div>
+      <div class="stat"><b>до 500</b><span>гостей одночасно</span></div>
+      <div class="stat"><b>30–70</b><span>тис. $ орієнтовний бюджет</span></div>
+      <div class="stat"><b>365</b><span>днів: літо, осінь, зима</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 3 -->
+<section class="slide" data-n="Покажіть, де це. Важливо: це не острів, до входу веде асфальтований заїзд з вул. Силікатна, біля входу є парковка. Розкажіть про дві сторони: ліворуч великий пляж, праворуч тихий лісок, там будуть будиночки.">
+  <div class="split">
+    <div class="txt">
+      <div class="k">01 · Ділянка</div>
+      <h2>Вузька коса між двома плесами</h2>
+      <ul class="clean">
+        <li>Захід: широкий природний піщаний пляж і велика вода</li>
+        <li>Схід: лісок і тиха затока, ідеально для будиночків</li>
+        <li>Заїзд з вул. Силікатна, парковка біля входу</li>
+        <li>25–30 дерев лишаються, тінь уже є</li>
+        <li>Електрика на ділянці є</li>
+      </ul>
+    </div>
+    <div class="pic"><img src="../proekt/foto/suputnyk.jpg" alt="Ділянка з супутника"><span class="tag">Коса зі супутника</span></div>
+  </div>
+</section>
+
+<!-- 4 -->
+<section class="slide" data-n="Пройдіть по схемі знизу вгору, як гість: вхід і сервіс, VIP-альтанки і волейбол, далі вздовж води пляж і 10 беседок, праворуч бар, кальянна і будиночки, нагорі мис з пірсом. Скажіть, що схема зроблена за ескізом замовника.">
+  <div class="split">
+    <div class="pic"><img src="../proekt/foto/viz-genplan.jpg" alt="Генплан згори"><span class="tag">Генплан згори</span></div>
+    <div class="txt">
+      <div class="k">02 · Генплан</div>
+      <h2>Маршрут гостя: від входу до мису</h2>
+      <ul class="clean">
+        <li><b>Вхід:</b> адміністрація, каса, кабінки, душі, туалети</li>
+        <li><b>Біля входу:</b> VIP-альтанки, волейбол, дитячий куточок</li>
+        <li><b>Захід:</b> пляж з лежаками і 10 беседок уздовж води</li>
+        <li><b>Схід:</b> бар з кухнею, кальянна, 2 будиночки з чанами</li>
+        <li><b>Мис:</b> пірс, сапи, гойдалка і найкращий захід сонця</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 5 -->
+<section class="slide" data-n="Скажіть, що все будується одним етапом і за переліком з анкети. Наголосіть на тому, що приносить гроші: беседки, VIP, бар, кальянна, будиночки з чанами, прокат. Про цифри доходу не фантазуйте, якщо їх ще не рахували.">
+  <div class="pad objpad">
+    <div class="k">03 · Що будуємо</div>
+    <h2>Усе одним етапом</h2>
+    <div class="objs">
+      <div class="obj"><b>10</b><span>беседок 6×4 м уздовж пляжу</span></div>
+      <div class="obj"><b>4</b><span>VIP-альтанки зі шторами</span></div>
+      <div class="obj"><b>2</b><span>будиночки з ночівлею і чаном</span></div>
+      <div class="obj"><b>1</b><span>бар, кухня і гриль-зона</span></div>
+      <div class="obj"><b>1</b><span>кальянна «HOOKAH»</span></div>
+      <div class="obj"><b>1</b><span>прокат сапів, каяків і пірс</span></div>
+      <div class="obj"><b>1+1</b><span>волейбол і дитяча зона</span></div>
+      <div class="obj"><b>6·4·2</b><span>кабінок, душів і туалетів</span></div>
+    </div>
+    <p class="muted" style="margin-top:2.5vh">Плюс 2 фотозони, білі пластикові лежаки і парасолі: бюджетно, легко мити і зберігати взимку.</p>
+  </div>
+</section>
+
+<!-- 6 -->
+<section class="slide" data-n="Це «один день на пляжі»: розкажіть як історію, від ранку до вечора. Підкресліть, що всі кадри зроблені з фото саме цієї ділянки, а не взяті з інтернету.">
+  <div class="pad" style="display:grid;grid-template-rows:auto minmax(0,1fr);gap:2vh">
+    <div><div class="k">04 · Один день на пляжі</div><h2>Ось як це виглядатиме</h2></div>
+    <div class="grid6">
+      <figure><img src="../proekt/foto/story-01.jpg" alt=""><figcaption>10:00 · Вхід</figcaption></figure>
+      <figure><img src="../proekt/foto/story-02.jpg" alt=""><figcaption>11:00 · Пляж</figcaption></figure>
+      <figure><img src="../proekt/foto/story-04.jpg" alt=""><figcaption>14:00 · Обід у беседці</figcaption></figure>
+      <figure><img src="../proekt/foto/story-06.jpg" alt=""><figcaption>16:00 · Волейбол і діти</figcaption></figure>
+      <figure><img src="../proekt/foto/story-07.jpg" alt=""><figcaption>17:00 · Бар</figcaption></figure>
+      <figure><img src="../proekt/foto/story-12.jpg" alt=""><figcaption>21:30 · Вечір у гірляндах</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<!-- 7 -->
+<section class="slide" data-n="Будиночки з чанами працюють і взимку, тому пляж живе цілий рік, а не лише влітку. Це сильний аргумент для власника. Покажіть, що вони стоять у ліску, окремо від шумного пляжу.">
+  <div class="split">
+    <div class="txt">
+      <div class="k">05 · Цілий рік</div>
+      <h2>Будиночки з чаном у ліску</h2>
+      <p>Два будиночки на палях з великим вікном на воду, терасою і дерев'яним чаном на дровах. Тиша з боку затоки, окремо від бару і пляжу.</p>
+      <p class="muted">Улітку пляж, восени і взимку чани, ночівля і вечори в гірляндах.</p>
+    </div>
+    <div class="pic"><img src="../proekt/foto/story-09.jpg" alt="Будиночок з чаном"><span class="tag">Будиночок з чаном увечері</span></div>
+  </div>
+</section>
+
+<!-- 8 -->
+<section class="slide" data-n="Скажіть: ми пропонуємо стиль «Горіх і графіт», він виглядає дорожче, ніж коштує. Але є ще 5 варіантів, і на сайті кнопкою можна перемкнути стиль: зміняться всі фото і 3D. Запитайте, який стиль подобається людині.">
+  <div class="pad fill">
+    <div class="k">06 · Стиль</div>
+    <h2>Шість стилів на вибір</h2>
+    <div class="styles">
+      <figure class="pick"><img src="../proekt/foto/story-03.jpg" alt=""><figcaption>Горіх і графіт · пропозиція</figcaption></figure>
+      <figure><img src="../proekt/foto/dark/story-03.jpg" alt=""><figcaption>Лофт</figcaption></figure>
+      <figure><img src="../proekt/foto/red/story-03.jpg" alt=""><figcaption>Хутір</figcaption></figure>
+      <figure><img src="../proekt/foto/log/story-03.jpg" alt=""><figcaption>Карпатський зруб</figcaption></figure>
+      <figure><img src="../proekt/foto/white/story-03.jpg" alt=""><figcaption>Середземномор'я</figcaption></figure>
+      <figure><img src="../proekt/foto/boho/story-03.jpg" alt=""><figcaption>Бохо</figcaption></figure>
+    </div>
+    
+  </div>
+</section>
+
+<!-- 9 -->
+<section class="slide" data-n="Найсильніший слайд для переконання. Показуйте пальцем: ось що зараз, ось що буде з того самого місця. Дайте паузу, нехай людина сама порівняє.">
+  <div class="pad fill">
+    <div class="k">07 · Було / буде</div>
+    <h2>Те саме місце, той самий ракурс</h2>
+    <div class="ba">
+      <div class="pair"><div><img src="../proekt/foto/before-mys.jpg" alt=""><em>Зараз</em></div><div class="after"><img src="../proekt/foto/story-11.jpg" alt=""><em>Буде · мис</em></div></div>
+      <div class="pair"><div><img src="../proekt/foto/before-bar.jpg" alt=""><em>Зараз</em></div><div class="after"><img src="../proekt/foto/story-07.jpg" alt=""><em>Буде · бар</em></div></div>
+      <div class="pair"><div><img src="../proekt/foto/before-domyky.jpg" alt=""><em>Зараз</em></div><div class="after"><img src="../proekt/foto/story-09.jpg" alt=""><em>Буде · будиночки</em></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 10 -->
+<section class="slide" data-n="Покажіть сайт прямо з телефона: 3D-модель можна крутити, пройтися пляжем пішки, пролетіти дроном, перемкнути літо, осінь, зиму і час доби. Запропонуйте людині самій покрутити.">
+  <div class="split">
+    <div class="pic"><img src="../proekt/foto/gal-06.jpg" alt="Коса з дрона"><span class="tag">3D і дрон на сайті</span></div>
+    <div class="txt">
+      <div class="k">08 · Сайт проєкту</div>
+      <h2>Пройдіться пляжем ще до будівництва</h2>
+      <ul class="clean">
+        <li>3D-модель коси: крутіть, наближайте, тисніть на зони</li>
+        <li>Прогулянка на рівні очей і політ дроном</li>
+        <li>Літо, осінь, зима, день і ніч</li>
+        <li>32 фото всіх зон і перемикання 6 стилів</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 11 -->
+<section class="slide" data-n="Чесно назвіть, що ще треба уточнити: це знімає недовіру. Закінчіть питанням: «Який стиль вам ближчий і з чого почнемо?»">
+  <div class="pad" style="display:flex;flex-direction:column;justify-content:center">
+    <div class="k">09 · Наступні кроки</div>
+    <h2>Що робимо далі</h2>
+    <ol class="steps">
+      <li>Обрати стиль з шести варіантів</li>
+      <li>Зробити геодезію: розміри на схемі поки орієнтовні</li>
+      <li>Уточнити потужність електрики і воду</li>
+      <li>Погодити межі ділянки і доріжку в міськраді</li>
+      <li>Порахувати кошторис під вибраний стиль</li>
+      <li>Будувати одним етапом до сезону</li>
+    </ol>
+  </div>
+</section>
+
+<!-- 12 -->
+<section class="slide" data-n="Дайте людині посилання або QR, щоб вона могла сама показати проєкт партнерам. Залиште контакт.">
+  <div class="split">
+    <div class="txt">
+      <div class="k">Дякуємо</div>
+      <h2>Увесь проєкт в одному посиланні</h2>
+      <p>Наведіть камеру телефона на код: відкриється сайт з 3D-моделлю і всіма фото.</p>
+      <div style="display:flex;gap:2vw;align-items:center;flex-wrap:wrap">
+        <div class="qrbox"><div id="qr"></div></div>
+        <div>
+          <a class="btn" href="../proekt/">Відкрити сайт →</a>
+          <p style="margin:1.5vh 0 0"><b>📞 096 695 87 12</b></p>
+        </div>
+      </div>
+    </div>
+    <div class="pic"><img src="../proekt/foto/story-12.jpg" alt="Вечір на пляжі"><span class="tag">Пляж Основа увечері</span></div>
+  </div>
+</section>
+
+</main>
+<div class="notes" aria-live="polite"><b>Що сказати</b><span class="nt"></span></div>
+<div class="bar">
+  <button type="button" class="nav b-prev" aria-label="Назад">←</button>
+  <span class="cnt">1 / 12</span>
+  <button type="button" class="nav b-next" aria-label="Далі">→</button>
+  <span class="sp"></span>
+  <button type="button" class="b-notes" aria-pressed="false">Підказки</button>
+  <button type="button" class="nav b-full" aria-label="На весь екран">⤢</button>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+(() => {
+  const S=[...document.querySelectorAll('.slide')], N=S.length, prog=document.querySelector('.prog'), cnt=document.querySelector('.cnt'), notes=document.querySelector('.notes'), nt=notes.querySelector('.nt'), bn=document.querySelector('.b-notes');
+  const mobile=()=>matchMedia('(max-width:760px) and (orientation:portrait)').matches;
+  // inline notes for phone scroll mode
+  S.forEach(s=>{const d=document.createElement('div');d.className='slide-note';d.textContent='Що сказати: '+s.dataset.n;s.parentNode.insertBefore(d,s.nextSibling)});
+  let i=Math.max(0,Math.min(N-1,(parseInt(location.hash.slice(1))||1)-1)), showN=false;
+  function go(n){i=Math.max(0,Math.min(N-1,n));S.forEach((s,k)=>{s.classList.toggle('on',k===i);s.classList.toggle('prev',k<i)});prog.style.width=((i+1)/N*100)+'%';cnt.textContent=(i+1)+' / '+N;nt.textContent=S[i].dataset.n;history.replaceState(null,'','#'+(i+1))}
+  function tn(){showN=!showN;notes.classList.toggle('on',showN&&!mobile());document.body.classList.toggle('notes-on',showN);bn.classList.toggle('on',showN);bn.setAttribute('aria-pressed',showN)}
+  document.querySelector('.b-prev').onclick=()=>go(i-1);
+  document.querySelector('.b-next').onclick=()=>go(i+1);
+  bn.onclick=tn;
+  document.querySelector('.b-full').onclick=()=>{document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen()};
+  addEventListener('keydown',e=>{if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();go(i+1)}else if(['ArrowLeft','PageUp'].includes(e.key))go(i-1);else if(e.key==='n'||e.key==='N'||e.key==='т'||e.key==='Т')tn();else if(e.key==='Home')go(0);else if(e.key==='End')go(N-1)});
+  let x0=null;addEventListener('touchstart',e=>{x0=e.touches[0].clientX},{passive:true});
+  addEventListener('touchend',e=>{if(x0===null||mobile())return;const dx=e.changedTouches[0].clientX-x0;if(Math.abs(dx)>50)go(i+(dx<0?1:-1));x0=null});
+  document.querySelector('.deck').addEventListener('click',e=>{if(mobile()||e.target.closest('a,button'))return;go(i+(e.clientX>innerWidth/2?1:-1))});
+  go(i);
+  try{new QRCode(document.getElementById('qr'),{text:new URL('../proekt/',location.href).href,width:150,height:150,colorDark:'#14302e'})}catch(e){}
+})();
+</script>
+</body>
+</html>
