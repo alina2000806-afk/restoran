@@ -16,10 +16,10 @@ h2{font-size:20px;margin:22px 0 10px}
 .head h1{color:var(--dark)}
 .head .mono{color:#3d4a12!important}
 .hband{display:flex;gap:2px;justify-content:space-between;margin:6px -6px -10px}
-.hband img{width:14%;min-width:0;max-width:74px;filter:drop-shadow(0 6px 0 rgba(22,16,14,.18))}
+.hband img{width:10.5%;min-width:0;max-width:74px;filter:drop-shadow(0 6px 0 rgba(22,16,14,.18))}
 @media(prefers-reduced-motion:no-preference){.hband img{animation:bob 3.4s ease-in-out infinite}
 .hband img:nth-child(2){animation-delay:-.5s}.hband img:nth-child(3){animation-delay:-1s}.hband img:nth-child(4){animation-delay:-1.5s}.hband img:nth-child(5){animation-delay:-2s}.hband img:nth-child(6){animation-delay:-2.5s}
-.hband img:nth-child(7){animation-delay:-3s}
+.hband img:nth-child(7){animation-delay:-3s}.hband img:nth-child(8){animation-delay:-.8s}.hband img:nth-child(9){animation-delay:-2.2s}
 @keyframes bob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-8px) rotate(3deg)}}}
 .top{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;flex-wrap:wrap}
 .top .mono{color:#3d4a12;max-width:100%;text-align:right;font-size:11px}
@@ -136,6 +136,8 @@ h2{font-size:20px;margin:22px 0 10px}
 .wk th,.wk td{padding:6px 5px;text-align:center;border-bottom:1px solid var(--line)}
 .wk th:first-child,.wk td:first-child{text-align:left;font-weight:700;padding-left:8px}
 .wk .z{color:var(--red);font-weight:700}
+.bcard.inv{align-items:flex-start}.bcard.inv img{width:48px}.bcard .cin{width:84px;min-height:32px;padding:4px 8px;border:2px solid var(--dark);border-radius:8px;background:var(--soft);font:700 14px "JetBrains Mono"}
+.bar{height:10px;border:2px solid var(--dark);border-radius:99px;overflow:hidden;background:#fff;margin:6px 0 4px}.bar i{display:block;height:100%}
 .stock{display:grid;grid-template-columns:1fr 90px;gap:8px;align-items:center;margin-top:6px;font-weight:700}
 .warn{background:#ffe6e2;border:2px solid var(--red);color:var(--red);border-radius:12px;padding:10px 12px;margin-top:10px;font-weight:700;font-size:13px}
 
@@ -168,7 +170,7 @@ h2{background:var(--dark);color:var(--lime);display:inline-block;padding:6px 12p
 </style></head><body><div class="wrap">
 
 <div class="head"><div class="top"><h1>Облік</h1><span class="mono" id="sync">локально на цьому пристрої</span></div>
- <div class="hband"><img src="media/st/pavuk.png" alt=""><img src="media/st/rat.png" alt=""><img src="media/st/guard.png" alt=""><img src="media/st/batman.png" alt=""><img src="media/st/shark_pink.png" alt=""><img src="media/st/biomeh.png" alt=""><img src="media/st/superman.png" alt=""></div></div>
+ <div class="hband"><img src="media/st/pavuk.png" alt=""><img src="media/st/rat.png" alt=""><img src="media/st/guard.png" alt=""><img src="media/st/batman.png" alt=""><img src="media/st/shark_pink.png" alt=""><img src="media/st/biomeh.png" alt=""><img src="media/st/superman.png" alt=""><img src="media/st/santa.png" alt=""><img src="media/st/dino.png" alt=""></div></div>
 
 <div class="money" id="money"></div>
 <div class="money" id="bal" style="cursor:pointer" title="Відкрити баланс"></div>
@@ -186,12 +188,12 @@ h2{background:var(--dark);color:var(--lime);display:inline-block;padding:6px 12p
 (function(){
 "use strict";
 var API=window.BOOKING_API||"", KEY="";
-var PRICE={"Павук":200,"Бетмен":200,"Охоронець":200,"Біомеханіка":200,"Супермен":200,"Щур":250,"Акула":250};
+var PRICE={"Павук":200,"Бетмен":200,"Охоронець":200,"Біомеханіка":200,"Супермен":200,"Дід Мороз":200,"Динозавр":250,"Щур":250,"Акула":250};
 function price(c){return PRICE[c]!=null?PRICE[c]:(String(c).indexOf("Акула")===0?250:200)}
-var ST={"Павук":"pavuk","Бетмен":"batman","Охоронець":"guard","Біомеханіка":"biomeh","Супермен":"superman","Щур":"rat","Акула рожева":"shark_pink","Акула блакитна":"shark_blue","Акула скелет":"shark_skeleton","Акула":"shark_blue"};
-var CLR={"Павук":"var(--pink)","Бетмен":"var(--violet)","Охоронець":"var(--lime)","Біомеханіка":"var(--blue)","Супермен":"var(--red)","Щур":"var(--orange)","Акула рожева":"var(--pink)","Акула скелет":"var(--violet)","Акула":"var(--blue)"};
+var ST={"Павук":"pavuk","Бетмен":"batman","Охоронець":"guard","Біомеханіка":"biomeh","Супермен":"superman","Дід Мороз":"santa","Динозавр":"dino","Щур":"rat","Акула рожева":"shark_pink","Акула блакитна":"shark_blue","Акула скелет":"shark_skeleton","Акула":"shark_blue"};
+var CLR={"Павук":"var(--pink)","Бетмен":"var(--violet)","Охоронець":"var(--lime)","Біомеханіка":"var(--blue)","Супермен":"var(--red)","Дід Мороз":"var(--red)","Динозавр":"var(--lime)","Щур":"var(--orange)","Акула рожева":"var(--pink)","Акула скелет":"var(--violet)","Акула":"var(--blue)"};
 function stKey(name){name=String(name||"");for(var k in ST){if(name.indexOf(k)===0)return ST[k]}return ""}
-function stImg(name,cls){var k=stKey(name);return k?"<img class='"+(cls||"stk")+"' src='media/st/"+k+".png' alt=''>":""}
+function stImg(name,cls){var k=stKey(name);return k?"<img class='"+(cls==null?"stk":cls)+"' src='media/st/"+k+".png' alt=''>":""}
 function clr(name){name=String(name||"");for(var k in CLR){if(name.indexOf(k)===0)return CLR[k]}return "var(--lime)"}
 var tab="cal", cur=new Date(), mcur=new Date(), items=[], ed=null;
 function $(s){return document.querySelector(s)}
@@ -365,7 +367,7 @@ function depView(){
 
 /* ---------- вкладки ---------- */
 var TABS=[{id:"cal",n:"Календар"},{id:"bal",n:"Баланс"},{id:"now",n:"В роботі",f:function(o){return o.type!=="spend"&&!isDone(o)}},
- {id:"all",n:"Усі записи",f:function(){return true}},{id:"money",n:"Гроші"}];
+ {id:"all",n:"Усі записи",f:function(){return true}},{id:"money",n:"Гроші"},{id:"inv",n:"Вкладення"}];
 function drawTabs(){
  $("#tabs").innerHTML="";
  TABS.forEach(function(t){
@@ -545,12 +547,50 @@ function moneyView(){
 }
 
 /* ---------- костюми, кількість і баланс ---------- */
-var STOCK0={"Павук":1,"Бетмен":1,"Охоронець":1,"Біомеханіка":1,"Супермен":1,"Щур":5,"Акула рожева":2,"Акула скелет":1,"Акула блакитна":1};
+var STOCK0={"Павук":1,"Бетмен":1,"Охоронець":1,"Біомеханіка":1,"Супермен":1,"Дід Мороз":4,"Динозавр":1,"Щур":7,"Акула рожева":2,"Акула скелет":1,"Акула блакитна":1};
+/* разові оновлення кількості (застосовуються один раз поверх збереженого в телефоні) */
+var STOCK_FIX={v:2,set:{"Щур":7,"Дід Мороз":4,"Динозавр":1}};
+/* скільки коштував один костюм при купівлі, ₴ (можна правити у «Вкладення») */
+var COST0={"Щур":750,"Дід Мороз":260};
 var COST=Object.keys(STOCK0);
 var bcur=ymd(today()),fk="road",fd=ymd(today());
 function stock(){var r={};COST.forEach(function(c){r[c]=STOCK0[c]});
- try{var x=JSON.parse(localStorage.getItem("oblik_stock")||"{}");COST.forEach(function(c){if(typeof x[c]==="number"&&x[c]>=0)r[c]=x[c]})}catch(e){}
+ try{var x=JSON.parse(localStorage.getItem("oblik_stock")||"{}");
+  if((+localStorage.getItem("oblik_stock_v")||0)<STOCK_FIX.v){for(var k in STOCK_FIX.set)x[k]=STOCK_FIX.set[k];localStorage.setItem("oblik_stock",JSON.stringify(x));localStorage.setItem("oblik_stock_v",String(STOCK_FIX.v))}
+  COST.forEach(function(c){if(typeof x[c]==="number"&&x[c]>=0)r[c]=x[c]})}catch(e){}
  return r}
+function costs(){var r={};COST.forEach(function(c){r[c]=COST0[c]!=null?COST0[c]:0});
+ try{var x=JSON.parse(localStorage.getItem("oblik_cost")||"{}");COST.forEach(function(c){if(typeof x[c]==="number"&&x[c]>=0)r[c]=x[c]})}catch(e){}
+ return r}
+/* скільки кожен костюм заробив за весь час і коли окупився */
+function invStats(){
+ var st=stock(),cs=costs(),r={};
+ COST.forEach(function(c){r[c]={units:st[c],cost:cs[c],inv:st[c]*cs[c],earn:0,rent:0,sale:0,first:"",payAt:"",days:null}});
+ var L=items.filter(function(o){return o.type!=="spend"&&paidSum(o)>0&&o.from}).sort(function(a,b){return String(a.from).localeCompare(String(b.from))});
+ L.forEach(function(o){var ls=lines(o),W=0;ls.forEach(function(l){W+=price(l.c)*l.n});var got=paidSum(o);
+  ls.forEach(function(l){var x=r[l.c];if(!x)return;var part=W?got*price(l.c)*l.n/W:0;
+   if(!x.first)x.first=o.from;x.earn+=part;if(o.type==="sale")x.sale+=l.n;else x.rent+=l.n;
+   if(x.inv>0&&!x.payAt&&x.earn>=x.inv){x.payAt=o.from;x.days=Math.round((pd(o.from)-pd(x.first))/864e5)}})});
+ return r}
+function invView(){
+ var r=invStats(),cs=costs(),T={inv:0,earn:0},known=0;
+ COST.forEach(function(c){T.inv+=r[c].inv;T.earn+=r[c].earn;if(r[c].cost>0)known++});
+ var h="<div class='calhead'><h3>Вкладення в костюми</h3></div>"+
+  "<div class='msum'><div class='m out'><b>"+nf(Math.round(T.inv))+" ₴</b><span>вклала (де відома ціна)</span></div>"+
+  "<div class='m in'><b>"+nf(Math.round(T.earn))+" ₴</b><span>заробили костюми за весь час</span></div>"+
+  "<div class='m net'><b>"+(T.inv?Math.round(T.earn*100/T.inv):0)+"%</b><span>окупність</span></div>"+
+  "<div class='m "+(T.earn-T.inv>=0?"in":"dep")+"'><b>"+nf(Math.round(T.earn-T.inv))+" ₴</b><span>"+(T.earn-T.inv>=0?"вже в плюсі":"ще не відбито")+"</span></div></div>"+
+  "<p class='mhint'>Ціна костюма відома для "+known+" з "+COST.length+". Впиши ціну за 1 шт у таблиці — усе перерахується. Дохід ділиться між костюмами замовлення за ціною доби.</p>";
+ COST.forEach(function(c){var x=r[c],pct=x.inv?Math.round(x.earn*100/x.inv):null;
+  h+="<div class='bcard inv'>"+stImg(c,"")+"<div style='flex:1;min-width:0'><div class='bn'>"+esc(c)+" <span class='bs' style='display:inline'>× "+x.units+"</span></div>"+
+   "<div class='bs'>ціна за 1 шт: <input type='number' inputmode='numeric' class='cin' data-c='"+c+"' value='"+(x.cost||"")+"' placeholder='?'> ₴"+(x.inv?" · вклала "+nf(x.inv)+" ₴":"")+"</div>"+
+   "<div class='bs'>заробив "+nf(Math.round(x.earn))+" ₴ · оренд "+x.rent+(x.sale?" · продано "+x.sale:"")+(x.first?" · з "+fm(x.first):"")+"</div>"+
+   (x.inv?"<div class='bar'><i style='width:"+Math.min(100,pct)+"%;background:"+(pct>=100?"var(--lime)":"var(--orange)")+"'></i></div>":"")+
+   (x.inv?"<div class='bs'>"+(x.payAt?"<b style='color:#2f7a24'>✓ окупився "+fm(x.payAt)+(x.days!=null?" за "+x.days+" дн.":"")+"</b>":"ще "+nf(Math.round(x.inv-x.earn))+" ₴ до окупності")+"</div>":"")+
+   "</div><div class='bh'>"+(pct!=null?pct+"%":"—")+"</div></div>"});
+ $("#view").innerHTML=h;
+ $("#view").querySelectorAll(".cin").forEach(function(e){e.onchange=function(){var o=costs();o[e.dataset.c]=Math.max(0,Math.round(+e.value||0));try{localStorage.setItem("oblik_cost",JSON.stringify(o))}catch(ex){}draw();toast("Ціну збережено")}});
+}
 function lines(o){
  if(o.lines&&o.lines.length)return o.lines;
  var m=String(o.costume||"").match(/^(.*?)\s*[×x]\s*(\d+)$/);
@@ -612,7 +652,7 @@ function balView(){
   var who=items.filter(function(o){return stateOf(o,s)&&lines(o).some(function(l){return l.c===c})}).map(function(o){
    var n=lines(o).filter(function(l){return l.c===c}).reduce(function(a,l){return a+l.n},0);
    return "<div class='bs'><button class='b' type='button' data-edit='"+o.id+"' style='min-height:34px;padding:4px 10px;margin-top:4px;text-align:left'>"+(stateOf(o,s)==="road"?"в дорозі ":"в оренді ")+n+" · "+esc(o.client||"без імені")+" · "+fm(o.ship)+"–"+fm(o.back)+" ✎</button></div>"}).join("");
-  h+="<div class='bcard"+(x.home<0?" over":"")+"'><img src='media/st/"+stKey(c)+".png' alt=''><div><div class='bn'>"+c+"</div>"+
+  h+="<div class='bcard"+(x.home<0?" over":"")+"'>"+stImg(c,"")+"<div><div class='bn'>"+c+"</div>"+
    "<div class='bs'>в дорозі "+x.road+" · в оренді "+x.rent+"</div>"+who+
    (x.home<0?"<div class='bs' style='color:var(--red)'>⚠ перебронь: бракує "+(-x.home)+"</div>":"")+
    "</div><div class='bh'>"+Math.max(0,x.home)+" з "+x.all+"</div></div>"});
@@ -776,6 +816,7 @@ function draw(){
  else if(tab==="now")list(function(o){return o.type!=="spend"&&!isDone(o)},{search:true});
  else if(tab==="all")list(function(){return true},{search:true,desc:true,backup:true});
  else if(tab==="money")moneyView();
+ else if(tab==="inv")invView();
 }
 $("#fab").onclick=function(){openForm(null)};
 window.onpopstate=function(){if(tab==="form"){tab=formRet;draw()}};
