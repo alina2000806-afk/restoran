@@ -689,7 +689,9 @@ function overbook(o){
  for(var s=a;s<=b;s=addDays(s,1)){
   if(!stateOf(o,s))continue;
   var r=counts(s,list);
-  lines(o).forEach(function(l){if(r[l.c]&&r[l.c].home<0&&!bad[l.c])bad[l.c]=fm(s)+" бракує "+(-r[l.c].home)})}
+  lines(o).forEach(function(l){if(r[l.c]&&r[l.c].home<0&&!bad[l.c]){
+   var who=list.filter(function(x){return x!==o&&stateOf(x,s)&&lines(x).some(function(y){return y.c===l.c})}).map(function(x){return (x.name||x.client||"без імені")+" ("+fm(x.from)+")"});
+   bad[l.c]=fm(s)+" бракує "+(-r[l.c].home)+(who.length?". Зайняті в: "+who.join(", "):"")}})}
  return Object.keys(bad).map(function(c){return c+": "+bad[c]}).join("; ")}
 /* ---------- форма ---------- */
 var formRet="cal";
