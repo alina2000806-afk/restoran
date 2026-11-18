@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="500" height="500" viewBox="0 0 500 500">
+<defs>
+ <radialGradient id="r" cx="35%" cy="28%" r="80%"><stop offset="0" stop-color="#ff7a74"/><stop offset=".45" stop-color="#e3262e"/><stop offset="1" stop-color="#9c0f17"/></radialGradient>
+ <radialGradient id="w" cx="40%" cy="30%" r="80%"><stop offset="0" stop-color="#ffffff"/><stop offset=".7" stop-color="#f1f1f4"/><stop offset="1" stop-color="#c9ccd6"/></radialGradient>
+ <radialGradient id="sk" cx="45%" cy="40%" r="70%"><stop offset="0" stop-color="#ffe1c7"/><stop offset="1" stop-color="#f0b48c"/></radialGradient>
+ <radialGradient id="bk" cx="40%" cy="30%" r="80%"><stop offset="0" stop-color="#5a5a5a"/><stop offset="1" stop-color="#151515"/></radialGradient>
+ <radialGradient id="gold" cx="40%" cy="30%" r="80%"><stop offset="0" stop-color="#fff3a8"/><stop offset="1" stop-color="#d9a21e"/></radialGradient>
+</defs>
+<!-- boots -->
+<path d="M180 400 h58 v40 q0 14 -14 14 h-62 q-10 0 -8 -12 q4 -16 26 -18 z" fill="url(#bk)"/>
+<path d="M268 400 h58 v26 q22 2 26 18 q2 12 -8 12 h-62 q-14 0 -14 -14 z" fill="url(#bk)"/>
+<!-- body coat -->
+<path d="M150 280 Q150 210 254 206 Q358 210 358 280 L366 380 Q366 410 334 410 L174 410 Q142 410 142 380 Z" fill="url(#r)"/>
+<rect x="140" y="386" width="228" height="30" rx="15" fill="url(#w)"/>
+<rect x="240" y="230" width="28" height="170" rx="12" fill="url(#w)"/>
+<!-- belt -->
+<rect x="146" y="318" width="216" height="30" rx="8" fill="url(#bk)"/>
+<rect x="232" y="312" width="44" height="42" rx="7" fill="none" stroke="url(#gold)" stroke-width="8"/>
+<!-- arms -->
+<path d="M156 250 Q110 220 104 176 Q118 166 132 186 Q146 214 176 228 Z" fill="url(#r)"/>
+<ellipse cx="116" cy="176" rx="22" ry="14" fill="url(#w)" transform="rotate(-30 116 176)"/>
+<g fill="url(#bk)"><ellipse cx="108" cy="146" rx="20" ry="24"/><ellipse cx="88" cy="158" rx="9" ry="13" transform="rotate(-35 88 158)"/></g>
+<path d="M352 252 Q388 290 382 330 Q368 336 360 318 Q356 290 336 270 Z" fill="url(#r)"/>
+<ellipse cx="374" cy="328" rx="22" ry="13" fill="url(#w)" transform="rotate(20 374 328)"/>
+<circle cx="378" cy="352" r="18" fill="url(#bk)"/>
+<!-- head -->
+<ellipse cx="254" cy="150" rx="78" ry="74" fill="url(#sk)"/>
+<ellipse cx="178" cy="156" rx="14" ry="18" fill="url(#sk)"/><ellipse cx="330" cy="156" rx="14" ry="18" fill="url(#sk)"/>
+<!-- beard -->
+<path d="M176 150 Q170 250 254 290 Q338 250 332 150 Q320 196 290 198 Q254 210 218 198 Q188 196 176 150 Z" fill="url(#w)"/>
+<g fill="url(#w)"><circle cx="196" cy="220" r="22"/><circle cx="222" cy="250" r="24"/><circle cx="254" cy="266" r="26"/><circle cx="286" cy="250" r="24"/><circle cx="312" cy="220" r="22"/></g>
+<!-- moustache -->
+<path d="M254 186 Q226 170 206 186 Q218 204 242 196 Q252 192 254 186 Z" fill="url(#w)" stroke="#d9dce4" stroke-width="2"/>
+<path d="M254 186 Q282 170 302 186 Q290 204 266 196 Q256 192 254 186 Z" fill="url(#w)" stroke="#d9dce4" stroke-width="2"/>
+<ellipse cx="254" cy="176" rx="14" ry="11" fill="#f39a86"/>
+<!-- eyes / brows / cheeks -->
+<ellipse cx="226" cy="146" rx="10" ry="12" fill="#3b2412"/><ellipse cx="282" cy="146" rx="10" ry="12" fill="#3b2412"/>
+<circle cx="229" cy="142" r="4" fill="#fff"/><circle cx="285" cy="142" r="4" fill="#fff"/>
+<path d="M208 124 Q226 112 242 122" stroke="#fff" stroke-width="9" fill="none" stroke-linecap="round"/><path d="M266 122 Q282 112 300 124" stroke="#fff" stroke-width="9" fill="none" stroke-linecap="round"/>
+<ellipse cx="208" cy="170" rx="12" ry="7" fill="#ff8f86" opacity=".6"/><ellipse cx="300" cy="170" rx="12" ry="7" fill="#ff8f86" opacity=".6"/>
+<path d="M240 210 Q254 222 268 210" stroke="#a8263a" stroke-width="4" fill="none" stroke-linecap="round"/>
+<!-- hat -->
+<path d="M176 108 Q186 30 262 26 Q330 26 352 70 Q378 98 396 132 Q370 120 350 100 Q342 96 334 108 Z" fill="url(#r)"/>
+<rect x="166" y="90" width="178" height="36" rx="18" fill="url(#w)"/>
+<circle cx="398" cy="136" r="20" fill="url(#w)"/>
+<ellipse cx="226" cy="54" rx="26" ry="10" fill="#fff" opacity=".35" transform="rotate(-20 226 54)"/>
+</svg>
