@@ -16,7 +16,7 @@ h2{font-size:20px;margin:22px 0 10px}
 .head h1{color:var(--dark)}
 .head .mono{color:#3d4a12!important}
 .hband{display:flex;gap:2px;justify-content:space-between;margin:6px -6px -10px}
-.hband img{width:10.5%;min-width:0;max-width:74px;filter:drop-shadow(0 6px 0 rgba(22,16,14,.18))}
+.hband img{width:14%;min-width:0;max-width:74px;filter:drop-shadow(0 6px 0 rgba(22,16,14,.18))}
 @media(prefers-reduced-motion:no-preference){.hband img{animation:bob 3.4s ease-in-out infinite}
 .hband img:nth-child(2){animation-delay:-.5s}.hband img:nth-child(3){animation-delay:-1s}.hband img:nth-child(4){animation-delay:-1.5s}.hband img:nth-child(5){animation-delay:-2s}.hband img:nth-child(6){animation-delay:-2.5s}
 .hband img:nth-child(7){animation-delay:-3s}.hband img:nth-child(8){animation-delay:-.8s}.hband img:nth-child(9){animation-delay:-2.2s}
@@ -170,7 +170,7 @@ h2{background:var(--dark);color:var(--lime);display:inline-block;padding:6px 12p
 </style></head><body><div class="wrap">
 
 <div class="head"><div class="top"><h1>Облік</h1><span class="mono" id="sync">локально на цьому пристрої</span></div>
- <div class="hband"><img src="media/st/pavuk.png" alt=""><img src="media/st/rat.png" alt=""><img src="media/st/guard.png" alt=""><img src="media/st/batman.png" alt=""><img src="media/st/shark_pink.png" alt=""><img src="media/st/biomeh.png" alt=""><img src="media/st/superman.png" alt=""><img src="media/st/santa.png" alt=""><img src="media/st/dino.png" alt=""></div></div>
+ <div class="hband"><img src="media/st/pavuk.png" alt=""><img src="media/st/rat.png" alt=""><img src="media/st/guard.png" alt=""><img src="media/st/batman.png" alt=""><img src="media/st/shark_pink.png" alt=""><img src="media/st/biomeh.png" alt=""><img src="media/st/superman.png" alt=""></div></div>
 
 <div class="money" id="money"></div>
 <div class="money" id="bal" style="cursor:pointer" title="Відкрити баланс"></div>
@@ -190,7 +190,7 @@ h2{background:var(--dark);color:var(--lime);display:inline-block;padding:6px 12p
 var API=window.BOOKING_API||"", KEY="";
 var PRICE={"Павук":200,"Бетмен":200,"Охоронець":200,"Біомеханіка":200,"Супермен":200,"Дід Мороз Дрековський":200,"Динозавр":250,"Щур":250,"Акула":250};
 function price(c){return PRICE[c]!=null?PRICE[c]:(String(c).indexOf("Акула")===0?250:200)}
-var ST={"Павук":"pavuk","Бетмен":"batman","Охоронець":"guard","Біомеханіка":"biomeh","Супермен":"superman","Дід Мороз":"santa","Динозавр":"dino","Щур":"rat","Акула рожева":"shark_pink","Акула блакитна":"shark_blue","Акула скелет":"shark_skeleton","Акула":"shark_blue"};
+var ST={"Павук":"pavuk","Бетмен":"batman","Охоронець":"guard","Біомеханіка":"biomeh","Супермен":"superman","Щур":"rat","Акула рожева":"shark_pink","Акула блакитна":"shark_blue","Акула скелет":"shark_skeleton","Акула":"shark_blue"};
 var CLR={"Павук":"var(--pink)","Бетмен":"var(--violet)","Охоронець":"var(--lime)","Біомеханіка":"var(--blue)","Супермен":"var(--red)","Дід Мороз":"var(--red)","Динозавр":"var(--lime)","Щур":"var(--orange)","Акула рожева":"var(--pink)","Акула скелет":"var(--violet)","Акула":"var(--blue)"};
 function stKey(name){name=String(name||"");for(var k in ST){if(name.indexOf(k)===0)return ST[k]}return ""}
 function stImg(name,cls){var k=stKey(name);return k?"<img class='"+(cls==null?"stk":cls)+"' src='media/st/"+k+".png' alt=''>":""}
@@ -754,7 +754,7 @@ function openForm(o,pre){
   var w=$("#f_lines");
   w.innerHTML=L.map(function(l,i){
    var opts=COST.slice();if(opts.indexOf(l.c)<0)opts.push(l.c);
-   return "<div class='costrow' style='margin-top:8px'><img src='media/st/"+(stKey(l.c)||"rat")+".png' alt='' style='width:48px'>"+
+   return "<div class='costrow' style='margin-top:8px'>"+(stKey(l.c)?"<img src='media/st/"+stKey(l.c)+".png' alt='' style='width:48px'>":"<span style='width:48px;flex:none'></span>")+
     "<select class='ls' data-i='"+i+"' aria-label='Костюм'>"+opts.map(function(c){return "<option"+(c===l.c?" selected":"")+">"+c+"</option>"}).join("")+"</select>"+
     "<input class='lq' data-i='"+i+"' type='number' min='1' inputmode='numeric' value='"+l.n+"' style='width:74px;flex:none' aria-label='Кількість'>"+
     (L.length>1?"<button class='b del lx' data-i='"+i+"' type='button' aria-label='Прибрати'>✕</button>":"")+"</div>"}).join("");
