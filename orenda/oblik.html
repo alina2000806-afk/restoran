@@ -608,14 +608,16 @@ function stateOf(o,s){
  /* «повернули» знімає костюм з оренди; закрита застава сама по собі — ні, тоді діють дати оренди */
  if(o.returned&&s>=(o.returnedAt||ymd(today())))return "";
  /* самовивіз: у клієнта з моменту видачі і доти, доки не натиснуто «отримала» — навіть якщо дата повернення вже минула */
- if(o.pickup){var st0=o.ship||o.from,ret=o.arrive||o.back||o.to||o.from;if(s<st0)return "";if(s<=ret)return "rent";return o.returned?"":"rent"}
+ /* прострочене повернення (не натиснуто «отримала») тримає костюм зайнятим лише до сьогодні; майбутні дні не блокує */
+ var tdy=ymd(today()),late=!(o.returned||o.done);
+ if(o.pickup){var st0=o.ship||o.from,ret=o.arrive||o.back||o.to||o.from;if(s<st0)return "";if(s<=ret)return "rent";return (late&&s<=tdy)?"rent":""}
  var from=o.from,to=o.to||o.from,ship=o.ship||from,back=o.back||addDays(to,1);
  if(s<ship)return "";
  if(s<from)return "road";
  if(s<back)return "rent";
- if(!(o.returned||o.done))return "road";
  var arr=o.returnedAt||arriveOf(o);
- return s<arr?"road":""}
+ if(s<arr)return "road";
+ return (late&&s<=tdy)?"road":""}
 /* зайнятість у день s з урахуванням часу: якщо один повертає о 18:00, а інший забирає о 19:00 — костюм вільний */
 function counts(s,list){
  var st=stock(),r={},ev={};if(!Array.isArray(list))list=items;
