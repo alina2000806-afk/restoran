@@ -607,7 +607,8 @@ function stateOf(o,s){
  if(o.type!=="rent"||!o.from)return "";
  /* «повернули» знімає костюм з оренди; закрита застава сама по собі — ні, тоді діють дати оренди */
  if(o.returned&&s>=(o.returnedAt||ymd(today())))return "";
- if(o.pickup){var st0=o.ship||o.from,ret=o.arrive||o.back||o.to||o.from;return (s>=st0&&s<=ret)?"rent":""}
+ /* самовивіз: у клієнта з моменту видачі і доти, доки не натиснуто «отримала» — навіть якщо дата повернення вже минула */
+ if(o.pickup){var st0=o.ship||o.from,ret=o.arrive||o.back||o.to||o.from;if(s<st0)return "";if(s<=ret)return "rent";return o.returned?"":"rent"}
  var from=o.from,to=o.to||o.from,ship=o.ship||from,back=o.back||addDays(to,1);
  if(s<ship)return "";
  if(s<from)return "road";
