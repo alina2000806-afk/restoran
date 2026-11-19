@@ -469,6 +469,7 @@ function bindActs(root){
    if(a==="returned"&&!o.returned&&o.type==="rent"){var bk=o.back||o.to||o.from;
     if(bk&&ymd(today())<bk&&!confirm("Повернення тільки "+fm(bk)+". Костюм точно вже в тебе?"))return}
    o[a]=!o[a];
+   if(a==="paid"&&o.paid)o.prepay=0;
    if(a==="returned")o.returnedAt=o.returned?ymd(today()):"";
    if(a==="returned"&&o.returned)o.wait=false;
    if(a==="depTaken")o.depTakenAt=o.depTaken?(o.depTakenAt||ymd(today())):"";
@@ -747,7 +748,7 @@ function openForm(o,pre){
  $("#f_sum").value=d.sum!=null?d.sum:"";$("#f_dep").value=d.dep!=null?d.dep:800*units();$("#f_note").value=d.note||"";
  $("#f_paid").checked=d.paid!==false&&(o?!!o.paid:true);$("#f_prepay").value=d.prepay?d.prepay:"";
  function restUI(){var sum=+$("#f_sum").value||0,pp=+$("#f_prepay").value||0,full=$("#f_paid").checked;$("#f_rest").textContent=full?"0 ₴ — оплачено":(pp?nf(Math.max(0,sum-pp))+" ₴ доплатити":nf(sum)+" ₴ не оплачено");$("#f_rest").style.color=full?"#2f7a24":(pp?"var(--orange)":"var(--red)")}
- $("#f_prepay").oninput=function(){if(+this.value>0)$("#f_paid").checked=false;restUI()};$("#f_paid").onchange=restUI;$("#f_sum").addEventListener("input",restUI);restUI();
+ $("#f_prepay").oninput=function(){if(+this.value>0)$("#f_paid").checked=false;restUI()};$("#f_paid").onchange=function(){if(this.checked)$("#f_prepay").value="";restUI()};$("#f_sum").addEventListener("input",restUI);restUI();
  $("#f_dtk").value=d.depTaken?(d.depTakenAt||depTakenDate(d)):"";$("#f_dbk").value=d.depBack?(d.depBackAt||depBackDate(d)):"";
  function units(){return L.reduce(function(a,l){return a+l.n},0)}
  function drawLines(){
@@ -805,7 +806,7 @@ function openForm(o,pre){
   o.from=$("#f_from").value;o.to=$("#f_to").value;o.ship=$("#f_ship").value;o.shipT=$("#f_shipT").value;o.back=$("#f_back").value;o.arrive=$("#f_arr").value;o.arriveT=$("#f_arrT").value;
   if(o.pickup&&o.arrive)o.back=o.arrive;
   o.sum=+$("#f_sum").value||0;o.dep=+$("#f_dep").value||0;o.note=$("#f_note").value.trim();
-  o.paid=o.type==="spend"?false:$("#f_paid").checked;o.prepay=o.type==="spend"?0:(+$("#f_prepay").value||0);
+  o.paid=o.type==="spend"?false:$("#f_paid").checked;o.prepay=(o.type==="spend"||o.paid)?0:(+$("#f_prepay").value||0);
   if(o.type==="rent"){var dt=$("#f_dtk").value,db=$("#f_dbk").value;
    o.depTaken=!!(dt||db);o.depTakenAt=dt||(db?db:"");o.depBack=!!db;o.depBackAt=db;if(db)o.done=true}
   o.addr=$("#f_addr").value.trim();if(o.pickup){o.addr="";o.rcpt="";o.ttn=""}
