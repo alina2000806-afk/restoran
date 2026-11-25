@@ -553,16 +553,16 @@ function moneyView(){
 }
 
 /* ---------- костюми, кількість і баланс ---------- */
-var STOCK0={"Павук":1,"Бетмен":1,"Охоронець":1,"Біомеханіка":1,"Супермен":1,"Дід Мороз Дрековський":4,"Динозавр":1,"Щур":8,"Акула рожева":2,"Акула скелет":1,"Акула блакитна":1,"Білий ведмідь":1};
+var STOCK0={"Павук":1,"Бетмен":1,"Охоронець":1,"Біомеханіка":1,"Супермен":1,"Дід Мороз Дрековський":4,"Динозавр":1,"Щур":8,"Акула рожева":2,"Акула блакитна":2,"Білий ведмідь":1};
 /* разові оновлення кількості (застосовуються один раз поверх збереженого в телефоні) */
-var STOCK_FIX={v:3,set:{"Щур":8,"Дід Мороз Дрековський":4,"Динозавр":1,"Білий ведмідь":1}};
+var STOCK_FIX={v:4,set:{"Щур":8,"Дід Мороз Дрековський":4,"Динозавр":1,"Білий ведмідь":1,"Акула блакитна":2,"Акула рожева":2}};
 /* скільки коштував один костюм при купівлі, ₴ (можна правити у «Вкладення») */
 var COST0={"Щур":750,"Дід Мороз Дрековський":260};
 var COST=Object.keys(STOCK0);
 var bcur=ymd(today()),fk="road",fd=ymd(today());
 function stock(){var r={};COST.forEach(function(c){r[c]=STOCK0[c]});
  try{var x=JSON.parse(localStorage.getItem("oblik_stock")||"{}");
-  if((+localStorage.getItem("oblik_stock_v")||0)<STOCK_FIX.v){for(var k in STOCK_FIX.set)x[k]=STOCK_FIX.set[k];localStorage.setItem("oblik_stock",JSON.stringify(x));localStorage.setItem("oblik_stock_v",String(STOCK_FIX.v))}
+  if((+localStorage.getItem("oblik_stock_v")||0)<STOCK_FIX.v){for(var k in STOCK_FIX.set)x[k]=STOCK_FIX.set[k];delete x["Акула скелет"];localStorage.setItem("oblik_stock",JSON.stringify(x));localStorage.setItem("oblik_stock_v",String(STOCK_FIX.v))}
   COST.forEach(function(c){if(typeof x[c]==="number"&&x[c]>=0)r[c]=x[c]})}catch(e){}
  return r}
 function costs(){var r={};COST.forEach(function(c){r[c]=COST0[c]!=null?COST0[c]:0});
