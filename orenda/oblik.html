@@ -215,9 +215,22 @@ function load(){
  var added=0;seed.forEach(function(o){if(!have[o.id]){items.push(JSON.parse(JSON.stringify(o)));added++}});
  if(added){save()}
 }
-function save(){try{localStorage.setItem("oblik",JSON.stringify(items))}catch(e){}}
+function save(){try{localStorage.setItem("oblik",JSON.stringify(items))}catch(e){}cloudPush()}
+/* ☁️ хмара: Облік з телефона -> сервер, щоб сайт оренди бачив вільні дати; онлайн-оплачені броні -> сюди */
+var CLOUD="https://oblik-alina.alina20040806.workers.dev";
+function skey(){try{var m=location.hash.match(/sync=([A-Za-z0-9_-]+)/);if(m){localStorage.setItem("oblik_sync_key",m[1]);history.replaceState(null,"",location.pathname)}return localStorage.getItem("oblik_sync_key")||""}catch(e){return ""}}
+function cloudPush(){var k=skey();if(!k)return;clearTimeout(cloudPush.t);cloudPush.t=setTimeout(function(){
+ fetch(CLOUD+"/api/oblik-push?k="+encodeURIComponent(k),{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({items:items,stock:stock()})})
+ .then(function(r){return r.json()}).then(function(j){if(j.ok){try{localStorage.setItem("oblik_cloud_at",String(Date.now()))}catch(e){}syncLabel()}}).catch(function(){})},1500)}
+function cloudPull(){var k=skey();if(!k)return;
+ fetch(CLOUD+"/api/oblik-web?k="+encodeURIComponent(k)).then(function(r){return r.json()}).then(function(j){if(!j.ok)return;
+  var seen={};try{seen=JSON.parse(localStorage.getItem("oblik_web_seen")||"{}")}catch(e){}
+  var have={},add=0;items.forEach(function(o){have[o.id]=1});
+  (j.items||[]).forEach(function(o){if(!o||!o.id||seen[o.id])return;seen[o.id]=1;if(!have[o.id]){items.push(o);add++}});
+  try{localStorage.setItem("oblik_web_seen",JSON.stringify(seen))}catch(e){}
+  if(add){save();draw();toast("💳 Нова онлайн-бронь: "+add)}else cloudPush()}).catch(function(){})}
 function backupAge(){var t=+localStorage.getItem("oblik_backup_at")||0;if(!t)return 9999;return Math.floor((Date.now()-t)/864e5)}
-function syncLabel(){var e=$("#sync");if(!e)return;var a=backupAge();e.textContent=items.length?("записів: "+items.length+" · копія: "+(a>=3650?"ще не було":(a===0?"сьогодні":a+" дн. тому"))+" ›"):"локально на цьому пристрої";e.style.cursor="pointer";e.onclick=function(){tab="all";draw();var b=$("#bk_box");if(b)b.scrollIntoView({behavior:"smooth"})}}
+function syncLabel(){var e=$("#sync");if(!e)return;var a=backupAge(),ca=0;try{ca=+localStorage.getItem("oblik_cloud_at")||0}catch(_){}var cl=skey()?(ca&&Date.now()-ca<864e5?" · ☁️ сайт бачить":" · ☁️ ще не надіслано"):"";e.textContent=(items.length?("записів: "+items.length+" · копія: "+(a>=3650?"ще не було":(a===0?"сьогодні":a+" дн. тому"))+" ›"):"локально на цьому пристрої")+cl;e.style.cursor="pointer";e.onclick=function(){tab="all";draw();var b=$("#bk_box");if(b)b.scrollIntoView({behavior:"smooth"})}}
 function backup(){
  var data=JSON.stringify({app:"oblik",at:new Date().toISOString(),stock:stock(),items:items},null,1);
  var name="oblik-"+ymd(today())+".json",blob=new Blob([data],{type:"application/json"});
@@ -833,5 +846,7 @@ $("#fab").onclick=function(){openForm(null)};
 window.onpopstate=function(){if(tab==="form"){tab=formRet;draw()}};
 load();
 draw();
+cloudPull();
+document.addEventListener("visibilitychange",function(){if(!document.hidden)cloudPull()});
 })();
 </script></body></html>
