@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Пляж Основа — альбом</title>
+<meta name="description" content="Альбом концепції пляжу Основа для друку: 16 сторінок A4 альбомної орієнтації з вильотами 3 мм.">
+<meta property="og:title" content="Пляж Основа — альбом для друку">
+<meta property="og:image" content="img/story-11.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800;900&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* Print: A4 landscape 297x210 + 3 mm bleed = 303x216. Safe zone = 15 mm from edge. */
+@page{size:303mm 216mm;margin:0}
+:root{--paper:#f6f0e5;--sand:#ebdfca;--ink:#112f2e;--ink2:#3f5653;--sun:#d8622a;--gold:#c99a4b;--line:rgba(17,47,46,.16)}
+*{box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+html,body{margin:0;background:#cfc8bb;color:var(--ink);font-family:Manrope,system-ui,sans-serif}
+.page{position:relative;width:303mm;height:216mm;overflow:hidden;background:var(--paper);page-break-after:always;break-after:page}
+.ph{position:absolute;overflow:hidden;background:#ddd}
+.ph img{width:100%;height:100%;object-fit:cover;display:block}
+.safe{position:absolute;inset:15mm}
+h1,h2,h3{font-family:Unbounded,sans-serif;margin:0;letter-spacing:-.02em;font-weight:800;line-height:1}
+.k{font:800 7.5pt/1 Manrope;letter-spacing:.26em;text-transform:uppercase;color:var(--sun);display:flex;align-items:center;gap:3mm}
+.k::before{content:"";width:9mm;height:.7mm;background:var(--sun)}
+h2{font-size:30pt;margin-top:4.5mm}
+p{font-size:11.5pt;line-height:1.5;margin:0}
+.lead{font-size:13pt;line-height:1.5;color:var(--ink2);margin-top:5mm}
+.cap{position:absolute;left:3.5mm;bottom:3.5mm;background:rgba(10,24,24,.78);color:#fff;font:700 8.5pt/1.2 Manrope;padding:1.8mm 3mm;border-radius:2mm}
+.cap b{color:#f3b98c;font-weight:800;margin-right:1.5mm}
+.foot{position:absolute;left:15mm;right:15mm;bottom:7.5mm;display:flex;align-items:center;gap:4mm;font:700 7pt Manrope;letter-spacing:.18em;text-transform:uppercase;color:var(--ink2)}
+.foot .sp{flex:1}
+.foot .n{font-family:Unbounded;letter-spacing:0;color:var(--sun);font-size:8pt}
+.mini{display:flex;align-items:center;gap:2.5mm;font:700 6.5pt/1.25 Manrope;letter-spacing:.08em;text-transform:uppercase}
+.mini img{width:12mm;height:12mm;background:#fff;padding:.8mm;border-radius:1.5mm}
+.foot.on-photo{color:#fff}
+.foot.on-photo .mini{background:rgba(10,24,24,.72);padding:1.5mm 2.5mm 1.5mm 1.5mm;border-radius:2.5mm}
+.specs{display:grid;grid-template-columns:1fr 1fr;gap:2.5mm 6mm;margin-top:6mm}
+.sp{border-top:.5mm solid var(--line);padding-top:2.2mm}
+.sp i{display:block;font:800 6.5pt Manrope;letter-spacing:.2em;text-transform:uppercase;color:var(--sun);font-style:normal}
+.sp b{display:block;margin-top:1mm;font:700 10.5pt/1.3 Manrope}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:6mm 8mm;margin-top:9mm}
+.st b{display:block;font:900 30pt/1 Unbounded;letter-spacing:-.03em;color:var(--ink)}
+.st span{display:block;margin-top:2mm;font:600 9.5pt/1.3 Manrope;color:var(--ink2)}
+.lg{display:grid;grid-template-columns:9mm 1fr;gap:3mm;align-items:center;padding:2.6mm 0;border-top:.4mm solid var(--line)}
+.lg em{font:900 10pt Unbounded;font-style:normal;width:9mm;height:9mm;border-radius:2mm;display:grid;place-items:center;background:var(--sun);color:#fff}
+.lg span{font-size:10.5pt;line-height:1.35}
+.card{position:absolute;background:rgba(246,240,229,.95);border-radius:4mm;padding:9mm 10mm}
+.time{font:900 14pt Unbounded;color:var(--sun)}
+.noscreen{}
+/* screen preview */
+@media screen{
+  body{padding:84px 0 40px}
+  .page{margin:0 auto 26px;box-shadow:0 18px 50px rgba(0,0,0,.25);zoom:var(--z,1)}
+  .bar{position:fixed;left:0;right:0;top:0;z-index:10;display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap;padding:12px 16px;background:#112f2e;color:#f6f0e5;font:600 15px Manrope}
+  .bar a{display:inline-flex;align-items:center;min-height:46px;padding:0 20px;border-radius:999px;background:#d8622a;color:#fff;text-decoration:none;font:800 15px Manrope}
+  .bar a.ghost{background:transparent;border:1px solid rgba(246,240,229,.35)}
+}
+@media print{.bar{display:none}body{background:none}}
+</style>
+</head>
+<body>
+<div class="bar"><span>Пляж Основа · альбом для друку · 16 сторінок A4 альбомна, вильоти 3 мм</span><a href="plyazh-osnova-albom.pdf" download>⬇ PDF для друку</a><a class="ghost" href="../proekt/">Проєкт онлайн</a></div>
+
+<!-- 1 COVER -->
+<section class="page">
+  <div class="ph" style="inset:0"><img src="img/story-11.jpg" alt=""></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(8,22,22,.82) 0%,rgba(8,22,22,.5) 40%,rgba(8,22,22,0) 68%)"></div>
+  <div style="position:absolute;left:18mm;bottom:22mm;color:#fff;max-width:150mm">
+    <div class="k" style="color:#f3b98c">Харків · Основ'янське озеро</div>
+    <h1 style="font-size:64pt;line-height:.92;margin-top:6mm;font-weight:900">Пляж<br><span style="color:#f3b98c">Основа</span></h1>
+    <p style="font-size:14pt;margin-top:7mm;color:rgba(255,255,255,.9)">Концепція благоустрою піщаної коси: генплан, зони, стиль і те, як тут виглядатиме один день.</p>
+  </div>
+  <div style="position:absolute;right:18mm;bottom:22mm;color:#fff;font:800 8pt Manrope;letter-spacing:.24em;text-transform:uppercase;text-align:right">Концепція<br>2026</div>
+</section>
+
+<!-- 2 IDEA -->
+<section class="page">
+  <div class="ph" style="top:0;right:0;bottom:0;width:150mm"><img src="img/gal-05.jpg" alt=""><span class="cap">Коса з висоти: від входу до мису</span></div>
+  <div style="position:absolute;left:18mm;top:20mm;width:118mm">
+    <div class="k">Ідея</div>
+    <h2>Природний пляж з водою з двох боків</h2>
+    <p class="lead">Місце вже гарне від природи. Ми не будуємо з нуля, а впорядковуємо косу так, щоб сюди їхали і влітку, і взимку.</p>
+    <div class="stats">
+      <div class="st"><b>≈200 м</b><span>берега вздовж коси</span></div>
+      <div class="st"><b>до 500</b><span>гостей одночасно</span></div>
+      <div class="st"><b>10 + 4</b><span>беседок і VIP-альтанок</span></div>
+      <div class="st"><b>365</b><span>днів на рік: літо, осінь, зима</span></div>
+    </div>
+  </div>
+  <div class="foot" style="right:165mm"><span class="n">02</span><span>Пляж Основа</span></div>
+</section>
+
+<!-- 3 SITE -->
+<section class="page">
+  <div class="ph" style="top:0;left:0;bottom:0;width:192mm"><img src="img/dilyanka.jpg" alt=""></div>
+  <div style="position:absolute;left:204mm;top:18mm;right:14mm">
+    <div class="k">Ділянка</div>
+    <h2 style="font-size:21pt">Коса між великою водою і тихою затокою</h2>
+    <div class="specs">
+      <div class="sp"><i>Схід</i><b>Широкий піщаний берег і велика вода</b></div>
+      <div class="sp"><i>Захід</i><b>Лісок і тиха затока з очеретом</b></div>
+      <div class="sp"><i>Заїзд</i><b>Асфальт з вул. Силікатна</b></div>
+      <div class="sp"><i>Парковка</i><b>≈ 20 авто біля входу</b></div>
+      <div class="sp"><i>Дерева</i><b>25–30 лишаються, тінь уже є</b></div>
+      <div class="sp"><i>Пішки</i><b>2–3 хв від зупинки</b></div>
+    </div>
+  </div>
+  <div class="foot" style="left:204mm;right:14mm"><span class="n">03</span><span>Ділянка</span><span class="sp"></span><span class="mini"><img src="img/qr.png" alt="">Проєкт<br>онлайн</span></div>
+</section>
+
+<!-- 4 ZONES MAP -->
+<section class="page">
+  <div style="position:absolute;left:15mm;top:13mm;right:15mm;display:flex;align-items:baseline;gap:6mm">
+    <div class="k">Зони</div><h3 style="font-size:16pt">Що і де стоїть</h3>
+    <span style="font:600 9pt Manrope;color:var(--ink2)">Схема за ескізом замовника на супутниковому знімку · північ угорі</span>
+  </div>
+  <div style="position:absolute;left:15mm;right:15mm;top:26mm;bottom:21mm;display:flex;gap:5mm;justify-content:center;align-items:center">
+    <div class="ph" style="position:relative;flex:none;height:147mm;aspect-ratio:1110/1236;border-radius:2.5mm"><img src="img/skhema-1.jpg" alt="" style="object-fit:contain"></div>
+    <div class="ph" style="position:relative;flex:none;height:147mm;aspect-ratio:1110/1204;border-radius:2.5mm"><img src="img/skhema-2.jpg" alt="" style="object-fit:contain"></div>
+  </div>
+  <div class="foot"><span class="n">04</span><span>Зони</span><span class="sp"></span><span class="mini"><img src="img/qr.png" alt="">Проєкт<br>онлайн</span></div>
+</section>
+
+<!-- 5 GENPLAN -->
+<section class="page">
+  <div class="ph" style="top:0;left:0;bottom:0;width:122mm"><img src="img/viz-genplan.jpg" alt=""><span class="cap">Генплан з висоти</span></div>
+  <div style="position:absolute;left:140mm;top:20mm;right:18mm">
+    <div class="k">Генплан</div>
+    <h2>Маршрут гостя: від входу до мису</h2>
+    <div style="margin-top:7mm">
+      <div class="lg"><em>1</em><span><b>Вхід:</b> арка, рецепція, 6 кабінок, 4 душі, 2 туалети</span></div>
+      <div class="lg"><em>2</em><span><b>VIP і спорт:</b> 4 альтанки, волейбол 16×8 м, діти</span></div>
+      <div class="lg"><em>3</em><span><b>Пляж:</b> лежаки і 10 беседок уздовж великої води</span></div>
+      <div class="lg"><em>4</em><span><b>Лісок:</b> бар з кухнею, кальянна, 2 будиночки з чанами</span></div>
+      <div class="lg"><em>5</em><span><b>Мис:</b> пірс, сапи, гойдалка над водою, захід сонця</span></div>
+    </div>
+  </div>
+  <div class="foot" style="left:140mm"><span class="n">05</span><span>Генплан</span><span class="sp"></span><span class="mini"><img src="img/qr.png" alt="">Проєкт<br>онлайн</span></div>
+</section>
+
+<!-- 6 DAY I -->
+<section class="page">
+  <div style="position:absolute;left:15mm;top:13mm;right:15mm;display:flex;align-items:baseline;gap:6mm">
+    <div class="k">Один день на пляжі</div><h3 style="font-size:16pt">Ранок і день</h3>
+  </div>
+  <div style="position:absolute;left:15mm;right:15mm;top:26mm;bottom:21mm;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:1fr 1fr;gap:3mm">
+    <div class="ph" style="position:relative;border-radius:2.5mm"><img src="img/story-01.jpg" alt=""><span class="cap"><b>10:00</b>Вхід: арка і рецепція</span></div>
+    <div class="ph" style="position:relative;border-radius:2.5mm"><img src="img/story-02.jpg" alt=""><span class="cap"><b>11:00</b>Пляж: лежаки і настил до води</span></div>
+    <div class="ph" style="position:relative;border-radius:2.5mm"><img src="img/story-03.jpg" alt=""><span class="cap"><b>12:30</b>10 беседок уздовж води</span></div>
+    <div class="ph" style="position:relative;border-radius:2.5mm"><img src="img/story-04.jpg" alt=""><span class="cap"><b>14:00</b>Обід у беседці</span></div>
+    <div class="ph" style="position:relative;border-radius:2.5mm"><img src="img/story-05.jpg" alt=""><span class="cap"><b>15:00</b>VIP-альтанки</span></div>
+    <div class="ph" style="position:relative;border-radius:2.5mm"><img src="img/story-06.jpg" alt=""><span class="cap"><b>16:00</b>Волейбол і діти</span></div>
+  </div>
+  <div class="foot"><span class="n">06</span><span>Один день</span><span class="sp"></span><span class="mini"><img src="img/qr.png" alt="">Проєкт<br>онлайн</span></div>
+</section>
+
+<!-- 7 DAY II -->
+<section class="page">
+  <div style="position:absolute;left:15mm;top:13mm;right:15mm;display:flex;align-items:baseline;gap:6mm">
+    <div class="k">Один день на пляжі</div><h3 style="font-size:16pt">Вечір</h3>
+  </div>
+  <div style="position:absolute;left:15mm;right:15mm;top:26mm;bottom:21mm;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:1fr 1fr;gap:3mm">
+    <div class="ph" style="position:relative;border-radius:2.5mm"><img src="img/story-07.jpg" alt=""><span class="cap"><b>17:00</b>Бар</span></div>
+    <div class="ph" style="position:relative;border-radius:2.5mm"><img src="img/story-08.jpg" alt=""><span class="cap"><b>18:00</b>Кальянна</span></div>
+    <div class="ph" style="position:relative;border-radius:2.5mm"><img src="img/story-09.jpg" alt=""><span class="cap"><b>19:00</b>Будиночок з чаном</span></div>
+    <div class="ph" style="position:relative;border-radius:2.5mm"><img src="img/story-10.jpg" alt=""><span class="cap"><b>19:30</b>Сапи і пірс</span></div>
+    <div class="ph" style="position:relative;border-radius:2.5mm"><img src="img/story-11.jpg" alt=""><span class="cap"><b>20:30</b>Захід сонця на мисі</span></div>
+    <div class="ph" style="position:relative;border-radius:2.5mm"><img src="img/story-12.jpg" alt=""><span class="cap"><b>21:30</b>Гірлянди по всій косі</span></div>
+  </div>
+  <div class="foot"><span class="n">07</span><span>Один день</span><span class="sp"></span><span class="mini"><img src="img/qr.png" alt="">Проєкт<br>онлайн</span></div>
+</section>
+
+<!-- 8 BEACH -->
+<section class="page">
+  <div class="ph" style="inset:0"><img src="img/story-03.jpg" alt=""></div>
+  <div class="card" style="left:15mm;bottom:15mm;width:118mm">
+    <div class="k">Пляж</div>
+    <h2 style="font-size:24pt">10 беседок уздовж води</h2>
+    <div class="specs">
+      <div class="sp"><i>Розмір</i><b>6×4 м, висота 3,5 м</b></div>
+      <div class="sp"><i>Всередині</i><b>Стіл і лави на 8–10 людей</b></div>
+      <div class="sp"><i>Каркас</i><b>Брус під горіх</b></div>
+      <div class="sp"><i>Дах</i><b>Матовий графітовий профнастил</b></div>
+      <div class="sp"><i>Лежаки</i><b>Білі пластикові, парасолі</b></div>
+      <div class="sp"><i>Вечір</i><b>Гірлянда під кожним дахом</b></div>
+    </div>
+  </div>
+  <div class="foot on-photo" style="left:auto;right:15mm"><span class="mini"><img src="img/qr.png" alt="">Проєкт<br>онлайн</span></div>
+</section>
+
+<!-- 9 VIP -->
+<section class="page">
+  <div class="ph" style="top:0;left:0;bottom:0;width:180mm"><img src="img/story-05.jpg" alt=""><span class="cap">4 VIP-альтанки на заході сонця</span></div>
+  <div class="ph" style="top:15mm;right:15mm;width:93mm;height:92mm;border-radius:2.5mm"><img src="img/gal-08.jpg" alt=""><span class="cap">Усередині</span></div>
+  <div style="position:absolute;left:195mm;right:15mm;top:116mm">
+    <div class="k">VIP</div>
+    <h2 style="font-size:21pt">Альтанки зі шторами</h2>
+    <div class="specs" style="margin-top:4mm">
+      <div class="sp"><i>Розмір</i><b>≈ 3×3 м</b></div>
+      <div class="sp"><i>Місткість</i><b>4–6 людей</b></div>
+      <div class="sp"><i>Штори</i><b>Льон з трьох боків</b></div>
+      <div class="sp"><i>Сервіс</i><b>Кальян просто сюди</b></div>
+    </div>
+  </div>
+  <div class="foot" style="left:195mm"><span class="n">09</span><span class="sp"></span><span class="mini"><img src="img/qr.png" alt="">Проєкт<br>онлайн</span></div>
+</section>
+
+<!-- 10 BAR -->
+<section class="page">
+  <div class="ph" style="top:0;right:0;bottom:0;width:180mm"><img src="img/story-07.jpg" alt=""><span class="cap">Бар з терасою</span></div>
+  <div class="ph" style="top:15mm;left:15mm;width:93mm;height:92mm;border-radius:2.5mm"><img src="img/gal-13.jpg" alt=""><span class="cap">Кальянна HOOKAH</span></div>
+  <div style="position:absolute;left:15mm;width:93mm;top:116mm">
+    <div class="k">Їжа і напої</div>
+    <h2 style="font-size:21pt">Бар, кухня, гриль, кальянна</h2>
+    <div class="specs" style="margin-top:4mm">
+      <div class="sp"><i>Павільйон</i><b>≈ 9×4 м</b></div>
+      <div class="sp"><i>Кухня</i><b>Гриль, снеки, фудтраки</b></div>
+      <div class="sp"><i>Кальянна</i><b>Кіоск 2,5×2 м</b></div>
+      <div class="sp"><i>Тиша</i><b>Після 22:00</b></div>
+    </div>
+  </div>
+  <div class="foot" style="right:200mm"><span class="n">10</span><span class="sp"></span><span class="mini"><img src="img/qr.png" alt="">Проєкт<br>онлайн</span></div>
+</section>
+
+<!-- 11 CABINS -->
+<section class="page">
+  <div class="ph" style="top:0;left:0;bottom:0;width:180mm"><img src="img/story-09.jpg" alt=""><span class="cap">Будиночок з чаном у ліску</span></div>
+  <div class="ph" style="top:15mm;right:15mm;width:93mm;height:92mm;border-radius:2.5mm"><img src="img/gal-14.jpg" alt=""><span class="cap">Усередині</span></div>
+  <div style="position:absolute;left:195mm;right:15mm;top:116mm">
+    <div class="k">Цілий рік</div>
+    <h2 style="font-size:21pt">2 будиночки з чаном</h2>
+    <div class="specs" style="margin-top:4mm">
+      <div class="sp"><i>Розмір</i><b>8×5 м, на палях</b></div>
+      <div class="sp"><i>Чан</i><b>Ø 2 м, на дровах</b></div>
+      <div class="sp"><i>Вікна</i><b>Панорамні, на воду</b></div>
+      <div class="sp"><i>Сезон</i><b>Ночівля 365 днів</b></div>
+    </div>
+  </div>
+  <div class="foot" style="left:195mm"><span class="n">11</span><span class="sp"></span><span class="mini"><img src="img/qr.png" alt="">Проєкт<br>онлайн</span></div>
+</section>
+
+<!-- 12 ACTIVITIES -->
+<section class="page">
+  <div style="position:absolute;left:15mm;top:13mm;right:15mm;display:flex;align-items:baseline;gap:6mm">
+    <div class="k">Чим зайнятись</div><h3 style="font-size:16pt">Вода, спорт, діти і мис</h3>
+  </div>
+  <div style="position:absolute;left:15mm;right:15mm;top:26mm;bottom:21mm;display:grid;grid-template-columns:1.25fr 1fr 1fr;grid-template-rows:1fr 1fr;gap:3mm">
+    <div class="ph" style="position:relative;border-radius:2.5mm;grid-row:span 2"><img src="img/gal-18.jpg" alt=""><span class="cap">Мис: гойдалка, лежаки, захід сонця</span></div>
+    <div class="ph" style="position:relative;border-radius:2.5mm"><img src="img/story-10.jpg" alt=""><span class="cap">Прокат сапів і каяків, пірс</span></div>
+    <div class="ph" style="position:relative;border-radius:2.5mm"><img src="img/story-06.jpg" alt=""><span class="cap">Волейбол 16×8 м</span></div>
+    <div class="ph" style="position:relative;border-radius:2.5mm"><img src="img/gal-09.jpg" alt=""><span class="cap">Дитячий куточок у тіні</span></div>
+    <div class="ph" style="position:relative;border-radius:2.5mm"><img src="img/gal-07.jpg" alt=""><span class="cap">VIP на заході сонця</span></div>
+  </div>
+  <div class="foot"><span class="n">12</span><span>Активності</span><span class="sp"></span><span class="mini"><img src="img/qr.png" alt="">Проєкт<br>онлайн</span></div>
+</section>
+
+<!-- 13 SEASONS -->
+<section class="page">
+  <div style="position:absolute;left:15mm;top:13mm;right:15mm;display:flex;align-items:baseline;gap:6mm">
+    <div class="k">Сезонність</div><h3 style="font-size:16pt">Пляж, що не закривається у вересні</h3>
+  </div>
+  <div style="position:absolute;left:15mm;right:15mm;top:26mm;bottom:21mm;display:grid;grid-template-columns:repeat(3,1fr);gap:3mm">
+    <div style="display:grid;grid-template-rows:1fr auto;gap:3mm"><div class="ph" style="position:relative;border-radius:2.5mm"><img src="img/story-02.jpg" alt=""></div><div><h3 style="font-size:13pt;color:var(--sun)">Літо</h3><p style="font-size:10pt;margin-top:1.5mm">Пляж, купання, сапи, волейбол, беседки з видом на воду.</p></div></div>
+    <div style="display:grid;grid-template-rows:1fr auto;gap:3mm"><div class="ph" style="position:relative;border-radius:2.5mm"><img src="img/story-12.jpg" alt=""></div><div><h3 style="font-size:13pt;color:var(--sun)">Осінь</h3><p style="font-size:10pt;margin-top:1.5mm">Беседки з гірляндами, гриль, бар, кальянна, захід на мисі.</p></div></div>
+    <div style="display:grid;grid-template-rows:1fr auto;gap:3mm"><div class="ph" style="position:relative;border-radius:2.5mm"><img src="img/gal-15.jpg" alt=""></div><div><h3 style="font-size:13pt;color:var(--sun)">Зима</h3><p style="font-size:10pt;margin-top:1.5mm">Будиночки в ліску з гарячим чаном на дровах і ночівлею.</p></div></div>
+  </div>
+  <div class="foot"><span class="n">13</span><span>Сезони</span><span class="sp"></span><span class="mini"><img src="img/qr.png" alt="">Проєкт<br>онлайн</span></div>
+</section>
+
+<!-- 14 STYLES -->
+<section class="page">
+  <div style="position:absolute;left:15mm;top:13mm;right:15mm;display:flex;align-items:baseline;gap:6mm">
+    <div class="k">Стиль</div><h3 style="font-size:16pt">Шість стилів на вибір — та сама беседка</h3>
+  </div>
+  <div style="position:absolute;left:15mm;right:15mm;top:26mm;bottom:21mm;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:1fr 1fr;gap:3mm">
+    <div class="ph" style="position:relative;border-radius:2.5mm;outline:1.2mm solid var(--sun);outline-offset:-1.2mm"><img src="img/story-03.jpg" alt=""><span class="cap" style="background:var(--sun)">Горіх і графіт · наша пропозиція</span></div>
+    <div class="ph" style="position:relative;border-radius:2.5mm"><img src="img/st-dark.jpg" alt=""><span class="cap">Лофт</span></div>
+    <div class="ph" style="position:relative;border-radius:2.5mm"><img src="img/st-red.jpg" alt=""><span class="cap">Хутір</span></div>
+    <div class="ph" style="position:relative;border-radius:2.5mm"><img src="img/st-log.jpg" alt=""><span class="cap">Карпатський зруб</span></div>
+    <div class="ph" style="position:relative;border-radius:2.5mm"><img src="img/st-white.jpg" alt=""><span class="cap">Середземномор'я</span></div>
+    <div class="ph" style="position:relative;border-radius:2.5mm"><img src="img/st-boho.jpg" alt=""><span class="cap">Бохо</span></div>
+  </div>
+  <div class="foot"><span class="n">14</span><span>Стилі · на сайті кожен стиль показано на всіх фото</span><span class="sp"></span><span class="mini"><img src="img/qr.png" alt="">Проєкт<br>онлайн</span></div>
+</section>
+
+<!-- 15 BEFORE/AFTER -->
+<section class="page">
+  <div style="position:absolute;left:15mm;top:13mm;right:15mm;display:flex;align-items:baseline;gap:6mm">
+    <div class="k">Було / буде</div><h3 style="font-size:16pt">Те саме місце, той самий ракурс</h3>
+  </div>
+  <div style="position:absolute;left:15mm;right:15mm;top:26mm;bottom:21mm;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:1fr 1fr;gap:3mm">
+    <div class="ph" style="position:relative;border-radius:2.5mm"><img src="img/before-mys.jpg" alt=""><span class="cap">Зараз · мис</span></div>
+    <div class="ph" style="position:relative;border-radius:2.5mm"><img src="img/before-bar.jpg" alt=""><span class="cap">Зараз · бар</span></div>
+    <div class="ph" style="position:relative;border-radius:2.5mm"><img src="img/before-domyky.jpg" alt=""><span class="cap">Зараз · лісок</span></div>
+    <div class="ph" style="position:relative;border-radius:2.5mm"><img src="img/story-11.jpg" alt=""><span class="cap" style="background:var(--sun)">Буде · мис</span></div>
+    <div class="ph" style="position:relative;border-radius:2.5mm"><img src="img/story-07.jpg" alt=""><span class="cap" style="background:var(--sun)">Буде · бар</span></div>
+    <div class="ph" style="position:relative;border-radius:2.5mm"><img src="img/story-09.jpg" alt=""><span class="cap" style="background:var(--sun)">Буде · будиночок</span></div>
+  </div>
+  <div class="foot"><span class="n">15</span><span>Було / буде</span><span class="sp"></span><span class="mini"><img src="img/qr.png" alt="">Проєкт<br>онлайн</span></div>
+</section>
+
+<!-- 16 BACK / QR -->
+<section class="page">
+  <div class="ph" style="inset:0"><img src="img/story-12.jpg" alt=""></div>
+  <div style="position:absolute;inset:0;background:rgba(8,22,22,.55)"></div>
+  <div style="position:absolute;left:18mm;top:50%;transform:translateY(-50%);width:150mm;color:#fff">
+    <div class="k" style="color:#f3b98c">Проєкт онлайн</div>
+    <h2 style="font-size:34pt;margin-top:6mm;line-height:1.05">Пройдіться пляжем ще до будівництва</h2>
+    <p style="font-size:13pt;margin-top:7mm;color:rgba(255,255,255,.9);line-height:1.55">Наведіть камеру телефона на код: відкриється сайт проєкту з 3D-моделлю коси, прогулянкою на рівні очей, польотом дрона, днем і ніччю, літом, осінню й зимою та всіма фото в шести стилях.</p>
+  </div>
+  <div style="position:absolute;right:22mm;top:50%;transform:translateY(-50%);background:#fff;border-radius:6mm;padding:7mm;text-align:center;box-shadow:0 10mm 25mm rgba(0,0,0,.35)">
+    <img src="img/qr.png" alt="QR-код на сайт проєкту" style="width:72mm;height:72mm;display:block">
+    <div style="margin-top:4mm;font:800 10pt Unbounded;color:var(--ink)">Пляж Основа · онлайн</div>
+    <div style="margin-top:1.5mm;font:600 7.5pt Manrope;color:var(--ink2)">alina2000806-afk.github.io/restoran/plyazh/proekt</div>
+  </div>
+</section>
+
+<script>
+/* screen preview: fit pages to viewport width */
+(function(){function f(){var w=innerWidth-24,pw=303*96/25.4;document.documentElement.style.setProperty('--z',Math.min(1,w/pw))}addEventListener('resize',f);f()})();
+</script>
+</body>
+</html>
